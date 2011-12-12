@@ -28,7 +28,7 @@ require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
 tx_rnbase::load('tx_rnbase_util_Logger');
 
 /**
- * 
+ *
  */
 class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 
@@ -55,7 +55,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 		tx_rnbase::load('tx_rnbase_util_Misc');
 		try {
 			$lastRun = $this->getLastRunTime($taskId);
-			/*@var $srv tx_mklog_srv_WatchDog */
+			/* @var $srv tx_mklog_srv_WatchDog */
 			$srv = tx_rnbase_util_Misc::getService('mklog', 'WatchDog');
 			$filters = array();
 			$options = array();
