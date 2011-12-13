@@ -59,6 +59,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 
 		$hasData = false;
 		for($i = $minLevel; $i < 4; $i++) {
+			// @TODO: limit/offset einbauen. nicht gleich tausende von logmails verschicken.
 			$entries = $this->getLatestEntries($lastRun, $i, $options);
 			$infos['latest'][$i] = $entries;
 			if(count($entries))
