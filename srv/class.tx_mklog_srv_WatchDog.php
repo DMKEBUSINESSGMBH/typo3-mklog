@@ -73,7 +73,6 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
 		$what = '*';
 		$from = 'tx_devlog';
-		$options = array();
 		$options['enablefieldsoff'] = '1';
 		$options['where'] = 'crdate>='. $lastRun->format('U') . ' AND severity>='. intval($severity);
 		$options['orderby'] = 'crdate desc';
