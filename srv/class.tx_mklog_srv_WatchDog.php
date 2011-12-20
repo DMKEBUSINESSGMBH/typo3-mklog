@@ -59,7 +59,6 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 
 		$hasData = false;
 		for($i = $minLevel; $i < 4; $i++) {
-			// @TODO: limit/offset einbauen. nicht gleich tausende von logmails verschicken.
 			$entries = $this->getLatestEntries($lastRun, $i, $options);
 			$infos['latest'][$i] = $entries;
 			if(count($entries))
@@ -75,6 +74,8 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		$from = 'tx_devlog';
 		$options['enablefieldsoff'] = '1';
 		$options['where'] = 'crdate>='. $lastRun->format('U') . ' AND severity>='. intval($severity);
+		// notbremse, es können ziemlich viele logs vorhanden sein.
+		if(!isset($options['limit'])) $options['limit'] = 100;
 		$options['orderby'] = 'crdate desc';
 		$result = tx_rnbase_util_DB::doSelect($what, $from, $options);
 		return $result;
