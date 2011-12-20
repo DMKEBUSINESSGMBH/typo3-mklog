@@ -139,7 +139,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 				$textPart .= sprintf("\nLevel %s (%d):\n", $levels[$level], $data['severity']);
 				$htmlPart .= sprintf("<h3>Level %s (%d)</h3>\n", $levels[$level], $data['severity']);
 				foreach($records As $record) {
-					$datavar = 'DataVar: '.($options['dataVar'] && $record['data_var'] ? print_r(unserialize($record['data_var']), true) : '');
+					$datavar = $options['dataVar'] ? ('DataVar: '.($record['data_var'] ? print_r(unserialize($record['data_var']), true) : '')) : '';
 					$textPart .= sprintf("Time: %s Extension: %s\nMessage: %s\n%s", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $datavar);
 					$htmlPart .= sprintf("<p>Time: %s<br />Extension: %s<br />Message: %s</p>\n<pre>%s</pre>", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $datavar);
 				}
