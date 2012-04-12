@@ -73,7 +73,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		$what = '*';
 		$from = 'tx_devlog';
 		$options['enablefieldsoff'] = '1';
-		$options['where'] = 'crdate>='. $lastRun->format('U') . ' AND severity>='. intval($severity);
+		$options['where'] = 'crdate>='. $lastRun->format('U') . ' AND severity='. intval($severity);
 		// notbremse, es können ziemlich viele logs vorhanden sein.
 		if(!isset($options['limit'])) $options['limit'] = 20;
 		$options['orderby'] = 'crdate desc';
@@ -128,7 +128,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		foreach ($infos['summery'] As $data) {
 			$textPart .= sprintf('Level %s (%d): %d items found', $levels[$data['severity']], $data['severity'], $data['cnt']);
 			$textPart .= "\n";
-			$htmlPart .= sprintf('<li><a href="#%s">Level %s (%d)</a>: %d items found</li>', strtolower($levels[$data['severity']]), $levels[$data['severity']], $data['severity'], $data['cnt']);
+			$htmlPart .= sprintf('<li><a href="#%s">Level %s (Severity Number: %d)</a>: %d items found</li>', strtolower($levels[$data['severity']]), $levels[$data['severity']], $data['severity'], $data['cnt']);
 		}
 		$htmlPart .= "\n</ul>\n";
 		if($infos['datafound']) {
@@ -137,7 +137,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 			foreach ($infos['latest'] As $level=>$records) {
 				if(!count($records)) continue;
 				$textPart .= sprintf("\nLevel %s (%d):\n", $levels[$level], $data['severity']);
-				$htmlPart .= sprintf('<h3><a name="%s">Level %s (%d)</a></h3>', strtolower($levels[$level]), $levels[$level], $data['severity']);
+				$htmlPart .= sprintf('<h3><a name="%s">Level %s (Severity Number: %d)</a></h3>', strtolower($levels[$level]), $levels[$level], $data['severity']);
 				foreach($records As $record) {
 					$datavar = $options['dataVar'] ? ('DataVar: '.($record['data_var'] ? print_r(unserialize($record['data_var']), true) : '')) : '';
 					$textPart .= sprintf("Time: %s Extension: %s\nMessage: %s\n%s", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $datavar);
