@@ -27,7 +27,7 @@ $EM_CONF[$_EXTKEY] = array(
     'depends' => array(
       'rn_base' => '0.10.3-0.0.0',
       'devlog' => '',
-		),
+	),
     'conflicts' => array(
     ),
     'suggests' => array(
