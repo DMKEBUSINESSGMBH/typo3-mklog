@@ -97,17 +97,16 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 	}
 	protected function sendMail($emails, $infos, DateTime $lastRun, $options=array()) {
 		$contentArr = $this->buildMailContents($infos, $lastRun, $options);
-
-		$mail = t3lib_div::makeInstance('t3lib_htmlmail');
-		$mail->start();
-		$mail->subject         = 'WatchDog for logger on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
-		$mail->from_email      = tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'fromEmail');
-		$mail->from_name       = '';
-		$mail->organisation    = '';
-		$mail->priority        = 1;
-		$mail->addPlain($contentArr['text']);
-		$mail->setHTML($contentArr['html']);
-		return $mail->send($emails);
+		
+		/* @var $mail tx_rnbase_util_Mail */
+		$mail = tx_rnbase::makeInstance('tx_rnbase_util_Mail');
+		$mail->setSubject('WatchDog for logger on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']);
+		$mail->setFrom(tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'fromEmail'));
+		$mail->setTo($emails);
+		$mail->setTextPart($contentArr['text']);
+		$mail->setHtmlPart($contentArr['html']);	
+	
+		return $mail->send();
 	}
 	public function getSeverities() {
 		return array(
