@@ -70,14 +70,19 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 	}
 	
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
-		$what = '*';
+		$what = '*, COUNT(uid) as msgCount';
 		$from = 'tx_devlog';
 		$options['enablefieldsoff'] = '1';
 		$options['where'] = 'crdate>='. $lastRun->format('U') . ' AND severity='. intval($severity);
 		// notbremse, es können ziemlich viele logs vorhanden sein.
-		if(!isset($options['limit'])) $options['limit'] = 20;
+		if(!isset($options['limit'])) $options['limit'] = 30;
 		$options['orderby'] = 'crdate desc';
+		
+		//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
+		$options['groupby'] = 'msg,extkey';
+		
 		$result = tx_rnbase_util_DB::doSelect($what, $from, $options);
+		
 		return $result;
 	}
 	
@@ -139,8 +144,8 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 				$htmlPart .= sprintf('<h3><a name="%s">Level %s (Severity Number: %d)</a></h3>', strtolower($levels[$level]), $levels[$level], $data['severity']);
 				foreach($records As $record) {
 					$datavar = $options['dataVar'] ? ('DataVar: '.($record['data_var'] ? print_r(unserialize($record['data_var']), true) : '')) : '';
-					$textPart .= sprintf("Time: %s Extension: %s\nMessage: %s\n%s", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $datavar);
-					$htmlPart .= sprintf("<p>Time: %s<br />Extension: %s<br />Message: %s</p>\n<pre>%s</pre>", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $datavar);
+					$textPart .= sprintf("Time: %s Extension: %s\nMessage: %s\nCount: %s\n%s", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $record['msgCount'], $datavar);
+					$htmlPart .= sprintf("<p>Time: %s<br />Extension: %s<br />Message: %s</p><br />Count: %s\n<pre>%s</pre>", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $record['msgCount'], $datavar);
 				}
 			}
 		}
