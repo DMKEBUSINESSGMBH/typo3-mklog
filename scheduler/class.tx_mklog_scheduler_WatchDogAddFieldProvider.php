@@ -24,6 +24,7 @@
 
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
 require_once t3lib_extMgm::extPath('scheduler', 'interfaces/interface.tx_scheduler_additionalfieldprovider.php');
+tx_rnbase::load('tx_rnbase_util_Misc');
 
 define('MKLOG_FIELD_EMAIL', 'mklog_email');
 define('MKLOG_FIELD_SEVERITY', 'mklog_severity');
