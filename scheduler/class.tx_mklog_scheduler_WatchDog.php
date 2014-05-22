@@ -23,7 +23,9 @@
 ***************************************************************/
 
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
-require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
+if (!class_exists('tx_scheduler_Task')) {
+	require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
+}
 
 tx_rnbase::load('tx_rnbase_util_Logger');
 
@@ -41,7 +43,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 private $severity;
 	 private $force;
 	 private $dataVar;
-	 
+
 	/**
 	 * Function executed from the Scheduler.
 	 * Sends an email
@@ -62,7 +64,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 			$options['minlevel'] = $this->severity;
 			$options['forceSummery'] = $this->force;
 			$options['dataVar'] = $this->dataVar;
-			
+
 			$srv->triggerMails($this->getEmail(), $lastRun, $filters, $options);
 			$this->updateLastRunTime($taskId);
 
@@ -88,7 +90,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 			array('tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s')
 		));
 	}
-	
+
 	/**
 	 * Return email address
 	 *
@@ -121,7 +123,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 				throw new Exception('tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!');
 			}
 		}
-		
+
 		$this->email = implode(',', $emails);
 	}
 	/**

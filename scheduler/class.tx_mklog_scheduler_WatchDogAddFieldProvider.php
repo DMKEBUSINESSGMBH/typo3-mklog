@@ -23,7 +23,11 @@
 ***************************************************************/
 
 require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
-require_once t3lib_extMgm::extPath('scheduler', 'interfaces/interface.tx_scheduler_additionalfieldprovider.php');
+if (!interface_exists('tx_scheduler_AdditionalFieldProvider')) {
+	require_once t3lib_extMgm::extPath(
+		'scheduler', '/interfaces/interface.tx_scheduler_additionalfieldprovider.php'
+	);
+}
 tx_rnbase::load('tx_rnbase_util_Misc');
 
 define('MKLOG_FIELD_EMAIL', 'mklog_email');
@@ -32,7 +36,7 @@ define('MKLOG_FIELD_FORCE', 'mklog_force');
 define('MKLOG_FIELD_DATAVAR', 'mklog_datavar');
 
 /**
- * 
+ *
  */
 class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_AdditionalFieldProvider {
 
@@ -53,7 +57,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 	 */
 	public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $parentObject) {
 
-		
+
 		// Initialize extra field value
 		if (!array_key_exists(MKLOG_FIELD_EMAIL, $taskInfo) || empty($taskInfo[MKLOG_FIELD_EMAIL])) {
 			if ($parentObject->CMD == 'add') {
@@ -77,7 +81,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 
 		// Email
 		$fieldID = 'field_'.MKLOG_FIELD_EMAIL;
-		// Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used! 
+		// Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used!
 		$fieldCode = '<input type="text" name="tx_scheduler['.MKLOG_FIELD_EMAIL.']" id="' . $fieldID .
 						'" value="' . $taskInfo[MKLOG_FIELD_EMAIL] . '" size="50" />';
 		$additionalFields[$fieldID] = array(
@@ -92,7 +96,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 		$fieldCode = '<select name="tx_scheduler['.MKLOG_FIELD_SEVERITY.']" id="' . $fieldID . '">';
 		$srv = tx_rnbase_util_Misc::getService('mklog', 'WatchDog');
 		$severities = $srv->getSeverities();
-		
+
 		foreach($severities As $key => $label) {
 			$fieldCode .= '<option value="'.$key.'" ' . ($taskInfo[MKLOG_FIELD_SEVERITY] == $key ? 'selected="selected"' : '') . ' />' . $label . "</option>\n";
 		}
@@ -114,7 +118,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 			'label'    => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_FORCE,
 			'cshKey'   => '_MOD_tools_txschedulerM1',
 		);
-		
+
 		// data_var
 		$fieldID = 'field_'.MKLOG_FIELD_DATAVAR;
 		$fieldCode = '<input type="radio" name="tx_scheduler['.MKLOG_FIELD_DATAVAR.']" id="' . $fieldID .
