@@ -27,7 +27,6 @@
  * benötigte Klassen einbinden
  */
 require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
-require_once(PATH_t3lib.'class.t3lib_svbase.php');
 tx_rnbase::load('tx_rnbase_util_Logger');
 
 /**
@@ -50,7 +49,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		if(intval($options['forceSummery']) > 0 || $infos['datafound'])
 			$this->sendMail($emails, $infos, $lastRun, $options);
 	}
-	
+
 	protected function lookupMsgs($lastRun, $filters=array(), $options=array()) {
 		$infos = array();
 		$infos['summery'] = $this->getSummary($lastRun);
@@ -68,7 +67,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		$infos['datafound'] = $hasData;
 		return $infos;
 	}
-	
+
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
 		$what = '*, COUNT(uid) as msgCount';
 		$from = 'tx_devlog';
@@ -77,15 +76,15 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		// notbremse, es können ziemlich viele logs vorhanden sein.
 		if(!isset($options['limit'])) $options['limit'] = 30;
 		$options['orderby'] = 'crdate desc';
-		
+
 		//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
 		$options['groupby'] = 'msg,extkey';
-		
+
 		$result = tx_rnbase_util_DB::doSelect($what, $from, $options);
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Anzahl aller Meldungen für alle Log-Level laden
 	 * @param DateTime $lastRun
@@ -102,15 +101,15 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 	}
 	protected function sendMail($emails, $infos, DateTime $lastRun, $options=array()) {
 		$contentArr = $this->buildMailContents($infos, $lastRun, $options);
-		
+
 		/* @var $mail tx_rnbase_util_Mail */
 		$mail = tx_rnbase::makeInstance('tx_rnbase_util_Mail');
 		$mail->setSubject('WatchDog for logger on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']);
 		$mail->setFrom(tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'fromEmail'));
 		$mail->setTo($emails);
 		$mail->setTextPart($contentArr['text']);
-		$mail->setHtmlPart($contentArr['html']);	
-	
+		$mail->setHtmlPart($contentArr['html']);
+
 		return $mail->send();
 	}
 	public function getSeverities() {
