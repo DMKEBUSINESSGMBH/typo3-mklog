@@ -63,6 +63,4 @@ MK Log
 
 	Introduction/Index
 	UsersManual/Index
-	DeveloperManual/Index
-	KnownProblems/Index
 	ChangeLog/Index
