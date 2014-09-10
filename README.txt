@@ -15,4 +15,4 @@ Ab dem gesetzten LogLevel und höher, werden die letzte Einträge einzeln aufgel
 Konfiguration
 email: Zieladressen
 minlevel: Minimales Loglevel ab dem die Mails verschickt werden
-forceSummery: Sendet zumindest das Summery auch wenn das minlevel nicht erreicht wurde.
+forceSummary: Sendet zumindest die Zusammenfassung auch wenn das minlevel nicht erreicht wurde.
