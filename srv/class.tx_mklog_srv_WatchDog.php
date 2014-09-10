@@ -38,41 +38,60 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 
 	/**
 	 * Versand von Infomails
-	 * @param 	string 	$emails
+	 * @param 	string 	$emailReceiver
 	 * @param 	date 	$lastRun
 	 * @param 	array 	$filters
 	 * @param 	array 	$options
 	 */
-	public function triggerMails($emails, $lastRun, $filters=array(), $options=array()) {
+	public function triggerMails(
+		$emailReceiver, $lastRun, $filters=array(), $options=array()
+	) {
 		$infos = $this->lookupMsgs($lastRun, $filters, $options);
 		// muss eine Mail verschickt werden?
-		if(intval($options['forceSummery']) > 0 || $infos['datafound'])
-			$this->sendMail($emails, $infos, $lastRun, $options);
+		if(intval($options['forceSummaryMail']) > 0 || $infos['datafound']) {
+			$this->sendMail($emailReceiver, $infos, $lastRun, $options);
+		}
 	}
 
-	protected function lookupMsgs($lastRun, $filters=array(), $options=array()) {
+	/**
+	 * @param DateTime $lastRun
+	 * @param array $filters
+	 * @param array $options
+	 * @return array
+	 */
+	protected function lookupMsgs(
+		DateTime $lastRun, array $filters = array(), array $options = array()
+	) {
 		$infos = array();
-		$infos['summery'] = $this->getSummary($lastRun);
+		$infos['summary'] = $this->getSummary($lastRun);
 
-		$minLevel = $options['minlevel'] ? $options['minlevel'] : tx_rnbase_util_Logger::LOGLEVEL_WARN;
+		$minimalSeverity = $options['minimalSeverity'] ?
+			$options['minimalSeverity'] : tx_rnbase_util_Logger::LOGLEVEL_WARN;
 
-		$hasData = false;
-		for($i = $minLevel; $i < 4; $i++) {
-			$entries = $this->getLatestEntries($lastRun, $i, $options);
-			$infos['latest'][$i] = $entries;
+		$hasData = FALSE;
+		for($severity = $minimalSeverity; $severity < 4; $severity++) {
+			$entries = $this->getLatestEntries($lastRun, $severity, $options);
+			$infos['latest'][$severity] = $entries;
 			if(count($entries))
-				$hasData=true;
+				$hasData = TRUE;
 		}
 
 		$infos['datafound'] = $hasData;
 		return $infos;
 	}
 
+	/**
+	 * @param DateTime $lastRun
+	 * @param int $severity
+	 * @param array $options
+	 * @return array
+	 */
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
 		$what = '*, COUNT(uid) as msgCount';
 		$from = 'tx_devlog';
 		$options['enablefieldsoff'] = '1';
-		$options['where'] = 'crdate>='. $lastRun->format('U') . ' AND severity='. intval($severity);
+		$options['where'] = 'crdate>='. $lastRun->format('U') .
+							' AND severity='. intval($severity);
 		// notbremse, es können ziemlich viele logs vorhanden sein.
 		if(!isset($options['limit'])) $options['limit'] = 30;
 		$options['orderby'] = 'crdate desc';
@@ -99,19 +118,38 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		$result = tx_rnbase_util_DB::doSelect($what, $from, $options);
 		return $result;
 	}
-	protected function sendMail($emails, $infos, DateTime $lastRun, $options=array()) {
+
+	/**
+	 *
+	 * @param string $emailReceiver
+	 * @param array $infos
+	 * @param DateTime $lastRun
+	 * @param array $options
+	 *
+	 * @return boolean
+	 */
+	protected function sendMail($emailReceiver, array $infos, DateTime $lastRun, array $options = array()) {
 		$contentArr = $this->buildMailContents($infos, $lastRun, $options);
 
 		/* @var $mail tx_rnbase_util_Mail */
 		$mail = tx_rnbase::makeInstance('tx_rnbase_util_Mail');
-		$mail->setSubject('WatchDog for logger on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']);
-		$mail->setFrom(tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'fromEmail'));
-		$mail->setTo($emails);
+		$mail->setSubject(
+			'WatchDog for logger on site ' .
+			$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
+		);
+		$mail->setFrom(
+			tx_rnbase_configurations::getExtensionCfgValue('rn_base', 'fromEmail')
+		);
+		$mail->setTo($emailReceiver);
 		$mail->setTextPart($contentArr['text']);
 		$mail->setHtmlPart($contentArr['html']);
 
 		return $mail->send();
 	}
+
+	/**
+	 * @return array
+	 */
 	public function getSeverities() {
 		return array(
 			tx_rnbase_util_Logger::LOGLEVEL_DEBUG => 'DEBUG',
@@ -121,17 +159,40 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 			tx_rnbase_util_Logger::LOGLEVEL_FATAL => 'FATAL',
 		);
 	}
-	protected function buildMailContents($infos, DateTime $lastRun, $options=array()) {
+
+	/**
+	 *
+	 * @param array $infos
+	 * @param DateTime $lastRun
+	 * @param array $options
+	 * @return array
+	 */
+	protected function buildMailContents(
+		array $infos, DateTime $lastRun, array $options = array()
+	) {
 		$levels = $this->getSeverities();
-		$textPart = 'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
-		$htmlPart = '<strong>This is an automatic email from TYPO3. Don\'t answer!</strong>';
-		$textPart .= '== Developer Log summery since '. $lastRun->format('Y-m-d H:i:s') ."==\n\n";
-		$htmlPart .= '<h2>Developer Log summery since '. $lastRun->format('Y-m-d H:i:s').'</h2>';
+		$textPart = 	'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
+		$htmlPart = 	'<strong>This is an automatic email from TYPO3. Don\'t answer!</strong>';
+		$textPart .= 	'== Developer Log summary since '.
+						$lastRun->format('Y-m-d H:i:s') ."==\n\n";
+		$htmlPart .= 	'<h2>Developer Log summary since '.
+						$lastRun->format('Y-m-d H:i:s').'</h2>';
 		$htmlPart .= "\n<ul>\n";
-		foreach ($infos['summery'] As $data) {
-			$textPart .= sprintf('Level %s (%d): %d items found', $levels[$data['severity']], $data['severity'], $data['cnt']);
+		foreach ($infos['summary'] As $data) {
+			$textPart .= sprintf(
+				'Level %s (%d): %d items found',
+				$levels[$data['severity']],
+				$data['severity'],
+				$data['cnt']
+			);
 			$textPart .= "\n";
-			$htmlPart .= sprintf('<li><a href="#%s">Level %s (Severity Number: %d)</a>: %d items found</li>', strtolower($levels[$data['severity']]), $levels[$data['severity']], $data['severity'], $data['cnt']);
+			$htmlPart .= sprintf(
+				'<li><a href="#%s">Level %s (Severity Number: %d)</a>: %d items found</li>',
+				strtolower($levels[$data['severity']]),
+				$levels[$data['severity']],
+				$data['severity'],
+				$data['cnt']
+			);
 		}
 		$htmlPart .= "\n</ul>\n";
 		if($infos['datafound']) {
@@ -139,12 +200,38 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 			$htmlPart .= '<h2>Latest entries by log level</h2>'."\n";
 			foreach ($infos['latest'] As $level=>$records) {
 				if(!count($records)) continue;
-				$textPart .= sprintf("\nLevel %s (%d):\n", $levels[$level], $data['severity']);
-				$htmlPart .= sprintf('<h3><a name="%s">Level %s (Severity Number: %d)</a></h3>', strtolower($levels[$level]), $levels[$level], $data['severity']);
+				$textPart .= sprintf(
+					"\nLevel %s (%d):\n", $levels[$level], $data['severity']
+				);
+				$htmlPart .= sprintf(
+					'<h3><a name="%s">Level %s (Severity Number: %d)</a></h3>',
+					strtolower($levels[$level]),
+					 $levels[$level],
+					$data['severity']
+				);
 				foreach($records As $record) {
-					$datavar = $options['dataVar'] ? ('DataVar: '.($record['data_var'] ? print_r(unserialize($record['data_var']), true) : '')) : '';
-					$textPart .= sprintf("Time: %s Extension: %s\nMessage: %s\nCount: %s\n%s", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $record['msgCount'], $datavar);
-					$htmlPart .= sprintf("<p>Time: %s<br />Extension: %s<br />Message: %s</p><br />Count: %s\n<pre>%s</pre>", date('Y-m-d H:i:s',$record['crdate']), $record['extkey'], $record['msg'], $record['msgCount'], $datavar);
+					$datavar = $options['includeDataVar'] ? (
+									'DataVar: '.(
+										$record['data_var'] ?
+										print_r(unserialize($record['data_var']), TRUE)
+										: '')
+									) : '';
+					$textPart .= sprintf(
+						"Time: %s Extension: %s\nMessage: %s\nCount: %s\n%s",
+						date('Y-m-d H:i:s',$record['crdate']),
+						$record['extkey'],
+						$record['msg'],
+						$record['msgCount'],
+						$datavar
+					);
+					$htmlPart .= sprintf(
+						"<p>Time: %s<br />Extension: %s<br />Message: %s</p><br />Count: %s\n<pre>%s</pre>",
+						date('Y-m-d H:i:s', $record['crdate']),
+						$record['extkey'],
+						$record['msg'],
+						$record['msgCount'],
+						$datavar
+					);
 				}
 			}
 		}

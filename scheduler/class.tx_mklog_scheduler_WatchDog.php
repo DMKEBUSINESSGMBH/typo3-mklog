@@ -39,19 +39,32 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 *
 	 * @var	string
 	 */
-	 private $email;
-	 private $severity;
-	 private $force;
-	 private $dataVar;
+	 private $emailReceiver;
+
+	 /**
+	  *
+	  * @var int
+	  */
+	 private $minimalSeverity;
+
+	 /**
+	  * @var boolean
+	  */
+	 private $forceSummaryMail;
+
+	 /**
+	  * @var boolean
+	  */
+	 private $includeDataVar;
 
 	/**
 	 * Function executed from the Scheduler.
 	 * Sends an email
 	 *
-	 * @return	void
+	 * @return	boolean
 	 */
 	public function execute() {
-		$success = true;
+		$success = TRUE;
 		$taskId = $this->taskUid;
 
 		tx_rnbase::load('tx_rnbase_util_Misc');
@@ -61,29 +74,46 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 			$srv = tx_rnbase_util_Misc::getService('mklog', 'WatchDog');
 			$filters = array();
 			$options = array();
-			$options['minlevel'] = $this->severity;
-			$options['forceSummery'] = $this->force;
-			$options['dataVar'] = $this->dataVar;
+			$options['minimalSeverity'] = $this->getMinimalSeverity();
+			$options['forceSummaryMail'] = $this->getForceSummaryMail();
+			$options['includeDataVar'] = $this->getIncludeDataVar();
 
-			$srv->triggerMails($this->getEmail(), $lastRun, $filters, $options);
+			$srv->triggerMails($this->getEmailReceiver(), $lastRun, $filters, $options);
 			$this->updateLastRunTime($taskId);
 
 		} catch (Exception $e) {
-			tx_rnbase_util_Logger::fatal('WatchDog failed!', 'mklog', array('Exception' => $e->getMessage()));
-			$success = false;
+			tx_rnbase_util_Logger::fatal(
+				'WatchDog failed!', 'mklog', array('Exception' => $e->getMessage())
+			);
+			$success = FALSE;
 		}
 		return $success;
 	}
+
+	/**
+	 * @param int $taskId
+	 * @return DateTime
+	 */
 	protected function getLastRunTime($taskId) {
 		$options = array();
 		$options['enablefieldsoff'] = 1;
 		$options['where'] = 'uid='.intval($taskId);
-		$ret = tx_rnbase_util_DB::doSelect('tx_mklog_lastrun', 'tx_scheduler_task', $options);
+		$ret = tx_rnbase_util_DB::doSelect(
+			'tx_mklog_lastrun', 'tx_scheduler_task', $options
+		);
 		$lastrun = new DateTime();
-		if(count($ret))
+		if(count($ret)) {
 			$lastrun = new DateTime($ret[0]['tx_mklog_lastrun']);
+		}
+
 		return $lastrun;
 	}
+
+	/**
+	 * @param int $taskId
+	 *
+	 * @return int number of rows affected
+	 */
 	protected function updateLastRunTime($taskId) {
 		$lastRun = new DateTime();
 		return tx_rnbase_util_DB::doUpdate('tx_scheduler_task', 'uid='.intval($taskId),
@@ -92,67 +122,77 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	}
 
 	/**
-	 * Return email address
-	 *
 	 * @return string
 	 */
-	public function getEmail() {
-		return $this->email;
-	}
-	public function getSeverity() {
-		return $this->severity;
-	}
-	public function getForce() {
-		return $this->force;
-	}
-	public function getDataVar() {
-		return $this->dataVar;
+	public function getEmailReceiver() {
+		return $this->emailReceiver;
 	}
 
 	/**
-	 * Set mail address
-	 *
-	 * @param string	$val
+	 * @return int
+	 */
+	public function getMinimalSeverity() {
+		return $this->minimalSeverity;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getForceSummaryMail() {
+		return $this->forceSummaryMail;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIncludeDataVar() {
+		return $this->includeDataVar;
+	}
+
+	/**
+	 * @param string	$emails
 	 * @return void
 	 */
-	public function setEmail($val) {
-		$emails = t3lib_div::trimExplode(',',$val);
+	public function setEmailReceiver($emails) {
+		$emails = t3lib_div::trimExplode(',', $emails);
 
 		foreach($emails As $email) {
 			if(!t3lib_div::validEmail($email)) {
-				throw new Exception('tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!');
+				throw new Exception(
+					'tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!'
+				);
 			}
 		}
 
 		$this->email = implode(',', $emails);
 	}
+
 	/**
-	 * Set minimum severity
-	 *
-	 * @param int	$val
+	 * @param int	$minimalSeverity
 	 * @return void
 	 */
-	public function setSeverity($val) {
-		$this->severity = $val;
+	public function setMinimalSeverity($minimalSeverity) {
+		$this->minimalSeverity = $minimalSeverity;
 	}
+
 	/**
-	 * Set force summery
+	 * Set force summary
 	 *
-	 * @param int	$val
+	 * @param int	$forceSummaryMail
 	 * @return void
 	 */
-	public function setForce($val) {
-		$this->force = $val;
+	public function setForceSummaryMail($forceSummaryMail) {
+		$this->forceSummaryMail = (boolean) $forceSummaryMail;
 	}
 
 	/**
 	 * Set data var
 	 *
-	 * @param int	$val
+	 * @param array	$includeDataVar
 	 * @return void
 	 */
-	public function setDataVar($val) {
-		$this->dataVar = $val;
+	public function setIncludeDataVar($includeDataVar) {
+		$this->includeDataVar = (boolean) $includeDataVar;
 	}
 
 	/**
@@ -161,8 +201,10 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 * @return	string	Information to display
 	 */
 	public function getAdditionalInformation() {
-		return sprintf(	$GLOBALS['LANG']->sL('LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_taskinfo'),
-			$this->getEmail());
+		return sprintf(
+			$GLOBALS['LANG']->sL('LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_taskinfo'),
+			$this->getEmail()
+		);
 	}
 
 }

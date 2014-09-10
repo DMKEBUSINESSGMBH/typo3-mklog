@@ -66,10 +66,10 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 
 			} elseif ($parentObject->CMD == 'edit') {
 				// Editing a task, set to internal value if data was not submitted already
-				$taskInfo[MKLOG_FIELD_EMAIL] = $task->getEmail();
-				$taskInfo[MKLOG_FIELD_FORCE] = $task->getForce();
-				$taskInfo[MKLOG_FIELD_SEVERITY] = $task->getSeverity();
-				$taskInfo[MKLOG_FIELD_DATAVAR] = $task->getDataVar();
+				$taskInfo[MKLOG_FIELD_EMAIL] = $task->getEmailReceiver();
+				$taskInfo[MKLOG_FIELD_FORCE] = $task->getForceSummaryMail();
+				$taskInfo[MKLOG_FIELD_SEVERITY] = $task->getMinimalSeverity();
+				$taskInfo[MKLOG_FIELD_DATAVAR] = $task->getIncludeDataVar();
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
 				$taskInfo[MKLOG_FIELD_EMAIL] = '';
@@ -161,10 +161,10 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 	 * @return	void
 	 */
 	public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
-		$task->setEmail($submittedData[MKLOG_FIELD_EMAIL]);
-		$task->setForce($submittedData[MKLOG_FIELD_FORCE]);
-		$task->setSeverity($submittedData[MKLOG_FIELD_SEVERITY]);
-		$task->setDataVar($submittedData[MKLOG_FIELD_DATAVAR]);
+		$task->setEmailReceiver($submittedData[MKLOG_FIELD_EMAIL]);
+		$task->setForceSummaryMail($submittedData[MKLOG_FIELD_FORCE]);
+		$task->setMinimalSeverity($submittedData[MKLOG_FIELD_SEVERITY]);
+		$task->setIncludeDataVar($submittedData[MKLOG_FIELD_DATAVAR]);
 	}
 }
 
