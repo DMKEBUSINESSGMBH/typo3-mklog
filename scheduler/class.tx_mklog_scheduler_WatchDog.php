@@ -203,7 +203,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	public function getAdditionalInformation() {
 		return sprintf(
 			$GLOBALS['LANG']->sL('LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_taskinfo'),
-			$this->getEmail()
+			$this->getEmailReceiver()
 		);
 	}
 
