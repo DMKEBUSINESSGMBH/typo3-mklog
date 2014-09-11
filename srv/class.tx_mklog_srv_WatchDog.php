@@ -44,7 +44,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 	 * @param 	array 	$options
 	 */
 	public function triggerMails(
-		$emailReceiver, $lastRun, $filters=array(), $options=array()
+		$emailReceiver, $lastRun, $filters = array(), $options = array()
 	) {
 		$infos = $this->lookupMsgs($lastRun, $filters, $options);
 		// muss eine Mail verschickt werden?
