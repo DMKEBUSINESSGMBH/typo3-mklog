@@ -39,23 +39,23 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 *
 	 * @var	string
 	 */
-	 private $emailReceiver;
+	 private $email;
 
 	 /**
 	  *
 	  * @var int
 	  */
-	 private $minimalSeverity;
+	 private $severity;
 
 	 /**
 	  * @var boolean
 	  */
-	 private $forceSummaryMail;
+	 private $force;
 
 	 /**
 	  * @var boolean
 	  */
-	 private $includeDataVar;
+	 private $dataVar;
 
 	/**
 	 * Function executed from the Scheduler.
@@ -125,28 +125,28 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 * @return string
 	 */
 	public function getEmailReceiver() {
-		return $this->emailReceiver;
+		return $this->email;
 	}
 
 	/**
 	 * @return int
 	 */
 	public function getMinimalSeverity() {
-		return $this->minimalSeverity;
+		return $this->severity;
 	}
 
 	/**
 	 * @return boolean
 	 */
 	public function getForceSummaryMail() {
-		return $this->forceSummaryMail;
+		return $this->force;
 	}
 
 	/**
 	 * @return boolean
 	 */
 	public function getIncludeDataVar() {
-		return $this->includeDataVar;
+		return $this->dataVar;
 	}
 
 	/**
@@ -172,7 +172,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 * @return void
 	 */
 	public function setMinimalSeverity($minimalSeverity) {
-		$this->minimalSeverity = $minimalSeverity;
+		$this->severity = $minimalSeverity;
 	}
 
 	/**
@@ -182,7 +182,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 * @return void
 	 */
 	public function setForceSummaryMail($forceSummaryMail) {
-		$this->forceSummaryMail = (boolean) $forceSummaryMail;
+		$this->force = (boolean) $forceSummaryMail;
 	}
 
 	/**
@@ -192,7 +192,7 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 * @return void
 	 */
 	public function setIncludeDataVar($includeDataVar) {
-		$this->includeDataVar = (boolean) $includeDataVar;
+		$this->dataVar = (boolean) $includeDataVar;
 	}
 
 	/**
