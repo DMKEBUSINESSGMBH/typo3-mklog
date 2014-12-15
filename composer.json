@@ -33,7 +33,6 @@
 	}, 
 	"require" : {
 		"typo3/cms-scheduler" : "*",
-		"typo3-ter/rn-base" : "~0.14",
-		"typo3-ter/devlog" : "~2.10"
+		"typo3-ter/rn-base" : "~0.14"
 	}
 }
