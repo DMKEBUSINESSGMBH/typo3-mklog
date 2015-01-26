@@ -30,9 +30,5 @@
 	},
 	"replace": {
 		"typo3-ter/mklog": "*"
-	}, 
-	"require" : {
-		"typo3/cms-scheduler" : "*",
-		"typo3-ter/rn-base" : "~0.14"
 	}
 }
