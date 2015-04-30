@@ -34,6 +34,7 @@ define('MKLOG_FIELD_EMAIL', 'mklog_email');
 define('MKLOG_FIELD_SEVERITY', 'mklog_severity');
 define('MKLOG_FIELD_FORCE', 'mklog_force');
 define('MKLOG_FIELD_DATAVAR', 'mklog_datavar');
+define('MKLOG_FIELD_GROUP_ENTRIES', 'mklog_group_entries');
 
 /**
  *
@@ -70,6 +71,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 				$taskInfo[MKLOG_FIELD_FORCE] = $task->getForceSummaryMail();
 				$taskInfo[MKLOG_FIELD_SEVERITY] = $task->getMinimalSeverity();
 				$taskInfo[MKLOG_FIELD_DATAVAR] = $task->getIncludeDataVar();
+				$taskInfo[MKLOG_FIELD_GROUP_ENTRIES] = $task->getGroupEntries();
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
 				$taskInfo[MKLOG_FIELD_EMAIL] = '';
@@ -131,6 +133,24 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 			'cshKey'   => '_MOD_tools_txschedulerM1',
 		);
 
+		// data_var
+		$fieldID = 'field_'.MKLOG_FIELD_GROUP_ENTRIES;
+		if (isset($taskInfo[MKLOG_FIELD_GROUP_ENTRIES])) {
+			$fieldValue = $taskInfo[MKLOG_FIELD_GROUP_ENTRIES];
+		} else {
+			// default
+			$fieldValue = 1;
+		}
+		$fieldCode = '<input type="radio" name="tx_scheduler['.MKLOG_FIELD_GROUP_ENTRIES.']" id="' . $fieldID .
+						'" value="1" ' . ($fieldValue ? 'checked="checked"' : '') . ' /> Yes';
+		$fieldCode .= '<input type="radio" name="tx_scheduler['.MKLOG_FIELD_GROUP_ENTRIES.']" id="' . $fieldID .
+						'" value="0" ' . ($fieldValue ? '':'checked="checked"') . ' /> No';
+		$additionalFields[$fieldID] = array(
+			'code'     => $fieldCode,
+			'label'    => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_GROUP_ENTRIES,
+			'cshKey'   => '_MOD_tools_txschedulerM1',
+		);
+
 		return $additionalFields;
 	}
 
@@ -165,6 +185,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 		$task->setForceSummaryMail($submittedData[MKLOG_FIELD_FORCE]);
 		$task->setMinimalSeverity($submittedData[MKLOG_FIELD_SEVERITY]);
 		$task->setIncludeDataVar($submittedData[MKLOG_FIELD_DATAVAR]);
+		$task->setGroupEntries($submittedData[MKLOG_FIELD_GROUP_ENTRIES]);
 	}
 }
 

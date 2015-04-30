@@ -96,9 +96,6 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		if(!isset($options['limit'])) $options['limit'] = 30;
 		$options['orderby'] = 'crdate desc';
 
-		//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
-		$options['groupby'] = 'msg,extkey';
-
 		$result = tx_rnbase_util_DB::doSelect($what, $from, $options);
 
 		return $result;

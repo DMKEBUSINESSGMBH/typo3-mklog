@@ -57,6 +57,11 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	  */
 	 private $dataVar;
 
+	 /**
+	  * @var boolean
+	  */
+	 private $groupEntries;
+
 	/**
 	 * Function executed from the Scheduler.
 	 * Sends an email
@@ -77,6 +82,11 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 			$options['minimalSeverity'] = $this->getMinimalSeverity();
 			$options['forceSummaryMail'] = $this->getForceSummaryMail();
 			$options['includeDataVar'] = $this->getIncludeDataVar();
+
+			//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
+			if ($this->getGroupEntries()) {
+				$options['groupby'] = 'msg,extkey';
+			}
 
 			$srv->triggerMails($this->getEmailReceiver(), $lastRun, $filters, $options);
 			$this->updateLastRunTime($taskId);
@@ -150,6 +160,13 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	}
 
 	/**
+	 * @return boolean
+	 */
+	public function getGroupEntries() {
+		return isset($this->groupEntries) ? $this->groupEntries : TRUE;
+	}
+
+	/**
 	 * @param string	$emails
 	 * @return void
 	 */
@@ -193,6 +210,14 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 */
 	public function setIncludeDataVar($includeDataVar) {
 		$this->dataVar = (boolean) $includeDataVar;
+	}
+
+	/**
+	 * @param boolean	$groupEntries
+	 * @return void
+	 */
+	public function setGroupEntries($groupEntries) {
+		$this->groupEntries = (boolean) $groupEntries;
 	}
 
 	/**
