@@ -86,6 +86,8 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 			//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
 			if ($this->getGroupEntries()) {
 				$options['groupby'] = 'msg,extkey';
+				// wir wollen aber wissen wie oft jede Nachricht vorhanden ist
+				$options['count'] = TRUE;
 			}
 
 			$srv->triggerMails($this->getEmailReceiver(), $lastRun, $filters, $options);

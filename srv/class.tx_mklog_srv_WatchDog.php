@@ -87,7 +87,7 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 	 * @return array
 	 */
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
-		$what = '*, COUNT(uid) as msgCount';
+		$what = '*';
 		$from = 'tx_devlog';
 		$options['enablefieldsoff'] = '1';
 		$options['where'] = 'crdate>='. $lastRun->format('U') .
@@ -95,6 +95,10 @@ class tx_mklog_srv_WatchDog extends t3lib_svbase {
 		// notbremse, es können ziemlich viele logs vorhanden sein.
 		if(!isset($options['limit'])) $options['limit'] = 30;
 		$options['orderby'] = 'crdate desc';
+
+		if ($options['count']) {
+			$what .= ', COUNT(*) as msgCount';
+		}
 
 		$result = tx_rnbase_util_DB::doSelect($what, $from, $options);
 
