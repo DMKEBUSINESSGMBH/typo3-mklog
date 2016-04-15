@@ -211,7 +211,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 				);
 				foreach($records As $record) {
 					$datavar = $options['includeDataVar'] ? (
-									'DataVar: '.(
+									'Extra Data: '.(
 										$record[$extraDataFieldName] ?
 										print_r(Tx_Rnbase_Utility_Extension_Devlog::getExtraDataAsArray(
 											$record[$extraDataFieldName]
