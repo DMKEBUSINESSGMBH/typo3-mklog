@@ -62,7 +62,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 		$infos = array();
 		$infos['summary'] = $this->getSummary($lastRun);
 
-		$minimalSeverity = $options['minimalSeverity'] ?
+		$minimalSeverity = isset($options['minimalSeverity']) ?
 			$options['minimalSeverity'] : tx_rnbase_util_Logger::LOGLEVEL_WARN;
 
 		$hasData = FALSE;
