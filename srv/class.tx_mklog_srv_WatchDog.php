@@ -25,6 +25,7 @@
 tx_rnbase::load('tx_rnbase_util_Logger');
 tx_rnbase::load('tx_rnbase_util_DB');
 tx_rnbase::load('Tx_Rnbase_Service_Base');
+tx_rnbase::load('Tx_Rnbase_Utility_Extension_Devlog');
 
 /**
  * Service für WatchDog
@@ -84,7 +85,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 	 */
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
 		$what = '*';
-		$from = 'tx_devlog';
+		$from = Tx_Rnbase_Utility_Extension_Devlog::getTableName();
 		$options['enablefieldsoff'] = '1';
 		$options['where'] = 'crdate>='. $lastRun->format('U') .
 							' AND severity='. intval($severity);
@@ -107,7 +108,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 	 */
 	protected function getSummary(DateTime $lastRun) {
 		$what = 'severity, count(uid) As cnt';
-		$from = 'tx_devlog';
+		$from = Tx_Rnbase_Utility_Extension_Devlog::getTableName();
 		$options = array();
 		$options['groupby'] = 'severity';
 		$options['enablefieldsoff'] = '1';
@@ -167,6 +168,8 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 	protected function buildMailContents(
 		array $infos, DateTime $lastRun, array $options = array()
 	) {
+		$messageFieldName = Tx_Rnbase_Utility_Extension_Devlog::getMessageFieldName();
+		$extraDataFieldName = Tx_Rnbase_Utility_Extension_Devlog::getExtraDataFieldName();
 		$levels = $this->getSeverities();
 		$textPart = 	'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
 		$htmlPart = 	'<strong>This is an automatic email from TYPO3. Don\'t answer!</strong>';
@@ -209,15 +212,17 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 				foreach($records As $record) {
 					$datavar = $options['includeDataVar'] ? (
 									'DataVar: '.(
-										$record['data_var'] ?
-										print_r(unserialize($record['data_var']), TRUE)
+										$record[$extraDataFieldName] ?
+										print_r(Tx_Rnbase_Utility_Extension_Devlog::getExtraDataAsArray(
+											$record[$extraDataFieldName]
+										), TRUE)
 										: '')
 									) : '';
 					$textPart .= sprintf(
 						"Time: %s Extension: %s\nMessage: %s\nCount: %s\n%s",
 						date('Y-m-d H:i:s',$record['crdate']),
 						$record['extkey'],
-						$record['msg'],
+						$record[$messageFieldName],
 						$record['msgCount'],
 						$datavar
 					);
@@ -225,7 +230,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 						"<p>Time: %s<br />Extension: %s<br />Message: %s</p><br />Count: %s\n<pre>%s</pre>",
 						date('Y-m-d H:i:s', $record['crdate']),
 						$record['extkey'],
-						$record['msg'],
+						$record[$messageFieldName],
 						$record['msgCount'],
 						$datavar
 					);
