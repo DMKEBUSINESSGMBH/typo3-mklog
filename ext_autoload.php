@@ -3,8 +3,10 @@
  * Register necessary class names with autoloader
  *
  */
+
+$extensionPath = PATH_typo3conf . 'ext/mklog/';
 return array(
-	'tx_mklog_scheduler_watchdog'					=> t3lib_extMgm::extPath('mklog', 'scheduler/class.tx_mklog_scheduler_WatchDog.php'),
-	'tx_mklog_scheduler_watchdogaddfieldprovider'	=> t3lib_extMgm::extPath('mklog', 'scheduler/class.tx_mklog_scheduler_WatchDogAddFieldProvider.php'),
+	'tx_mklog_scheduler_watchdog'					=> $extensionPath . 'scheduler/class.tx_mklog_scheduler_WatchDog.php',
+	'tx_mklog_scheduler_watchdogaddfieldprovider'	=> $extensionPath . 'scheduler/class.tx_mklog_scheduler_WatchDogAddFieldProvider.php',
 );
 

@@ -21,14 +21,9 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
-if (!interface_exists('tx_scheduler_AdditionalFieldProvider')) {
-	require_once t3lib_extMgm::extPath(
-		'scheduler', '/interfaces/interface.tx_scheduler_additionalfieldprovider.php'
-	);
-}
+tx_rnbase::load('Tx_Rnbase_Scheduler_FieldProvider');
 tx_rnbase::load('tx_rnbase_util_Misc');
+tx_rnbase::load('tx_rnbase_util_Typo3Classes');
 
 define('MKLOG_FIELD_EMAIL', 'mklog_email');
 define('MKLOG_FIELD_SEVERITY', 'mklog_severity');
@@ -37,9 +32,15 @@ define('MKLOG_FIELD_DATAVAR', 'mklog_datavar');
 define('MKLOG_FIELD_GROUP_ENTRIES', 'mklog_group_entries');
 
 /**
+ * tx_mklog_scheduler_WatchDogAddFieldProvider
  *
+ * @package 		TYPO3
+ * @subpackage	 	mklog
+ * @author 			René Nitzsche
+ * @license 		http://www.gnu.org/licenses/lgpl.html
+ * 					GNU Lesser General Public License, version 3 or later
  */
-class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_AdditionalFieldProvider {
+class tx_mklog_scheduler_WatchDogAddFieldProvider extends Tx_Rnbase_Scheduler_FieldProvider {
 
 	/**
 	 * This method is used to define new fields for adding or editing a task
@@ -56,7 +57,7 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 	 *										['cshKey']		=> The CSH key for the field
 	 *										['cshLabel']	=> The code of the CSH label
 	 */
-	public function getAdditionalFields(array &$taskInfo, $task, tx_scheduler_Module $parentObject) {
+	protected function _getAdditionalFields(array &$taskInfo, $task, $parentObject) {
 
 
 		// Initialize extra field value
@@ -162,10 +163,14 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 	 * @param	tx_scheduler_Module		$parentObject: reference to the calling object (Scheduler's BE module)
 	 * @return	boolean					True if validation was ok (or selected class is not relevant), false otherwise
 	 */
-	public function validateAdditionalFields(array &$submittedData, tx_scheduler_Module $parentObject) {
+	protected function _validateAdditionalFields(array &$submittedData, $schedulerModule) {
 		$submittedData[MKLOG_FIELD_EMAIL] = trim($submittedData[MKLOG_FIELD_EMAIL]);
 		if (empty($submittedData[MKLOG_FIELD_EMAIL])) {
-			$parentObject->addMessage($GLOBALS['LANG']->sL('LLL:EXT:scheduler/mod1/locallang.xml:msg.noEmail'), t3lib_FlashMessage::ERROR);
+			$flashMessageClass = tx_rnbase_util_Typo3Classes::getFlashMessageClass();
+			$schedulerModule->addMessage(
+				$GLOBALS['LANG']->sL('LLL:EXT:scheduler/mod1/locallang.xml:msg.noEmail'),
+				$flashMessageClass::ERROR
+			);
 			return false;
 		}
 
@@ -177,10 +182,10 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider implements tx_scheduler_Additi
 	 * if the task class matches
 	 *
 	 * @param	array				$submittedData: array containing the data submitted by the user
-	 * @param	tx_mklog_scheduler_WatchDog	$task: reference to the current task object
+	 * @param	Tx_Rnbase_Scheduler_Task	$task: reference to the current task object
 	 * @return	void
 	 */
-	public function saveAdditionalFields(array $submittedData, tx_scheduler_Task $task) {
+	protected function _saveAdditionalFields(array $submittedData, Tx_Rnbase_Scheduler_Task $task) {
 		$task->setEmailReceiver($submittedData[MKLOG_FIELD_EMAIL]);
 		$task->setForceSummaryMail($submittedData[MKLOG_FIELD_FORCE]);
 		$task->setMinimalSeverity($submittedData[MKLOG_FIELD_SEVERITY]);

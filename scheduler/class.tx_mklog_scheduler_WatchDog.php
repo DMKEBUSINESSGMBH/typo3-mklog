@@ -21,18 +21,21 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-
-require_once t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php';
-if (!class_exists('tx_scheduler_Task')) {
-	require_once t3lib_extMgm::extPath('scheduler', 'class.tx_scheduler_task.php');
-}
+tx_rnbase::load('Tx_Rnbase_Scheduler_Task');
 tx_rnbase::load('tx_rnbase_util_DB');
 tx_rnbase::load('tx_rnbase_util_Logger');
+tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
 /**
+ * tx_mklog_scheduler_WatchDog
  *
+ * @package 		TYPO3
+ * @subpackage	 	mklog
+ * @author 			René Nitzsche
+ * @license 		http://www.gnu.org/licenses/lgpl.html
+ * 					GNU Lesser General Public License, version 3 or later
  */
-class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
+class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task {
 
 	/**
 	 * Email address(es) for notification mail
@@ -173,10 +176,10 @@ class tx_mklog_scheduler_WatchDog extends tx_scheduler_Task {
 	 * @return void
 	 */
 	public function setEmailReceiver($emails) {
-		$emails = t3lib_div::trimExplode(',', $emails);
+		$emails = Tx_Rnbase_Utility_Strings::trimExplode(',', $emails);
 
 		foreach($emails As $email) {
-			if(!t3lib_div::validEmail($email)) {
+			if(!Tx_Rnbase_Utility_Strings::validEmail($email)) {
 				throw new Exception(
 					'tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!'
 				);

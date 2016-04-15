@@ -22,20 +22,16 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-
-/**
- * benötigte Klassen einbinden
- */
-require_once(t3lib_extMgm::extPath('rn_base') . 'class.tx_rnbase.php');
 tx_rnbase::load('tx_rnbase_util_Logger');
 tx_rnbase::load('tx_rnbase_util_DB');
+tx_rnbase::load('Tx_Rnbase_Service_Base');
 
 /**
  * Service für WatchDog
  *
  * @author René Nitzsche
  */
-class tx_mklog_srv_WatchDog extends t3lib_svbase {
+class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 
 	/**
 	 * Versand von Infomails

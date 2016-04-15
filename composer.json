@@ -1,7 +1,7 @@
 {
 	"name" : "dmk/mklog",
 	"description" : "Keep track of developer logs. Provides automatic email notification about important errors.",
-	"version" : "1.1.9",
+	"version" : "2.0.0",
 	"type" : "typo3-cms-extension",
 	"keywords" : ["TYPO3 CMS", "devlog", "log", "notification"],
 	"homepage" : "http://www.dmk-ebusiness.de/",
@@ -30,5 +30,12 @@
 	},
 	"replace": {
 		"typo3-ter/mklog": "*"
+	},
+	"require" : {
+		"typo3/cms-core" : ">=4.5.0 <=7.6.99",
+		"digedag/rn-base" : ">=1.0.0"
+	},
+	"autoload": {
+		"classmap": ["scheduler/", "srv/"]
 	}
 }

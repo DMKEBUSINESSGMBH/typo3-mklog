@@ -14,16 +14,16 @@ if (!defined ('TYPO3_MODE')) {
 
 $_EXTKEY = 'mklog';
 
-//require_once(t3lib_extMgm::extPath($_EXTKEY).'srv/ext_localconf.php');
+//require_once(tx_rnbase_util_Extensions::extPath($_EXTKEY).'srv/ext_localconf.php');
 
 
-t3lib_extMgm::addService($_EXTKEY,  $_EXTKEY /* sv type */,  'tx_mklog_srv_WatchDog' /* sv key */,
+tx_rnbase_util_Extensions::addService($_EXTKEY,  $_EXTKEY /* sv type */,  'tx_mklog_srv_WatchDog' /* sv key */,
   array(
     'title' => 'WatchDog services', 'description' => 'Service functions WatchDog',
     'subtype' => 'WatchDog',
     'available' => TRUE, 'priority' => 50, 'quality' => 50,
     'os' => '', 'exec' => '',
-    'classFile' => t3lib_extMgm::extPath($_EXTKEY).'srv/class.tx_mklog_srv_WatchDog.php',
+    'classFile' => tx_rnbase_util_Extensions::extPath($_EXTKEY).'srv/class.tx_mklog_srv_WatchDog.php',
     'className' => 'tx_mklog_srv_WatchDog',
   )
 );
