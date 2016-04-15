@@ -23,4 +23,4 @@ sent via mail.
 Note, you will only get entries which are new since the last run. If nothing
 new no mail will be sent. Except if you force a summary mail.
 
-It is even possible to include the data_var field of a devlog entry into the mail.
+It is even possible to include the data_var/extra_data field of a devlog entry into the mail.

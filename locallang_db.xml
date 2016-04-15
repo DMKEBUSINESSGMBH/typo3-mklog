@@ -12,7 +12,7 @@
 			<label index="scheduler_watchdog_field_mklog_email">Email</label>
 			<label index="scheduler_watchdog_field_mklog_force">Force a summary mail</label>
 			<label index="scheduler_watchdog_field_mklog_severity">Minimum error level to trigger email.</label>
-			<label index="scheduler_watchdog_field_mklog_datavar">Include data_var.</label>
+			<label index="scheduler_watchdog_field_mklog_datavar">Include data_var/extra_data.</label>
 			<label index="scheduler_watchdog_taskinfo">Send notify emails to %s.</label>
 			<label index="scheduler_watchdog_field_mklog_group_entries">Group messages (so every message is only present once)</label>
 
@@ -23,7 +23,7 @@
 			<label index="scheduler_watchdog_taskinfo">Sende Info-Emails an %s.</label>
 			<label index="scheduler_watchdog_field_mklog_force">Email mit Zusammenfassung immer schicken.</label>
 			<label index="scheduler_watchdog_field_mklog_severity">Mindest-Fehlerstufe für Mailversand.</label>
-			<label index="scheduler_watchdog_field_mklog_datavar">Daten (data_var) mit exportieren.</label>
+			<label index="scheduler_watchdog_field_mklog_datavar">Daten (data_var/extra_data) mit exportieren.</label>
 			<label index="scheduler_watchdog_field_mklog_group_entries">Meldungen gruppieren (damit jede Meldung nur einmal erscheint)</label>
 
 		</languageKey>

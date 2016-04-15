@@ -25,6 +25,7 @@ tx_rnbase::load('Tx_Rnbase_Scheduler_Task');
 tx_rnbase::load('tx_rnbase_util_DB');
 tx_rnbase::load('tx_rnbase_util_Logger');
 tx_rnbase::load('Tx_Rnbase_Utility_Strings');
+tx_rnbase::load('Tx_Rnbase_Utility_Extension_Devlog');
 
 /**
  * tx_mklog_scheduler_WatchDog
@@ -88,7 +89,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task {
 
 			//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
 			if ($this->getGroupEntries()) {
-				$options['groupby'] = 'msg,extkey';
+				$options['groupby'] = Tx_Rnbase_Utility_Extension_Devlog::getMessageFieldName() . ',extkey';
 				// wir wollen aber wissen wie oft jede Nachricht vorhanden ist
 				$options['count'] = TRUE;
 			}
