@@ -25,7 +25,7 @@
 tx_rnbase::load('tx_rnbase_util_Logger');
 tx_rnbase::load('tx_rnbase_util_DB');
 tx_rnbase::load('Tx_Rnbase_Service_Base');
-tx_rnbase::load('Tx_Rnbase_Utility_Extension_Devlog');
+tx_rnbase::load('Tx_Mklog_Utility_Devlog');
 
 /**
  * Service für WatchDog
@@ -85,7 +85,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 	 */
 	protected function getLatestEntries(DateTime $lastRun, $severity, array $options) {
 		$what = '*';
-		$from = Tx_Rnbase_Utility_Extension_Devlog::getTableName();
+		$from = Tx_Mklog_Utility_Devlog::getTableName();
 		$options['enablefieldsoff'] = '1';
 		$options['where'] = 'crdate>='. $lastRun->format('U') .
 							' AND severity='. intval($severity);
@@ -108,7 +108,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 	 */
 	protected function getSummary(DateTime $lastRun) {
 		$what = 'severity, count(uid) As cnt';
-		$from = Tx_Rnbase_Utility_Extension_Devlog::getTableName();
+		$from = Tx_Mklog_Utility_Devlog::getTableName();
 		$options = array();
 		$options['groupby'] = 'severity';
 		$options['enablefieldsoff'] = '1';
@@ -168,8 +168,8 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 	protected function buildMailContents(
 		array $infos, DateTime $lastRun, array $options = array()
 	) {
-		$messageFieldName = Tx_Rnbase_Utility_Extension_Devlog::getMessageFieldName();
-		$extraDataFieldName = Tx_Rnbase_Utility_Extension_Devlog::getExtraDataFieldName();
+		$messageFieldName = Tx_Mklog_Utility_Devlog::getMessageFieldName();
+		$extraDataFieldName = Tx_Mklog_Utility_Devlog::getExtraDataFieldName();
 		$levels = $this->getSeverities();
 		$textPart = 	'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
 		$htmlPart = 	'<strong>This is an automatic email from TYPO3. Don\'t answer!</strong>';
@@ -213,7 +213,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base {
 					$datavar = $options['includeDataVar'] ? (
 									'Extra Data: '.(
 										$record[$extraDataFieldName] ?
-										print_r(Tx_Rnbase_Utility_Extension_Devlog::getExtraDataAsArray(
+										print_r(Tx_Mklog_Utility_Devlog::getExtraDataAsArray(
 											$record[$extraDataFieldName]
 										), TRUE)
 										: '')

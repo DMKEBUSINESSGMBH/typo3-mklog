@@ -36,6 +36,6 @@
 		"digedag/rn-base" : ">=1.0.4"
 	},
 	"autoload": {
-		"classmap": ["scheduler/", "srv/"]
+		"classmap": ["scheduler/", "srv/", "Classes/"]
 	}
 }
