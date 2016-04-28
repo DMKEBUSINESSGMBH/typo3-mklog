@@ -18,6 +18,7 @@ The following is a very high level overview of the changes in this extension.
 =========  ===========================================================================
 Version    Changes
 =========  ===========================================================================
+2.0.0      | [FEATURE] added support for TYPO3 7.6
 1.1.7      | [BUGFIX] fixed sending mail without found entries if no grouping configured
 1.1.0      | Initial Release
 =========  ===========================================================================
