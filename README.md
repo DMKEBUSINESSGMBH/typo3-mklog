@@ -1,24 +1,11 @@
 mklog
 =======
 
-Check the manual at http://docs.typo3.org/typo3cms/extensions/mklog/
+This extensions offers a scheduler task, the watch dog, which aggregates devlog entries and sends them via mail. So it is possible to send a mail with fatal errors the minute they occur but warnings only every 6 hours. Or send a mail with infos from an import every night.
+
+Of course the devlog has to be used by the core and extensions. To have exceptions and errors logged to the devlog the error handling of mktools can be used.
 
 
-Sinn und Zweck von mklog.
+[UsersManual](Documentation/UsersManual/Index.md)
 
-1. Automatische Systemmails bei bestimmten Fehlermeldungen im Devlog
-2. Neues BE-Modul zur Anzeige des devlogs
-
-
-1. Infomail
-Ablauf: Der Job prüft, ob seit dem letzten Lauf Fehler im Devlog eingetroffen sind, die bestimmten
-Kriterien entsprechen. In diesem Fall wird eine Infomail erzeugt.
-
-Die Mail enthält zum einen eine Auflistung aller LogLevel mit der Summe der gefundenen Einträge
-Ab dem gesetzten LogLevel und höher, werden die letzte Einträge einzeln aufgelistet.
-
-Konfiguration
-email: Zieladressen
-minlevel: Minimales Loglevel ab dem die Mails verschickt werden
-forceSummary: Sendet zumindest die Zusammenfassung auch wenn das minlevel nicht erreicht wurde.
-
+[ChangeLog](Documentation/ChangeLog/Index.md)
