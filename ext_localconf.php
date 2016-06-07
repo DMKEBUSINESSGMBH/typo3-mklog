@@ -35,3 +35,5 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mklog_schedu
 	'description'      => 'LLL:EXT:' . $_EXTKEY . '/locallang_db.xml:scheduler_watchdog_description',
 	'additionalFields' => 'tx_mklog_scheduler_WatchDogAddFieldProvider'
 );
+
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'EXT:' . $_EXTKEY . '/Classes/Hooks/DataHandler.php:Tx_Mklog_Hooks_DataHandler';
