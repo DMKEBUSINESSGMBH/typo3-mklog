@@ -5,6 +5,7 @@ The following is a very high level overview of the changes in this extension.
 
 |Version|Changes|
 |-------|-------|
+|2.0.5| Delete devlog entries automatically when deleting pages and prevent copying of devlog entries along when copying a page|
 |2.0.4| added extension icon|
 |2.0.3| converted documentation from reSt to markdown|
 |2.0.2| [FEATURE] added support for TYPO3 7.6|
