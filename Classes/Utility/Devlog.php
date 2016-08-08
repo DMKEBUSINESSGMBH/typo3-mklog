@@ -24,6 +24,9 @@
 /**
  * Tx_Mklog_Utility_Devlog
  *
+ * Achtung, diese KLasse ist ausschließlich für die tx_devlog Extension,
+ * nicht für das interne devlog!
+ *
  * @package 		TYPO3
  * @subpackage	 	mklog
  * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>

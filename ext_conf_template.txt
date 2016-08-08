@@ -1,0 +1,11 @@
+# cat=base; type=boolean; label=Enable DevLog: Enables the tx_devlog alternative tx_mklog
+enable_devlog = 1
+
+# cat=base; type=options[Debug=7,Info=6,Notice=5,Warning=4,Error=3,Critical=2,Alert=1,Emergency=0]; label=Minimum log level: Minimum message level required for actually writing to the log table
+min_log_level = 4
+
+# cat=base; type=string; label=Excluded Extensions: A comma seperated list of extension keys that should not be logged
+exclude_ext_keys = extbase
+
+# cat=base; type=int; label=Max Log size: Maximum number of log entries to keep when cleaning up
+max_logs = 10000
