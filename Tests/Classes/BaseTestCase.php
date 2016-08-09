@@ -76,7 +76,7 @@ abstract class BaseTestCase
 	}
 
 	/**
-	 * Returns a subscriber model mock
+	 * Returns a devlog entry model mock
 	 *
 	 * @return \PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Domain\Model\DevlogEntryModel
 	 */

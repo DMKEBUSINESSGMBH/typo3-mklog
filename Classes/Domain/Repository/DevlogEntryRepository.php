@@ -128,6 +128,42 @@ class DevlogEntryRepository
 	}
 
 	/**
+	 * Returns the latest log runs
+	 *
+	 * @param int $limit
+	 *
+	 * @return Tx_Rnbase_Domain_Collection_Base
+	 */
+	public function getLatestRuns(
+		$limit = 50
+	) {
+		$fields = $options = array();
+
+		$options['groupby'] = 'DEVLOGENTRY.run_id';
+		$options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
+		$options['limit'] = (int) $limit;
+		$options['forcewrapper'] = 1;
+
+		return $this->search($fields, $options);
+	}
+
+	/**
+	 * Returns all extension keys who has logged into devlog
+	 *
+	 * @return Tx_Rnbase_Domain_Collection_Base
+	 */
+	public function getLoggedExtensions()
+	{
+		$fields = $options = array();
+
+		$options['groupby'] = 'DEVLOGENTRY.ext_key';
+		$options['orderby']['DEVLOGENTRY.ext_key'] = 'DESC';
+		$options['forcewrapper'] = 1;
+
+		return $this->search($fields, $options);
+	}
+
+	/**
 	 * On default, return hidden and deleted fields in backend
 	 *
 	 * @param array $fields

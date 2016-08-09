@@ -24,6 +24,8 @@ namespace DMK\Mklog\Logger;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \DMK\Mklog\Utility\SeverityUtility;
+
 /**
  * Devlog logger
  *
@@ -134,19 +136,19 @@ class DevlogLogger
 		// map the old log levels to the new one
 		switch ((int) $params['severity']) {
 			case \tx_rnbase_util_Logger::LOGLEVEL_DEBUG:
-				$params['severity'] = 7;
+				$params['severity'] = SeverityUtility::DEBUG;
 				break;
 			case \tx_rnbase_util_Logger::LOGLEVEL_INFO:
-				$params['severity'] = 6;
+				$params['severity'] = SeverityUtility::INFO;
 				break;
 			case \tx_rnbase_util_Logger::LOGLEVEL_NOTICE:
-				$params['severity'] = 5;
+				$params['severity'] = SeverityUtility::NOTICE;
 				break;
 			case \tx_rnbase_util_Logger::LOGLEVEL_WARN:
-				$params['severity'] = 4;
+				$params['severity'] = SeverityUtility::WARNING;
 				break;
 			case \tx_rnbase_util_Logger::LOGLEVEL_FATAL:
-				$params['severity'] = 2;
+				$params['severity'] = SeverityUtility::CRITICAL;
 				break;
 		}
 

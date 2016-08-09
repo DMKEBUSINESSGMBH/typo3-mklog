@@ -184,7 +184,33 @@ class DevlogEntryRepositoryTest
 	}
 
 	/**
-	 * Test the prepareGenericSearcher method.
+	 * Test the getLatestRuns method.
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testGetLatestRuns()
+	{
+		self::markTestIncomplete();
+	}
+
+	/**
+	 * Test the getLoggedExtensions method.
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testGetLoggedExtensions()
+	{
+		self::markTestIncomplete();
+	}
+
+	/**
+	 * Test the isTableAvailable method.
 	 *
 	 * @return void
 	 *
@@ -197,7 +223,7 @@ class DevlogEntryRepositoryTest
 	}
 
 	/**
-	 * Test the prepareGenericSearcher method.
+	 * Test the optimize method.
 	 *
 	 * @return void
 	 *
