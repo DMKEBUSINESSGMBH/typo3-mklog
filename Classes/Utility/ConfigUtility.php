@@ -141,4 +141,19 @@ class ConfigUtility
 
 		return $this->getExtConf()->getExcludeExtKeys();
 	}
+
+	/**
+	 * The global from mail address
+	 *
+	 * @return array
+	 */
+	public function getGlobalMailFrom()
+	{
+		return \tx_rnbase_configurations::getExtensionCfgValue(
+			'rn_base',
+			'fromEmail'
+		);
+	}
+
+
 }

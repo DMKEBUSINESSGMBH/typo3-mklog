@@ -24,6 +24,8 @@ namespace DMK\Mklog\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \DMK\Mklog\Utility\SeverityUtility;
+
 \tx_rnbase::load('Tx_Rnbase_Domain_Model_Base');
 
 /**
@@ -72,7 +74,7 @@ namespace DMK\Mklog\Domain\Model;
  *          GNU Lesser General Public License, version 3 or later
  */
 class DevlogEntryModel
-	extends \Tx_Rnbase_Domain_Model_Base
+	extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
 {
 	/**
 	 * Liefert den aktuellen Tabellenname
@@ -82,5 +84,88 @@ class DevlogEntryModel
 	public function getTableName()
 	{
 		return 'tx_mklog_devlog_entry';
+	}
+
+	/* *** ******************************************** *** *
+	 * *** \DMK\Mklog\WatchDog\Message\InterfaceMessage *** *
+	 * *** ******************************************** *** */
+
+	/**
+	 * Returns the short text of the message
+	 *
+	 * @return string
+	 */
+	public function getShortMessage()
+	{
+		return $this->getExtKey();
+	}
+
+	/**
+	 * Returns the full text of the message
+	 *
+	 * @return string
+	 */
+	public function getFullMessage()
+	{
+		return $this->getMessage();
+	}
+
+	/**
+	 * Returns the timestamp of the message
+	 *
+	 * @return float
+	 */
+	public function getTimestamp()
+	{
+		return $this->getCrdate();
+	}
+
+	/**
+	 * Returns the log level of the message as a Psr\Log\Level-constant
+	 *
+	 * @return string
+	 */
+	public function getLevel()
+	{
+		switch ($this->getSeverity()) {
+			case SeverityUtility::EMERGENCY:
+				return 'emergency';
+			case SeverityUtility::ALERT:
+				return 'alert';
+			case SeverityUtility::CRITICAL:
+				return 'critical';
+			case SeverityUtility::ERROR:
+				return 'error';
+			case SeverityUtility::WARNING:
+				return 'warning';
+			case SeverityUtility::NOTICE:
+				return 'notice';
+			case SeverityUtility::INFO:
+				return 'info';
+			case SeverityUtility::DEBUG:
+				return 'debug';
+		}
+	}
+
+	/**
+	 * Returns the facility of the message
+	 *
+	 * @return string
+	 */
+	public function getFacility()
+	{
+		$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
+
+		return $utility::getIndpEnv('TYPO3_HOST_ONLY');
+	}
+
+	/**
+	 * Returns the value of the additional field of the message
+	 *
+	 * @return mixed
+	 */
+	public function getAdditionalData()
+	{
+		return $this->getExtraData();
 	}
 }
