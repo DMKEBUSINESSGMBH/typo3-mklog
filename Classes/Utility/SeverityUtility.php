@@ -134,6 +134,35 @@ final class SeverityUtility
 	}
 
 	/**
+	 * Returns a log level as a Psr\Log\Level-constant
+	 *
+	 * @param int $level Log level.
+	 *
+	 * @return string Log level name.
+	 */
+	public static function getPsrLevelConstant($level)
+	{
+		switch ($level) {
+			case self::EMERGENCY:
+				return 'emergency';
+			case self::ALERT:
+				return 'alert';
+			case self::CRITICAL:
+				return 'critical';
+			case self::ERROR:
+				return 'error';
+			case self::WARNING:
+				return 'warning';
+			case self::NOTICE:
+				return 'notice';
+			case self::INFO:
+				return 'info';
+			case self::DEBUG:
+				return 'debug';
+		}
+	}
+
+	/**
 	 * Returns all levels as array
 	 *
 	 * @return array

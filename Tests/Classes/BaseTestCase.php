@@ -49,6 +49,10 @@ abstract class BaseTestCase
 	{
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
+
+		$extConf = \DMK\Mklog\Factory::getConfigUtility()->getExtConf();
+		$extConf->setMinLogLevel(7);
+		$extConf->setExcludeExtKeys('');
 	}
 
 	/**
@@ -59,6 +63,8 @@ abstract class BaseTestCase
 	 */
 	protected function tearDown()
 	{
+		// reset extconf cache
+		\DMK\Mklog\Factory::getConfigUtility()->unsExtConf();
 	}
 
 	/**

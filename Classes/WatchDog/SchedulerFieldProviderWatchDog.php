@@ -63,20 +63,17 @@ class SchedulerFieldProviderWatchDog
 		// @codingStandardsIgnoreEnd
 
 		// Initialize extra field value
-		if ((
-			!array_key_exists('mklog_watchdog_transport', $taskInfo) ||
-			empty($taskInfo['mklog_watchdog_transport'])
-		)) {
-			if ($parentObject->CMD == 'add') {
-				// New task
-				$taskInfo['mklog_watchdog_transport'] = '';
-
-			} elseif ($parentObject->CMD == 'edit') {
+		if (empty($taskInfo['mklog_watchdog_transport'])) {
+			if ($parentObject->CMD == 'edit') {
 				// Editing a task, set to internal value if data was not submitted already
 				$taskInfo['mklog_watchdog_transport'] = $task->getOptions()->getTransport();
+				$taskInfo['mklog_watchdog_credentials'] = $task->getOptions()->getCredentials();
+				$taskInfo['mklog_watchdog_severity'] = $task->getOptions()->getSeverity();
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
 				$taskInfo['mklog_watchdog_transport'] = '';
+				$taskInfo['mklog_watchdog_credentials'] = '';
+				$taskInfo['mklog_watchdog_severity'] = \DMK\Mklog\Utility\SeverityUtility::DEBUG;
 			}
 		}
 
@@ -84,12 +81,14 @@ class SchedulerFieldProviderWatchDog
 		$additionalFields = array();
 
 		$additionalFields['field_mklog_watchdog_transport'] = $this->getTransportField($taskInfo);
+		$additionalFields['field_mklog_watchdog_credentials'] = $this->getCredentialsField($taskInfo);
+		$additionalFields['field_mklog_watchdog_severity'] = $this->getSeverityField($taskInfo);
 
 		return $additionalFields;
 	}
 
 	/**
-	 * Creates the Transport drop down
+	 * Creates the transport drop down
 	 *
 	 * @param array $taskInfo
 	 *
@@ -98,12 +97,14 @@ class SchedulerFieldProviderWatchDog
 	protected function getTransportField(
 		array &$taskInfo
 	) {
-		// Transport
-		$fieldCode = '<select name="tx_scheduler[mklog_watchdog_transport]" id="field_mklog_watchdog_transport">';
+		$fieldCode = '<select ' .
+			'name="tx_scheduler[mklog_watchdog_transport]" ' .
+			'id="field_mklog_watchdog_transport" ' .
+		'>';
 
 		foreach (array(
 			'\DMK\Mklog\WatchDog\Transport\MailTransport' => 'Mail',
-
+			'\DMK\Mklog\WatchDog\Transport\GelfTransport' => 'Gelf (GrayLog)',
 		) as $key => $label) {
 			$fieldCode .= sprintf(
 				'<option value="%1$s" %3$s />%2$s</option>',
@@ -117,6 +118,63 @@ class SchedulerFieldProviderWatchDog
 		return array(
 			'code' => $fieldCode,
 			'label'  => 'Transport',
+		);
+	}
+
+	/**
+	 * Creates the credentials input field
+	 *
+	 * @param array $taskInfo
+	 *
+	 * @return array
+	 */
+	protected function getCredentialsField(
+		array &$taskInfo
+	) {
+		$fieldCode = '<input ' .
+			'type="text" ' .
+			'name="tx_scheduler[mklog_watchdog_credentials]" ' .
+			'id="field_mklog_watchdog_credentials" ' .
+			'value="' . $taskInfo['mklog_watchdog_credentials'] . '" ' .
+			'size="50" />';
+
+		return array(
+			'code' => $fieldCode,
+			'label' => 'Credentials',
+		);
+	}
+
+	/**
+	 * Creates the severity drop down
+	 *
+	 * @param array $taskInfo
+	 *
+	 * @return array
+	 */
+	protected function getSeverityField(
+		array &$taskInfo
+	) {
+		// Transport
+		$fieldCode = '<select ' .
+			'name="tx_scheduler[mklog_watchdog_severity]" ' .
+			'id="field_mklog_watchdog_severity" ' .
+		'>';
+
+		$levels = \DMK\Mklog\Utility\SeverityUtility::getItems();
+
+		foreach ($levels as $key => $label) {
+			$fieldCode .= sprintf(
+				'<option value="%1$s" %3$s />%2$s</option>',
+				$key,
+				$label,
+				$taskInfo['mklog_watchdog_severity'] == $key ? 'selected="selected"' : ''
+			);
+		}
+		$fieldCode .= '</select>';
+
+		return array(
+			'code' => $fieldCode,
+			'label'  => 'Min Severity',
 		);
 	}
 
@@ -135,6 +193,18 @@ class SchedulerFieldProviderWatchDog
 		$schedulerModule
 	) {
 		// @codingStandardsIgnoreEnd
+
+		$credentials = &$submittedData['mklog_watchdog_credentials'];
+		$credentials = trim($credentials);
+		if (empty($credentials)) {
+			$flashMessageClass = \tx_rnbase_util_Typo3Classes::getFlashMessageClass();
+			$schedulerModule->addMessage(
+				'The credentials for the transport are required!',
+				$flashMessageClass::ERROR
+			);
+			return false;
+		}
+
 		return true;
 	}
 
@@ -153,6 +223,10 @@ class SchedulerFieldProviderWatchDog
 		\Tx_Rnbase_Scheduler_Task $task
 	) {
 		// @codingStandardsIgnoreEnd
-		$task->getOptions()->setTransport($submittedData['mklog_watchdog_transport']);
+		($task->getOptions()
+			->setTransport($submittedData['mklog_watchdog_transport'])
+			->setCredentials($submittedData['mklog_watchdog_credentials'])
+			->setSeverity((int) $submittedData['mklog_watchdog_severity'])
+		);
 	}
 }

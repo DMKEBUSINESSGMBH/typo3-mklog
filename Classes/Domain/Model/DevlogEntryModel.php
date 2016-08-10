@@ -24,8 +24,6 @@ namespace DMK\Mklog\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \DMK\Mklog\Utility\SeverityUtility;
-
 \tx_rnbase::load('Tx_Rnbase_Domain_Model_Base');
 
 /**
@@ -127,24 +125,9 @@ class DevlogEntryModel
 	 */
 	public function getLevel()
 	{
-		switch ($this->getSeverity()) {
-			case SeverityUtility::EMERGENCY:
-				return 'emergency';
-			case SeverityUtility::ALERT:
-				return 'alert';
-			case SeverityUtility::CRITICAL:
-				return 'critical';
-			case SeverityUtility::ERROR:
-				return 'error';
-			case SeverityUtility::WARNING:
-				return 'warning';
-			case SeverityUtility::NOTICE:
-				return 'notice';
-			case SeverityUtility::INFO:
-				return 'info';
-			case SeverityUtility::DEBUG:
-				return 'debug';
-		}
+		return \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant(
+			$this->getSeverity()
+		);
 	}
 
 	/**

@@ -43,6 +43,15 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_mklog_schedu
 	'additionalFields' => 'tx_mklog_scheduler_WatchDogAddFieldProvider'
 );
 
+tx_rnbase::load('DMK\\Mklog\\WatchDog\\SchedulerWatchDog');
+tx_rnbase::load('DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog');
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\WatchDog\\SchedulerWatchDog'] = array(
+	'extension' => $_EXTKEY,
+	'title' => 'DevLog WatchDog',
+	'description' => '',
+	'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog'
+);
+
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'EXT:' . $_EXTKEY . '/Classes/Hooks/DataHandler.php:Tx_Mklog_Hooks_DataHandler';
 
 // devlog hook to log into tx_mklog_devlog_entry

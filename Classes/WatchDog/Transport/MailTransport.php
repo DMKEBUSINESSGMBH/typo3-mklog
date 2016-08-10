@@ -24,11 +24,13 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \DMK\Mklog\Utility\SeverityUtility;
+
 \tx_rnbase::load('DMK\\Mklog\\WatchDog\\Transport\\AbstractTransport');
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
 /**
- * MK Log watchdog
+ * MK Log watchdog mail transporter
  *
  * @package TYPO3
  * @subpackage DMK\Mklog
@@ -64,40 +66,27 @@ class MailTransport
 	}
 
 	/**
-	 * Adds a Message to send
+	 * Initializes the Transport
 	 *
-	 * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+	 * @param \Tx_Rnbase_Domain_Model_Data $options
 	 *
 	 * @return void
 	 */
-	protected function addMessage(
-		\DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+	public function initialize(
+		\Tx_Rnbase_Domain_Model_Data $options
 	) {
-		$level = $message->getLevel();
+		parent::initialize($options);
 
-		if (!isset($this->messages[$level])) {
-			$this->messages[$level] = array();
+		$levels = SeverityUtility::getItems();
+		foreach (array_keys($levels) as $level) {
+			if ($this->getOptions()->getSeverity() < $level) {
+				continue;
+			}
+			$psrLevel = SeverityUtility::getPsrLevelConstant($level);
+			$this->uniqs[$psrLevel] = array();
+			$this->uniqs[$psrLevel]['summary'] = 0;
+			$this->messages[$psrLevel] = array();
 		}
-		if (!isset($this->uniqs[$level])) {
-			$this->uniqs[$level] = array();
-		}
-
-		// build message unique key
-		$key = md5($message->getShortMessage() . $message->getFullMessage());
-
-		// set the summary count
-		if (!isset($this->uniqs[$level]['summary'])) {
-			$this->uniqs[$level]['summary'] = 0;
-		}
-		$this->uniqs[$level]['summary']++;
-		// set the unique count
-		if (!isset($this->uniqs[$level][$key])) {
-			$this->uniqs[$level][$key] = 0;
-		}
-		$this->uniqs[$level][$key]++;
-
-		// store the unique message
-		$this->messages[$level][$key] = $message;
 	}
 
 	/**
@@ -111,6 +100,33 @@ class MailTransport
 		\DMK\Mklog\WatchDog\Message\InterfaceMessage $message
 	) {
 		$this->addMessage($message);
+	}
+
+	/**
+	 * Adds a Message to send
+	 *
+	 * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+	 *
+	 * @return void
+	 */
+	protected function addMessage(
+		\DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+	) {
+		$level = $message->getLevel();
+
+		// build message unique key
+		$key = md5($message->getShortMessage() . $message->getFullMessage());
+
+		// set the summary count
+		$this->uniqs[$level]['summary']++;
+		// set the unique count
+		if (!isset($this->uniqs[$level][$key])) {
+			$this->uniqs[$level][$key] = 0;
+		}
+		$this->uniqs[$level][$key]++;
+
+		// store the unique message
+		$this->messages[$level][$key] = $message;
 	}
 
 	/**
@@ -133,9 +149,10 @@ class MailTransport
 		// create summary
 		foreach ($this->uniqs as $level => $messages) {
 			$content .= sprintf(
-				'Level %s : %d items found',
+				'%3$sLevel %1$s : %2$d items found',
 				$level,
-				$messages['summary']
+				$messages['summary'],
+				$messages['summary'] === 0 ? '  ' : '> '
 			);
 			$content .= LF;
 		}
@@ -143,6 +160,10 @@ class MailTransport
 		$content .= LF . LF . '== Latest entries by log level' . LF;
 
 		foreach ($this->messages as $level => $messages) {
+			// skip if there are no messages for this level
+			if (empty($messages)) {
+				continue;
+			}
 			$content .= sprintf(
 				LF . '=== Level %s (%d):',
 				$level,
@@ -185,7 +206,7 @@ class MailTransport
 			$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
 		);
 		$mail->setFrom(\DMK\Mklog\Factory::getConfigUtility()->getGlobalMailFrom());
-		$mail->setTo($this->getOptions()->getMailTo());
+		$mail->setTo($this->getOptions()->getCredentials());
 		$mail->setTextPart($content);
 
 		$mail->send();

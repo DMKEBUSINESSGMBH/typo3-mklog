@@ -1,0 +1,8 @@
+{
+	"config": {
+		"vendor-dir": "Composer"
+	},
+	"require": {
+		"graylog2/gelf-php": "~1"
+	}
+}

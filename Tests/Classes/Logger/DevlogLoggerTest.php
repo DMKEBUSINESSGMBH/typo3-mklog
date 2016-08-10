@@ -52,14 +52,14 @@ class DevlogLoggerTest
 		self::markTestIncomplete();
 	}
 	/**
-	 * Test the getTableName method
+	 * Test the storeLog method
 	 *
 	 * @return void
 	 *
 	 * @group unit
 	 * @test
 	 */
-	public function testGetTableName()
+	public function testStoreLog()
 	{
 		$msg = 'msg';
 		$extKey = 'mklog';

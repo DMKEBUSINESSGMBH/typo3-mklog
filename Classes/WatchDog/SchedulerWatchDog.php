@@ -42,14 +42,14 @@ class SchedulerWatchDog
 	/**
 	 * Internal options storage
 	 *
-	 * @var Tx_Rnbase_Domain_Model_Data
+	 * @var \Tx_Rnbase_Domain_Model_Data
 	 */
 	private $options = null;
 
 	/**
 	 * Returns a storage
 	 *
-	 * @return Tx_Rnbase_Domain_Model_Data
+	 * @return \Tx_Rnbase_Domain_Model_Data
 	 */
 	public function getOptions()
 	{
@@ -69,17 +69,13 @@ class SchedulerWatchDog
 	 */
 	public function execute()
 	{
-		// @TODO: make configurable by the scheduler!
-		$this->getOptions()->setMailTo('mwagner@localhost.net');
-
 		$transport = $this->getTransport();
 
 		// initialize the transport
 		$transport->initialize($this->getOptions());
 
-		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
 		// @TODO: find only new entrys, not all!
-		foreach ($repo->findAll() as $message) {
+		foreach ($this->findMessages() as $message) {
 			$transport->publish($message);
 		}
 
@@ -89,6 +85,24 @@ class SchedulerWatchDog
 		// @TODO: mark logs as deleted!
 
 		return true;
+	}
+
+	/**
+	 * Returns all untransportet messages
+	 *
+	 * @return \Tx_Rnbase_Domain_Collection_Base
+	 */
+	protected function findMessages()
+	{
+		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+
+		$fields = $options = array();
+
+		if ($this->getOptions()->getSeverity()) {
+			$fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
+		}
+
+		return $repo->search($fields, $options);
 	}
 
 	/**
@@ -109,5 +123,28 @@ class SchedulerWatchDog
 		}
 
 		return $instance;
+	}
+
+	/**
+	 * This method returns the destination mail address as additional information
+	 *
+	 * @return	string	Information to display
+	 */
+	public function getAdditionalInformation()
+	{
+		if ($this->getOptions()->isEmpty()) {
+			return '';
+		}
+
+		\tx_rnbase::load('Tx_Rnbase_Utility_Strings');
+
+		$options = array();
+
+		foreach ($this->getOptions() as $key => $value) {
+			$key = \Tx_Rnbase_Utility_Strings::underscoredToLowerCamelCase($key);
+			$options[] = ucfirst($key) . ': ' . $value;
+		}
+
+		return 'Options: ' . implode('; ', $options);
 	}
 }
