@@ -64,7 +64,7 @@ abstract class BaseTestCase
 	protected function tearDown()
 	{
 		// reset extconf cache
-		\DMK\Mklog\Factory::getConfigUtility()->unsExtConf();
+		\DMK\Mklog\Factory::getConfigUtility()->getExtConf()->setProperty(array());
 	}
 
 	/**

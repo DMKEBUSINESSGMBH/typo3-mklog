@@ -62,7 +62,7 @@ class ConfigUtility
 	/**
 	 * Is the devlog enabled?
 	 *
-	 * @return bool
+	 * @return \Tx_Rnbase_Domain_Model_Data
 	 */
 	public function getExtConf()
 	{
