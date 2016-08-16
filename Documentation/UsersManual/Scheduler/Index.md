@@ -13,6 +13,15 @@ Currently there are a mail and some gelf transports.
 
 ![](../../Images/SchedulerWatchDog.png)
 
+The credentials are Transport specific:
+
+ * Mail Message  
+   Only the email: `john@dohe.org`
+ * Gelf UDP  
+   The host and port of the server: `127.0.0.1:12201`
+ * Gelf HTTP  
+   The complete url of the server: `https://admin:admin@127.0.0.1:2345/gelf`
+
 
 ### tx_devlog Scheduler
 
