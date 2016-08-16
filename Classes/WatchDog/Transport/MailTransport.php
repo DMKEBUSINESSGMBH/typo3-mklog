@@ -62,7 +62,7 @@ class MailTransport
 	 */
 	public function getIdentifier()
 	{
-		return 'mklogmail';
+		return 'mkLogMail';
 	}
 
 	/**

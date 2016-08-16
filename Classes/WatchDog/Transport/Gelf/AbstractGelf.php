@@ -59,7 +59,7 @@ abstract class AbstractGelf
 	 */
 	public function getIdentifier()
 	{
-		return 'mkloggelf';
+		return 'mkLogGelf';
 	}
 
 	/**
