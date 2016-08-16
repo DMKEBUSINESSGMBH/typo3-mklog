@@ -59,5 +59,5 @@ if (!empty($_EXTCONF['enableDevLog'])) {
 	// the old devlog hook to log into tx_mklog_devlog_entry
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['devLog']['mklog'] = 'EXT:mklog/Classes/Logger/DevlogLogger.php:&DMK\\Mklog\\Logger\\DevlogLogger->devLogHook';
 	// register logger writer
-	$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][\DMK\Mklog\Utility\SeverityUtility::DEBUG]['DMK\\Mklog\\Logger\\DevlogLogger'] = array();
+	$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][($_EXTCONF['min_log_level'] ?: \DMK\Mklog\Utility\SeverityUtility::DEBUG)]['DMK\\Mklog\\Logger\\DevlogLogger'] = array();
 }
