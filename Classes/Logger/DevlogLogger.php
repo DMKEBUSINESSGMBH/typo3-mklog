@@ -39,6 +39,19 @@ class DevlogLogger
 	implements \TYPO3\CMS\Core\Log\Writer\WriterInterface
 {
 	/**
+	 * Constructs this log writer
+	 *
+	 * @param array $options Configuration options - depends on the actual log writer
+	 *
+	 * @return void
+	 */
+	public function __construct(
+		array $options = array()
+	) {
+		// $this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
+	}
+
+	/**
 	 * Writes the log record
 	 *
 	 * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
