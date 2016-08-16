@@ -115,7 +115,7 @@ class MailTransport
 		$level = $message->getLevel();
 
 		// build message unique key
-		$key = md5($message->getShortMessage() . $message->getFullMessage());
+		$key = md5($message->getFacility() . $message->getShortMessage());
 
 		// set the summary count
 		$this->uniqs[$level]['summary']++;
@@ -174,11 +174,11 @@ class MailTransport
 			/* @var $message \DMK\Mklog\WatchDog\Message\InterfaceMessage */
 			foreach ($messages as $key => $message) {
 				$content .= sprintf(
-					'Time: %2$s %1$sExtension: %3$s %1$sMessage: %4$s %1$sCount: %5$s',
+					'Time: %2$s %1$sFacility: %3$s %1$sMessage: %4$s %1$sCount: %5$s',
 					LF,
 					strftime('%d.%m.%y %H:%M:%S', $message->getTimestamp()),
+					$message->getFacility(),
 					$message->getShortMessage(),
-					$message->getFullMessage(),
 					$this->uniqs[$level][$key]
 				);
 				$content .= LF . LF;

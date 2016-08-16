@@ -76,7 +76,23 @@ class SchedulerWatchDog
 
 		// @TODO: find only new entrys, not all!
 		foreach ($this->findMessages() as $message) {
-			$transport->publish($message);
+			try {
+				$transport->publish($message);
+			} catch (\Exception $e) {
+				\tx_rnbase::load('tx_rnbase_util_Logger');
+				\tx_rnbase_util_Logger::fatal(
+					'Message could not be send',
+					'mklog',
+					array(
+						'transport' => get_class($transport),
+						'exception' => array(
+							'message' => $e->getMessage(),
+							'trase' => $e->getTraceAsString(),
+							'__string' => $e->__toString(),
+						),
+					)
+				);
+			}
 		}
 
 		// shutdown the transport

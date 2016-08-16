@@ -96,13 +96,25 @@ abstract class AbstractGelf
 	) {
 		$gelfMsg = new \Gelf\Message();
 		($gelfMsg
-			->setTimestamp($message->getTimestamp())
-			->setLevel($message->getLevel())
+			->setVersion('1.0')
+			->setHost($message->getHost())
 			->setShortMessage($message->getShortMessage())
 			->setFullMessage($message->getFullMessage())
-			->setAdditional('additional_data', $message->getAdditionalData())
+			->setTimestamp($message->getTimestamp())
+			->setLevel($message->getLevel())
 			->setFacility($message->getFacility())
 		);
+
+		$additionalData = $message->getAdditionalData();
+		if (!is_array($additionalData)) {
+			$additionalData = array('additional_data' => $additionalData);
+		}
+		foreach ($additionalData as $key => $value) {
+			$gelfMsg->setAdditional(
+				$key,
+				$value
+			);
+		}
 
 		$this->getPublisher()->publish($gelfMsg);
 	}

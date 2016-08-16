@@ -95,7 +95,7 @@ class DevlogEntryModel
 	 */
 	public function getShortMessage()
 	{
-		return $this->getExtKey();
+		return $this->getMessage();
 	}
 
 	/**
@@ -105,7 +105,7 @@ class DevlogEntryModel
 	 */
 	public function getFullMessage()
 	{
-		return $this->getMessage();
+		return $this->getExtraData();
 	}
 
 	/**
@@ -137,6 +137,16 @@ class DevlogEntryModel
 	 */
 	public function getFacility()
 	{
+		return $this->getExtKey();
+	}
+
+	/**
+	 * Returns the host of the message
+	 *
+	 * @return string
+	 */
+	public function getHost()
+	{
 		$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
 
 		return $utility::getIndpEnv('TYPO3_HOST_ONLY');
@@ -149,6 +159,6 @@ class DevlogEntryModel
 	 */
 	public function getAdditionalData()
 	{
-		return $this->getExtraData();
+		return '';
 	}
 }

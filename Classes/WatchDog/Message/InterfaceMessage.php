@@ -71,6 +71,13 @@ interface InterfaceMessage
 	public function getFacility();
 
 	/**
+	 * Returns the facility of the message
+	 *
+	 * @return string
+	 */
+	public function getHost();
+
+	/**
 	 * Returns the value of the additional field of the message
 	 *
 	 * @return mixed

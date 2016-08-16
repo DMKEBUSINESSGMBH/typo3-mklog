@@ -54,6 +54,6 @@ class HttpGelf
 			$this->getOptions()->getCredentials()
 		);
 
-		return$transport;
+		return $transport;
 	}
 }
