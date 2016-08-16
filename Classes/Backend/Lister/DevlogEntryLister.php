@@ -209,6 +209,10 @@ class DevlogEntryLister
 	) {
 		parent::prepareFieldsAndOptions($fields, $options);
 
+		$options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
+		$options['orderby']['DEVLOGENTRY.crdate'] = 'DESC';
+		$options['orderby']['DEVLOGENTRY.uid'] = 'DESC';
+
 		if ($this->getOptions()->getPid() > 0) {
 			$fields['DEVLOGENTRY.pid'][OP_EQ_INT] = $this->getOptions()->getPid();
 		}
