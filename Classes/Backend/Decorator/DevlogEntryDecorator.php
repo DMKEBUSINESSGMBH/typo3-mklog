@@ -112,6 +112,7 @@ class DevlogEntryDecorator
 			case SeverityUtility::WARNING:
 				$icon = 'status-dialog-warning';
 				break;
+			case SeverityUtility::ERROR:
 			case SeverityUtility::CRITICAL:
 			case SeverityUtility::ALERT:
 			case SeverityUtility::EMERGENCY:
