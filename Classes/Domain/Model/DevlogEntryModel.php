@@ -149,7 +149,12 @@ class DevlogEntryModel
 	{
 		$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
 
-		return $utility::getIndpEnv('TYPO3_HOST_ONLY');
+		$host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
+		if (empty($host)) {
+			$host = gethostname();
+		}
+
+		return $host;
 	}
 
 	/**
