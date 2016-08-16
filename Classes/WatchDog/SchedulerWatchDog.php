@@ -1,6 +1,5 @@
 <?php
 namespace DMK\Mklog\WatchDog;
-
 /***************************************************************
  * Copyright notice
  *
@@ -76,7 +75,8 @@ class SchedulerWatchDog
 	 */
 	public function execute()
 	{
-		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+		$failures = $successes = array();
+
 		$transport = $this->getTransport();
 
 		// initialize the transport
@@ -86,29 +86,30 @@ class SchedulerWatchDog
 		foreach ($this->findMessages() as $message) {
 			try {
 				$transport->publish($message);
-				// mark entry as transported for current transport
-				$repo->persist(
-					$message->addTransportId(
-						$this->getTransportId()
-					)
-				);
-				// mark message as send
+				// mark entry as send for current transport
+				$this->markAsTransported($message);
+				$successes[$message->getUid()] = '';
 			} catch (\Exception $e) {
-				\tx_rnbase::load('tx_rnbase_util_Logger');
-				\tx_rnbase_util_Logger::fatal(
-					'Message could not be send',
-					'mklog',
-					array(
-						'transport' => get_class($transport),
-						'exception' => array(
-							'message' => $e->getMessage(),
-							'trase' => $e->getTraceAsString(),
-							'__string' => $e->__toString(),
-						),
-					)
-				);
+				$failures[$message->getUid()] = $e->getMessage();
 			}
 		}
+
+		\tx_rnbase::load('tx_rnbase_util_Logger');
+		\tx_rnbase_util_Logger::devLog(
+			sprintf(
+				'WatchDog %1$s has %2$d messages send and %3$d failures.',
+				$this->getTransportId(),
+				count($successes),
+				count($failures)
+			),
+			'mklog',
+			empty($failures) ? \tx_rnbase_util_Logger::LOGLEVEL_DEBUG : \tx_rnbase_util_Logger::LOGLEVEL_WARN,
+			array(
+				'transport' => $this->getTransportId(),
+				'successes' => $successes,
+				'failures' => $failures,
+			)
+		);
 
 		// shutdown the transport
 		$transport->shutdown();
@@ -133,7 +134,27 @@ class SchedulerWatchDog
 			$fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
 		}
 
+		$options['limit'] = 10;
+
 		return $repo->search($fields, $options);
+	}
+
+	/**
+	 * Marks the message as transported
+	 *
+	 * @param \DMK\Mklog\Domain\Model\DevlogEntryModel $message
+	 *
+	 * @return void
+	 */
+	protected function markAsTransported(
+		\DMK\Mklog\Domain\Model\DevlogEntryModel $message
+	) {
+		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+		$repo->persist(
+			$message->addTransportId(
+				$this->getTransportId()
+			)
+		);
 	}
 
 	/**
