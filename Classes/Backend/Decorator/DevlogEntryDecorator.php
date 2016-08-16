@@ -153,7 +153,7 @@ class DevlogEntryDecorator
 		return sprintf(
 			'<button ' .
 				'type="submit" ' .
-				'class="button button-extkey severity severity-%1$s" ' .
+				'class="button button-extkey severity-%1$s" ' .
 				'name="SET[mklogDevlogEntryExtKey]" ' .
 				'value="%1$s" ' .
 				'title="Filter %1$s"' .
