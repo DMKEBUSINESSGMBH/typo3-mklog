@@ -128,6 +128,27 @@ class DevlogEntryRepository
 	}
 
 	/**
+	 * Persists an model
+	 *
+	 * @param \Tx_Rnbase_Domain_Model_DomainInterface $model
+	 * @param array|\Tx_Rnbase_Domain_Model_Data $options
+	 *
+	 * @return void
+	 */
+	public function persist(
+		\Tx_Rnbase_Domain_Model_DomainInterface $model,
+		$options = null
+	) {
+		\tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
+		$options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
+
+		// there is no tca, so skip this check!
+		$options->setSkipTcaColumnElimination(true);
+
+		parent::persist($model, $options);
+	}
+
+	/**
 	 * Returns the latest log runs
 	 *
 	 * @param int $limit

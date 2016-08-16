@@ -128,12 +128,7 @@ class DevlogLogger
 			$entry->setExtraData($extraData);
 		}
 
-		$repo->persist(
-			$entry,
-			array(
-				'skip_tca_column_elimination' => true,
-			)
-		);
+		$repo->persist($entry);
 	}
 
 	/**
