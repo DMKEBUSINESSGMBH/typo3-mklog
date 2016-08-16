@@ -96,7 +96,7 @@ abstract class AbstractGelf
 	) {
 		$gelfMsg = new \Gelf\Message();
 		($gelfMsg
-			->setVersion('1.0')
+			->setVersion('1.1')
 			->setHost($message->getHost())
 			->setShortMessage($message->getShortMessage())
 			->setFullMessage($message->getFullMessage())
