@@ -154,6 +154,4 @@ class ConfigUtility
 			'fromEmail'
 		);
 	}
-
-
 }

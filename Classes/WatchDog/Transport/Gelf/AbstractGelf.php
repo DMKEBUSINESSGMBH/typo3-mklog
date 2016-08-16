@@ -95,15 +95,14 @@ abstract class AbstractGelf
 		\DMK\Mklog\WatchDog\Message\InterfaceMessage $message
 	) {
 		$gelfMsg = new \Gelf\Message();
-		($gelfMsg
+		$gelfMsg
 			->setVersion('1.1')
 			->setHost($message->getHost())
 			->setShortMessage($message->getShortMessage())
 			->setFullMessage($message->getFullMessage())
 			->setTimestamp($message->getTimestamp())
 			->setLevel($message->getLevel())
-			->setFacility($message->getFacility())
-		);
+			->setFacility($message->getFacility());
 
 		$additionalData = $message->getAdditionalData();
 		if (!is_array($additionalData)) {

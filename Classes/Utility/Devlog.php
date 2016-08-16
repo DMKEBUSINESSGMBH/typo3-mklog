@@ -33,34 +33,47 @@
  * @license 		http://www.gnu.org/licenses/lgpl.html
  * 					GNU Lesser General Public License, version 3 or later
  */
-class Tx_Mklog_Utility_Devlog {
-
+class Tx_Mklog_Utility_Devlog
+{
 	/**
+	 * Get devlog extension table name
+	 *
 	 * @return string
 	 */
-	static public function getTableName() {
+	public static function getTableName()
+	{
 		return self::getValueByDevlogExtensionVersion('tx_devlog', 'tx_devlog_domain_model_entry');
 	}
 
 	/**
+	 * Get messagef field name
+	 *
 	 * @return string
 	 */
-	static public function getMessageFieldName() {
+	public static function getMessageFieldName()
+	{
 		return self::getValueByDevlogExtensionVersion('msg', 'message');
 	}
 
 	/**
+	 * Get extra data field name
+	 *
 	 * @return string
 	 */
-	static public function getExtraDataFieldName() {
+	public static function getExtraDataFieldName()
+	{
 		return self::getValueByDevlogExtensionVersion('data_var', 'extra_data');
 	}
 
 	/**
+	 * Get extra data as array
+	 *
 	 * @param string $extraData
+	 *
 	 * @return array
 	 */
-	static function getExtraDataAsArray($extraData) {
+	public static function getExtraDataAsArray($extraData)
+	{
 		if (tx_rnbase_util_TYPO3::isExtMinVersion('devlog', '3000000')) {
 			$extraData = unserialize(gzuncompress($extraData));
 		} else {
@@ -71,12 +84,17 @@ class Tx_Mklog_Utility_Devlog {
 	}
 
 	/**
-	 * @param unknown $valueBeforeVersion3
-	 * @param unknown $valueSinceVersion3
+	 * Get value by devlog extension version
+	 *
+	 * @param string $valueBeforeVersion3
+	 * @param string $valueSinceVersion3
 	 *
 	 * @return string
 	 */
-	static protected function getValueByDevlogExtensionVersion($valueBeforeVersion3, $valueSinceVersion3) {
+	protected static function getValueByDevlogExtensionVersion(
+		$valueBeforeVersion3,
+		$valueSinceVersion3
+	) {
 		if (tx_rnbase_util_TYPO3::isExtMinVersion('devlog', '3000000')) {
 			$value = $valueSinceVersion3;
 		} else {
@@ -85,8 +103,4 @@ class Tx_Mklog_Utility_Devlog {
 
 		return $value;
 	}
-}
-
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/rn_base/util/class.tx_rnbase_util_Logger.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/rn_base/util/class.tx_rnbase_util_Logger.php']);
 }

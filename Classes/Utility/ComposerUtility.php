@@ -35,23 +35,22 @@ namespace DMK\Mklog\Utility;
  */
 final class ComposerUtility
 {
-	static $loaded = FALSE;
-
 	/**
-	 * preloads the
+	 * Preloads the composer with the build in dependencies
 	 *
 	 * @return void
 	 */
 	public static function autoload()
 	{
-		if (self::$loaded === TRUE) {
+		static $loaded = false;
+
+		if ($loaded === true) {
 			return;
 		}
 		require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
 			'mklog',
 			'Resources/Private/PHP/Composer/autoload.php'
 		);
-		self::$loaded = TRUE;
+		$loaded = true;
 	}
-
 }
