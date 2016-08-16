@@ -109,6 +109,7 @@ abstract class AbstractGelf
 		if (!is_array($additionalData)) {
 			$additionalData = array('additional_data' => $additionalData);
 		}
+
 		foreach ($additionalData as $key => $value) {
 			$gelfMsg->setAdditional(
 				$key,

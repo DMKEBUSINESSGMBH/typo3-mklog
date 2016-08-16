@@ -84,6 +84,39 @@ class DevlogEntryModel
 		return 'tx_mklog_devlog_entry';
 	}
 
+	/**
+	 * A list of scheduler task uids which has already transferred this message
+	 *
+	 * @return array
+	 */
+	public function getTransportIds()
+	{
+		if ($this->isPropertyEmpty('transport_ids')) {
+			return array();
+		}
+
+		return explode(',', $this->getProperty('transport_ids'));
+	}
+
+	/**
+	 * Adds a scheduler to the transport id list
+	 *
+	 * @param string $transportId
+	 *
+	 * @return array
+	 */
+	public function addTransportId(
+		$transportId
+	) {
+		$ids = $this->getTransportIds();
+		$ids[] = $transportId;
+
+		return $this->setProperty(
+			'transport_ids',
+			implode(',', array_unique($ids))
+		);
+	}
+
 	/* *** ******************************************** *** *
 	 * *** \DMK\Mklog\WatchDog\Message\InterfaceMessage *** *
 	 * *** ******************************************** *** */

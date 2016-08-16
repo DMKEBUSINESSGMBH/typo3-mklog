@@ -112,7 +112,7 @@ class SchedulerFieldProviderWatchDog
 			),
 		) as $group => $subs) {
 			$fieldCode .= '<optgroup label="' . $group . '">';
-			foreach($subs as $key =>$label) {
+			foreach ($subs as $key => $label) {
 				$fieldCode .= sprintf(
 					'<option value="%1$s" %3$s />%2$s</option>',
 					$key,
@@ -211,6 +211,7 @@ class SchedulerFieldProviderWatchDog
 				'The credentials for the transport are required!',
 				$flashMessageClass::ERROR
 			);
+
 			return false;
 		}
 

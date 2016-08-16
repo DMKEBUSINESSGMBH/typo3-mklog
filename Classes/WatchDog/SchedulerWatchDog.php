@@ -47,6 +47,13 @@ class SchedulerWatchDog
 	private $options = null;
 
 	/**
+	 * The current configured transport
+	 *
+	 * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+	 */
+	private $transport = null;
+
+	/**
 	 * Returns a storage
 	 *
 	 * @return \Tx_Rnbase_Domain_Model_Data
@@ -69,15 +76,23 @@ class SchedulerWatchDog
 	 */
 	public function execute()
 	{
+		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
 		$transport = $this->getTransport();
 
 		// initialize the transport
 		$transport->initialize($this->getOptions());
 
-		// @TODO: find only new entrys, not all!
+		/* @var $message \DMK\Mklog\Domain\Model\DevlogEntryModel */
 		foreach ($this->findMessages() as $message) {
 			try {
 				$transport->publish($message);
+				// mark entry as transported for current transport
+				$repo->persist(
+					$message->addTransportId(
+						$this->getTransportId()
+					)
+				);
+				// mark message as send
 			} catch (\Exception $e) {
 				\tx_rnbase::load('tx_rnbase_util_Logger');
 				\tx_rnbase_util_Logger::fatal(
@@ -98,8 +113,6 @@ class SchedulerWatchDog
 		// shutdown the transport
 		$transport->shutdown();
 
-		// @TODO: mark logs as deleted!
-
 		return true;
 	}
 
@@ -114,6 +127,8 @@ class SchedulerWatchDog
 
 		$fields = $options = array();
 
+		$fields['DEVLOGENTRY.transport_ids'][OP_NOTIN] = $this->getTransportId();
+
 		if ($this->getOptions()->getSeverity()) {
 			$fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
 		}
@@ -122,23 +137,35 @@ class SchedulerWatchDog
 	}
 
 	/**
-	 * Creates the Transport
+	 * Creates the transport
 	 *
 	 * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
 	 */
 	protected function getTransport()
 	{
-		$class = $this->getOptions()->getTransport();
-		$instance = \tx_rnbase::makeInstance($class);
+		if ($this->transport === null) {
+			$class = $this->getOptions()->getTransport();
+			$this->transport = \tx_rnbase::makeInstance($class);
 
-		if (!$instance instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
-			throw new \Exception(
-				'The Transport "' . get_class($instance) . '" ' .
-				'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"'
-			);
+			if (!$this->transport instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
+				throw new \Exception(
+					'The Transport "' . get_class($this->transport) . '" ' .
+					'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"'
+				);
+			}
 		}
 
-		return $instance;
+		return $this->transport;
+	}
+
+	/**
+	 * Creates the transport id
+	 *
+	 * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+	 */
+	protected function getTransportId()
+	{
+		return $this->getTransport()->getIdentifier() . ':' . $this->getTaskUid();
 	}
 
 	/**
