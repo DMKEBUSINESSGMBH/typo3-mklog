@@ -52,7 +52,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Wat
 	'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog'
 );
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'EXT:' . $_EXTKEY . '/Classes/Hooks/DataHandler.php:Tx_Mklog_Hooks_DataHandler';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'EXT:mklog/Classes/Hooks/DataHandler.php:Tx_Mklog_Hooks_DataHandler';
 
 // devlog hook to log into tx_mklog_devlog_entry
 if (!empty($_EXTCONF['enableDevLog'])) {

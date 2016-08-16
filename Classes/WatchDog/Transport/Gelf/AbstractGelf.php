@@ -1,5 +1,5 @@
 <?php
-namespace DMK\Mklog\WatchDog\Transport;
+namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
 /***************************************************************
  * Copyright notice
@@ -24,6 +24,8 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \DMK\Mklog\WatchDog\Transport\AbstractTransport;
+
 \tx_rnbase::load('DMK\\Mklog\\WatchDog\\Transport\\AbstractTransport');
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
@@ -40,7 +42,7 @@ namespace DMK\Mklog\WatchDog\Transport;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class GelfTransport
+abstract class AbstractGelf
 	extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
 {
 	/**
@@ -59,6 +61,13 @@ class GelfTransport
 	{
 		return 'mkloggelf';
 	}
+
+	/**
+	 * Creates the Transport
+	 *
+	 * @return \Gelf\Transport\AbstractTransport
+	 */
+	abstract protected function getTransport();
 
 	/**
 	 * Initializes the Transport
@@ -96,26 +105,6 @@ class GelfTransport
 		);
 
 		$this->getPublisher()->publish($gelfMsg);
-	}
-
-	/**
-	 * Creates the Transport
-	 *
-	 * @return \Gelf\Transport\AbstractTransport
-	 */
-	protected function getTransport()
-	{
-		list($host, $port) = explode(
-			',',
-			$this->getOptions()->getCredentials()
-		);
-
-		return new \Gelf\Transport\UdpTransport(
-			trim($host),
-			trim($port),
-			\Gelf\Transport\UdpTransport::CHUNK_SIZE_LAN
-		);
-
 	}
 
 	/**

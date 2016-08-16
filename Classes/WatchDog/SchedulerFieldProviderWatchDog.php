@@ -103,15 +103,24 @@ class SchedulerFieldProviderWatchDog
 		'>';
 
 		foreach (array(
-			'\DMK\Mklog\WatchDog\Transport\MailTransport' => 'Mail',
-			'\DMK\Mklog\WatchDog\Transport\GelfTransport' => 'Gelf (GrayLog)',
-		) as $key => $label) {
-			$fieldCode .= sprintf(
-				'<option value="%1$s" %3$s />%2$s</option>',
-				$key,
-				$label,
-				$taskInfo['mklog_watchdog_transport'] == $key ? 'selected="selected"' : ''
-			);
+			'Mail' => array(
+				'\DMK\Mklog\WatchDog\Transport\MailTransport' => 'Mail Message',
+			),
+			'Gelf (GrayLog)' => array(
+				'\DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf' => 'Gelf HTTP',
+				'\DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf' => 'Gelf UDP',
+			),
+		) as $group => $subs) {
+			$fieldCode .= '<optgroup label="' . $group . '">';
+			foreach($subs as $key =>$label) {
+				$fieldCode .= sprintf(
+					'<option value="%1$s" %3$s />%2$s</option>',
+					$key,
+					$label,
+					$taskInfo['mklog_watchdog_transport'] == $key ? 'selected="selected"' : ''
+				);
+			}
+			$fieldCode .= '</optgroup>';
 		}
 		$fieldCode .= '</select>';
 
