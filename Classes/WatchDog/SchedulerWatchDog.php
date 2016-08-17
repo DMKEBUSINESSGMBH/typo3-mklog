@@ -1,5 +1,6 @@
 <?php
 namespace DMK\Mklog\WatchDog;
+
 /***************************************************************
  * Copyright notice
  *

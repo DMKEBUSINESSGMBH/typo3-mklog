@@ -61,3 +61,8 @@ if (!empty($_EXTCONF['enableDevLog'])) {
 	// register logger writer
 	$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][($_EXTCONF['min_log_level'] ?: \DMK\Mklog\Utility\SeverityUtility::DEBUG)]['DMK\\Mklog\\Logger\\DevlogLogger'] = array();
 }
+// is the gelf enabled?
+if (!empty($_EXTCONF['gelf_enable'])) {
+	// register logger writer
+	$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][($_EXTCONF['gelf_min_log_level'] ?: \DMK\Mklog\Utility\SeverityUtility::ALERT)]['DMK\\Mklog\\Logger\\GelfLogger'] = array();
+}

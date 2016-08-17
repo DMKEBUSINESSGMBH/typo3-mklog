@@ -9,3 +9,12 @@ exclude_ext_keys = extbase
 
 # cat=base; type=int; label=Max Log size: Maximum number of log entries to keep when cleaning up
 max_logs = 10000
+
+# cat=gelf; type=boolean; label=Enable Gelf: Enables direct logging to a gelf transport
+gelf_enable = 1
+
+# cat=gelf; type=string; label=Gelf Credentials: example UDP credentials 127.0.0.1:12201
+gelf_credentials =
+
+# cat=gelf; type=options[Debug=7,Info=6,Notice=5,Warning=4,Error=3,Critical=2,Alert=1,Emergency=0]; label=Minimum log level: Minimum message level required to ransport the message. Usualy it is 1, all other logs should be written into devlog table and transported with a scheduler to gelf.
+gelf_min_log_level = 1

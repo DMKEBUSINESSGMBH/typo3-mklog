@@ -143,6 +143,36 @@ class ConfigUtility
 	}
 
 	/**
+	 * Is the gelf logging enabled?
+	 *
+	 * @return bool
+	 */
+	public function getGelfEnable()
+	{
+		return (bool) $this->getExtConf()->getGelfEnable();
+	}
+
+	/**
+	 * Minimum log level for gelf logger
+	 *
+	 * @return int
+	 */
+	public function getGelfMinLogLevel()
+	{
+		return (int) $this->getExtConf()->getGelfMinLogLevel();
+	}
+
+	/**
+	 * Credentials for gelf loging
+	 *
+	 * @return int
+	 */
+	public function getGelfCredentials()
+	{
+		return $this->getExtConf()->getGelfCredentials();
+	}
+
+	/**
 	 * The global from mail address
 	 *
 	 * @return array

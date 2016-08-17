@@ -36,21 +36,8 @@ use \DMK\Mklog\Utility\SeverityUtility;
  *          GNU Lesser General Public License, version 3 or later
  */
 class DevlogLogger
-	implements \TYPO3\CMS\Core\Log\Writer\WriterInterface
+	extends AbstractLogger
 {
-	/**
-	 * Constructs this log writer
-	 *
-	 * @param array $options Configuration options - depends on the actual log writer
-	 *
-	 * @return void
-	 */
-	public function __construct(
-		array $options = array()
-	) {
-		// $this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
-	}
-
 	/**
 	 * Writes the log record
 	 *
@@ -104,29 +91,12 @@ class DevlogLogger
 		// optimize the log table
 		$repo->optimize();
 
-		/* @var $entry \DMK\Mklog\Domain\Model\DevlogEntryModel */
-		$entry = $repo->createNewModel();
-		$entry->setCrdate(time());
-		$entry->setRunId($config->getCurrentRunId());
-		$entry->setMessage($message);
-		$entry->setExtKey($extension);
-		$entry->setSeverity($severity);
-		$entry->setPid(0);
-
-		if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE'])) {
-			$entry->setPid($GLOBALS['TSFE']->id);
-		}
-
-		$entry->setCruserId(0);
-		if (!empty($GLOBALS['BE_USER']->user['uid'])) {
-			$entry->setCruserId($GLOBALS['BE_USER']->user['uid']);
-		}
-
-		if (!empty($extraData)) {
-			// @TODO: use an converter!
-			$extraData = json_encode($extraData, JSON_FORCE_OBJECT);
-			$entry->setExtraData($extraData);
-		}
+		$entry = $this->createDevlogEntry(
+			$message,
+			$extension,
+			$severity,
+			$extraData
+		);
 
 		$repo->persist($entry);
 	}
@@ -206,15 +176,5 @@ class DevlogLogger
 		}
 
 		return $storage->getLoggingActive();
-	}
-
-	/**
-	 * Returns the devlog entry repository
-	 *
-	 * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
-	 */
-	protected function getDevlogEntryRepository()
-	{
-		return \DMK\Mklog\Factory::getDevlogEntryRepository();
 	}
 }
