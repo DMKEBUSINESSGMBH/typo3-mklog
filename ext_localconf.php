@@ -55,7 +55,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Wat
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'EXT:mklog/Classes/Hooks/DataHandler.php:Tx_Mklog_Hooks_DataHandler';
 
 // is the devlog enabled?
-if (!empty($_EXTCONF['enableDevLog'])) {
+if (!empty($_EXTCONF['enable_devlog'])) {
 	// the old devlog hook to log into tx_mklog_devlog_entry
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['devLog']['mklog'] = 'EXT:mklog/Classes/Logger/DevlogLogger.php:&DMK\\Mklog\\Logger\\DevlogLogger->devLogHook';
 	// register logger writer
