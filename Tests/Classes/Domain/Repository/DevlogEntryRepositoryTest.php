@@ -193,7 +193,56 @@ class DevlogEntryRepositoryTest
 	 */
 	public function testGetLatestRuns()
 	{
-		self::markTestIncomplete();
+		$repo = $this->getDevlogEntryRepository();
+		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
+
+		$searcher
+			->expects(self::once())
+			->method('search')
+			->with(
+				$this->callback(
+					function($fields)
+					{
+						return is_array($fields);
+					}
+				),
+				$this->callback(
+					function($options)
+					{
+						self::assertTrue(is_array($options));
+
+						self::assertArrayHasKey('groupby', $options);
+						self::assertEquals(
+							'DEVLOGENTRY.run_id',
+							$options['groupby']
+						);
+
+						self::assertArrayHasKey('orderby', $options);
+						self::assertCount(1, $options['orderby']);
+						self::assertEquals(
+							'DESC',
+							$options['orderby']['DEVLOGENTRY.run_id']
+						);
+
+						self::assertArrayHasKey('limit', $options);
+						self::assertEquals(
+							57,
+							$options['limit']
+						);
+
+						self::assertArrayHasKey('forcewrapper', $options);
+						self::assertEquals(
+							1,
+							$options['forcewrapper']
+						);
+
+						return true;
+					}
+				)
+			)
+		;
+
+		$repo->getLatestRuns(57);
 	}
 
 	/**
@@ -206,7 +255,50 @@ class DevlogEntryRepositoryTest
 	 */
 	public function testGetLoggedExtensions()
 	{
-		self::markTestIncomplete();
+		$repo = $this->getDevlogEntryRepository();
+		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
+
+		$searcher
+			->expects(self::once())
+			->method('search')
+			->with(
+				$this->callback(
+					function($fields)
+					{
+						return is_array($fields);
+					}
+				),
+				$this->callback(
+					function($options)
+					{
+						self::assertTrue(is_array($options));
+
+						self::assertArrayHasKey('groupby', $options);
+						self::assertEquals(
+							'DEVLOGENTRY.ext_key',
+							$options['groupby']
+						);
+
+						self::assertArrayHasKey('orderby', $options);
+						self::assertCount(1, $options['orderby']);
+						self::assertEquals(
+							'DESC',
+							$options['orderby']['DEVLOGENTRY.ext_key']
+						);
+
+						self::assertArrayHasKey('forcewrapper', $options);
+						self::assertEquals(
+							1,
+							$options['forcewrapper']
+						);
+
+						return true;
+					}
+				)
+			)
+		;
+
+		$repo->getLoggedExtensions(57);
 	}
 
 	/**
@@ -219,7 +311,28 @@ class DevlogEntryRepositoryTest
 	 */
 	public function testIsTableAvailable()
 	{
-		self::markTestIncomplete();
+		$repo = $this->getDevlogEntryRepository();
+
+		$db = $this->getMock(
+			'\TYPO3\CMS\Core\Database\DatabaseConnection',
+			array('admin_get_fields')
+		);
+		$db
+			->expects(self::once())
+			->method('admin_get_fields')
+			->with(self::equalTo($this->getDevlogEntryModel()->getTableName()))
+			->will(self::returnValue(array()))
+		;
+
+		$connection = $this->callInaccessibleMethod($repo, 'getConnection');
+
+		$connection
+			->expects(self::once())
+			->method('getDatabaseConnection')
+			->will(self::returnValue($db))
+		;
+
+		self::assertFalse($repo->isTableAvailable());
 	}
 
 	/**

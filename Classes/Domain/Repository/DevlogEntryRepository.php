@@ -65,9 +65,10 @@ class DevlogEntryRepository
 	 */
 	public function isTableAvailable()
 	{
-		$tablename = $this->getEmptyModel()->getTableName();
-		$db = \Tx_Rnbase_Database_Connection::getInstance()->getDatabaseConnection();
-		$tableFields = $db->admin_get_fields($tablename);
+		$db = $this->getConnection()->getDatabaseConnection();
+		$tableFields = $db->admin_get_fields(
+			$this->getEmptyModel()->getTableName()
+		);
 
 		return !empty($tableFields);
 	}
