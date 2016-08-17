@@ -40,17 +40,97 @@ class DevlogLoggerTest
 	extends \DMK\Mklog\Tests\BaseTestCase
 {
 	/**
-	 * Test the getTableName method
+	 * Sets up the fixture, for example, open a network connection.
+	 * This method is called before a test is executed.
+	 *
+	 * @return void
+	 */
+	protected function setUp()
+	{
+		parent::setUp();
+		$this->backup['TYPO3_DB'] = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
+	 * Tears down the fixture, for example, close a network connection.
+	 * This method is called after a test is executed.
+	 *
+	 * @return void
+	 */
+	protected function tearDown()
+	{
+		parent::tearDown();
+		$GLOBALS['TYPO3_DB'] = $this->backup['TYPO3_DB'];
+	}
+
+	/**
+	 * Test the isLoggingEnabled method
 	 *
 	 * @return void
 	 *
 	 * @group unit
 	 * @test
 	 */
-	public function testIsLoggingEnabled()
+	public function testIsLoggingEnabledWithoutDbShouldBeFalse()
+	{
+		// unset the db!
+		unset($GLOBALS['TYPO3_DB']);
+		// activate logging
+		\DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
+
+		self::assertFalse(
+			$this->callInaccessibleMethod(
+				$this->getDevlogLoggerMock(),
+				'isLoggingEnabled'
+			)
+		);
+
+	}
+
+	/**
+	 * Test the isLoggingEnabled method
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testIsLoggingEnabledWithDisabledLogInGlobals()
+	{
+		// activate logging
+		\DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
+
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
+		self::assertFalse(
+			$this->callInaccessibleMethod(
+				$this->getDevlogLoggerMock(),
+				'isLoggingEnabled'
+			)
+		);
+
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = false;
+		self::assertTrue(
+			$this->callInaccessibleMethod(
+				$this->getDevlogLoggerMock(),
+				'isLoggingEnabled'
+			)
+		);
+
+	}
+
+	/**
+	 * Test the isLoggingEnabled method
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testIsLoggingEnabledByConfig()
 	{
 		self::markTestIncomplete();
 	}
+
 	/**
 	 * Test the storeLog method
 	 *

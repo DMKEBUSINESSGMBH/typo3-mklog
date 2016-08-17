@@ -40,6 +40,13 @@ abstract class BaseTestCase
 	extends \tx_rnbase_tests_BaseTestCase
 {
 	/**
+	 * Property to store backups for set up and tear down
+	 *
+	 * @var array $backup
+	 */
+	protected $backup = array();
+
+	/**
 	 * Sets up the fixture, for example, open a network connection.
 	 * This method is called before a test is executed.
 	 *
@@ -50,6 +57,7 @@ abstract class BaseTestCase
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
+		\DMK\Mklog\Factory::getStorage()->unsLoggingActive();
 		$extConf = \DMK\Mklog\Factory::getConfigUtility()->getExtConf();
 		$extConf->setMinLogLevel(7);
 		$extConf->setExcludeExtKeys('');
