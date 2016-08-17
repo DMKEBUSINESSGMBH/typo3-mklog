@@ -54,4 +54,30 @@ class DevlogEntryModelTest
 			$this->getDevlogEntryModel()->getTableName()
 		);
 	}
+
+	/**
+	 * Test the getTransportIds method
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testGetAndAddTransportIds()
+	{
+		$model = $this->getDevlogEntryModel();
+
+		self::assertTrue(is_array($model->getTransportIds()));
+		self::assertEmpty($model->getTransportIds());
+
+		$model->addTransportId('mkLogGelf:5');
+		$model->addTransportId('mkLogMail:7');
+
+		self::assertTrue(is_array($model->getTransportIds()));
+		self::assertCount(2, $model->getTransportIds());
+
+		$ids = $model->getTransportIds();
+		self::assertSame('mkLogGelf:5', $ids[0]);
+		self::assertSame('mkLogMail:7', $ids[1]);
+	}
 }
