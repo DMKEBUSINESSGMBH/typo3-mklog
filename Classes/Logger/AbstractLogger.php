@@ -83,11 +83,16 @@ abstract class AbstractLogger
 			$entry->setCruserId($GLOBALS['BE_USER']->user['uid']);
 		}
 
-		if (!empty($extraData)) {
-			// @TODO: use an converter!
-			$extraData = json_encode($extraData, JSON_FORCE_OBJECT);
-			$entry->setExtraData($extraData);
+		// force extra_data to be an array!
+		if (!is_array($extraData)) {
+			$extraData = array();
 		}
+		// add trace to extradata
+		$extraData['__trace'] = \tx_rnbase_util_Debug::getDebugTrail();
+		// @TODO: use an converter!
+		$extraData = json_encode($extraData, JSON_FORCE_OBJECT);
+		$entry->setExtraData($extraData);
+
 
 		return $entry;
 	}
