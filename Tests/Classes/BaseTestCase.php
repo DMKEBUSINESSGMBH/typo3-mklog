@@ -26,6 +26,7 @@ namespace DMK\Mklog\Tests;
 
 require_once \t3lib_extMgm::extPath('rn_base', 'class.tx_rnbase.php');
 \tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
+\tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
 
 /**
  * Basis Testcase
