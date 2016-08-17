@@ -87,6 +87,10 @@ abstract class AbstractLogger
 		if (!is_array($extraData)) {
 			$extraData = array();
 		}
+		// add userdata
+		\tx_rnbase::load('tx_rnbase_util_TYPO3');
+		$extraData['__feuser'] = \tx_rnbase_util_TYPO3::getFEUserUID();
+		$extraData['__beuser'] = \tx_rnbase_util_TYPO3::getBEUserUID();
 		// add trace to extradata
 		$extraData['__trace'] = \tx_rnbase_util_Debug::getDebugTrail();
 		// @TODO: use an converter!
