@@ -151,7 +151,10 @@ class DevlogLogger
 		}
 
 		// skip if logging is disabled
-		if ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog']) {
+		if ((
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] ||
+			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog']
+		)) {
 			return false;
 		}
 
