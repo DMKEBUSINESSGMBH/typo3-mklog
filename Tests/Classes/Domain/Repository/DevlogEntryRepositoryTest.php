@@ -93,6 +93,8 @@ class DevlogEntryRepositoryTest
 		$repo = $this->getDevlogEntryRepository();
 		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
 
+		$that = $this; // workaround for php 5.3
+
 		$searcher
 			->expects(self::once())
 			->method('search')
@@ -104,30 +106,30 @@ class DevlogEntryRepositoryTest
 					}
 				),
 				$this->callback(
-					function($options) use ($repo)
+					function($options) use ($that, $repo)
 					{
 						$tablename = $repo->getEmptyModel()->getTableName();
-						self::assertTrue(is_array($options));
+						$that->assertTrue(is_array($options));
 
-						self::assertArrayHasKey('searchdef', $options);
-						self::assertTrue(is_array($options['searchdef']));
+						$that->assertArrayHasKey('searchdef', $options);
+						$that->assertTrue(is_array($options['searchdef']));
 
 						$sd = $options['searchdef'];
-						self::assertArrayHasKey('usealias', $sd);
-						self::assertSame($sd['usealias'], 1);
-						self::assertArrayHasKey('basetable', $sd);
-						self::assertSame($sd['basetable'], $tablename);
-						self::assertArrayHasKey('basetablealias', $sd);
-						self::assertSame($sd['basetablealias'], 'DEVLOGENTRY');
-						self::assertArrayHasKey('wrapperclass', $sd);
-						self::assertSame($sd['wrapperclass'], get_class($repo->getEmptyModel()));
+						$that->assertArrayHasKey('usealias', $sd);
+						$that->assertSame($sd['usealias'], 1);
+						$that->assertArrayHasKey('basetable', $sd);
+						$that->assertSame($sd['basetable'], $tablename);
+						$that->assertArrayHasKey('basetablealias', $sd);
+						$that->assertSame($sd['basetablealias'], 'DEVLOGENTRY');
+						$that->assertArrayHasKey('wrapperclass', $sd);
+						$that->assertSame($sd['wrapperclass'], get_class($repo->getEmptyModel()));
 
-						self::assertArrayHasKey('alias', $sd);
-						self::assertTrue(is_array($sd['alias']));
-						self::assertArrayHasKey('DEVLOGENTRY', $sd['alias']);
-						self::assertTrue(is_array($sd['alias']['DEVLOGENTRY']));
-						self::assertArrayHasKey('table', $sd['alias']['DEVLOGENTRY']);
-						self::assertSame($sd['alias']['DEVLOGENTRY']['table'], $tablename);
+						$that->assertArrayHasKey('alias', $sd);
+						$that->assertTrue(is_array($sd['alias']));
+						$that->assertArrayHasKey('DEVLOGENTRY', $sd['alias']);
+						$that->assertTrue(is_array($sd['alias']['DEVLOGENTRY']));
+						$that->assertArrayHasKey('table', $sd['alias']['DEVLOGENTRY']);
+						$that->assertSame($sd['alias']['DEVLOGENTRY']['table'], $tablename);
 
 						return true;
 					}
@@ -152,6 +154,7 @@ class DevlogEntryRepositoryTest
 		$repo = $this->getDevlogEntryRepository();
 		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
 
+		$that = $this; // workaround for php 5.3
 		$searcher
 			->expects(self::once())
 			->method('search')
@@ -163,12 +166,12 @@ class DevlogEntryRepositoryTest
 					}
 				),
 				$this->callback(
-					function($options)
+					function($options) use ($that)
 					{
-						self::assertTrue(is_array($options));
+						$that->assertTrue(is_array($options));
 
-						self::assertArrayHasKey('collection', $options);
-						self::assertEquals(
+						$that->assertArrayHasKey('collection', $options);
+						$that->assertEquals(
 							'Tx_Rnbase_Domain_Collection_Base',
 							$options['collection']
 						);
@@ -196,6 +199,7 @@ class DevlogEntryRepositoryTest
 		$repo = $this->getDevlogEntryRepository();
 		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
 
+		$that = $this; // workaround for php 5.3
 		$searcher
 			->expects(self::once())
 			->method('search')
@@ -207,31 +211,31 @@ class DevlogEntryRepositoryTest
 					}
 				),
 				$this->callback(
-					function($options)
+					function($options) use ($that)
 					{
-						self::assertTrue(is_array($options));
+						$that->assertTrue(is_array($options));
 
-						self::assertArrayHasKey('groupby', $options);
-						self::assertEquals(
+						$that->assertArrayHasKey('groupby', $options);
+						$that->assertEquals(
 							'DEVLOGENTRY.run_id',
 							$options['groupby']
 						);
 
-						self::assertArrayHasKey('orderby', $options);
-						self::assertCount(1, $options['orderby']);
-						self::assertEquals(
+						$that->assertArrayHasKey('orderby', $options);
+						$that->assertCount(1, $options['orderby']);
+						$that->assertEquals(
 							'DESC',
 							$options['orderby']['DEVLOGENTRY.run_id']
 						);
 
-						self::assertArrayHasKey('limit', $options);
-						self::assertEquals(
+						$that->assertArrayHasKey('limit', $options);
+						$that->assertEquals(
 							57,
 							$options['limit']
 						);
 
-						self::assertArrayHasKey('forcewrapper', $options);
-						self::assertEquals(
+						$that->assertArrayHasKey('forcewrapper', $options);
+						$that->assertEquals(
 							1,
 							$options['forcewrapper']
 						);
@@ -258,6 +262,7 @@ class DevlogEntryRepositoryTest
 		$repo = $this->getDevlogEntryRepository();
 		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
 
+		$that = $this; // workaround for php 5.3
 		$searcher
 			->expects(self::once())
 			->method('search')
@@ -269,25 +274,25 @@ class DevlogEntryRepositoryTest
 					}
 				),
 				$this->callback(
-					function($options)
+					function($options) use ($that)
 					{
-						self::assertTrue(is_array($options));
+						$that->assertTrue(is_array($options));
 
-						self::assertArrayHasKey('groupby', $options);
-						self::assertEquals(
+						$that->assertArrayHasKey('groupby', $options);
+						$that->assertEquals(
 							'DEVLOGENTRY.ext_key',
 							$options['groupby']
 						);
 
-						self::assertArrayHasKey('orderby', $options);
-						self::assertCount(1, $options['orderby']);
-						self::assertEquals(
+						$that->assertArrayHasKey('orderby', $options);
+						$that->assertCount(1, $options['orderby']);
+						$that->assertEquals(
 							'DESC',
 							$options['orderby']['DEVLOGENTRY.ext_key']
 						);
 
-						self::assertArrayHasKey('forcewrapper', $options);
-						self::assertEquals(
+						$that->assertArrayHasKey('forcewrapper', $options);
+						$that->assertEquals(
 							1,
 							$options['forcewrapper']
 						);

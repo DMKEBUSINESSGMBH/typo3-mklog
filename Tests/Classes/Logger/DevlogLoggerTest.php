@@ -154,6 +154,7 @@ class DevlogLoggerTest
 			->will(self::returnValue(true))
 		;
 
+		$that = $this; // workaround for php 5.3
 		$repo = $this->callInaccessibleMethod($logger, 'getDevlogEntryRepository');
 		$connection = $this->callInaccessibleMethod($repo, 'getConnection');
 		$connection
@@ -166,28 +167,28 @@ class DevlogLoggerTest
 					}
 				),
 				$this->callback(
-					function($data) use ($msg, $extKey, $severity, $extraData)
+					function($data) use ($that, $msg, $extKey, $severity, $extraData)
 					{
-						self::assertSame(
+						$that->assertSame(
 							\DMK\Mklog\Factory::getConfigUtility()->getCurrentRunId(),
 							$data['run_id']
 						);
 
-						self::assertGreaterThan(time() - 60, $data['crdate']);
-						self::assertSame(0, $data['pid']);
-						self::assertSame($msg, $data['message']);
-						self::assertSame($extKey, $data['ext_key']);
-						self::assertSame($severity, $data['severity']);
+						$that->assertGreaterThan(time() - 60, $data['crdate']);
+						$that->assertSame(0, $data['pid']);
+						$that->assertSame($msg, $data['message']);
+						$that->assertSame($extKey, $data['ext_key']);
+						$that->assertSame($severity, $data['severity']);
 						// how to check? on cli it is 0, on be runs the current user id!
-						self::assertArrayHasKey('cruser_id', $data);
-						self::assertArrayHasKey('extra_data', $data);
-						self::assertTrue(is_string($data['extra_data']));
+						$that->assertArrayHasKey('cruser_id', $data);
+						$that->assertArrayHasKey('extra_data', $data);
+						$that->assertTrue(is_string($data['extra_data']));
 						$logData = json_decode($data['extra_data'], true);
-						self::assertSame(1, $logData['foo']);
-						self::assertSame(array('baz'), $logData['bar']);
-						self::assertArrayHasKey('__feuser', $logData);
-						self::assertArrayHasKey('__beuser', $logData);
-						self::assertArrayHasKey('__trace', $logData);
+						$that->assertSame(1, $logData['foo']);
+						$that->assertSame(array('baz'), $logData['bar']);
+						$that->assertArrayHasKey('__feuser', $logData);
+						$that->assertArrayHasKey('__beuser', $logData);
+						$that->assertArrayHasKey('__trace', $logData);
 
 						return true;
 					}
