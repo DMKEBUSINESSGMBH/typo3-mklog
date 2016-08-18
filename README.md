@@ -1,10 +1,10 @@
-MK LOGGER [![Build Status](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog.svg?branch=master)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
+MK LOGGER
 =========
 
-[![Latest Stable Version](https://poser.pugx.org/dmk/mklog/v/stable?format=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![Latest Unstable Version](https://poser.pugx.org/dmk/mklog/v/unstable?format=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![Total Downloads](https://poser.pugx.org/dmk/mklog/downloads?format=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![License](https://poser.pugx.org/dmk/mklog/license?format=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=2592000&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Total Downloads](https://img.shields.io/packagist/dt/dmk/mklog.svg?maxAge=2592000&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mklog.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
+[![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=2592000&style=flat-square)](https://packagist.org/packages/dmk/mklog)
 
 
 This extension offers a developer log. 
