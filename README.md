@@ -1,4 +1,4 @@
-MK LOGGER
+MK LOGGER [![Build Status](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog.svg?branch=master)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
 =========
 
 [![Latest Stable Version](https://poser.pugx.org/dmk/mklog/v/stable?format=flat-square)](https://packagist.org/packages/dmk/mklog)
