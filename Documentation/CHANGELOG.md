@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-2.0.6
+2.1.0
 ------
 
  * new devlog logger added
