@@ -180,10 +180,14 @@ class DevlogLoggerTest
 						self::assertSame($severity, $data['severity']);
 						// how to check? on cli it is 0, on be runs the current user id!
 						self::assertArrayHasKey('cruser_id', $data);
-						self::assertSame(
-							json_encode($extraData, JSON_FORCE_OBJECT),
-							$data['extra_data']
-						);
+						self::assertArrayHasKey('extra_data', $data);
+						self::assertTrue(is_string($data['extra_data']));
+						$logData = json_decode($data['extra_data'], true);
+						self::assertSame(1, $logData['foo']);
+						self::assertSame(array('baz'), $logData['bar']);
+						self::assertArrayHasKey('__feuser', $logData);
+						self::assertArrayHasKey('__beuser', $logData);
+						self::assertArrayHasKey('__trace', $logData);
 
 						return true;
 					}
