@@ -110,7 +110,11 @@ class SchedulerWatchDogTest
 			array_merge(
 				array('getDevlogEntryRepository'),
 				$methods
-			)
+			),
+			array(),
+			'',
+			false,
+			false
 		);
 
 		$logger
