@@ -200,6 +200,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase {
 					array(
 						'pages',
 						'tt_content',
+						'sys_template',
 						Tx_Mklog_Utility_Devlog::getTableName(),
 					)
 				)
