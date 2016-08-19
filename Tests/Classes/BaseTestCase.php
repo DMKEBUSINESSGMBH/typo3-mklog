@@ -124,9 +124,14 @@ abstract class BaseTestCase
 		\tx_rnbase::load('DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository');
 		$repo = $this->getMock(
 			'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository',
-			array('getSearcher', 'getConnection')
+			array('getSearcher', 'getConnection', 'getEmptyModel')
 		);
 
+		$repo
+			->expects(self::any())
+			->method('getEmptyModel')
+			->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel')))
+		;
 		$repo
 			->expects(self::any())
 			->method('getSearcher')
