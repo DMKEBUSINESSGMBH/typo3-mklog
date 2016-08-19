@@ -1,10 +1,10 @@
 MK LOGGER
 =========
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=2592000&style=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![Total Downloads](https://img.shields.io/packagist/dt/dmk/mklog.svg?maxAge=2592000&style=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mklog.svg?maxAge=2592000&style=flat-square)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
-[![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=2592000&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Total Downloads](https://img.shields.io/packagist/dt/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mklog.svg?maxAge=3600&style=flat-square)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
+[![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
 
 
 This extension offers a developer log. 
