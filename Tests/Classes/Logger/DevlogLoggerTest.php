@@ -100,6 +100,7 @@ class DevlogLoggerTest
 		// activate logging
 		\DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
 		self::assertFalse(
 			$this->callInaccessibleMethod(
@@ -108,6 +109,7 @@ class DevlogLoggerTest
 			)
 		);
 
+		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = false;
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = false;
 		self::assertTrue(
 			$this->callInaccessibleMethod(
