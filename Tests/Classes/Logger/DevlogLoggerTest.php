@@ -100,6 +100,8 @@ class DevlogLoggerTest
 		// activate logging
 		\DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
+		// create an dummy db object for unittests outside of a typo3 env
+		$GLOBALS['TYPO3_DB'] = new \stdClass();
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 		$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
 		self::assertFalse(
