@@ -17,8 +17,6 @@ Or transport all the logs to a graylog server
 Of course the devlog has to be used by the core and extensions.
 To have exceptions and errors logged to the devlog the error handling of mktools can be used.
 
-[UsersManual](Documentation/UsersManual/Index.md)
-
 ### Installation
 Install TYPO3 via composer.
 Maybe you can use our [TYPO3-Composer-Webroot Project](https://github.com/DMKEBUSINESSGMBH/typo3-composer-webroot)
@@ -30,6 +28,6 @@ composer require dmk/mklog
 
 ### Documentation
 
-For usage please have a look in our [Documentation](Documentation/Index.md)
+For usage please have a look in our **_[Documentation](Documentation/Index.md)_**
 
 [CHANGELOG](Documentation/CHANGELOG.md)
