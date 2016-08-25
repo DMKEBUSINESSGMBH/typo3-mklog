@@ -144,11 +144,11 @@ class DevlogEntryModel
 	/**
 	 * Returns the timestamp of the message
 	 *
-	 * @return float
+	 * @return \DateTime
 	 */
 	public function getTimestamp()
 	{
-		return $this->getCrdate();
+		return new \DateTime('@' . $this->getCrdate());
 	}
 
 	/**

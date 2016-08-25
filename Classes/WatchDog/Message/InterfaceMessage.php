@@ -50,9 +50,9 @@ interface InterfaceMessage
 	public function getFullMessage();
 
 	/**
-	 * Returns the timestamp of the message
+	 * Returns the timestamp of the message as a datetime object
 	 *
-	 * @return float
+	 * @return \DateTime
 	 */
 	public function getTimestamp();
 
