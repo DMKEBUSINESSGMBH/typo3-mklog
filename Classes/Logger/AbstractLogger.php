@@ -68,19 +68,19 @@ abstract class AbstractLogger
 		/* @var $entry \DMK\Mklog\Domain\Model\DevlogEntryModel */
 		$entry = $repo->createNewModel();
 		$entry->setCrdate(time());
-		$entry->setRunId($config->getCurrentRunId());
-		$entry->setMessage($message);
-		$entry->setExtKey($extension);
-		$entry->setSeverity($severity);
+		$entry->setRunId((int) $config->getCurrentRunId());
+		$entry->setMessage((string) $message);
+		$entry->setExtKey((string) $extension);
+		$entry->setSeverity((int) $severity);
 		$entry->setPid(0);
 
 		if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE'])) {
-			$entry->setPid($GLOBALS['TSFE']->id);
+			$entry->setPid((int) $GLOBALS['TSFE']->id);
 		}
 
 		$entry->setCruserId(0);
 		if (!empty($GLOBALS['BE_USER']->user['uid'])) {
-			$entry->setCruserId($GLOBALS['BE_USER']->user['uid']);
+			$entry->setCruserId((int) $GLOBALS['BE_USER']->user['uid']);
 		}
 
 		// force extra_data to be an array!

@@ -45,8 +45,8 @@ namespace DMK\Mklog\Domain\Model;
  * @method DevlogEntryModel setMessage() setMessage(string $message)
  * @method bool hasMessage()
  *
- * @method string getSeverity()
- * @method DevlogEntryModel setSeverity() setSeverity(string $severity)
+ * @method int getSeverity()
+ * @method DevlogEntryModel setSeverity() setSeverity(int $severity)
  * @method bool hasSeverity()
  *
  * @method int getCruserId()
