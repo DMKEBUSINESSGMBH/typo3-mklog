@@ -68,7 +68,7 @@ abstract class AbstractLogger
 		/* @var $entry \DMK\Mklog\Domain\Model\DevlogEntryModel */
 		$entry = $repo->createNewModel();
 		$entry->setCrdate(time());
-		$entry->setRunId((int) $config->getCurrentRunId());
+		$entry->setRunId($config->getCurrentRunId());
 		$entry->setMessage((string) $message);
 		$entry->setExtKey((string) $extension);
 		$entry->setSeverity((int) $severity);
