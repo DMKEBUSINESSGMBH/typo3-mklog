@@ -197,6 +197,21 @@ class DevlogEntryModel
 	 */
 	public function getAdditionalData()
 	{
-		return '';
+		$additionalData = array();
+		// check extra data and extract the __ fields
+		$extraData = $this->getExtraData();
+		if ($extraData{0} !== '{') {
+			return $additionalData;
+		}
+
+		$extraData = json_decode($extraData, true, 2);
+		foreach ($extraData as $key => $value) {
+			if (!($key{0} === '_' && $key{1} === '_')) {
+				continue;
+			}
+			$additionalData[substr($key, 2)] = $value;
+		}
+
+		return $additionalData;
 	}
 }

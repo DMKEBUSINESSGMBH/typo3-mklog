@@ -80,4 +80,35 @@ class DevlogEntryModelTest
 		self::assertSame('mkLogGelf:5', $ids[0]);
 		self::assertSame('mkLogMail:7', $ids[1]);
 	}
+
+	/**
+	 * Test the getTransportIds method
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testGetAdditionalData()
+	{
+		$model = $this->getDevlogEntryModel();
+		$model->setExtraData(
+			json_encode(
+				array(
+					'__feuser' => 40,
+					'__beuser' => 13,
+				),
+				JSON_FORCE_OBJECT
+			)
+		);
+
+		$data = $model->getAdditionalData();
+
+		self::assertTrue(is_array($data));
+		self::assertCount(2, $data);
+		self::assertArrayHasKey('feuser', $data);
+		self::assertEquals(40, $data['feuser']);
+		self::assertArrayHasKey('beuser', $data);
+		self::assertEquals(13, $data['beuser']);
+	}
 }
