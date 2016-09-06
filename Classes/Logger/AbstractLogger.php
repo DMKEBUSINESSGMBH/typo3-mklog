@@ -69,6 +69,7 @@ abstract class AbstractLogger
 		$entry = $repo->createNewModel();
 		$entry->setCrdate(time());
 		$entry->setRunId($config->getCurrentRunId());
+		$entry->setHost($entry->getHost());
 		$entry->setMessage((string) $message);
 		$entry->setExtKey((string) $extension);
 		$entry->setSeverity((int) $severity);
@@ -96,7 +97,6 @@ abstract class AbstractLogger
 		// @TODO: use an converter!
 		$extraData = json_encode($extraData, JSON_FORCE_OBJECT);
 		$entry->setExtraData($extraData);
-
 
 		return $entry;
 	}

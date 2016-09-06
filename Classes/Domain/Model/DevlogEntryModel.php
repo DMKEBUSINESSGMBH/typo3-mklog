@@ -41,6 +41,9 @@ namespace DMK\Mklog\Domain\Model;
  * @method DevlogEntryModel setExtKey() setExtKey(string $extKey)
  * @method bool hasExtKey()
  *
+ * @method DevlogEntryModel setHost() setHost(string $host)
+ * @method bool hasHost()
+ *
  * @method string getMessage()
  * @method DevlogEntryModel setMessage() setMessage(string $message)
  * @method bool hasMessage()
@@ -132,6 +135,11 @@ class DevlogEntryModel
 		}
 
 		$extraData = json_decode($extraData, true, 2);
+
+		if (!is_array($extraData)) {
+			return $data;
+		}
+
 		foreach ($extraData as $key => $value) {
 			$visibility = ($key{0} === '_' && $key{1} === '_') ? 'protected' : 'public';
 			if ($visibility === 'protected') {
@@ -234,9 +242,14 @@ class DevlogEntryModel
 	 */
 	public function getHost()
 	{
-		$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
+		$host = $this->getProperty('host');
 
-		$host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
+		if (empty($host)) {
+			$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
+
+			$host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
+		}
+
 		if (empty($host)) {
 			$host = gethostname();
 		}
