@@ -106,7 +106,7 @@ abstract class AbstractGelf
 
 		$additionalData = $message->getAdditionalData();
 		if (!is_array($additionalData)) {
-			$additionalData = array('additional_data' => $additionalData);
+			$additionalData = array();
 		}
 
 		foreach ($additionalData as $key => $value) {

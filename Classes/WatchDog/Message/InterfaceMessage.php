@@ -80,7 +80,7 @@ interface InterfaceMessage
 	/**
 	 * Returns the value of the additional field of the message
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public function getAdditionalData();
 }
