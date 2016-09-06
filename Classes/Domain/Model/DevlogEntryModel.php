@@ -134,7 +134,7 @@ class DevlogEntryModel
 			return $data;
 		}
 
-		$extraData = json_decode($extraData, true, 2);
+		$extraData = json_decode($extraData, true);
 
 		if (!is_array($extraData)) {
 			return $data;
