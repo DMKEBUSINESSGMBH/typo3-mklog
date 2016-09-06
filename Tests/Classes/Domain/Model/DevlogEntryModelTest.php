@@ -82,7 +82,34 @@ class DevlogEntryModelTest
 	}
 
 	/**
-	 * Test the getTransportIds method
+	 * Test the getFullMessage method
+	 *
+	 * @return void
+	 *
+	 * @group unit
+	 * @test
+	 */
+	public function testGetFullMessage()
+	{
+		$model = $this->getDevlogEntryModel();
+		$model->setExtraData(
+			json_encode(
+				array(
+					'foo' => 'bar',
+					'__beuser' => 13,
+				),
+				JSON_FORCE_OBJECT
+			)
+		);
+
+		$data = $model->getFullMessage();
+
+		self::assertTrue(is_string($data));
+		self::assertEquals('{"foo":"bar"}', $data);
+	}
+
+	/**
+	 * Test the getAdditionalData method
 	 *
 	 * @return void
 	 *
@@ -95,6 +122,7 @@ class DevlogEntryModelTest
 		$model->setExtraData(
 			json_encode(
 				array(
+					'foo' => 'bar',
 					'__feuser' => 40,
 					'__beuser' => 13,
 				),

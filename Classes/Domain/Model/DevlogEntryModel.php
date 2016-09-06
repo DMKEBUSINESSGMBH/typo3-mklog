@@ -117,6 +117,57 @@ class DevlogEntryModel
 		);
 	}
 
+	/**
+	 * Returns the extra data as array
+	 *
+	 * @return mixed
+	 */
+	private function getExtraDataArray()
+	{
+		$data = array('protected' => array(), 'public' => array());
+		// check extra data and extract the __ fields
+		$extraData = $this->getExtraData();
+		if ($extraData{0} !== '{') {
+			return $data;
+		}
+
+		$extraData = json_decode($extraData, true, 2);
+		foreach ($extraData as $key => $value) {
+			$visibility = ($key{0} === '_' && $key{1} === '_') ? 'protected' : 'public';
+			if ($visibility === 'protected') {
+				$key = substr($key, 2);
+			}
+			$data[$visibility][$key] = $value;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Returns the public values of extra data
+	 *
+	 * @return mixed
+	 */
+	public function getPublicExtraData()
+	{
+		$extraData = $this->getExtraDataArray();
+
+		return $extraData['public'];
+	}
+
+	/**
+	 * Returns the protected values of extra data
+	 *
+	 * @return mixed
+	 */
+	public function getProtectedExtraData()
+	{
+		$extraData = $this->getExtraDataArray();
+
+		return $extraData['protected'];
+	}
+
+
 	/* *** ******************************************** *** *
 	 * *** \DMK\Mklog\WatchDog\Message\InterfaceMessage *** *
 	 * *** ******************************************** *** */
@@ -138,7 +189,10 @@ class DevlogEntryModel
 	 */
 	public function getFullMessage()
 	{
-		return $this->getExtraData();
+		return json_encode(
+			$this->getPublicExtraData(),
+			JSON_FORCE_OBJECT
+		);
 	}
 
 	/**
@@ -197,21 +251,6 @@ class DevlogEntryModel
 	 */
 	public function getAdditionalData()
 	{
-		$additionalData = array();
-		// check extra data and extract the __ fields
-		$extraData = $this->getExtraData();
-		if ($extraData{0} !== '{') {
-			return $additionalData;
-		}
-
-		$extraData = json_decode($extraData, true, 2);
-		foreach ($extraData as $key => $value) {
-			if (!($key{0} === '_' && $key{1} === '_')) {
-				continue;
-			}
-			$additionalData[substr($key, 2)] = $value;
-		}
-
-		return $additionalData;
+		return $this->getProtectedExtraData();
 	}
 }
