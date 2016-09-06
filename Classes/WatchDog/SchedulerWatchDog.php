@@ -95,16 +95,21 @@ class SchedulerWatchDog
 			}
 		}
 
+		// shutdown the transport
+		$transport->shutdown();
+
 		\tx_rnbase::load('tx_rnbase_util_Logger');
+		$success = empty($failures);
+		$msg = sprintf(
+			'WatchDog %1$s has %2$d messages send and %3$d failures.',
+			$this->getTransportId(),
+			count($successes),
+			count($failures)
+		);
 		\tx_rnbase_util_Logger::devLog(
-			sprintf(
-				'WatchDog %1$s has %2$d messages send and %3$d failures.',
-				$this->getTransportId(),
-				count($successes),
-				count($failures)
-			),
+			$msg,
 			'mklog',
-			empty($failures) ? \tx_rnbase_util_Logger::LOGLEVEL_DEBUG : \tx_rnbase_util_Logger::LOGLEVEL_WARN,
+			$success ? \tx_rnbase_util_Logger::LOGLEVEL_DEBUG : \tx_rnbase_util_Logger::LOGLEVEL_WARN,
 			array(
 				'transport' => $this->getTransportId(),
 				'successes' => $successes,
@@ -112,10 +117,19 @@ class SchedulerWatchDog
 			)
 		);
 
-		// shutdown the transport
-		$transport->shutdown();
+		// create a flash message for the beuser
+		\tx_rnbase::load('tx_rnbase_util_TYPO3');
+		if (\tx_rnbase_util_TYPO3::getBEUserUID()) {
+			\tx_rnbase::load('tx_rnbase_util_Misc');
+			\tx_rnbase_util_Misc::addFlashMessage(
+				$msg,
+				'MK LOGGER WatchDog',
+				$success ? 0 : 2,
+				false
+			);
+		}
 
-		return true;
+		return $success;
 	}
 
 	/**
