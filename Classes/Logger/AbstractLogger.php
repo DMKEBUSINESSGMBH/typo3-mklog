@@ -92,13 +92,49 @@ abstract class AbstractLogger
 		$extraData['__feuser'] = \tx_rnbase_util_TYPO3::getFEUserUID();
 		$extraData['__beuser'] = \tx_rnbase_util_TYPO3::getBEUserUID();
 		// add trace to extradata
-		$extraData['__trace'] = \tx_rnbase_util_Debug::getDebugTrail();
+		$extraData['__trace'] = $this->getBacktrace();
 		// @TODO: use an converter!
 		$extraData = json_encode($extraData, JSON_FORCE_OBJECT);
 		$entry->setExtraData($extraData);
 
 
 		return $entry;
+	}
+
+	/**
+	 * Returns the Backtrase excluding the log calls.
+	 *
+	 * @return array
+	 */
+	private function getBacktrace()
+	{
+		\tx_rnbase::load('tx_rnbase_util_Debug');
+		$trace = array_reverse(
+			\tx_rnbase_util_Debug::getTracePaths()
+		);
+
+		$skip = 0;
+		$ignoreClasses = array(
+			'DMK\\Mklog\\Logger\\',
+			'TYPO3\\CMS\\Core\\Log\\',
+			'Tx_Rnbase_Utility_Logger',
+			'tx_rnbase_util_Logger',
+		);
+
+		foreach ($trace as $path) {
+			$ignore = false;
+			foreach ($ignoreClasses as $ignoreClass) {
+				$ignore = \Tx_Rnbase_Utility_Strings::isFirstPartOfStr($path, $ignoreClass);
+				if ($ignore) {
+					break;
+				}
+			}
+			if ($ignore) {
+				$skip++;
+			}
+		}
+
+		return array_splice($trace, $skip);
 	}
 
 	/**
