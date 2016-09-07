@@ -113,15 +113,19 @@ abstract class AbstractLogger
 			\tx_rnbase_util_Debug::getTracePaths()
 		);
 
-		$skip = 0;
+		$lastIgnoreKey = 0;
 		$ignoreClasses = array(
+			// ignore internal loger calls
 			'DMK\\Mklog\\Logger\\',
+			// ignore core devlog and logerr calls
 			'TYPO3\\CMS\\Core\\Log\\',
+			'TYPO3\\CMS\\Core\\Utility\\GeneralUtility::devLog',
+			// ignore rnbase loggers
 			'Tx_Rnbase_Utility_Logger',
 			'tx_rnbase_util_Logger',
 		);
 
-		foreach ($trace as $path) {
+		foreach ($trace as $key => $path) {
 			$ignore = false;
 			foreach ($ignoreClasses as $ignoreClass) {
 				$ignore = \Tx_Rnbase_Utility_Strings::isFirstPartOfStr($path, $ignoreClass);
@@ -129,12 +133,13 @@ abstract class AbstractLogger
 					break;
 				}
 			}
+			// break if ther is no more ignore
 			if ($ignore) {
-				$skip++;
+				$lastIgnoreKey = $key;
 			}
 		}
 
-		return array_splice($trace, $skip);
+		return array_splice($trace, $lastIgnoreKey + 1);
 	}
 
 	/**
