@@ -197,6 +197,7 @@ class DevlogEntryModel
 	 */
 	public function getFullMessage()
 	{
+		// @TODO: use an converter!
 		return json_encode(
 			$this->getPublicExtraData(),
 			JSON_FORCE_OBJECT

@@ -112,6 +112,7 @@ abstract class AbstractGelf
 		foreach ($additionalData as $key => $value) {
 			// the value shoult be an string, so we convert objects and arrays!
 			if (!\is_scalar($value)) {
+		// @TODO: use an converter!
 				$value = json_encode($value, JSON_FORCE_OBJECT);
 			}
 			$gelfMsg->setAdditional(

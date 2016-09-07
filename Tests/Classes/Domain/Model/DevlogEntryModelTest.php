@@ -93,6 +93,7 @@ class DevlogEntryModelTest
 	{
 		$model = $this->getDevlogEntryModel();
 		$model->setExtraData(
+			// @TODO: use an converter!
 			json_encode(
 				array(
 					'foo' => 'bar',
@@ -120,6 +121,7 @@ class DevlogEntryModelTest
 	{
 		$model = $this->getDevlogEntryModel();
 		$model->setExtraData(
+			// @TODO: use an converter!
 			json_encode(
 				array(
 					'foo' => 'bar',
