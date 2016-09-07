@@ -24,6 +24,8 @@ namespace DMK\Mklog\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+\tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
+
 /**
  * MK Log Factory
  *
@@ -34,7 +36,7 @@ namespace DMK\Mklog\Utility;
  *          GNU Lesser General Public License, version 3 or later
  */
 class ConfigUtility
-	implements \TYPO3\CMS\Core\SingletonInterface
+	implements \Tx_Rnbase_Interface_Singleton
 {
 	/**
 	 * Internal config storage
