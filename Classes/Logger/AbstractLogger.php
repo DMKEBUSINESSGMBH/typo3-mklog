@@ -84,9 +84,23 @@ abstract class AbstractLogger
 			$entry->setCruserId((int) $GLOBALS['BE_USER']->user['uid']);
 		}
 
+		$entry->setExtraData($this->progressExtraData($extraData));
+
+		return $entry;
+	}
+
+	/**
+	 * Progresses the extra data and adds some aditional informations
+	 *
+	 * @param mixed $extraData
+	 *
+	 * @return array
+	 */
+	protected function progressExtraData($extraData)
+	{
 		// force extra_data to be an array!
 		if (!is_array($extraData)) {
-			$extraData = array();
+			$extraData = array('extra' => $extraData);
 		}
 		// add userdata
 		\tx_rnbase::load('tx_rnbase_util_TYPO3');
@@ -94,11 +108,8 @@ abstract class AbstractLogger
 		$extraData['__beuser'] = \tx_rnbase_util_TYPO3::getBEUserUID();
 		// add trace to extradata
 		$extraData['__trace'] = $this->getBacktrace();
-		// @TODO: use an converter!
-		$extraData = json_encode($extraData, JSON_FORCE_OBJECT);
-		$entry->setExtraData($extraData);
 
-		return $entry;
+		return $extraData;
 	}
 
 	/**

@@ -93,13 +93,9 @@ class DevlogEntryModelTest
 	{
 		$model = $this->getDevlogEntryModel();
 		$model->setExtraData(
-			// @TODO: use an converter!
-			json_encode(
-				array(
-					'foo' => 'bar',
-					'__beuser' => 13,
-				),
-				JSON_FORCE_OBJECT
+			array(
+				'foo' => 'bar',
+				'__beuser' => 13,
 			)
 		);
 
@@ -121,14 +117,10 @@ class DevlogEntryModelTest
 	{
 		$model = $this->getDevlogEntryModel();
 		$model->setExtraData(
-			// @TODO: use an converter!
-			json_encode(
-				array(
-					'foo' => 'bar',
-					'__feuser' => 40,
-					'__beuser' => 13,
-				),
-				JSON_FORCE_OBJECT
+			array(
+				'foo' => 'bar',
+				'__feuser' => 40,
+				'__beuser' => 13,
 			)
 		);
 

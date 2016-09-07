@@ -190,7 +190,7 @@ class DevlogEntryDecorator
 	protected function formatExtraDataColumn(
 		DevlogEntryModel $entry
 	) {
-		$extraData = $entry->getExtraData();
+		$extraData = $entry->getExtraDataRaw();
 
 		if (empty($extraData)) {
 			return '';

@@ -66,7 +66,7 @@ final class Factory
 	}
 
 	/**
-	 * Returns a cache
+	 * Returns the config
 	 *
 	 * @return \DMK\Mklog\Utility\ConfigUtility
 	 */
@@ -82,6 +82,25 @@ final class Factory
 		}
 
 		return $storage->getConfigUtility();
+	}
+
+	/**
+	 * Returns the data converter
+	 *
+	 * @return \DMK\Mklog\Utility\DataConverterUtility
+	 */
+	public static function getDataConverterUtility()
+	{
+		$storage = self::getStorage();
+		if (!$storage->hasDataConverterUtility()) {
+			$storage->setDataConverterUtility(
+				\tx_rnbase::makeInstance(
+					'DMK\\Mklog\\Utility\\DataConverterUtility'
+				)
+			);
+		}
+
+		return $storage->getDataConverterUtility();
 	}
 
 	/**

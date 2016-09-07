@@ -56,10 +56,6 @@ namespace DMK\Mklog\Domain\Model;
  * @method DevlogEntryModel setCruserId() setCruserId(int $cruserId)
  * @method bool hasCruserId()
  *
- * @method string getExtraData()
- * @method DevlogEntryModel setExtraData() setExtraData(string $extraData)
- * @method bool hasExtraData()
- *
  * @method int getCruserId()
  * @method DevlogEntryModel setCruserId() setCruserId(int $cruserId)
  * @method bool hasCruserId()
@@ -121,34 +117,41 @@ class DevlogEntryModel
 	}
 
 	/**
-	 * Returns the extra data as array
+	 * The raw extra data.
 	 *
-	 * @return mixed
+	 * @return string
 	 */
-	private function getExtraDataArray()
+	public function getExtraDataRaw()
 	{
-		$data = array('protected' => array(), 'public' => array());
-		// check extra data and extract the __ fields
-		$extraData = $this->getExtraData();
-		if ($extraData{0} !== '{') {
-			return $data;
-		}
+		return $this->getProperty('extra_data');
+	}
 
-		$extraData = json_decode($extraData, true);
+	/**
+	 * Returns the extra data
+	 *
+	 * @return array
+	 */
+	private function getExtraData()
+	{
+		return \DMK\Mklog\Factory::getDataConverterUtility()->decode(
+			$this->getExtraDataRaw()
+		);
+	}
 
-		if (!is_array($extraData)) {
-			return $data;
-		}
-
-		foreach ($extraData as $key => $value) {
-			$visibility = ($key{0} === '_' && $key{1} === '_') ? 'protected' : 'public';
-			if ($visibility === 'protected') {
-				$key = substr($key, 2);
-			}
-			$data[$visibility][$key] = $value;
-		}
-
-		return $data;
+	/**
+	 * Setter for extra data
+	 *
+	 * @param array $data
+	 *
+	 * @return DevlogEntryModel
+	 */
+	public function setExtraData(
+		array $data
+	) {
+		return $this->setProperty(
+			'extra_data',
+			\DMK\Mklog\Factory::getDataConverterUtility()->encode($data)
+		);
 	}
 
 	/**
@@ -156,11 +159,18 @@ class DevlogEntryModel
 	 *
 	 * @return mixed
 	 */
-	public function getPublicExtraData()
+	public function getExternalExtraData()
 	{
-		$extraData = $this->getExtraDataArray();
+		$data = array();
 
-		return $extraData['public'];
+		foreach ($this->getExtraData() as $key => $value) {
+			if ($key{0} === '_' && $key{1} === '_') {
+				continue;
+			}
+			$data[$key] = $value;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -168,11 +178,18 @@ class DevlogEntryModel
 	 *
 	 * @return mixed
 	 */
-	public function getProtectedExtraData()
+	public function getInternalExtraData()
 	{
-		$extraData = $this->getExtraDataArray();
+		$data = array();
 
-		return $extraData['protected'];
+		foreach ($this->getExtraData() as $key => $value) {
+			if (!($key{0} === '_' && $key{1} === '_')) {
+				continue;
+			}
+			$data[substr($key, 2)] = $value;
+		}
+
+		return $data;
 	}
 
 
@@ -197,10 +214,8 @@ class DevlogEntryModel
 	 */
 	public function getFullMessage()
 	{
-		// @TODO: use an converter!
-		return json_encode(
-			$this->getPublicExtraData(),
-			JSON_FORCE_OBJECT
+		return \DMK\Mklog\Factory::getDataConverterUtility()->encode(
+			$this->getExternalExtraData()
 		);
 	}
 
@@ -265,6 +280,6 @@ class DevlogEntryModel
 	 */
 	public function getAdditionalData()
 	{
-		return $this->getProtectedExtraData();
+		return $this->getInternalExtraData();
 	}
 }
