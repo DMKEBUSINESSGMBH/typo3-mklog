@@ -118,6 +118,8 @@ The credentials are Transport specific:
    The host and port of the server: `127.0.0.1:12201`
  * **Gelf HTTP**  
    The complete url of the server: `https://admin:admin@127.0.0.1:2345/gelf`
+ * **Message limit per run**  
+   Max message count to send throu the transport for each scheduler run. Set to `0` to disable the limit.
 
 ### tx_devlog Scheduler
 

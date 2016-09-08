@@ -149,7 +149,15 @@ class SchedulerWatchDog
 			$fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
 		}
 
-		$options['limit'] = 10;
+		$limit = $this->getOptions()->getMessageLimit();
+		// fallback of 100, if no limit is configured
+		if ($limit === null) {
+			$limit = 100;
+		}
+		$limit = (int) $limit;
+		if ($limit > 0) {
+			$options['limit'] = $limit;
+		}
 
 		return $repo->search($fields, $options);
 	}

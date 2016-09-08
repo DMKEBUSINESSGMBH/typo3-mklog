@@ -69,11 +69,13 @@ class SchedulerFieldProviderWatchDog
 				$taskInfo['mklog_watchdog_transport'] = $task->getOptions()->getTransport();
 				$taskInfo['mklog_watchdog_credentials'] = $task->getOptions()->getCredentials();
 				$taskInfo['mklog_watchdog_severity'] = $task->getOptions()->getSeverity();
+				$taskInfo['mklog_watchdog_messagelimit'] = $task->getOptions()->getMessageLimit();
 			} else {
 				// Otherwise set an empty value, as it will not be used anyway
 				$taskInfo['mklog_watchdog_transport'] = '';
 				$taskInfo['mklog_watchdog_credentials'] = '';
 				$taskInfo['mklog_watchdog_severity'] = \DMK\Mklog\Utility\SeverityUtility::DEBUG;
+				$taskInfo['mklog_watchdog_messagelimit'] = '100';
 			}
 		}
 
@@ -83,6 +85,7 @@ class SchedulerFieldProviderWatchDog
 		$additionalFields['field_mklog_watchdog_transport'] = $this->getTransportField($taskInfo);
 		$additionalFields['field_mklog_watchdog_credentials'] = $this->getCredentialsField($taskInfo);
 		$additionalFields['field_mklog_watchdog_severity'] = $this->getSeverityField($taskInfo);
+		$additionalFields['field_mklog_watchdog_messagelimit'] = $this->getMessageLimitField($taskInfo);
 
 		return $additionalFields;
 	}
@@ -188,6 +191,29 @@ class SchedulerFieldProviderWatchDog
 	}
 
 	/**
+	 * Creates the transport drop down
+	 *
+	 * @param array $taskInfo
+	 *
+	 * @return array
+	 */
+	protected function getMessageLimitField(
+		array &$taskInfo
+	) {
+		$fieldCode = '<input ' .
+			'type="text" ' .
+			'name="tx_scheduler[mklog_watchdog_messagelimit]" ' .
+			'id="field_mklog_watchdog_messagelimit" ' .
+			'value="' . $taskInfo['mklog_watchdog_messagelimit'] . '" ' .
+			'size="50" />';
+
+		return array(
+			'code' => $fieldCode,
+			'label' => 'Message limit per run',
+		);
+	}
+
+	/**
 	 * This method checks any additional data that is relevant to the specific task
 	 * If the task class is not relevant, the method is expected to return true
 	 *
@@ -237,6 +263,7 @@ class SchedulerFieldProviderWatchDog
 			->setTransport($submittedData['mklog_watchdog_transport'])
 			->setCredentials($submittedData['mklog_watchdog_credentials'])
 			->setSeverity((int) $submittedData['mklog_watchdog_severity'])
+			->setMessageLimit((int) $submittedData['mklog_watchdog_messagelimit'])
 		);
 	}
 }
