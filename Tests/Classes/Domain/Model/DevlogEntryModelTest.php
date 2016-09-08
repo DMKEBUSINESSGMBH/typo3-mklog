@@ -24,8 +24,18 @@ namespace DMK\Mklog\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once \tx_rnbase_util_Extensions::extPath('rn_base', 'class.tx_rnbase.php');
-require_once \tx_rnbase_util_Extensions::extPath('mklog', 'Tests/Classes/BaseTestCase.php');
+if (!\class_exists('tx_rnbase')) {
+	require_once \tx_rnbase_util_Extensions::extPath(
+		'rn_base',
+		'class.tx_rnbase.php'
+	);
+}
+if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
+	require_once \tx_rnbase_util_Extensions::extPath(
+		'mklog',
+		'Tests/Classes/BaseTestCase.php'
+	);
+}
 
 /**
  * Devlog entry model test
