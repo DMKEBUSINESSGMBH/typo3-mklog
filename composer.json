@@ -54,7 +54,7 @@
 	},
 	"autoload-dev" : {
 		"psr-4" : {
-			"DMK\\Mklog\\Tests\\" : "Tests",
+			"DMK\\Mklog\\Tests\\" : "Tests/Classes",
 			"TYPO3\\CMS\\Core\\Tests\\" : ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
 			"TYPO3\\CMS\\Fluid\\Tests\\" : ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
 		}
