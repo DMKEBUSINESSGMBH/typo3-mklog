@@ -48,12 +48,16 @@ class DevlogLogger
 	public function writeLog(
 		\TYPO3\CMS\Core\Log\LogRecord $record
 	) {
-		$this->storeLog(
-			$record->getMessage(),
-			$record->getComponent(),
-			$record->getLevel(),
-			$record->getData()
-		);
+		try {
+			$this->storeLog(
+				$record->getMessage(),
+				$record->getComponent(),
+				$record->getLevel(),
+				$record->getData()
+			);
+		} catch (\Exception $e) {
+			$this->handleExceptionDuringLogging($e);
+		}
 
 		return $this;
 	}
@@ -130,12 +134,16 @@ class DevlogLogger
 				break;
 		}
 
-		$this->storeLog(
-			$params['msg'],
-			$params['extKey'],
-			$params['severity'],
-			$params['dataVar']
-		);
+		try {
+			$this->storeLog(
+				$params['msg'],
+				$params['extKey'],
+				$params['severity'],
+				$params['dataVar']
+			);
+		} catch (\Exception $e) {
+			$this->handleExceptionDuringLogging($e);
+		}
 	}
 
 	/**
@@ -179,5 +187,35 @@ class DevlogLogger
 		}
 
 		return $storage->getLoggingActive();
+	}
+
+	/**
+	 * Send an exeption mail for all exceptions during the store log process
+	 *
+	 * @param \Exception $e
+	 *
+	 * @TODO: add recursive call check for exceptions (
+	 *     throw exception, only block at secnd exception.
+	 *     so the gelf logger can log the exception
+	 *     and only a recursion of logging will prevented.
+	 * )
+	 *
+	 * @return void
+	 */
+	protected function handleExceptionDuringLogging(
+		\Exception $e
+	) {
+		// try to send mail
+		$addr = \tx_rnbase_configurations::getExtensionCfgValue(
+			'rn_base',
+			'sendEmailOnException'
+		);
+		if ($addr) {
+			\tx_rnbase_util_Misc::sendErrorMail(
+				$addr,
+				'Mklog\DevlogLogger',
+				$e
+			);
+		}
 	}
 }
