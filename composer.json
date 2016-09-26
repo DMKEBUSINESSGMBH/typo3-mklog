@@ -31,7 +31,8 @@
 		"issues" : "https://github.com/DMKEBUSINESSGMBH/typo3-mklog"
 	},
 	"replace" : {
-		"typo3-ter/mklog" : "*"
+		"mklog" : "self.version",
+		"typo3-ter/mklog" : "self.version"
 	},
 	"require" : {
 		"typo3/cms" : "^4.5 || ^6.2.14 || ^7.6 || ^8.7",
