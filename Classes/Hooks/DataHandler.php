@@ -90,6 +90,7 @@ class Tx_Mklog_Hooks_DataHandler {
 	 * @return string
 	 */
 	protected function getDevlogTableName() {
+		tx_rnbase::load('Tx_Mklog_Utility_Devlog');
 		return Tx_Mklog_Utility_Devlog::getTableName();
 	}
 
