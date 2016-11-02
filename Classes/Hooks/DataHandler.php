@@ -110,7 +110,7 @@ class Tx_Mklog_Hooks_DataHandler {
 	 * @return string
 	 */
 	protected function getMklogTableName() {
-		return tx_rnbase::makeInstance('\\DMK\\Mklog\\Domain\\Model\\DevlogEntryModel', array())->getTableName();
+		return \DMK\Mklog\Factory::getDevlogEntryRepository()->getEmptyModel()->getTableName();
 	}
 
 	/**
