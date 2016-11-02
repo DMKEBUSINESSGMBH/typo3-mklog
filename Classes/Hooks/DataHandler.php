@@ -35,28 +35,6 @@
 class Tx_Mklog_Hooks_DataHandler {
 
 	/**
-	 * @param string $command
-	 * @param string $table
-	 * @param int $id
-	 * @param array $value
-	 * @param TYPO3\CMS\Core\DataHandling\DataHandler
-	 *
-	 * @return void
-	 */
-	public function processCmdmap_preProcess($command, $table, $id, $value, $dataHandler) {
-		if ($table == 'pages'){
-			switch ($command) {
-				case 'delete':
-					$this->deleteDevlogEntriesByPageId($id);
-					break;
-				case 'copy':
-					$this->removeDevlogTableFromTablesThatCanBeCopied($dataHandler);
-					break;
-			}
-		}
-	}
-
-	/**
 	 * Wenn eine Seite gelöscht werden soll und darauf devlog Einträge liegen, dann können das nicht Admins
 	 * nur wenn sie Schreibrechte auf die devlog Tabelle haben. Dadurch werden beim kopieren von Seiten mit devlog
 	 * Einträgen diese Einträge auch mitkopiert. Das führt dann zu unerwarteten WatchDog Meldungen, da diese neu
@@ -70,6 +48,29 @@ class Tx_Mklog_Hooks_DataHandler {
 	 * aber noch nicht weil eben festgestellt wurde dass devlog Einträge drauf liegen. Daher hooken wir uns einen
 	 * Schritt eher ein.
 	 *
+	 * @param string $command
+	 * @param string $table
+	 * @param int $id
+	 * @param array $value
+	 * @param TYPO3\CMS\Core\DataHandling\DataHandler
+	 *
+	 * @return void
+	 */
+	public function processCmdmap_preProcess($command, $table, $id, $value, $dataHandler) {
+		if ($table == 'pages'){
+			switch ($command) {
+				case 'delete':
+					$this->deleteDevlogEntriesByPageId($id);
+					$this->deleteMklogEntriesByPageId($id);
+					break;
+				case 'copy':
+					$this->removeLogTablesFromTablesThatCanBeCopied($dataHandler);
+					break;
+			}
+		}
+	}
+
+	/**
 	 * @param int $pageId
 	 *
 	 * @return void
@@ -78,6 +79,15 @@ class Tx_Mklog_Hooks_DataHandler {
 		if (tx_rnbase_util_Extensions::isLoaded('devlog')) {
 			$this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = ' . intval($pageId));
 		}
+	}
+
+	/**
+	 * @param int $pageId
+	 *
+	 * @return void
+	 */
+	protected function deleteMklogEntriesByPageId($pageId) {
+		$this->getDatabaseConnection()->doDelete($this->getMklogTableName(), 'pid = ' . intval($pageId));
 	}
 
 	/**
@@ -97,19 +107,28 @@ class Tx_Mklog_Hooks_DataHandler {
 	}
 
 	/**
-	 * Es ist nie gewünscht dass die devlog Einträge beim kopieren einer Seite mitkopiert werden,
+	 * @return string
+	 */
+	protected function getMklogTableName() {
+		return tx_rnbase::makeInstance('\\DMK\\Mklog\\Domain\\Model\\DevlogEntryModel', array())->getTableName();
+	}
+
+	/**
+	 * Es ist nie gewünscht dass die devlog und tx_mklog_devlog_entry Einträge beim kopieren einer Seite mitkopiert werden,
 	 * auch nicht für Admins.
 	 *
 	 * @param TYPO3\CMS\Core\DataHandling\DataHandler
 	 *
 	 * @return void
 	 */
-	protected function removeDevlogTableFromTablesThatCanBeCopied($dataHandler) {
+	protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler) {
 		$tablesThatCanBeCopied = array_flip($dataHandler->compileAdminTables());
 
-		$devlogTableName = $this->getDevlogTableName();
-		if (isset($tablesThatCanBeCopied[$devlogTableName])) {
-			unset($tablesThatCanBeCopied[$devlogTableName]);
+		$tablesThatShouldNotBeCopied = array($this->getDevlogTableName(), $this->getMklogTableName());
+		foreach ($tablesThatShouldNotBeCopied as $tableThatShouldNotBeCopied) {
+			if (isset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied])) {
+				unset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied]);
+			}
 		}
 
 		$dataHandler->copyWhichTables = implode(',', array_flip($tablesThatCanBeCopied));
