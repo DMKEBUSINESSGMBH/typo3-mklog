@@ -75,7 +75,9 @@ class Tx_Mklog_Hooks_DataHandler {
 	 * @return void
 	 */
 	protected function deleteDevlogEntriesByPageId($pageId) {
-		$this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = ' . intval($pageId));
+		if (tx_rnbase_util_Extensions::isLoaded('devlog')) {
+			$this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = ' . intval($pageId));
+		}
 	}
 
 	/**
