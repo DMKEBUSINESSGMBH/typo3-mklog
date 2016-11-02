@@ -154,19 +154,23 @@ class DevlogEntryRepository
 	 *
 	 * @param int $limit
 	 *
-	 * @return Tx_Rnbase_Domain_Collection_Base
+	 * @return array
 	 */
-	public function getLatestRuns(
+	public function getLatestRunIds(
 		$limit = 50
 	) {
 		$fields = $options = array();
 
+		$options['what'] = 'DEVLOGENTRY.run_id';
 		$options['groupby'] = 'DEVLOGENTRY.run_id';
 		$options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
 		$options['limit'] = (int) $limit;
-		$options['forcewrapper'] = 1;
+		$options['collection'] = false;
+		
+		$items = $this->search($fields, $options);
+		$items = call_user_func_array('array_merge_recursive', $items);
 
-		return $this->search($fields, $options);
+		return $items['run_id'];
 	}
 
 	/**

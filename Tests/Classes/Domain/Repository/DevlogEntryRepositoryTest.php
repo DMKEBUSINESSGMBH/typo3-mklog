@@ -197,14 +197,14 @@ class DevlogEntryRepositoryTest
 	}
 
 	/**
-	 * Test the getLatestRuns method.
+	 * Test the getLatestRunIds method.
 	 *
 	 * @return void
 	 *
 	 * @group unit
 	 * @test
 	 */
-	public function testGetLatestRuns()
+	public function testGetLatestRunIds()
 	{
 		$repo = $this->getDevlogEntryRepository();
 		$searcher = $this->callInaccessibleMethod($repo, 'getSearcher');
@@ -225,6 +225,15 @@ class DevlogEntryRepositoryTest
 					{
 						$that->assertTrue(is_array($options));
 
+						$that->assertArrayHasKey('collection', $options);
+						$that->assertFalse($options['collection']);
+
+						$that->assertArrayHasKey('what', $options);
+						$that->assertEquals(
+							'DEVLOGENTRY.run_id',
+							$options['what']
+						);
+
 						$that->assertArrayHasKey('groupby', $options);
 						$that->assertEquals(
 							'DEVLOGENTRY.run_id',
@@ -244,19 +253,28 @@ class DevlogEntryRepositoryTest
 							$options['limit']
 						);
 
-						$that->assertArrayHasKey('forcewrapper', $options);
-						$that->assertEquals(
-							1,
-							$options['forcewrapper']
-						);
-
 						return true;
 					}
 				)
 			)
+			->will(
+				$this->returnValue(
+					array(
+						array('run_id' => '14780947042869'),
+						array('run_id' => '14780821110468'),
+						array('run_id' => '1478080061308'),
+					)
+				)
+			)
 		;
 
-		$repo->getLatestRuns(57);
+		$ids = $repo->getLatestRunIds(57);
+
+		$this->assertTrue(is_array($ids));
+		$this->assertCount(3, $ids);
+		$this->assertEquals('14780947042869', $ids[0]);
+		$this->assertEquals('14780821110468', $ids[1]);
+		$this->assertEquals('1478080061308', $ids[2]);
 	}
 
 	/**

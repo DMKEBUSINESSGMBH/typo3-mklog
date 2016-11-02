@@ -163,13 +163,12 @@ class DevlogEntryLister
 	public function getLatestRuns()
 	{
 		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
-		$latestRuns = $repo->getLatestRuns();
+		$latestRuns = $repo->getLatestRunIds();
 
 		$items = array('' => '');
 
-		/* @var $item \DMK\Mklog\Domain\Model\DevlogEntryModel */
-		foreach ($latestRuns as $item) {
-			$items[$item->getRunId()] = strftime('%d.%m.%y %H:%M:%S', (int) $item->getCrdate());
+		foreach ($latestRuns as $id) {
+			$items[$id] = strftime('%d.%m.%y %H:%M:%S', substr($id, 0, 10));
 		}
 
 		return $items;
