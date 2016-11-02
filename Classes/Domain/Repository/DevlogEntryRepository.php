@@ -166,7 +166,7 @@ class DevlogEntryRepository
 		$options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
 		$options['limit'] = (int) $limit;
 		$options['collection'] = false;
-		
+
 		$items = $this->search($fields, $options);
 		$items = call_user_func_array('array_merge_recursive', $items);
 
@@ -184,8 +184,8 @@ class DevlogEntryRepository
 
 		$options['groupby'] = 'DEVLOGENTRY.ext_key';
 		$options['orderby']['DEVLOGENTRY.ext_key'] = 'DESC';
+		$options['what'] = 'DEVLOGENTRY.ext_key';
 		$options['forcewrapper'] = 1;
-
 		return $this->search($fields, $options);
 	}
 
