@@ -1,5 +1,12 @@
 language: php
 
+notifications:
+  email:
+    recipients:
+      - dev@dmk-ebusiness.de
+    on_success: change
+    on_failure: [always
+
 php:
   - 5.3
   - 5.4
