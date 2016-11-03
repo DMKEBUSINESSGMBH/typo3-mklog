@@ -306,6 +306,14 @@ class DevlogEntryRepositoryTest
 					{
 						$that->assertTrue(is_array($options));
 
+						$that->assertCount(6, $options);
+
+						$that->assertArrayHasKey('what', $options);
+						$that->assertEquals(
+							'DEVLOGENTRY.ext_key',
+							$options['what']
+						);
+
 						$that->assertArrayHasKey('groupby', $options);
 						$that->assertEquals(
 							'DEVLOGENTRY.ext_key',
@@ -319,19 +327,34 @@ class DevlogEntryRepositoryTest
 							$options['orderby']['DEVLOGENTRY.ext_key']
 						);
 
-						$that->assertArrayHasKey('forcewrapper', $options);
-						$that->assertEquals(
-							1,
-							$options['forcewrapper']
-						);
+						$that->assertArrayHasKey('collection', $options);
+						$that->assertFalse($options['collection']);
+
+						$that->assertArrayHasKey('enablefieldsoff', $options);
+						$that->assertArrayHasKey('searchdef', $options);
 
 						return true;
 					}
 				)
 			)
+			->will(
+				$this->returnValue(
+					array(
+						array('ext_key' => 'rn_base'),
+						array('ext_key' => 'mklog'),
+						array('ext_key' => 'mkpostman'),
+					)
+				)
+			)
 		;
 
-		$repo->getLoggedExtensions(57);
+		$keys = $repo->getLoggedExtensions();
+
+		$this->assertTrue(is_array($keys));
+		$this->assertCount(3, $keys);
+		$this->assertEquals('rn_base', $keys[0]);
+		$this->assertEquals('mklog', $keys[1]);
+		$this->assertEquals('mkpostman', $keys[2]);
 	}
 
 	/**

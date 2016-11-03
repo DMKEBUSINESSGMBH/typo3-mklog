@@ -176,17 +176,21 @@ class DevlogEntryRepository
 	/**
 	 * Returns all extension keys who has logged into devlog
 	 *
-	 * @return Tx_Rnbase_Domain_Collection_Base
+	 * @return array
 	 */
 	public function getLoggedExtensions()
 	{
 		$fields = $options = array();
 
+		$options['what'] = 'DEVLOGENTRY.ext_key';
 		$options['groupby'] = 'DEVLOGENTRY.ext_key';
 		$options['orderby']['DEVLOGENTRY.ext_key'] = 'DESC';
-		$options['what'] = 'DEVLOGENTRY.ext_key';
-		$options['forcewrapper'] = 1;
-		return $this->search($fields, $options);
+		$options['collection'] = false;
+
+		$items = $this->search($fields, $options);
+		$items = call_user_func_array('array_merge_recursive', $items);
+
+		return $items['ext_key'];
 	}
 
 	/**
@@ -201,10 +205,10 @@ class DevlogEntryRepository
 		array &$fields,
 		array &$options
 	) {
-		parent::prepareFieldsAndOptions($fields, $options);
-		$this->prepareGenericSearcher($options);
 		// there is no tca for the table!
 		$options['enablefieldsoff'] = true;
+		parent::prepareFieldsAndOptions($fields, $options);
+		$this->prepareGenericSearcher($options);
 	}
 
 	/**

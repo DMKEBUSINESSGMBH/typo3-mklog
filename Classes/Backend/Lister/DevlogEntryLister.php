@@ -182,13 +182,13 @@ class DevlogEntryLister
 	public function getLoggedExtensions()
 	{
 		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
-		$latestRuns = $repo->getLoggedExtensions();
+		$extKeys = $repo->getLoggedExtensions();
 
 		$items = array('' => '');
 
 		/* @var $item \DMK\Mklog\Domain\Model\DevlogEntryModel */
-		foreach ($latestRuns as $item) {
-			$items[$item->getExtKey()] = $item->getExtKey();
+		foreach ($extKeys as $extKey) {
+			$items[$extKey] = $extKey;
 		}
 
 		return $items;
