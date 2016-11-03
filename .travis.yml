@@ -5,7 +5,7 @@ notifications:
     recipients:
       - dev@dmk-ebusiness.de
     on_success: change
-    on_failure: [always
+    on_failure: always
 
 php:
   - 5.3
