@@ -143,7 +143,10 @@ class SchedulerWatchDog
 
 		$fields = $options = array();
 
-		$fields['DEVLOGENTRY.transport_ids'][OP_NOTIN] = $this->getTransportId();
+		$fields[SEARCH_FIELD_CUSTOM] = sprintf(
+			'NOT FIND_IN_SET(\'%s\', `transport_ids`)',
+			$this->getTransportId()
+		);
 
 		if ($this->getOptions()->getSeverity()) {
 			$fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
