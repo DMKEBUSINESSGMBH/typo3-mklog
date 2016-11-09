@@ -132,10 +132,7 @@ class DevlogEntryLister
 				$this->getOptions()->getPid(),
 				'SET[' . $this->getListerId() . 'Severity]',
 				$filter->getSeverity(),
-				array_merge(
-					array('' => ''),
-					\DMK\Mklog\Utility\SeverityUtility::getItems()
-				)
+				$this->getSeverityLevels()
 			),
 			'label' => '###LABEL_FILTER_SEVERITY###',
 		);
@@ -169,6 +166,23 @@ class DevlogEntryLister
 
 		foreach ($latestRuns as $id) {
 			$items[$id] = strftime('%d.%m.%y %H:%M:%S', substr($id, 0, 10));
+		}
+
+		return $items;
+	}
+
+	/**
+	 * Returns the severity levels
+	 *
+	 * @return array
+	 */
+	public function getSeverityLevels()
+	{
+
+		$items = array();
+		$items[''] = '';
+		foreach (\DMK\Mklog\Utility\SeverityUtility::getItems() as $id => $name) {
+			$items[$id] = $id . ' - ' . ucfirst(strtolower($name));
 		}
 
 		return $items;
