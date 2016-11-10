@@ -168,9 +168,8 @@ class DevlogEntryRepository
 		$options['collection'] = false;
 
 		$items = $this->search($fields, $options);
-		$items = call_user_func_array('array_merge_recursive', $items);
 
-		return $items['run_id'];
+		return $this->convertSingleSelectToFlatArray($items, 'run_id');
 	}
 
 	/**
@@ -188,9 +187,37 @@ class DevlogEntryRepository
 		$options['collection'] = false;
 
 		$items = $this->search($fields, $options);
+
+		return $this->convertSingleSelectToFlatArray($items, 'ext_key');
+	}
+
+	/**
+	 * Flattens an single select array
+	 *
+	 * @param array $items
+	 * @param string $field
+	 *
+	 * @return array
+	 */
+	private function convertSingleSelectToFlatArray(
+		array $items,
+		$field
+	) {
+		if (empty($items)) {
+			return array();
+		}
+
 		$items = call_user_func_array('array_merge_recursive', $items);
 
-		return $items['ext_key'];
+		if (empty($items)) {
+			return array();
+		}
+
+		if (!is_array($items[$field])) {
+			$items[$field] = array($items[$field]);
+		}
+
+		return $items[$field];
 	}
 
 	/**
