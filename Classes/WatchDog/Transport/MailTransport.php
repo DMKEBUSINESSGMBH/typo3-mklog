@@ -176,7 +176,7 @@ class MailTransport
 				$content .= sprintf(
 					'Time: %2$s %1$sFacility: %3$s %1$sMessage: %4$s %1$sCount: %5$s',
 					LF,
-					strftime('%d.%m.%y %H:%M:%S', $message->getTimestamp()),
+					$message->getTimestamp()->format('d.m.Y H:i:s'),
 					$message->getFacility(),
 					$message->getShortMessage(),
 					$this->uniqs[$level][$key]
