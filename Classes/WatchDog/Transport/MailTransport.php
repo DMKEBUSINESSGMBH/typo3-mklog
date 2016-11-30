@@ -130,6 +130,21 @@ class MailTransport
 	}
 
 	/**
+	 * The overall count of messages in log.
+	 *
+	 * @return int
+	 */
+	protected function getMailCount()
+	{
+		$count = 0;
+		foreach ($this->uniqs as $messages) {
+			$count += $messages['summary'];
+		}
+
+		return $count;
+	}
+
+	/**
 	 * Deinitializes the Transport.
 	 * For this transport we send the Mail
 	 *
@@ -138,7 +153,7 @@ class MailTransport
 	public function shutdown()
 	{
 		// no messages? nothing todo!
-		if (empty($this->uniqs)) {
+		if ($this->getMailCount() === 0) {
 			return;
 		}
 
