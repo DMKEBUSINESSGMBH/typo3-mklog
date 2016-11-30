@@ -107,11 +107,11 @@ class SchedulerFieldProviderWatchDog
 
 		foreach (array(
 			'Mail' => array(
-				'\DMK\Mklog\WatchDog\Transport\MailTransport' => 'Mail Message',
+				'DMK\Mklog\WatchDog\Transport\MailTransport' => 'Mail Message',
 			),
 			'Gelf (GrayLog)' => array(
-				'\DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf' => 'Gelf HTTP',
-				'\DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf' => 'Gelf UDP',
+				'DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf' => 'Gelf HTTP',
+				'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf' => 'Gelf UDP',
 			),
 		) as $group => $subs) {
 			$fieldCode .= '<optgroup label="' . $group . '">';
