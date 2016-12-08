@@ -56,10 +56,6 @@ namespace DMK\Mklog\Domain\Model;
  * @method DevlogEntryModel setCruserId() setCruserId(int $cruserId)
  * @method bool hasCruserId()
  *
- * @method int getCruserId()
- * @method DevlogEntryModel setCruserId() setCruserId(int $cruserId)
- * @method bool hasCruserId()
- *
  * @method int getCrdate()
  * @method DevlogEntryModel setCrdate() setCrdate(int $crdate)
  * @method bool hasCrdate()
@@ -73,6 +69,21 @@ namespace DMK\Mklog\Domain\Model;
 class DevlogEntryModel
 	extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
 {
+	/**
+	 * override reset and dont load record after creating entry
+	 *
+	 * @return Tx_Rnbase_Domain_Model_Base
+	 */
+	public function reset()
+	{
+		//$this->loadRecord();
+
+		// set the modified state to clean
+		$this->resetCleanState();
+
+		return $this;
+	}
+
 	/**
 	 * Liefert den aktuellen Tabellenname
 	 *
