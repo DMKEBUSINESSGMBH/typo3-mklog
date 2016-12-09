@@ -70,7 +70,7 @@ class DevlogEntryModel
 	extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
 {
 	/**
-	 * override reset and dont load record after creating entry
+	 * Override reset and dont load record after creating entry
 	 *
 	 * @return Tx_Rnbase_Domain_Model_Base
 	 */
