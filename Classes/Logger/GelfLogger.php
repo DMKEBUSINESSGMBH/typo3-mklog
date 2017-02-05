@@ -96,7 +96,7 @@ class GelfLogger
 	protected function getTransport()
 	{
 		return \tx_rnbase::makeInstance(
-			'\DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf'
+			'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf'
 		);
 	}
 }
