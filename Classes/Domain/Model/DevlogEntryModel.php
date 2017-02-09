@@ -237,7 +237,10 @@ class DevlogEntryModel
 	 */
 	public function getTimestamp()
 	{
-		return new \DateTime('@' . $this->getCrdate());
+		return \DateTime::createFromFormat(
+			'U.u',
+			$this->getCrdate() . '.000216'
+		);
 	}
 
 	/**
