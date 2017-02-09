@@ -89,9 +89,10 @@ class ConfigUtility
 	public function getCurrentRunId()
 	{
 		if (!$this->getStorage()->hasDevLogCurrentRunId()) {
-			$this->getStorage()->setDevLogCurrentRunId(
-				str_replace('.', '', (string) microtime(true))
-			);
+			list($sec, $usec) = explode('.', (string) microtime(true));
+			// miliseconds has to be exactly 6 sings long. otherwise the resulting number is too small.
+			$usec = $usec . str_repeat('0', 6 - strlen($usec));
+			$this->getStorage()->setDevLogCurrentRunId($sec . $usec);
 		}
 
 		return $this->getStorage()->getDevLogCurrentRunId();
