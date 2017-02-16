@@ -239,7 +239,7 @@ class DevlogEntryModel
 	{
 		return \DateTime::createFromFormat(
 			'U.u',
-			$this->getCrdate() . '.000216'
+			$this->getCrdate() . '.0216'
 		);
 	}
 
