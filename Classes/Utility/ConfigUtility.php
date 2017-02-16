@@ -109,6 +109,16 @@ class ConfigUtility
 	}
 
 	/**
+	 * Is the configured host?
+	 *
+	 * @return string
+	 */
+	public function getHost()
+	{
+		return $this->getExtConf()->getHost();
+	}
+
+	/**
 	 * Minimum log level to log
 	 *
 	 * @return int

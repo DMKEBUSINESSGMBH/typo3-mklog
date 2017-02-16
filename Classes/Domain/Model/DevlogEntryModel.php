@@ -274,12 +274,20 @@ class DevlogEntryModel
 	{
 		$host = $this->getProperty('host');
 
+		// first check ext conf
+		if (empty($host)) {
+			$config = \DMK\Mklog\Factory::getConfigUtility();
+			$host = $config->getHost();
+		}
+
+		// now check the domain
 		if (empty($host)) {
 			$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
 
 			$host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
 		}
 
+		// as fallback use the server hostname
 		if (empty($host)) {
 			$host = gethostname();
 		}
