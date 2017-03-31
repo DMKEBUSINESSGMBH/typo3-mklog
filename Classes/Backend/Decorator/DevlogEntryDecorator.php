@@ -45,14 +45,14 @@ class DevlogEntryDecorator
 	 * For example a strikethrough for disabled entries.
 	 *
 	 * @param string $formatedValue
-	 * @param DevlogEntryModel $entry
+	 * @param \Tx_Rnbase_Domain_Model_DataInterface|DevlogEntryModel $entry
 	 * @param string $columnName
 	 *
 	 * @return string
 	 */
 	protected function wrapValue(
 		$formatedValue,
-		DevlogEntryModel $entry,
+		\Tx_Rnbase_Domain_Model_DataInterface $entry,
 		$columnName
 	) {
 		return sprintf(
