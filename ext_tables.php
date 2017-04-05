@@ -19,7 +19,7 @@ if (TYPO3_MODE == 'BE') {
 		array(
 			'access' => 'user,group',
 			'routeTarget' => 'DMK\\Mklog\\Backend\\ModuleBackend',
-			'icon' => 'EXT:mklog/ext_icon.gif',
+			'icon' => 'EXT:mklog/ext_icon.png',
 			'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
 		)
 	);
