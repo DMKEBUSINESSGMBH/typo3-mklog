@@ -34,7 +34,7 @@ namespace DMK\Mklog\Logger;
  *          GNU Lesser General Public License, version 3 or later
  */
 abstract class AbstractLogger
-	implements \TYPO3\CMS\Core\Log\Writer\WriterInterface
+	implements \TYPO3\CMS\Core\Log\Writer\WriterInterface, \TYPO3\CMS\Core\SingletonInterface
 {
 	/**
 	 * Constructs this log writer
