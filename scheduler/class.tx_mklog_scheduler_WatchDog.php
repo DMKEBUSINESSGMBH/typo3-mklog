@@ -30,216 +30,238 @@ tx_rnbase::load('Tx_Mklog_Utility_Devlog');
 /**
  * tx_mklog_scheduler_WatchDog
  *
- * @package 		TYPO3
- * @subpackage	 	mklog
- * @author 			René Nitzsche
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mklog
+ * @author          René Nitzsche
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task {
+class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
+{
 
-	/**
-	 * Email address(es) for notification mail
-	 *
-	 * @var	string
-	 */
-	 private $email;
+    /**
+     * Email address(es) for notification mail
+     *
+     * @var     string
+     */
+    private $email;
 
-	 /**
-	  *
-	  * @var int
-	  */
-	 private $severity;
+     /**
+      *
+      * @var int
+      */
+    private $severity;
 
-	 /**
-	  * @var boolean
-	  */
-	 private $force;
+     /**
+      * @var boolean
+      */
+    private $force;
 
-	 /**
-	  * @var boolean
-	  */
-	 private $dataVar;
+     /**
+      * @var boolean
+      */
+    private $dataVar;
 
-	 /**
-	  * @var boolean
-	  */
-	 private $groupEntries;
+     /**
+      * @var boolean
+      */
+    private $groupEntries;
 
-	/**
-	 * Function executed from the Scheduler.
-	 * Sends an email
-	 *
-	 * @return	boolean
-	 */
-	public function execute() {
-		$success = TRUE;
-		$taskId = $this->taskUid;
+    /**
+     * Function executed from the Scheduler.
+     * Sends an email
+     *
+     * @return  bool
+     */
+    public function execute()
+    {
+        $success = true;
+        $taskId = $this->taskUid;
 
-		tx_rnbase::load('tx_rnbase_util_Misc');
-		try {
-			$lastRun = $this->getLastRunTime($taskId);
-			/* @var $srv tx_mklog_srv_WatchDog */
-			$srv = tx_rnbase_util_Misc::getService('mklog', 'WatchDog');
-			$filters = array();
-			$options = array();
-			$options['minimalSeverity'] = $this->getMinimalSeverity();
-			$options['forceSummaryMail'] = $this->getForceSummaryMail();
-			$options['includeDataVar'] = $this->getIncludeDataVar();
+        tx_rnbase::load('tx_rnbase_util_Misc');
+        try {
+            $lastRun = $this->getLastRunTime($taskId);
+            /* @var $srv tx_mklog_srv_WatchDog */
+            $srv = tx_rnbase_util_Misc::getService('mklog', 'WatchDog');
+            $filters = array();
+            $options = array();
+            $options['minimalSeverity'] = $this->getMinimalSeverity();
+            $options['forceSummaryMail'] = $this->getForceSummaryMail();
+            $options['includeDataVar'] = $this->getIncludeDataVar();
 
-			//damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
-			if ($this->getGroupEntries()) {
-				$options['groupby'] = Tx_Mklog_Utility_Devlog::getMessageFieldName() . ',extkey';
-				// wir wollen aber wissen wie oft jede Nachricht vorhanden ist
-				$options['count'] = TRUE;
-			}
+            //damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
+            if ($this->getGroupEntries()) {
+                $options['groupby'] = Tx_Mklog_Utility_Devlog::getMessageFieldName() . ',extkey';
+                // wir wollen aber wissen wie oft jede Nachricht vorhanden ist
+                $options['count'] = true;
+            }
 
-			$srv->triggerMails($this->getEmailReceiver(), $lastRun, $filters, $options);
-			$this->updateLastRunTime($taskId);
+            $srv->triggerMails($this->getEmailReceiver(), $lastRun, $filters, $options);
+            $this->updateLastRunTime($taskId);
+        } catch (Exception $e) {
+            tx_rnbase_util_Logger::fatal(
+                'WatchDog failed!',
+                'mklog',
+                array('Exception' => $e->getMessage())
+            );
+            $success = false;
+        }
 
-		} catch (Exception $e) {
-			tx_rnbase_util_Logger::fatal(
-				'WatchDog failed!', 'mklog', array('Exception' => $e->getMessage())
-			);
-			$success = FALSE;
-		}
-		return $success;
-	}
+        return $success;
+    }
 
-	/**
-	 * @param int $taskId
-	 * @return DateTime
-	 */
-	protected function getLastRunTime($taskId) {
-		$options = array();
-		$options['enablefieldsoff'] = 1;
-		$options['where'] = 'uid='.intval($taskId);
-		$ret = tx_rnbase_util_DB::doSelect(
-			'tx_mklog_lastrun', 'tx_scheduler_task', $options
-		);
-		$lastrun = new DateTime();
-		if(count($ret)) {
-			$lastrun = new DateTime($ret[0]['tx_mklog_lastrun']);
-		}
+    /**
+     * @param int $taskId
+     * @return DateTime
+     */
+    protected function getLastRunTime($taskId)
+    {
+        $options = array();
+        $options['enablefieldsoff'] = 1;
+        $options['where'] = 'uid='.intval($taskId);
+        $ret = tx_rnbase_util_DB::doSelect(
+            'tx_mklog_lastrun',
+            'tx_scheduler_task',
+            $options
+        );
+        $lastrun = new DateTime();
+        if (count($ret)) {
+            $lastrun = new DateTime($ret[0]['tx_mklog_lastrun']);
+        }
 
-		return $lastrun;
-	}
+        return $lastrun;
+    }
 
-	/**
-	 * @param int $taskId
-	 *
-	 * @return int number of rows affected
-	 */
-	protected function updateLastRunTime($taskId) {
-		$lastRun = new DateTime();
-		return tx_rnbase_util_DB::doUpdate('tx_scheduler_task', 'uid='.intval($taskId),
-			array('tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s')
-		));
-	}
+    /**
+     * @param int $taskId
+     *
+     * @return int number of rows affected
+     */
+    protected function updateLastRunTime($taskId)
+    {
+        $lastRun = new DateTime();
 
-	/**
-	 * @return string
-	 */
-	public function getEmailReceiver() {
-		return $this->email;
-	}
+        return tx_rnbase_util_DB::doUpdate(
+            'tx_scheduler_task',
+            'uid='.intval($taskId),
+            array('tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s')
+            )
+        );
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getMinimalSeverity() {
-		return $this->severity;
-	}
+    /**
+     * @return string
+     */
+    public function getEmailReceiver()
+    {
+        return $this->email;
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function getForceSummaryMail() {
-		return $this->force;
-	}
+    /**
+     * @return int
+     */
+    public function getMinimalSeverity()
+    {
+        return $this->severity;
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function getIncludeDataVar() {
-		return $this->dataVar;
-	}
+    /**
+     * @return bool
+     */
+    public function getForceSummaryMail()
+    {
+        return $this->force;
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function getGroupEntries() {
-		return isset($this->groupEntries) ? $this->groupEntries : TRUE;
-	}
+    /**
+     * @return bool
+     */
+    public function getIncludeDataVar()
+    {
+        return $this->dataVar;
+    }
 
-	/**
-	 * @param string	$emails
-	 * @return void
-	 */
-	public function setEmailReceiver($emails) {
-		$emails = Tx_Rnbase_Utility_Strings::trimExplode(',', $emails);
+    /**
+     * @return bool
+     */
+    public function getGroupEntries()
+    {
+        return isset($this->groupEntries) ? $this->groupEntries : true;
+    }
 
-		foreach($emails As $email) {
-			if(!Tx_Rnbase_Utility_Strings::validEmail($email)) {
-				throw new Exception(
-					'tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!'
-				);
-			}
-		}
+    /**
+     * @param string    $emails
+     * @return void
+     */
+    public function setEmailReceiver($emails)
+    {
+        $emails = Tx_Rnbase_Utility_Strings::trimExplode(',', $emails);
 
-		$this->email = implode(',', $emails);
-	}
+        foreach ($emails as $email) {
+            if (!Tx_Rnbase_Utility_Strings::validEmail($email)) {
+                throw new Exception(
+                    'tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!'
+                );
+            }
+        }
 
-	/**
-	 * @param int	$minimalSeverity
-	 * @return void
-	 */
-	public function setMinimalSeverity($minimalSeverity) {
-		$this->severity = $minimalSeverity;
-	}
+        $this->email = implode(',', $emails);
+    }
 
-	/**
-	 * Set force summary
-	 *
-	 * @param int	$forceSummaryMail
-	 * @return void
-	 */
-	public function setForceSummaryMail($forceSummaryMail) {
-		$this->force = (boolean) $forceSummaryMail;
-	}
+    /**
+     * @param int   $minimalSeverity
+     * @return void
+     */
+    public function setMinimalSeverity($minimalSeverity)
+    {
+        $this->severity = $minimalSeverity;
+    }
 
-	/**
-	 * Set data var
-	 *
-	 * @param array	$includeDataVar
-	 * @return void
-	 */
-	public function setIncludeDataVar($includeDataVar) {
-		$this->dataVar = (boolean) $includeDataVar;
-	}
+    /**
+     * Set force summary
+     *
+     * @param int   $forceSummaryMail
+     * @return void
+     */
+    public function setForceSummaryMail($forceSummaryMail)
+    {
+        $this->force = (boolean) $forceSummaryMail;
+    }
 
-	/**
-	 * @param boolean	$groupEntries
-	 * @return void
-	 */
-	public function setGroupEntries($groupEntries) {
-		$this->groupEntries = (boolean) $groupEntries;
-	}
+    /**
+     * Set data var
+     *
+     * @param array $includeDataVar
+     * @return void
+     */
+    public function setIncludeDataVar($includeDataVar)
+    {
+        $this->dataVar = (boolean) $includeDataVar;
+    }
 
-	/**
-	 * This method returns the destination mail address as additional information
-	 *
-	 * @return	string	Information to display
-	 */
-	public function getAdditionalInformation() {
-		return sprintf(
-			$GLOBALS['LANG']->sL('LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_taskinfo'),
-			$this->getEmailReceiver()
-		);
-	}
+    /**
+     * @param bool   $groupEntries
+     * @return void
+     */
+    public function setGroupEntries($groupEntries)
+    {
+        $this->groupEntries = (boolean) $groupEntries;
+    }
 
+    /**
+     * This method returns the destination mail address as additional information
+     *
+     * @return  string  Information to display
+     */
+    public function getAdditionalInformation()
+    {
+        return sprintf(
+            $GLOBALS['LANG']->sL('LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_taskinfo'),
+            $this->getEmailReceiver()
+        );
+    }
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/scheduler/class.tx_mklog_scheduler_WatchDog.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/scheduler/class.tx_mklog_scheduler_WatchDog.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/scheduler/class.tx_mklog_scheduler_WatchDog.php']);
 }

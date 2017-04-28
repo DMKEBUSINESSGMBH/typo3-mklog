@@ -40,25 +40,24 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class UdpGelf
-	extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
+class UdpGelf extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
 {
-	/**
-	 * Creates the Transport
-	 *
-	 * @return \Gelf\Transport\AbstractTransport
-	 */
-	protected function getTransport()
-	{
-		list($host, $port) = explode(
-			':',
-			$this->getOptions()->getCredentials()
-		);
+    /**
+     * Creates the Transport
+     *
+     * @return \Gelf\Transport\AbstractTransport
+     */
+    protected function getTransport()
+    {
+        list($host, $port) = explode(
+            ':',
+            $this->getOptions()->getCredentials()
+        );
 
-		return new \Gelf\Transport\UdpTransport(
-			trim($host),
-			trim($port),
-			\Gelf\Transport\UdpTransport::CHUNK_SIZE_LAN
-		);
-	}
+        return new \Gelf\Transport\UdpTransport(
+            trim($host),
+            trim($port),
+            \Gelf\Transport\UdpTransport::CHUNK_SIZE_LAN
+        );
+    }
 }

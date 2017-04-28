@@ -33,70 +33,69 @@ namespace DMK\Mklog\Logger;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class GelfLogger
-	extends AbstractLogger
+class GelfLogger extends AbstractLogger
 {
-	/**
-	 * Writes the log record
-	 *
-	 * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
-	 *
-	 * @return WriterInterface $this
-	 */
-	public function writeLog(
-		\TYPO3\CMS\Core\Log\LogRecord $record
-	) {
-		$config = \DMK\Mklog\Factory::getConfigUtility();
+    /**
+     * Writes the log record
+     *
+     * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
+     *
+     * @return WriterInterface $this
+     */
+    public function writeLog(
+        \TYPO3\CMS\Core\Log\LogRecord $record
+    ) {
+        $config = \DMK\Mklog\Factory::getConfigUtility();
 
-		// check min log level
-		if ((
-			!$config->getGelfEnable() ||
-			!$config->getGelfCredentials() ||
-			$record->getLevel() > $config->getGelfMinLogLevel()
-		)) {
-			return $this;
-		}
+        // check min log level
+        if ((
+            !$config->getGelfEnable() ||
+            !$config->getGelfCredentials() ||
+            $record->getLevel() > $config->getGelfMinLogLevel()
+        )) {
+            return $this;
+        }
 
-		$options = \tx_rnbase::makeInstance(
-			'Tx_Rnbase_Domain_Model_Data',
-			array(
-				'credentials' => $config->getGelfCredentials(),
-			)
-		);
+        $options = \tx_rnbase::makeInstance(
+            'Tx_Rnbase_Domain_Model_Data',
+            array(
+                'credentials' => $config->getGelfCredentials(),
+            )
+        );
 
-		$transport = $this->getTransport();
+        $transport = $this->getTransport();
 
-		$transport->initialize($options);
+        $transport->initialize($options);
 
-		$message = $this->createDevlogEntry(
-			$record->getMessage(),
-			$record->getComponent(),
-			$record->getLevel(),
-			$record->getData()
-		);
+        $message = $this->createDevlogEntry(
+            $record->getMessage(),
+            $record->getComponent(),
+            $record->getLevel(),
+            $record->getData()
+        );
 
-		try {
-			$transport->publish($message);
-		} catch (\Exception $e) {
-			// what todo on transport exception?
-			// usualy we have a emergency and a other logger (file or mail) shold take over
-			return $this;
-		}
+        try {
+            $transport->publish($message);
+        } catch (\Exception $e) {
+            // what todo on transport exception?
+            // usualy we have a emergency and a other logger (file or mail) shold take over
+            return $this;
+        }
 
-		$transport->shutdown();
+        $transport->shutdown();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Creates the transport
-	 *
-	 * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
-	 */
-	protected function getTransport()
-	{
-		return \tx_rnbase::makeInstance(
-			'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf'
-		);
-	}
+    /**
+     * Creates the transport
+     *
+     * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     */
+    protected function getTransport()
+    {
+        return \tx_rnbase::makeInstance(
+            'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf'
+        );
+    }
 }

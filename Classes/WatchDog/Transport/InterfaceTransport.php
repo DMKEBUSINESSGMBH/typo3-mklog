@@ -35,39 +35,39 @@ namespace DMK\Mklog\WatchDog\Transport;
  */
 interface InterfaceTransport
 {
-	/**
-	 * An unique identifier for the transport
-	 *
-	 * @return string
-	 */
-	public function getIdentifier();
+    /**
+     * An unique identifier for the transport
+     *
+     * @return string
+     */
+    public function getIdentifier();
 
-	/**
-	 * Initializes the Transport
-	 *
-	 * @param \Tx_Rnbase_Domain_Model_Data $options
-	 *
-	 * @return void
-	 */
-	public function initialize(
-		\Tx_Rnbase_Domain_Model_Data $options
-	);
+    /**
+     * Initializes the Transport
+     *
+     * @param \Tx_Rnbase_Domain_Model_Data $options
+     *
+     * @return void
+     */
+    public function initialize(
+        \Tx_Rnbase_Domain_Model_Data $options
+    );
 
-	/**
-	 * Publishes a message by the provider
-	 *
-	 * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-	 *
-	 * @return void
-	 */
-	public function publish(
-		\DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-	);
+    /**
+     * Publishes a message by the provider
+     *
+     * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+     *
+     * @return void
+     */
+    public function publish(
+        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+    );
 
-	/**
-	 * Deinitializes the Transport
-	 *
-	 * @return void
-	 */
-	public function shutdown();
+    /**
+     * Deinitializes the Transport
+     *
+     * @return void
+     */
+    public function shutdown();
 }

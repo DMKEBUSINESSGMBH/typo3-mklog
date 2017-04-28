@@ -35,22 +35,22 @@ namespace DMK\Mklog\Utility;
  */
 final class ComposerUtility
 {
-	/**
-	 * Preloads the composer with the build in dependencies
-	 *
-	 * @return void
-	 */
-	public static function autoload()
-	{
-		static $loaded = false;
+    /**
+     * Preloads the composer with the build in dependencies
+     *
+     * @return void
+     */
+    public static function autoload()
+    {
+        static $loaded = false;
 
-		if ($loaded === true) {
-			return;
-		}
-		require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
-			'mklog',
-			'Resources/Private/PHP/Composer/autoload.php'
-		);
-		$loaded = true;
-	}
+        if ($loaded === true) {
+            return;
+        }
+        require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
+            'mklog',
+            'Resources/Private/PHP/Composer/autoload.php'
+        );
+        $loaded = true;
+    }
 }

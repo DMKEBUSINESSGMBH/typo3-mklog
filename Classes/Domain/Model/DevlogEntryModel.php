@@ -66,242 +66,241 @@ namespace DMK\Mklog\Domain\Model;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryModel
-	extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
+class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
 {
-	/**
-	 * Override reset and dont load record after creating entry
-	 *
-	 * @return Tx_Rnbase_Domain_Model_Base
-	 */
-	public function reset()
-	{
-		//$this->loadRecord();
+    /**
+     * Override reset and dont load record after creating entry
+     *
+     * @return Tx_Rnbase_Domain_Model_Base
+     */
+    public function reset()
+    {
+        //$this->loadRecord();
 
-		// set the modified state to clean
-		$this->resetCleanState();
+        // set the modified state to clean
+        $this->resetCleanState();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Liefert den aktuellen Tabellenname
-	 *
-	 * @return Tabellenname als String
-	 */
-	public function getTableName()
-	{
-		return 'tx_mklog_devlog_entry';
-	}
+    /**
+     * Liefert den aktuellen Tabellenname
+     *
+     * @return Tabellenname als String
+     */
+    public function getTableName()
+    {
+        return 'tx_mklog_devlog_entry';
+    }
 
-	/**
-	 * A list of scheduler task uids which has already transferred this message
-	 *
-	 * @return array
-	 */
-	public function getTransportIds()
-	{
-		if ($this->isPropertyEmpty('transport_ids')) {
-			return array();
-		}
+    /**
+     * A list of scheduler task uids which has already transferred this message
+     *
+     * @return array
+     */
+    public function getTransportIds()
+    {
+        if ($this->isPropertyEmpty('transport_ids')) {
+            return array();
+        }
 
-		return explode(',', $this->getProperty('transport_ids'));
-	}
+        return explode(',', $this->getProperty('transport_ids'));
+    }
 
-	/**
-	 * Adds a scheduler to the transport id list
-	 *
-	 * @param string $transportId
-	 *
-	 * @return array
-	 */
-	public function addTransportId(
-		$transportId
-	) {
-		$ids = $this->getTransportIds();
-		$ids[] = $transportId;
+    /**
+     * Adds a scheduler to the transport id list
+     *
+     * @param string $transportId
+     *
+     * @return array
+     */
+    public function addTransportId(
+        $transportId
+    ) {
+        $ids = $this->getTransportIds();
+        $ids[] = $transportId;
 
-		return $this->setProperty(
-			'transport_ids',
-			implode(',', array_unique($ids))
-		);
-	}
+        return $this->setProperty(
+            'transport_ids',
+            implode(',', array_unique($ids))
+        );
+    }
 
-	/**
-	 * The raw extra data.
-	 *
-	 * @return string
-	 */
-	public function getExtraDataRaw()
-	{
-		return $this->getProperty('extra_data');
-	}
+    /**
+     * The raw extra data.
+     *
+     * @return string
+     */
+    public function getExtraDataRaw()
+    {
+        return $this->getProperty('extra_data');
+    }
 
-	/**
-	 * Returns the extra data
-	 *
-	 * @return array
-	 */
-	private function getExtraData()
-	{
-		return \DMK\Mklog\Factory::getDataConverterUtility()->decode(
-			$this->getExtraDataRaw()
-		);
-	}
+    /**
+     * Returns the extra data
+     *
+     * @return array
+     */
+    private function getExtraData()
+    {
+        return \DMK\Mklog\Factory::getDataConverterUtility()->decode(
+            $this->getExtraDataRaw()
+        );
+    }
 
-	/**
-	 * Setter for extra data
-	 *
-	 * @param array $data
-	 *
-	 * @return DevlogEntryModel
-	 */
-	public function setExtraData(
-		array $data
-	) {
-		return $this->setProperty(
-			'extra_data',
-			\DMK\Mklog\Factory::getDataConverterUtility()->encode($data)
-		);
-	}
+    /**
+     * Setter for extra data
+     *
+     * @param array $data
+     *
+     * @return DevlogEntryModel
+     */
+    public function setExtraData(
+        array $data
+    ) {
+        return $this->setProperty(
+            'extra_data',
+            \DMK\Mklog\Factory::getDataConverterUtility()->encode($data)
+        );
+    }
 
-	/**
-	 * Returns the public values of extra data
-	 *
-	 * @return mixed
-	 */
-	public function getExternalExtraData()
-	{
-		$data = array();
+    /**
+     * Returns the public values of extra data
+     *
+     * @return mixed
+     */
+    public function getExternalExtraData()
+    {
+        $data = array();
 
-		foreach ($this->getExtraData() as $key => $value) {
-			if ($key{0} === '_' && $key{1} === '_') {
-				continue;
-			}
-			$data[$key] = $value;
-		}
+        foreach ($this->getExtraData() as $key => $value) {
+            if ($key{0} === '_' && $key{1} === '_') {
+                continue;
+            }
+            $data[$key] = $value;
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
-	/**
-	 * Returns the protected values of extra data
-	 *
-	 * @return mixed
-	 */
-	public function getInternalExtraData()
-	{
-		$data = array();
+    /**
+     * Returns the protected values of extra data
+     *
+     * @return mixed
+     */
+    public function getInternalExtraData()
+    {
+        $data = array();
 
-		foreach ($this->getExtraData() as $key => $value) {
-			if (!($key{0} === '_' && $key{1} === '_')) {
-				continue;
-			}
-			$data[substr($key, 2)] = $value;
-		}
+        foreach ($this->getExtraData() as $key => $value) {
+            if (!($key{0} === '_' && $key{1} === '_')) {
+                continue;
+            }
+            $data[substr($key, 2)] = $value;
+        }
 
-		return $data;
-	}
+        return $data;
+    }
 
 
-	/* *** ******************************************** *** *
-	 * *** \DMK\Mklog\WatchDog\Message\InterfaceMessage *** *
-	 * *** ******************************************** *** */
+    /* *** ******************************************** *** *
+     * *** \DMK\Mklog\WatchDog\Message\InterfaceMessage *** *
+     * *** ******************************************** *** */
 
-	/**
-	 * Returns the short text of the message
-	 *
-	 * @return string
-	 */
-	public function getShortMessage()
-	{
-		return $this->getMessage();
-	}
+    /**
+     * Returns the short text of the message
+     *
+     * @return string
+     */
+    public function getShortMessage()
+    {
+        return $this->getMessage();
+    }
 
-	/**
-	 * Returns the full text of the message
-	 *
-	 * @return string
-	 */
-	public function getFullMessage()
-	{
-		return \DMK\Mklog\Factory::getDataConverterUtility()->encode(
-			$this->getExternalExtraData()
-		);
-	}
+    /**
+     * Returns the full text of the message
+     *
+     * @return string
+     */
+    public function getFullMessage()
+    {
+        return \DMK\Mklog\Factory::getDataConverterUtility()->encode(
+            $this->getExternalExtraData()
+        );
+    }
 
-	/**
-	 * Returns the timestamp of the message
-	 *
-	 * @return \DateTime
-	 */
-	public function getTimestamp()
-	{
-		return \DateTime::createFromFormat(
-			'U.u',
-			$this->getCrdate() . '.0216'
-		);
-	}
+    /**
+     * Returns the timestamp of the message
+     *
+     * @return \DateTime
+     */
+    public function getTimestamp()
+    {
+        return \DateTime::createFromFormat(
+            'U.u',
+            $this->getCrdate() . '.0216'
+        );
+    }
 
-	/**
-	 * Returns the log level of the message as a Psr\Log\Level-constant
-	 *
-	 * @return string
-	 */
-	public function getLevel()
-	{
-		return \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant(
-			$this->getSeverity()
-		);
-	}
+    /**
+     * Returns the log level of the message as a Psr\Log\Level-constant
+     *
+     * @return string
+     */
+    public function getLevel()
+    {
+        return \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant(
+            $this->getSeverity()
+        );
+    }
 
-	/**
-	 * Returns the facility of the message
-	 *
-	 * @return string
-	 */
-	public function getFacility()
-	{
-		return $this->getExtKey();
-	}
+    /**
+     * Returns the facility of the message
+     *
+     * @return string
+     */
+    public function getFacility()
+    {
+        return $this->getExtKey();
+    }
 
-	/**
-	 * Returns the host of the message
-	 *
-	 * @return string
-	 */
-	public function getHost()
-	{
-		$host = $this->getProperty('host');
+    /**
+     * Returns the host of the message
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        $host = $this->getProperty('host');
 
-		// first check ext conf
-		if (empty($host)) {
-			$config = \DMK\Mklog\Factory::getConfigUtility();
-			$host = $config->getHost();
-		}
+        // first check ext conf
+        if (empty($host)) {
+            $config = \DMK\Mklog\Factory::getConfigUtility();
+            $host = $config->getHost();
+        }
 
-		// now check the domain
-		if (empty($host)) {
-			$utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
+        // now check the domain
+        if (empty($host)) {
+            $utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
 
-			$host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
-		}
+            $host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
+        }
 
-		// as fallback use the server hostname
-		if (empty($host)) {
-			$host = gethostname();
-		}
+        // as fallback use the server hostname
+        if (empty($host)) {
+            $host = gethostname();
+        }
 
-		return $host;
-	}
+        return $host;
+    }
 
-	/**
-	 * Returns the value of the additional field of the message
-	 *
-	 * @return array
-	 */
-	public function getAdditionalData()
-	{
-		return $this->getInternalExtraData();
-	}
+    /**
+     * Returns the value of the additional field of the message
+     *
+     * @return array
+     */
+    public function getAdditionalData()
+    {
+        return $this->getInternalExtraData();
+    }
 }

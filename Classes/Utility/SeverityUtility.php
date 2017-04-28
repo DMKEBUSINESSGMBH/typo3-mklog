@@ -38,154 +38,154 @@ namespace DMK\Mklog\Utility;
  */
 final class SeverityUtility
 {
-	/**
-	 * Emergency: system is unusable
-	 *
-	 * You'd likely not be able to reach the system. You better have an SLA in
-	 * place when this happens.
-	 *
-	 * @var int
-	 */
-	const EMERGENCY = 0;
-	/**
-	 * Alert: action must be taken immediately
-	 *
-	 * Example: Entire website down, database unavailable, etc.
-	 *
-	 * @var int
-	 */
-	const ALERT = 1;
-	/**
-	 * Critical: critical conditions
-	 *
-	 * Example: unexpected exception.
-	 *
-	 * @var int
-	 */
-	const CRITICAL = 2;
-	/**
-	 * Error: error conditions
-	 *
-	 * Example: Runtime error.
-	 *
-	 * @var int
-	 */
-	const ERROR = 3;
-	/**
-	 * Warning: warning conditions
-	 *
-	 * Examples: Use of deprecated APIs, undesirable things that are not
-	 * necessarily wrong.
-	 *
-	 * @var int
-	 */
-	const WARNING = 4;
-	/**
-	 * Notice: normal but significant condition
-	 *
-	 * Example: things you should have a look at, nothing to worry about though.
-	 *
-	 * @var int
-	 */
-	const NOTICE = 5;
-	/**
-	 * Informational: informational messages
-	 *
-	 * Examples: User logs in, SQL logs.
-	 *
-	 * @var i
-	 */
-	const INFO = 6;
-	/**
-	 * Debug: debug-level messages
-	 *
-	 * Example: Detailed status information.
-	 *
-	 * @var int
-	 */
-	const DEBUG = 7;
+    /**
+     * Emergency: system is unusable
+     *
+     * You'd likely not be able to reach the system. You better have an SLA in
+     * place when this happens.
+     *
+     * @var int
+     */
+    const EMERGENCY = 0;
+    /**
+     * Alert: action must be taken immediately
+     *
+     * Example: Entire website down, database unavailable, etc.
+     *
+     * @var int
+     */
+    const ALERT = 1;
+    /**
+     * Critical: critical conditions
+     *
+     * Example: unexpected exception.
+     *
+     * @var int
+     */
+    const CRITICAL = 2;
+    /**
+     * Error: error conditions
+     *
+     * Example: Runtime error.
+     *
+     * @var int
+     */
+    const ERROR = 3;
+    /**
+     * Warning: warning conditions
+     *
+     * Examples: Use of deprecated APIs, undesirable things that are not
+     * necessarily wrong.
+     *
+     * @var int
+     */
+    const WARNING = 4;
+    /**
+     * Notice: normal but significant condition
+     *
+     * Example: things you should have a look at, nothing to worry about though.
+     *
+     * @var int
+     */
+    const NOTICE = 5;
+    /**
+     * Informational: informational messages
+     *
+     * Examples: User logs in, SQL logs.
+     *
+     * @var i
+     */
+    const INFO = 6;
+    /**
+     * Debug: debug-level messages
+     *
+     * Example: Detailed status information.
+     *
+     * @var int
+     */
+    const DEBUG = 7;
 
-	/**
-	 * Reverse look up of log level to level name.
-	 *
-	 * @var array
-	 */
-	protected static $levels = array(
-		self::EMERGENCY => 'EMERGENCY',
-		self::ALERT => 'ALERT',
-		self::CRITICAL => 'CRITICAL',
-		self::ERROR => 'ERROR',
-		self::WARNING => 'WARNING',
-		self::NOTICE => 'NOTICE',
-		self::INFO => 'INFO',
-		self::DEBUG => 'DEBUG'
-	);
+    /**
+     * Reverse look up of log level to level name.
+     *
+     * @var array
+     */
+    protected static $levels = array(
+        self::EMERGENCY => 'EMERGENCY',
+        self::ALERT => 'ALERT',
+        self::CRITICAL => 'CRITICAL',
+        self::ERROR => 'ERROR',
+        self::WARNING => 'WARNING',
+        self::NOTICE => 'NOTICE',
+        self::INFO => 'INFO',
+        self::DEBUG => 'DEBUG'
+    );
 
-	/**
-	 * Resolves the name of a log level.
-	 *
-	 * @param int $level Log level.
-	 *
-	 * @return string Log level name.
-	 */
-	public static function getName($level)
-	{
-		return self::$levels[$level];
-	}
+    /**
+     * Resolves the name of a log level.
+     *
+     * @param int $level Log level.
+     *
+     * @return string Log level name.
+     */
+    public static function getName($level)
+    {
+        return self::$levels[$level];
+    }
 
-	/**
-	 * Returns a log level as a Psr\Log\Level-constant
-	 *
-	 * @param int $level Log level.
-	 *
-	 * @return string Log level name.
-	 */
-	public static function getPsrLevelConstant($level)
-	{
-		switch ($level) {
-			case self::EMERGENCY:
-				return 'emergency';
-			case self::ALERT:
-				return 'alert';
-			case self::CRITICAL:
-				return 'critical';
-			case self::ERROR:
-				return 'error';
-			case self::WARNING:
-				return 'warning';
-			case self::NOTICE:
-				return 'notice';
-			case self::INFO:
-				return 'info';
-			case self::DEBUG:
-				return 'debug';
-		}
-	}
+    /**
+     * Returns a log level as a Psr\Log\Level-constant
+     *
+     * @param int $level Log level.
+     *
+     * @return string Log level name.
+     */
+    public static function getPsrLevelConstant($level)
+    {
+        switch ($level) {
+            case self::EMERGENCY:
+                return 'emergency';
+            case self::ALERT:
+                return 'alert';
+            case self::CRITICAL:
+                return 'critical';
+            case self::ERROR:
+                return 'error';
+            case self::WARNING:
+                return 'warning';
+            case self::NOTICE:
+                return 'notice';
+            case self::INFO:
+                return 'info';
+            case self::DEBUG:
+                return 'debug';
+        }
+    }
 
-	/**
-	 * Returns all levels as array
-	 *
-	 * @return array
-	 */
-	public static function getItems()
-	{
-		return self::$levels;
-	}
+    /**
+     * Returns all levels as array
+     *
+     * @return array
+     */
+    public static function getItems()
+    {
+        return self::$levels;
+    }
 
-	/**
-	 * Returns all levels as array
-	 *
-	 * @return array
-	 */
-	public static function getTcaItems()
-	{
-		$levels = array();
-		$levels[] = array('', '');
+    /**
+     * Returns all levels as array
+     *
+     * @return array
+     */
+    public static function getTcaItems()
+    {
+        $levels = array();
+        $levels[] = array('', '');
 
-		foreach (self::$levels as $id => $name) {
-			$levels[] = array($id, $name);
-		}
+        foreach (self::$levels as $id => $name) {
+            $levels[] = array($id, $name);
+        }
 
-		return $levels;
-	}
+        return $levels;
+    }
 }

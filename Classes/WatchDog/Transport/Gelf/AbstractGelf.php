@@ -42,101 +42,100 @@ use \DMK\Mklog\WatchDog\Transport\AbstractTransport;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class AbstractGelf
-	extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
+abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
 {
-	/**
-	 * The gelf publisher
-	 *
-	 * @var \Gelf\PublisherInterface
-	 */
-	private $publisher = null;
+    /**
+     * The gelf publisher
+     *
+     * @var \Gelf\PublisherInterface
+     */
+    private $publisher = null;
 
-	/**
-	 * An unique identifier for the transport
-	 *
-	 * @return string
-	 */
-	public function getIdentifier()
-	{
-		return 'mkLogGelf';
-	}
+    /**
+     * An unique identifier for the transport
+     *
+     * @return string
+     */
+    public function getIdentifier()
+    {
+        return 'mkLogGelf';
+    }
 
-	/**
-	 * Creates the Transport
-	 *
-	 * @return \Gelf\Transport\AbstractTransport
-	 */
-	abstract protected function getTransport();
+    /**
+     * Creates the Transport
+     *
+     * @return \Gelf\Transport\AbstractTransport
+     */
+    abstract protected function getTransport();
 
-	/**
-	 * Initializes the Transport
-	 *
-	 * @param \Tx_Rnbase_Domain_Model_Data $options
-	 *
-	 * @return void
-	 */
-	public function initialize(
-		\Tx_Rnbase_Domain_Model_Data $options
-	) {
-		parent::initialize($options);
+    /**
+     * Initializes the Transport
+     *
+     * @param \Tx_Rnbase_Domain_Model_Data $options
+     *
+     * @return void
+     */
+    public function initialize(
+        \Tx_Rnbase_Domain_Model_Data $options
+    ) {
+        parent::initialize($options);
 
-		\DMK\Mklog\Utility\ComposerUtility::autoload();
-	}
+        \DMK\Mklog\Utility\ComposerUtility::autoload();
+    }
 
-	/**
-	 * Publishes a message by the provider
-	 *
-	 * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-	 *
-	 * @return void
-	 */
-	public function publish(
-		\DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-	) {
-		$gelfMsg = new \Gelf\Message();
-		$gelfMsg
-			->setVersion('1.1')
-			->setHost($message->getHost())
-			->setShortMessage($message->getShortMessage())
-			->setFullMessage($message->getFullMessage())
-			->setTimestamp($message->getTimestamp())
-			->setLevel($message->getLevel())
-			->setFacility($message->getFacility());
+    /**
+     * Publishes a message by the provider
+     *
+     * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+     *
+     * @return void
+     */
+    public function publish(
+        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+    ) {
+        $gelfMsg = new \Gelf\Message();
+        $gelfMsg
+            ->setVersion('1.1')
+            ->setHost($message->getHost())
+            ->setShortMessage($message->getShortMessage())
+            ->setFullMessage($message->getFullMessage())
+            ->setTimestamp($message->getTimestamp())
+            ->setLevel($message->getLevel())
+            ->setFacility($message->getFacility());
 
-		$additionalData = $message->getAdditionalData();
-		if (!is_array($additionalData)) {
-			$additionalData = array();
-		}
+        $additionalData = $message->getAdditionalData();
+        if (!is_array($additionalData)) {
+            $additionalData = array();
+        }
 
-		$converter  =\DMK\Mklog\Factory::getDataConverterUtility();
-		foreach ($additionalData as $key => $value) {
-			// the value shoult be an string, so we convert objects and arrays!
-			if (!\is_scalar($value)) {
-				$value = $converter->encode($value);
-			}
-			$gelfMsg->setAdditional(
-				$key,
-				$value
-			);
-		}
+        $converter  = \DMK\Mklog\Factory::getDataConverterUtility();
+        foreach ($additionalData as $key => $value) {
+            // the value shoult be an string, so we convert objects and arrays!
+            if (!\is_scalar($value)) {
+                $value = $converter->encode($value);
+            }
+            $gelfMsg->setAdditional(
+                $key,
+                $value
+            );
+        }
 
-		$this->getPublisher()->publish($gelfMsg);
-	}
+        $this->getPublisher()->publish($gelfMsg);
+    }
 
-	/**
-	 * Creates the Publisher
-	 *
-	 * @return \Gelf\PublisherInterface
-	 */
-	protected function getPublisher()
-	{
-		if ($this->publisher === null) {
-			$this->publisher = new \Gelf\Publisher(
-				$this->getTransport()
-			);
-		}
+    /**
+     * Creates the Publisher
+     *
+     * @return \Gelf\PublisherInterface
+     */
+    protected function getPublisher()
+    {
+        if ($this->publisher === null) {
+            $this->publisher = new \Gelf\Publisher(
+                $this->getTransport()
+            );
+        }
 
-		return $this->publisher;
-	}
+        return $this->publisher;
+    }
 }

@@ -22,7 +22,6 @@ use RuntimeException;
  */
 class Message implements MessageInterface
 {
-
     protected $host;
     protected $shortMessage;
     protected $fullMessage;

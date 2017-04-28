@@ -35,187 +35,186 @@ use \DMK\Mklog\Utility\SeverityUtility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogLogger
-	extends AbstractLogger
+class DevlogLogger extends AbstractLogger
 {
-	/**
-	 * Writes the log record
-	 *
-	 * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
-	 *
-	 * @return WriterInterface $this
-	 */
-	public function writeLog(
-		\TYPO3\CMS\Core\Log\LogRecord $record
-	) {
-		try {
-			$this->storeLog(
-				$record->getMessage(),
-				$record->getComponent(),
-				$record->getLevel(),
-				$record->getData()
-			);
-		} catch (\Exception $e) {
-			$this->handleExceptionDuringLogging($e);
-		}
+    /**
+     * Writes the log record
+     *
+     * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
+     *
+     * @return WriterInterface $this
+     */
+    public function writeLog(
+        \TYPO3\CMS\Core\Log\LogRecord $record
+    ) {
+        try {
+            $this->storeLog(
+                $record->getMessage(),
+                $record->getComponent(),
+                $record->getLevel(),
+                $record->getData()
+            );
+        } catch (\Exception $e) {
+            $this->handleExceptionDuringLogging($e);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Stores a devlog entry
-	 *
-	 * @param string $message
-	 * @param string $extension
-	 * @param int $severity
-	 * @param mixed $extraData
-	 *
-	 * @return void
-	 */
-	protected function storeLog($message, $extension, $severity, $extraData)
-	{
-		if (!$this->isLoggingEnabled()) {
-			return;
-		}
+    /**
+     * Stores a devlog entry
+     *
+     * @param string $message
+     * @param string $extension
+     * @param int $severity
+     * @param mixed $extraData
+     *
+     * @return void
+     */
+    protected function storeLog($message, $extension, $severity, $extraData)
+    {
+        if (!$this->isLoggingEnabled()) {
+            return;
+        }
 
-		$config = \DMK\Mklog\Factory::getConfigUtility();
+        $config = \DMK\Mklog\Factory::getConfigUtility();
 
-		// check min log level
-		if ($severity > $config->getMinLogLevel()) {
-			return;
-		}
+        // check min log level
+        if ($severity > $config->getMinLogLevel()) {
+            return;
+        }
 
-		// check exclude extension keys
-		if (in_array($extension, $config->getExcludeExtKeys())) {
-			return;
-		}
+        // check exclude extension keys
+        if (in_array($extension, $config->getExcludeExtKeys())) {
+            return;
+        }
 
-		$repo = $this->getDevlogEntryRepository();
+        $repo = $this->getDevlogEntryRepository();
 
-		// optimize the log table
-		$repo->optimize();
+        // optimize the log table
+        $repo->optimize();
 
-		$entry = $this->createDevlogEntry(
-			$message,
-			$extension,
-			$severity,
-			$extraData
-		);
+        $entry = $this->createDevlogEntry(
+            $message,
+            $extension,
+            $severity,
+            $extraData
+        );
 
-		$repo->persist($entry);
-	}
+        $repo->persist($entry);
+    }
 
-	/**
-	 * Old devlog Hook from the old TYPO3 API
-	 *
-	 * @param array $params
-	 *
-	 * @return void
-	 */
-	public function devLogHook(array $params)
-	{
-		\tx_rnbase::load('tx_rnbase_util_Logger');
-		// map the old log levels to the new one
-		switch ((int) $params['severity']) {
-			case \tx_rnbase_util_Logger::LOGLEVEL_DEBUG:
-				$params['severity'] = SeverityUtility::DEBUG;
-				break;
-			case \tx_rnbase_util_Logger::LOGLEVEL_INFO:
-				$params['severity'] = SeverityUtility::INFO;
-				break;
-			case \tx_rnbase_util_Logger::LOGLEVEL_NOTICE:
-				$params['severity'] = SeverityUtility::NOTICE;
-				break;
-			case \tx_rnbase_util_Logger::LOGLEVEL_WARN:
-				$params['severity'] = SeverityUtility::WARNING;
-				break;
-			case \tx_rnbase_util_Logger::LOGLEVEL_FATAL:
-				$params['severity'] = SeverityUtility::CRITICAL;
-				break;
-		}
+    /**
+     * Old devlog Hook from the old TYPO3 API
+     *
+     * @param array $params
+     *
+     * @return void
+     */
+    public function devLogHook(array $params)
+    {
+        \tx_rnbase::load('tx_rnbase_util_Logger');
+        // map the old log levels to the new one
+        switch ((int) $params['severity']) {
+            case \tx_rnbase_util_Logger::LOGLEVEL_DEBUG:
+                $params['severity'] = SeverityUtility::DEBUG;
+                break;
+            case \tx_rnbase_util_Logger::LOGLEVEL_INFO:
+                $params['severity'] = SeverityUtility::INFO;
+                break;
+            case \tx_rnbase_util_Logger::LOGLEVEL_NOTICE:
+                $params['severity'] = SeverityUtility::NOTICE;
+                break;
+            case \tx_rnbase_util_Logger::LOGLEVEL_WARN:
+                $params['severity'] = SeverityUtility::WARNING;
+                break;
+            case \tx_rnbase_util_Logger::LOGLEVEL_FATAL:
+                $params['severity'] = SeverityUtility::CRITICAL;
+                break;
+        }
 
-		try {
-			$this->storeLog(
-				$params['msg'],
-				$params['extKey'],
-				$params['severity'],
-				$params['dataVar']
-			);
-		} catch (\Exception $e) {
-			$this->handleExceptionDuringLogging($e);
-		}
-	}
+        try {
+            $this->storeLog(
+                $params['msg'],
+                $params['extKey'],
+                $params['severity'],
+                $params['dataVar']
+            );
+        } catch (\Exception $e) {
+            $this->handleExceptionDuringLogging($e);
+        }
+    }
 
-	/**
-	 * Is logging enabled?
-	 *
-	 * @return bool
-	 */
-	protected function isLoggingEnabled()
-	{
-		// skip logging, if there is no db.
-		if (empty($GLOBALS['TYPO3_DB']) || !is_object($GLOBALS['TYPO3_DB'])) {
-			return false;
-		}
+    /**
+     * Is logging enabled?
+     *
+     * @return bool
+     */
+    protected function isLoggingEnabled()
+    {
+        // skip logging, if there is no db.
+        if (empty($GLOBALS['TYPO3_DB']) || !is_object($GLOBALS['TYPO3_DB'])) {
+            return false;
+        }
 
-		// skip if logging is disabled
-		if ((
-			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] ||
-			$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog']
-		)) {
-			return false;
-		}
+        // skip if logging is disabled
+        if ((
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] ||
+            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog']
+        )) {
+            return false;
+        }
 
-		// now check some cachable options
+        // now check some cachable options
 
-		$storage = \DMK\Mklog\Factory::getStorage();
+        $storage = \DMK\Mklog\Factory::getStorage();
 
-		if ($storage->hasLoggingActive()) {
-			return $storage->getLoggingActive();
-		}
+        if ($storage->hasLoggingActive()) {
+            return $storage->getLoggingActive();
+        }
 
-		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
-		$config = \DMK\Mklog\Factory::getConfigUtility();
+        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+        $config = \DMK\Mklog\Factory::getConfigUtility();
 
-		$storage->setLoggingActive(true);
+        $storage->setLoggingActive(true);
 
-		if (!$config->getEnableDevLog()) {
-			$storage->setLoggingActive(false);
-		} elseif (!$repo->isTableAvailable()) {
-			// check for exsisting db table
-			$storage->setLoggingActive(false);
-		}
+        if (!$config->getEnableDevLog()) {
+            $storage->setLoggingActive(false);
+        } elseif (!$repo->isTableAvailable()) {
+            // check for exsisting db table
+            $storage->setLoggingActive(false);
+        }
 
-		return $storage->getLoggingActive();
-	}
+        return $storage->getLoggingActive();
+    }
 
-	/**
-	 * Send an exeption mail for all exceptions during the store log process
-	 *
-	 * @param \Exception $e
-	 *
-	 * @TODO: add recursive call check for exceptions (
-	 *     throw exception, only block at secnd exception.
-	 *     so the gelf logger can log the exception
-	 *     and only a recursion of logging will prevented.
-	 * )
-	 *
-	 * @return void
-	 */
-	protected function handleExceptionDuringLogging(
-		\Exception $e
-	) {
-		// try to send mail
-		$addr = \tx_rnbase_configurations::getExtensionCfgValue(
-			'rn_base',
-			'sendEmailOnException'
-		);
-		if ($addr) {
-			\tx_rnbase_util_Misc::sendErrorMail(
-				$addr,
-				'Mklog\DevlogLogger',
-				$e
-			);
-		}
-	}
+    /**
+     * Send an exeption mail for all exceptions during the store log process
+     *
+     * @param \Exception $e
+     *
+     * @TODO: add recursive call check for exceptions (
+     *     throw exception, only block at secnd exception.
+     *     so the gelf logger can log the exception
+     *     and only a recursion of logging will prevented.
+     * )
+     *
+     * @return void
+     */
+    protected function handleExceptionDuringLogging(
+        \Exception $e
+    ) {
+        // try to send mail
+        $addr = \tx_rnbase_configurations::getExtensionCfgValue(
+            'rn_base',
+            'sendEmailOnException'
+        );
+        if ($addr) {
+            \tx_rnbase_util_Misc::sendErrorMail(
+                $addr,
+                'Mklog\DevlogLogger',
+                $e
+            );
+        }
+    }
 }

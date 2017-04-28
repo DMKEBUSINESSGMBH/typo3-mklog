@@ -36,27 +36,26 @@ namespace DMK\Mklog\Backend;
  * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
-class ModuleBackend
-	extends \tx_rnbase_mod_BaseModule
+class ModuleBackend extends \tx_rnbase_mod_BaseModule
 {
-	/**
-	 * Initializes the backend module by setting internal variables, initializing the menu.
-	 *
-	 * @return void
-	 */
-	public function init()
-	{
-		$GLOBALS['LANG']->includeLLFile('EXT:mklog/Resources/Private/Language/Backend.xlf');
-		parent::init();
-	}
+    /**
+     * Initializes the backend module by setting internal variables, initializing the menu.
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $GLOBALS['LANG']->includeLLFile('EXT:mklog/Resources/Private/Language/Backend.xlf');
+        parent::init();
+    }
 
-	/**
-	 * Method to get the extension key
-	 *
-	 * @return string Extension key
-	 */
-	public function getExtensionKey()
-	{
-		return 'mklog';
-	}
+    /**
+     * Method to get the extension key
+     *
+     * @return string Extension key
+     */
+    public function getExtensionKey()
+    {
+        return 'mklog';
+    }
 }

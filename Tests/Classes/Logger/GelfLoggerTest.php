@@ -25,16 +25,16 @@ namespace DMK\Mklog\Logger;
  ***************************************************************/
 
 if (!\class_exists('tx_rnbase')) {
-	require_once \tx_rnbase_util_Extensions::extPath(
-		'rn_base',
-		'class.tx_rnbase.php'
-	);
+    require_once \tx_rnbase_util_Extensions::extPath(
+        'rn_base',
+        'class.tx_rnbase.php'
+    );
 }
 if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-	require_once \tx_rnbase_util_Extensions::extPath(
-		'mklog',
-		'Tests/Classes/BaseTestCase.php'
-	);
+    require_once \tx_rnbase_util_Extensions::extPath(
+        'mklog',
+        'Tests/Classes/BaseTestCase.php'
+    );
 }
 
 /**
@@ -46,43 +46,40 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class GelfLoggerTest
-	extends \DMK\Mklog\Tests\BaseTestCase
+class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-	/**
-	 * Test the writeLog method
-	 *
-	 * @return void
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testWriteLog()
-	{
-		$logger = $this->getGelfLoggerMock();
+    /**
+     * Test the writeLog method
+     *
+     * @return void
+     *
+     * @group unit
+     * @test
+     */
+    public function testWriteLog()
+    {
+        $logger = $this->getGelfLoggerMock();
 
-		self::markTestIncomplete();
-	}
+        self::markTestIncomplete();
+    }
 
-	/**
-	 * Returns the logger mock
-	 *
-	 * @return PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Logger\GelfLogger
-	 */
-	protected function getGelfLoggerMock()
-	{
-		$logger = $this->getMock(
-			'DMK\\Mklog\\Logger\\GelfLogger',
-			array('getDevlogEntryRepository')
-		);
+    /**
+     * Returns the logger mock
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Logger\GelfLogger
+     */
+    protected function getGelfLoggerMock()
+    {
+        $logger = $this->getMock(
+            'DMK\\Mklog\\Logger\\GelfLogger',
+            array('getDevlogEntryRepository')
+        );
 
-		$logger
-			->expects(self::any())
-			->method('getDevlogEntryRepository')
-			->will(self::returnValue($this->getDevlogEntryRepository()))
-		;
+        $logger
+            ->expects(self::any())
+            ->method('getDevlogEntryRepository')
+            ->will(self::returnValue($this->getDevlogEntryRepository()));
 
-		return $logger;
-
-	}
+        return $logger;
+    }
 }

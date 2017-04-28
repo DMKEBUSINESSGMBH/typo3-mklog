@@ -38,37 +38,35 @@ namespace DMK\Mklog\Utility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DataConverterUtility
-	implements \Tx_Rnbase_Interface_Singleton
+class DataConverterUtility implements \Tx_Rnbase_Interface_Singleton
 {
-	/**
-	 * Converts data into a string
-	 *
-	 * @param mixed $data
-	 *
-	 * @return string
-	 */
-	public function encode($data)
-	{
-		return json_encode($data, JSON_FORCE_OBJECT);
-	}
+    /**
+     * Converts data into a string
+     *
+     * @param mixed $data
+     *
+     * @return string
+     */
+    public function encode($data)
+    {
+        return json_encode($data, JSON_FORCE_OBJECT);
+    }
 
-	/**
-	 * Decodes an extra data string into an array
-	 *
-	 * @param string $data
-	 *
-	 * @return array
-	 */
-	public function decode($data)
-	{
-		if ($data{0} !== '{') {
-			return $data;
-		}
+    /**
+     * Decodes an extra data string into an array
+     *
+     * @param string $data
+     *
+     * @return array
+     */
+    public function decode($data)
+    {
+        if ($data{0} !== '{') {
+            return $data;
+        }
 
-		$data = json_decode($data);
+        $data = json_decode($data);
 
-		return (array) $data;
-	}
-
+        return (array) $data;
+    }
 }

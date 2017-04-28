@@ -40,20 +40,19 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class HttpGelf
-	extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
+class HttpGelf extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
 {
-	/**
-	 * Creates the Transport
-	 *
-	 * @return \Gelf\Transport\AbstractTransport
-	 */
-	protected function getTransport()
-	{
-		$transport = \Gelf\Transport\HttpTransport::fromUrl(
-			$this->getOptions()->getCredentials()
-		);
+    /**
+     * Creates the Transport
+     *
+     * @return \Gelf\Transport\AbstractTransport
+     */
+    protected function getTransport()
+    {
+        $transport = \Gelf\Transport\HttpTransport::fromUrl(
+            $this->getOptions()->getCredentials()
+        );
 
-		return $transport;
-	}
+        return $transport;
+    }
 }

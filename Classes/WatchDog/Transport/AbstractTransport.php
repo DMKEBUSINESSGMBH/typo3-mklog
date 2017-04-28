@@ -36,45 +36,44 @@ namespace DMK\Mklog\WatchDog\Transport;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class AbstractTransport
-	implements InterfaceTransport
+abstract class AbstractTransport implements InterfaceTransport
 {
-	/**
-	 * Internal options storage
-	 *
-	 * @var Tx_Rnbase_Domain_Model_Data
-	 */
-	private $options = null;
+    /**
+     * Internal options storage
+     *
+     * @var Tx_Rnbase_Domain_Model_Data
+     */
+    private $options = null;
 
-	/**
-	 * Returns a storage
-	 *
-	 * @return Tx_Rnbase_Domain_Model_Data
-	 */
-	public function getOptions()
-	{
-		return $this->options;
-	}
+    /**
+     * Returns a storage
+     *
+     * @return Tx_Rnbase_Domain_Model_Data
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 
-	/**
-	 * Initializes the Transport
-	 *
-	 * @param \Tx_Rnbase_Domain_Model_Data $options
-	 *
-	 * @return void
-	 */
-	public function initialize(
-		\Tx_Rnbase_Domain_Model_Data $options
-	) {
-		$this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
-	}
+    /**
+     * Initializes the Transport
+     *
+     * @param \Tx_Rnbase_Domain_Model_Data $options
+     *
+     * @return void
+     */
+    public function initialize(
+        \Tx_Rnbase_Domain_Model_Data $options
+    ) {
+        $this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
+    }
 
-	/**
-	 * Deinitializes the Transport
-	 *
-	 * @return void
-	 */
-	public function shutdown()
-	{
-	}
+    /**
+     * Deinitializes the Transport
+     *
+     * @return void
+     */
+    public function shutdown()
+    {
+    }
 }

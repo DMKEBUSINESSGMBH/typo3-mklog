@@ -33,52 +33,51 @@ namespace DMK\Mklog\Backend\Handler;
  * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
-class DevlogEntryHandler
-	extends \Tx_Rnbase_Backend_Handler_SearchHandler
+class DevlogEntryHandler extends \Tx_Rnbase_Backend_Handler_SearchHandler
 {
-	/**
-	 * Returns a unique ID for this handler.
-	 * This is used to created the subpart in template.
-	 *
-	 * @return string
-	 */
-	public function getSubModuleId()
-	{
-		return 'mklog_devlog_entry';
-	}
+    /**
+     * Returns a unique ID for this handler.
+     * This is used to created the subpart in template.
+     *
+     * @return string
+     */
+    public function getSubModuleId()
+    {
+        return 'mklog_devlog_entry';
+    }
 
-	/**
-	 * Returns the label for Handler in SubMenu. You can use a label-Marker.
-	 *
-	 * @return string
-	 */
-	public function getSubLabel()
-	{
-		return '';
-	}
+    /**
+     * Returns the label for Handler in SubMenu. You can use a label-Marker.
+     *
+     * @return string
+     */
+    public function getSubLabel()
+    {
+        return '';
+    }
 
-	/**
-	 * The class for the searcher
-	 *
-	 * @return string
-	 */
-	protected function getListerClass()
-	{
-		return 'DMK\\Mklog\\Backend\\Lister\\DevlogEntryLister';
-	}
+    /**
+     * The class for the searcher
+     *
+     * @return string
+     */
+    protected function getListerClass()
+    {
+        return 'DMK\\Mklog\\Backend\\Lister\\DevlogEntryLister';
+    }
 
-	/**
-	 * Prepares the handler
-	 *
-	 * @return void
-	 */
-	protected function prepare()
-	{
-		$options = $this->getOptions();
+    /**
+     * Prepares the handler
+     *
+     * @return void
+     */
+    protected function prepare()
+    {
+        $options = $this->getOptions();
 
-		$repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
-		$options->setBaseTableName(
-			$repo->getEmptyModel()->getTableName()
-		);
-	}
+        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+        $options->setBaseTableName(
+            $repo->getEmptyModel()->getTableName()
+        );
+    }
 }

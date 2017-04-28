@@ -25,16 +25,16 @@ namespace DMK\Mklog\Logger;
  ***************************************************************/
 
 if (!\class_exists('tx_rnbase')) {
-	require_once \tx_rnbase_util_Extensions::extPath(
-		'rn_base',
-		'class.tx_rnbase.php'
-	);
+    require_once \tx_rnbase_util_Extensions::extPath(
+        'rn_base',
+        'class.tx_rnbase.php'
+    );
 }
 if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-	require_once \tx_rnbase_util_Extensions::extPath(
-		'mklog',
-		'Tests/Classes/BaseTestCase.php'
-	);
+    require_once \tx_rnbase_util_Extensions::extPath(
+        'mklog',
+        'Tests/Classes/BaseTestCase.php'
+    );
 }
 
 /**
@@ -46,19 +46,18 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class AbstractLoggerTest
-	extends \DMK\Mklog\Tests\BaseTestCase
+class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-	/**
-	 * Test the createDevlogEntry method
-	 *
-	 * @return void
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testCreateDevlogEntry()
-	{
-		$this->markTestIncomplete();
-	}
+    /**
+     * Test the createDevlogEntry method
+     *
+     * @return void
+     *
+     * @group unit
+     * @test
+     */
+    public function testCreateDevlogEntry()
+    {
+        $this->markTestIncomplete();
+    }
 }

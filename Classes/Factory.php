@@ -35,83 +35,83 @@ namespace DMK\Mklog;
  */
 final class Factory
 {
-	/**
-	 * Returns a storage
-	 *
-	 * @return Tx_Rnbase_Domain_Model_Data
-	 */
-	public static function getStorage()
-	{
-		static $storage = null;
+    /**
+     * Returns a storage
+     *
+     * @return Tx_Rnbase_Domain_Model_Data
+     */
+    public static function getStorage()
+    {
+        static $storage = null;
 
-		if ($storage === null) {
-			$storage = \tx_rnbase::makeInstance(
-				'Tx_Rnbase_Domain_Model_Data'
-			);
-		}
+        if ($storage === null) {
+            $storage = \tx_rnbase::makeInstance(
+                'Tx_Rnbase_Domain_Model_Data'
+            );
+        }
 
-		return $storage;
-	}
+        return $storage;
+    }
 
-	/**
-	 * Returns a cache
-	 *
-	 * @return tx_rnbase_cache_ICache
-	 */
-	public static function getCache()
-	{
-		\tx_rnbase::load('tx_rnbase_cache_Manager');
+    /**
+     * Returns a cache
+     *
+     * @return tx_rnbase_cache_ICache
+     */
+    public static function getCache()
+    {
+        \tx_rnbase::load('tx_rnbase_cache_Manager');
 
-		return \tx_rnbase_cache_Manager::getCache('mklog');
-	}
+        return \tx_rnbase_cache_Manager::getCache('mklog');
+    }
 
-	/**
-	 * Returns the config
-	 *
-	 * @return \DMK\Mklog\Utility\ConfigUtility
-	 */
-	public static function getConfigUtility()
-	{
-		$storage = self::getStorage();
-		if (!$storage->hasConfigUtility()) {
-			$storage->setConfigUtility(
-				\tx_rnbase::makeInstance(
-					'DMK\\Mklog\\Utility\\ConfigUtility'
-				)
-			);
-		}
+    /**
+     * Returns the config
+     *
+     * @return \DMK\Mklog\Utility\ConfigUtility
+     */
+    public static function getConfigUtility()
+    {
+        $storage = self::getStorage();
+        if (!$storage->hasConfigUtility()) {
+            $storage->setConfigUtility(
+                \tx_rnbase::makeInstance(
+                    'DMK\\Mklog\\Utility\\ConfigUtility'
+                )
+            );
+        }
 
-		return $storage->getConfigUtility();
-	}
+        return $storage->getConfigUtility();
+    }
 
-	/**
-	 * Returns the data converter
-	 *
-	 * @return \DMK\Mklog\Utility\DataConverterUtility
-	 */
-	public static function getDataConverterUtility()
-	{
-		$storage = self::getStorage();
-		if (!$storage->hasDataConverterUtility()) {
-			$storage->setDataConverterUtility(
-				\tx_rnbase::makeInstance(
-					'DMK\\Mklog\\Utility\\DataConverterUtility'
-				)
-			);
-		}
+    /**
+     * Returns the data converter
+     *
+     * @return \DMK\Mklog\Utility\DataConverterUtility
+     */
+    public static function getDataConverterUtility()
+    {
+        $storage = self::getStorage();
+        if (!$storage->hasDataConverterUtility()) {
+            $storage->setDataConverterUtility(
+                \tx_rnbase::makeInstance(
+                    'DMK\\Mklog\\Utility\\DataConverterUtility'
+                )
+            );
+        }
 
-		return $storage->getDataConverterUtility();
-	}
+        return $storage->getDataConverterUtility();
+    }
 
-	/**
-	 * Returns the devlog entry repository
-	 *
-	 * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
-	 */
-	public static function getDevlogEntryRepository()
-	{
-		return \tx_rnbase::makeInstance(
-			'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository'
-		);
-	}
+    /**
+     * Returns the devlog entry repository
+     *
+     * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
+     */
+    public static function getDevlogEntryRepository()
+    {
+        return \tx_rnbase::makeInstance(
+            'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository'
+        );
+    }
 }

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *  Copyright notice
  *
  *  (c) 2016 DMK E-Business GmbH <dev@dmk-ebusiness.de>
@@ -26,111 +25,121 @@
 /**
  * Tx_Mklog_Hooks_DataHandler
  *
- * @package 		TYPO3
- * @subpackage	 	mklog
- * @author 			Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license 		http://www.gnu.org/licenses/lgpl.html
- * 					GNU Lesser General Public License, version 3 or later
+ * @package         TYPO3
+ * @subpackage      mklog
+ * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @license         http://www.gnu.org/licenses/lgpl.html
+ *                  GNU Lesser General Public License, version 3 or later
  */
-class Tx_Mklog_Hooks_DataHandler {
+class Tx_Mklog_Hooks_DataHandler
+{
 
-	/**
-	 * Wenn eine Seite gelöscht werden soll und darauf devlog Einträge liegen, dann können das nicht Admins
-	 * nur wenn sie Schreibrechte auf die devlog Tabelle haben. Dadurch werden beim kopieren von Seiten mit devlog
-	 * Einträgen diese Einträge auch mitkopiert. Das führt dann zu unerwarteten WatchDog Meldungen, da diese neu
-	 * eingefügt werden aber eigentlich alt sind. Daher sollte kein Redakteur Zugriff auf die devlog Tabelle haben.
-	 * Stattdessen löschen wir die Einträge auf einer Seite einfach selbst, womit die fehlenden Rechte auf devlog
-	 * Tabellen nicht stört.
-	 *
-	 * Wir könnten theoretisch auch den processCmdmap_deleteAction Hook nutzen. Dort ist aber schon
-	 * einer der version Extension registriert, welche die Berechtigungen selbst prüft. Daher würde die Meldungen dass
-	 * die Rechte fehlen schon ausgegeben bevor wir löschen. Der devlog Eintrag ist dann zwar weg, die Seite
-	 * aber noch nicht weil eben festgestellt wurde dass devlog Einträge drauf liegen. Daher hooken wir uns einen
-	 * Schritt eher ein.
-	 *
-	 * @param string $command
-	 * @param string $table
-	 * @param int $id
-	 * @param array $value
-	 * @param TYPO3\CMS\Core\DataHandling\DataHandler
-	 *
-	 * @return void
-	 */
-	public function processCmdmap_preProcess($command, $table, $id, $value, $dataHandler) {
-		if ($table == 'pages'){
-			switch ($command) {
-				case 'delete':
-					$this->deleteDevlogEntriesByPageId($id);
-					$this->deleteMklogEntriesByPageId($id);
-					break;
-				case 'copy':
-					$this->removeLogTablesFromTablesThatCanBeCopied($dataHandler);
-					break;
-			}
-		}
-	}
+    /**
+     * Wenn eine Seite gelöscht werden soll und darauf devlog Einträge liegen, dann können das nicht Admins
+     * nur wenn sie Schreibrechte auf die devlog Tabelle haben. Dadurch werden beim kopieren von Seiten mit devlog
+     * Einträgen diese Einträge auch mitkopiert. Das führt dann zu unerwarteten WatchDog Meldungen, da diese neu
+     * eingefügt werden aber eigentlich alt sind. Daher sollte kein Redakteur Zugriff auf die devlog Tabelle haben.
+     * Stattdessen löschen wir die Einträge auf einer Seite einfach selbst, womit die fehlenden Rechte auf devlog
+     * Tabellen nicht stört.
+     *
+     * Wir könnten theoretisch auch den processCmdmap_deleteAction Hook nutzen. Dort ist aber schon
+     * einer der version Extension registriert, welche die Berechtigungen selbst prüft. Daher würde die Meldungen dass
+     * die Rechte fehlen schon ausgegeben bevor wir löschen. Der devlog Eintrag ist dann zwar weg, die Seite
+     * aber noch nicht weil eben festgestellt wurde dass devlog Einträge drauf liegen. Daher hooken wir uns einen
+     * Schritt eher ein.
+     *
+     * @param string $command
+     * @param string $table
+     * @param int $id
+     * @param array $value
+     * @param TYPO3\CMS\Core\DataHandling\DataHandler
+     *
+     * @return void
+     */
+    public function processCmdmap_preProcess($command, $table, $id, $value, $dataHandler)
+    {
+        if ($table == 'pages') {
+            switch ($command) {
+                case 'delete':
+                    $this->deleteDevlogEntriesByPageId($id);
+                    $this->deleteMklogEntriesByPageId($id);
+                    break;
+                case 'copy':
+                    $this->removeLogTablesFromTablesThatCanBeCopied($dataHandler);
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * @param int $pageId
-	 *
-	 * @return void
-	 */
-	protected function deleteDevlogEntriesByPageId($pageId) {
-		if (tx_rnbase_util_Extensions::isLoaded('devlog')) {
-			$this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = ' . intval($pageId));
-		}
-	}
+    /**
+     * @param int $pageId
+     *
+     * @return void
+     */
+    protected function deleteDevlogEntriesByPageId($pageId)
+    {
+        if (tx_rnbase_util_Extensions::isLoaded('devlog')) {
+            $this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = ' . intval($pageId));
+        }
+    }
 
-	/**
-	 * @param int $pageId
-	 *
-	 * @return void
-	 */
-	protected function deleteMklogEntriesByPageId($pageId) {
-		$this->getDatabaseConnection()->doDelete($this->getMklogTableName(), 'pid = ' . intval($pageId));
-	}
+    /**
+     * @param int $pageId
+     *
+     * @return void
+     */
+    protected function deleteMklogEntriesByPageId($pageId)
+    {
+        $this->getDatabaseConnection()->doDelete($this->getMklogTableName(), 'pid = ' . intval($pageId));
+    }
 
-	/**
-	 * @return Tx_Rnbase_Database_Connection
-	 */
-	protected function getDatabaseConnection() {
-		tx_rnbase::load('Tx_Rnbase_Database_Connection');
-		return Tx_Rnbase_Database_Connection::getInstance();
-	}
+    /**
+     * @return Tx_Rnbase_Database_Connection
+     */
+    protected function getDatabaseConnection()
+    {
+        tx_rnbase::load('Tx_Rnbase_Database_Connection');
 
-	/**
-	 * @return string
-	 */
-	protected function getDevlogTableName() {
-		tx_rnbase::load('Tx_Mklog_Utility_Devlog');
-		return Tx_Mklog_Utility_Devlog::getTableName();
-	}
+        return Tx_Rnbase_Database_Connection::getInstance();
+    }
 
-	/**
-	 * @return string
-	 */
-	protected function getMklogTableName() {
-		return \DMK\Mklog\Factory::getDevlogEntryRepository()->getEmptyModel()->getTableName();
-	}
+    /**
+     * @return string
+     */
+    protected function getDevlogTableName()
+    {
+        tx_rnbase::load('Tx_Mklog_Utility_Devlog');
 
-	/**
-	 * Es ist nie gewünscht dass die devlog und tx_mklog_devlog_entry Einträge beim kopieren einer Seite mitkopiert werden,
-	 * auch nicht für Admins.
-	 *
-	 * @param TYPO3\CMS\Core\DataHandling\DataHandler
-	 *
-	 * @return void
-	 */
-	protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler) {
-		$tablesThatCanBeCopied = array_flip($dataHandler->compileAdminTables());
+        return Tx_Mklog_Utility_Devlog::getTableName();
+    }
 
-		$tablesThatShouldNotBeCopied = array($this->getDevlogTableName(), $this->getMklogTableName());
-		foreach ($tablesThatShouldNotBeCopied as $tableThatShouldNotBeCopied) {
-			if (isset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied])) {
-				unset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied]);
-			}
-		}
+    /**
+     * @return string
+     */
+    protected function getMklogTableName()
+    {
+        return \DMK\Mklog\Factory::getDevlogEntryRepository()->getEmptyModel()->getTableName();
+    }
 
-		$dataHandler->copyWhichTables = implode(',', array_flip($tablesThatCanBeCopied));
-	}
+    /**
+     * Es ist nie gewünscht dass die devlog und tx_mklog_devlog_entry Einträge beim kopieren einer Seite mitkopiert werden,
+     * auch nicht für Admins.
+     *
+     * @param TYPO3\CMS\Core\DataHandling\DataHandler
+     *
+     * @return void
+     */
+    protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler)
+    {
+        $tablesThatCanBeCopied = array_flip($dataHandler->compileAdminTables());
+
+        $tablesThatShouldNotBeCopied = array($this->getDevlogTableName(), $this->getMklogTableName());
+        foreach ($tablesThatShouldNotBeCopied as $tableThatShouldNotBeCopied) {
+            if (isset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied])) {
+                unset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied]);
+            }
+        }
+
+        $dataHandler->copyWhichTables = implode(',', array_flip($tablesThatCanBeCopied));
+    }
 }

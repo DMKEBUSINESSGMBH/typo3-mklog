@@ -62,21 +62,21 @@ We recommend to use the static utility `Tx_Rnbase_Utility_Logger` as warpper.
 
 The recommend way  with the wrapper
 ```php
-	Tx_Rnbase_Utility_Logger::debug('tx_myext', 'only a debug info');
+    Tx_Rnbase_Utility_Logger::debug('tx_myext', 'only a debug info');
 ```
 The direct way
 ```php
-	$logManager = t3lib_div::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager');
-	$logger = $logManager->getLogger($'tx_myext');
-	$logger->debug('only a debug info');
+    $logManager = t3lib_div::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager');
+    $logger = $logManager->getLogger($'tx_myext');
+    $logger->debug('only a debug info');
 ```
 The old way with the wrapper over the classic logging hook 
 ```php
-	tx_rnbase_util_Logger::debug('only a debug info', 'tx_myext');
+    tx_rnbase_util_Logger::debug('only a debug info', 'tx_myext');
 ```
 The old direct way over the classic logging hook 
 ```php
-	t3lib_div::devLog('only a debug info', 'tx_myext', -1);
+    t3lib_div::devLog('only a debug info', 'tx_myext', -1);
 ```
 
 

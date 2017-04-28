@@ -6,31 +6,31 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit1ed2965a279a24327a01a381e2cb8f61
 {
-    public static $prefixLengthsPsr4 = array (
-        'G' => 
-        array (
+    public static $prefixLengthsPsr4 = array(
+        'G' =>
+        array(
             'Gelf\\' => 5,
         ),
     );
 
-    public static $prefixDirsPsr4 = array (
-        'Gelf\\' => 
-        array (
+    public static $prefixDirsPsr4 = array(
+        'Gelf\\' =>
+        array(
             0 => __DIR__ . '/..' . '/graylog2/gelf-php/src/Gelf',
         ),
     );
 
-    public static $prefixesPsr0 = array (
-        'P' => 
-        array (
-            'Psr\\Log\\' => 
-            array (
+    public static $prefixesPsr0 = array(
+        'P' =>
+        array(
+            'Psr\\Log\\' =>
+            array(
                 0 => __DIR__ . '/..' . '/psr/log',
             ),
         ),
     );
 
-    public static $classMap = array (
+    public static $classMap = array(
         'Gelf\\Encoder\\CompressedJsonEncoder' => __DIR__ . '/..' . '/graylog2/gelf-php/src/Gelf/Encoder/CompressedJsonEncoder.php',
         'Gelf\\Encoder\\EncoderInterface' => __DIR__ . '/..' . '/graylog2/gelf-php/src/Gelf/Encoder/EncoderInterface.php',
         'Gelf\\Encoder\\JsonEncoder' => __DIR__ . '/..' . '/graylog2/gelf-php/src/Gelf/Encoder/JsonEncoder.php',
@@ -69,7 +69,6 @@ class ComposerStaticInit1ed2965a279a24327a01a381e2cb8f61
             $loader->prefixDirsPsr4 = ComposerStaticInit1ed2965a279a24327a01a381e2cb8f61::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit1ed2965a279a24327a01a381e2cb8f61::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit1ed2965a279a24327a01a381e2cb8f61::$classMap;
-
         }, null, ClassLoader::class);
     }
 }

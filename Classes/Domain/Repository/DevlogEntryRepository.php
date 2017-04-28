@@ -35,240 +35,239 @@ namespace DMK\Mklog\Domain\Repository;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryRepository
-	extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
+class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
 {
-	/**
-	 * Liefert den Namen der Suchklasse
-	 *
-	 * @return 	string
-	 */
-	protected function getSearchClass()
-	{
-		return 'tx_rnbase_util_SearchGeneric';
-	}
+    /**
+     * Liefert den Namen der Suchklasse
+     *
+     * @return  string
+     */
+    protected function getSearchClass()
+    {
+        return 'tx_rnbase_util_SearchGeneric';
+    }
 
-	/**
-	 * Liefert die Model Klasse.
-	 *
-	 * @return 	string
-	 */
-	protected function getWrapperClass()
-	{
-		return 'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel';
-	}
+    /**
+     * Liefert die Model Klasse.
+     *
+     * @return  string
+     */
+    protected function getWrapperClass()
+    {
+        return 'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel';
+    }
 
-	/**
-	 * Exists the table at the db?
-	 *
-	 * @return bool
-	 */
-	public function isTableAvailable()
-	{
-		$db = $this->getConnection()->getDatabaseConnection();
-		$tableFields = $db->admin_get_fields(
-			$this->getEmptyModel()->getTableName()
-		);
+    /**
+     * Exists the table at the db?
+     *
+     * @return bool
+     */
+    public function isTableAvailable()
+    {
+        $db = $this->getConnection()->getDatabaseConnection();
+        $tableFields = $db->admin_get_fields(
+            $this->getEmptyModel()->getTableName()
+        );
 
-		return !empty($tableFields);
-	}
+        return !empty($tableFields);
+    }
 
-	/**
-	 * Exists the table at the db?
-	 *
-	 * @return void
-	 */
-	public function optimize()
-	{
-		static $optimized = false;
+    /**
+     * Exists the table at the db?
+     *
+     * @return void
+     */
+    public function optimize()
+    {
+        static $optimized = false;
 
-		// Only one optimize run per request
-		if ($optimized) {
-			return;
-		}
-		$optimized = true;
+        // Only one optimize run per request
+        if ($optimized) {
+            return;
+        }
+        $optimized = true;
 
-		$maxRows = \DMK\Mklog\Factory::getConfigUtility()->getMaxLogs();
+        $maxRows = \DMK\Mklog\Factory::getConfigUtility()->getMaxLogs();
 
-		// no cleanup
-		if (empty($maxRows)) {
-			return;
-		}
+        // no cleanup
+        if (empty($maxRows)) {
+            return;
+        }
 
-		// fetch current rows
-		$numRows = $this->search(array(), array('count' => true));
+        // fetch current rows
+        $numRows = $this->search(array(), array('count' => true));
 
-		// there are log entries to delete
-		if ($numRows > $maxRows) {
-			// fetch the execution date from the latest log entry
-			$collection = $this->search(
-				array(),
-				array(
-					'what' => 'run_id',
-					'offset' => $maxRows,
-					'limit' => 1,
-					'orderby' => array('DEVLOGENTRY.run_id' => 'ASC'),
-				)
-			);
+        // there are log entries to delete
+        if ($numRows > $maxRows) {
+            // fetch the execution date from the latest log entry
+            $collection = $this->search(
+                array(),
+                array(
+                    'what' => 'run_id',
+                    'offset' => $maxRows,
+                    'limit' => 1,
+                    'orderby' => array('DEVLOGENTRY.run_id' => 'ASC'),
+                )
+            );
 
-			if ($collection->isEmpty()) {
-				return;
-			}
-			$lastExec = reset($collection->first());
-			// nothing found to delete!?
-			if (empty($lastExec)) {
-				return;
-			}
+            if ($collection->isEmpty()) {
+                return;
+            }
+            $lastExec = reset($collection->first());
+            // nothing found to delete!?
+            if (empty($lastExec)) {
+                return;
+            }
 
-			// delete all entries, older than the last exeution date!
-			$this->getConnection()->doDelete(
-				$this->getEmptyModel()->getTableName(),
-				'run_id < ' . $lastExec
-			);
-		}
-	}
+            // delete all entries, older than the last exeution date!
+            $this->getConnection()->doDelete(
+                $this->getEmptyModel()->getTableName(),
+                'run_id < ' . $lastExec
+            );
+        }
+    }
 
-	/**
-	 * Persists an model
-	 *
-	 * @param \Tx_Rnbase_Domain_Model_DomainInterface $model
-	 * @param array|\Tx_Rnbase_Domain_Model_Data $options
-	 *
-	 * @return void
-	 */
-	public function persist(
-		\Tx_Rnbase_Domain_Model_DomainInterface $model,
-		$options = null
-	) {
-		\tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
-		$options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
+    /**
+     * Persists an model
+     *
+     * @param \Tx_Rnbase_Domain_Model_DomainInterface $model
+     * @param array|\Tx_Rnbase_Domain_Model_Data $options
+     *
+     * @return void
+     */
+    public function persist(
+        \Tx_Rnbase_Domain_Model_DomainInterface $model,
+        $options = null
+    ) {
+        \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
+        $options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
 
-		// there is no tca, so skip this check!
-		$options->setSkipTcaColumnElimination(true);
+        // there is no tca, so skip this check!
+        $options->setSkipTcaColumnElimination(true);
 
-		parent::persist($model, $options);
-	}
+        parent::persist($model, $options);
+    }
 
-	/**
-	 * Returns the latest log runs
-	 *
-	 * @param int $limit
-	 *
-	 * @return array
-	 */
-	public function getLatestRunIds(
-		$limit = 50
-	) {
-		$fields = $options = array();
+    /**
+     * Returns the latest log runs
+     *
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getLatestRunIds(
+        $limit = 50
+    ) {
+        $fields = $options = array();
 
-		$options['what'] = 'DEVLOGENTRY.run_id';
-		$options['groupby'] = 'DEVLOGENTRY.run_id';
-		$options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
-		$options['limit'] = (int) $limit;
-		$options['collection'] = false;
+        $options['what'] = 'DEVLOGENTRY.run_id';
+        $options['groupby'] = 'DEVLOGENTRY.run_id';
+        $options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
+        $options['limit'] = (int) $limit;
+        $options['collection'] = false;
 
-		$items = $this->search($fields, $options);
+        $items = $this->search($fields, $options);
 
-		return $this->convertSingleSelectToFlatArray($items, 'run_id');
-	}
+        return $this->convertSingleSelectToFlatArray($items, 'run_id');
+    }
 
-	/**
-	 * Returns all extension keys who has logged into devlog
-	 *
-	 * @return array
-	 */
-	public function getLoggedExtensions()
-	{
-		$fields = $options = array();
+    /**
+     * Returns all extension keys who has logged into devlog
+     *
+     * @return array
+     */
+    public function getLoggedExtensions()
+    {
+        $fields = $options = array();
 
-		$options['what'] = 'DEVLOGENTRY.ext_key';
-		$options['groupby'] = 'DEVLOGENTRY.ext_key';
-		$options['orderby']['DEVLOGENTRY.ext_key'] = 'DESC';
-		$options['collection'] = false;
+        $options['what'] = 'DEVLOGENTRY.ext_key';
+        $options['groupby'] = 'DEVLOGENTRY.ext_key';
+        $options['orderby']['DEVLOGENTRY.ext_key'] = 'DESC';
+        $options['collection'] = false;
 
-		$items = $this->search($fields, $options);
+        $items = $this->search($fields, $options);
 
-		return $this->convertSingleSelectToFlatArray($items, 'ext_key');
-	}
+        return $this->convertSingleSelectToFlatArray($items, 'ext_key');
+    }
 
-	/**
-	 * Flattens an single select array
-	 *
-	 * @param array $items
-	 * @param string $field
-	 *
-	 * @return array
-	 */
-	private function convertSingleSelectToFlatArray(
-		array $items,
-		$field
-	) {
-		if (empty($items)) {
-			return array();
-		}
+    /**
+     * Flattens an single select array
+     *
+     * @param array $items
+     * @param string $field
+     *
+     * @return array
+     */
+    private function convertSingleSelectToFlatArray(
+        array $items,
+        $field
+    ) {
+        if (empty($items)) {
+            return array();
+        }
 
-		$items = call_user_func_array('array_merge_recursive', $items);
+        $items = call_user_func_array('array_merge_recursive', $items);
 
-		if (empty($items)) {
-			return array();
-		}
+        if (empty($items)) {
+            return array();
+        }
 
-		if (!is_array($items[$field])) {
-			$items[$field] = array($items[$field]);
-		}
+        if (!is_array($items[$field])) {
+            $items[$field] = array($items[$field]);
+        }
 
-		return $items[$field];
-	}
+        return $items[$field];
+    }
 
-	/**
-	 * On default, return hidden and deleted fields in backend
-	 *
-	 * @param array $fields
-	 * @param array $options
-	 *
-	 * @return void
-	 */
-	protected function prepareFieldsAndOptions(
-		array &$fields,
-		array &$options
-	) {
-		// there is no tca for the table!
-		$options['enablefieldsoff'] = true;
-		parent::prepareFieldsAndOptions($fields, $options);
-		$this->prepareGenericSearcher($options);
-	}
+    /**
+     * On default, return hidden and deleted fields in backend
+     *
+     * @param array $fields
+     * @param array $options
+     *
+     * @return void
+     */
+    protected function prepareFieldsAndOptions(
+        array &$fields,
+        array &$options
+    ) {
+        // there is no tca for the table!
+        $options['enablefieldsoff'] = true;
+        parent::prepareFieldsAndOptions($fields, $options);
+        $this->prepareGenericSearcher($options);
+    }
 
-	/**
-	 * Prepares the simple generic searcher
-	 *
-	 * @param array $options
-	 *
-	 * @return void
-	 */
-	protected function prepareGenericSearcher(
-		array &$options
-	) {
-		if (empty($options['searchdef']) || !is_array($options['searchdef'])) {
-			$options['searchdef'] = array();
-		}
+    /**
+     * Prepares the simple generic searcher
+     *
+     * @param array $options
+     *
+     * @return void
+     */
+    protected function prepareGenericSearcher(
+        array &$options
+    ) {
+        if (empty($options['searchdef']) || !is_array($options['searchdef'])) {
+            $options['searchdef'] = array();
+        }
 
-		$model = $this->getEmptyModel();
-		\tx_rnbase::load('tx_rnbase_util_Arrays');
-		$options['searchdef'] = \tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
-			// default searcher config
-			array(
-				'usealias' => 1,
-				'basetable' => $model->getTableName(),
-				'basetablealias' => 'DEVLOGENTRY',
-				'wrapperclass' => get_class($model),
-				'alias' => array(
-					'DEVLOGENTRY' => array(
-						'table' => $model->getTableName()
-					)
-				)
-			),
-			// searcher config overrides
-			$options['searchdef']
-		);
-	}
+        $model = $this->getEmptyModel();
+        \tx_rnbase::load('tx_rnbase_util_Arrays');
+        $options['searchdef'] = \tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
+            // default searcher config
+            array(
+                'usealias' => 1,
+                'basetable' => $model->getTableName(),
+                'basetablealias' => 'DEVLOGENTRY',
+                'wrapperclass' => get_class($model),
+                'alias' => array(
+                    'DEVLOGENTRY' => array(
+                        'table' => $model->getTableName()
+                    )
+                )
+            ),
+            // searcher config overrides
+            $options['searchdef']
+        );
+    }
 }

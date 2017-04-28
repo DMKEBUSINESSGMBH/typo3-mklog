@@ -1,21 +1,21 @@
 mod {
-	mklog {
-		template = EXT:mklog/Resources/Private/Templates/Backend/Module.html
+    mklog {
+        template = EXT:mklog/Resources/Private/Templates/Backend/Module.html
 
-		mklog_devlog {
-			template = EXT:mklog/Resources/Private/Templates/Backend/Module/Devlog.html
-		}
-		mklog_devlog_entry{
-		}
+        mklog_devlog {
+            template = EXT:mklog/Resources/Private/Templates/Backend/Module/Devlog.html
+        }
+        mklog_devlog_entry{
+        }
 
-		_cfg {
-			### can be set to use a specific storage for the be web module
-			#fallbackPid = 0
+        _cfg {
+            ### can be set to use a specific storage for the be web module
+            #fallbackPid = 0
 
-			funcmenu.useTabs = 1
-			funcmenu.allow := addToList(
-				DMK\\Mklog\\Backend\\Module\\DevlogModule
-			)
-		}
-	}
+            funcmenu.useTabs = 1
+            funcmenu.allow := addToList(
+                DMK\\Mklog\\Backend\\Module\\DevlogModule
+            )
+        }
+    }
 }

@@ -33,43 +33,42 @@ namespace DMK\Mklog\Backend\Module;
  * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
-class DevlogModule
-	extends \tx_rnbase_mod_ExtendedModFunc
+class DevlogModule extends \tx_rnbase_mod_ExtendedModFunc
 {
-	/**
-	 * Method getFuncId
-	 *
-	 * @return	string
-	 */
-	protected function getFuncId()
-	{
-		return 'mklog_devlog';
-	}
+    /**
+     * Method getFuncId
+     *
+     * @return  string
+     */
+    protected function getFuncId()
+    {
+        return 'mklog_devlog';
+    }
 
-	/**
-	 * Returns all sub handlers
-	 *
-	 * @return array
-	 */
-	protected function getSubMenuItems()
-	{
-		return array(
-			\tx_rnbase::makeInstance(
-				'DMK\\Mklog\\Backend\\Handler\\DevlogEntryHandler'
-			),
-		);
-	}
+    /**
+     * Returns all sub handlers
+     *
+     * @return array
+     */
+    protected function getSubMenuItems()
+    {
+        return array(
+            \tx_rnbase::makeInstance(
+                'DMK\\Mklog\\Backend\\Handler\\DevlogEntryHandler'
+            ),
+        );
+    }
 
-	/**
-	 * Liefert false, wenn es keine SubSelectors gibt.
-	 * sonst ein Array mit den ausgewählten Werten.
-	 *
-	 * @param string $selectorStr
-	 *
-	 * @return array or false if not needed. Return empty array if no item found
-	 */
-	protected function makeSubSelectors(&$selectorStr)
-	{
-		return false;
-	}
+    /**
+     * Liefert false, wenn es keine SubSelectors gibt.
+     * sonst ein Array mit den ausgewählten Werten.
+     *
+     * @param string $selectorStr
+     *
+     * @return array or false if not needed. Return empty array if no item found
+     */
+    protected function makeSubSelectors(&$selectorStr)
+    {
+        return false;
+    }
 }

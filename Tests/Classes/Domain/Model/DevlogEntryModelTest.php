@@ -25,16 +25,16 @@ namespace DMK\Mklog\Domain\Model;
  ***************************************************************/
 
 if (!\class_exists('tx_rnbase')) {
-	require_once \tx_rnbase_util_Extensions::extPath(
-		'rn_base',
-		'class.tx_rnbase.php'
-	);
+    require_once \tx_rnbase_util_Extensions::extPath(
+        'rn_base',
+        'class.tx_rnbase.php'
+    );
 }
 if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-	require_once \tx_rnbase_util_Extensions::extPath(
-		'mklog',
-		'Tests/Classes/BaseTestCase.php'
-	);
+    require_once \tx_rnbase_util_Extensions::extPath(
+        'mklog',
+        'Tests/Classes/BaseTestCase.php'
+    );
 }
 
 /**
@@ -46,101 +46,100 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryModelTest
-	extends \DMK\Mklog\Tests\BaseTestCase
+class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-	/**
-	 * Test the getTableName method
-	 *
-	 * @return void
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testGetTableName()
-	{
-		self::assertSame(
-			'tx_mklog_devlog_entry',
-			$this->getDevlogEntryModel()->getTableName()
-		);
-	}
+    /**
+     * Test the getTableName method
+     *
+     * @return void
+     *
+     * @group unit
+     * @test
+     */
+    public function testGetTableName()
+    {
+        self::assertSame(
+            'tx_mklog_devlog_entry',
+            $this->getDevlogEntryModel()->getTableName()
+        );
+    }
 
-	/**
-	 * Test the getTransportIds method
-	 *
-	 * @return void
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testGetAndAddTransportIds()
-	{
-		$model = $this->getDevlogEntryModel();
+    /**
+     * Test the getTransportIds method
+     *
+     * @return void
+     *
+     * @group unit
+     * @test
+     */
+    public function testGetAndAddTransportIds()
+    {
+        $model = $this->getDevlogEntryModel();
 
-		self::assertTrue(is_array($model->getTransportIds()));
-		self::assertEmpty($model->getTransportIds());
+        self::assertTrue(is_array($model->getTransportIds()));
+        self::assertEmpty($model->getTransportIds());
 
-		$model->addTransportId('mkLogGelf:5');
-		$model->addTransportId('mkLogMail:7');
+        $model->addTransportId('mkLogGelf:5');
+        $model->addTransportId('mkLogMail:7');
 
-		self::assertTrue(is_array($model->getTransportIds()));
-		self::assertCount(2, $model->getTransportIds());
+        self::assertTrue(is_array($model->getTransportIds()));
+        self::assertCount(2, $model->getTransportIds());
 
-		$ids = $model->getTransportIds();
-		self::assertSame('mkLogGelf:5', $ids[0]);
-		self::assertSame('mkLogMail:7', $ids[1]);
-	}
+        $ids = $model->getTransportIds();
+        self::assertSame('mkLogGelf:5', $ids[0]);
+        self::assertSame('mkLogMail:7', $ids[1]);
+    }
 
-	/**
-	 * Test the getFullMessage method
-	 *
-	 * @return void
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testGetFullMessage()
-	{
-		$model = $this->getDevlogEntryModel();
-		$model->setExtraData(
-			array(
-				'foo' => 'bar',
-				'__beuser' => 13,
-			)
-		);
+    /**
+     * Test the getFullMessage method
+     *
+     * @return void
+     *
+     * @group unit
+     * @test
+     */
+    public function testGetFullMessage()
+    {
+        $model = $this->getDevlogEntryModel();
+        $model->setExtraData(
+            array(
+                'foo' => 'bar',
+                '__beuser' => 13,
+            )
+        );
 
-		$data = $model->getFullMessage();
+        $data = $model->getFullMessage();
 
-		self::assertTrue(is_string($data));
-		self::assertEquals('{"foo":"bar"}', $data);
-	}
+        self::assertTrue(is_string($data));
+        self::assertEquals('{"foo":"bar"}', $data);
+    }
 
-	/**
-	 * Test the getAdditionalData method
-	 *
-	 * @return void
-	 *
-	 * @group unit
-	 * @test
-	 */
-	public function testGetAdditionalData()
-	{
-		$model = $this->getDevlogEntryModel();
-		$model->setExtraData(
-			array(
-				'foo' => 'bar',
-				'__feuser' => 40,
-				'__beuser' => 13,
-			)
-		);
+    /**
+     * Test the getAdditionalData method
+     *
+     * @return void
+     *
+     * @group unit
+     * @test
+     */
+    public function testGetAdditionalData()
+    {
+        $model = $this->getDevlogEntryModel();
+        $model->setExtraData(
+            array(
+                'foo' => 'bar',
+                '__feuser' => 40,
+                '__beuser' => 13,
+            )
+        );
 
-		$data = $model->getAdditionalData();
+        $data = $model->getAdditionalData();
 
-		self::assertTrue(is_array($data));
-		self::assertCount(2, $data);
-		self::assertArrayHasKey('feuser', $data);
-		self::assertEquals(40, $data['feuser']);
-		self::assertArrayHasKey('beuser', $data);
-		self::assertEquals(13, $data['beuser']);
-	}
+        self::assertTrue(is_array($data));
+        self::assertCount(2, $data);
+        self::assertArrayHasKey('feuser', $data);
+        self::assertEquals(40, $data['feuser']);
+        self::assertArrayHasKey('beuser', $data);
+        self::assertEquals(13, $data['beuser']);
+    }
 }
