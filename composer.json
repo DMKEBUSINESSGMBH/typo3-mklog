@@ -1,7 +1,7 @@
 {
     "name": "dmk/mklog",
     "description": "Keep track of developer logs. Provides automatic email notification about important errors.",
-"version" : "2.2.5",
+    "version": "3.0.0",
     "type": "typo3-cms-extension",
     "keywords": [
         "TYPO3 CMS",
@@ -38,8 +38,8 @@
         "typo3-ter/mklog": "self.version"
     },
     "require": {
-        "typo3/cms": "^6.2.14 || ^7.6 || ^8.7",
-        "digedag/rn-base": ">=1.1.4"
+        "typo3/cms": "~4.5 || ~6.2 || ~7.6 || ~8.7",
+        "digedag/rn-base": ">=1.4"
     },
     "require-dev": {
         "namelesscoder/typo3-repository-client": "^1.2",
@@ -57,9 +57,8 @@
         }
     },
     "autoload-dev": {
-        "psr-4" : {
-            "DMK\\Mklog\\Tests\\" : "Tests/Classes",
-            "TYPO3\\CMS\\Core\\Tests\\" : ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
+        "psr-4": {
+            "DMK\\Mklog\\Tests\\" : "Tests/Classes","TYPO3\\CMS\\Core\\Tests\\":".Build/vendor/typo3/cms/typo3/sysext/core/Tests/",
             "TYPO3\\CMS\\Fluid\\Tests\\" : ".Build/vendor/typo3/cms/typo3/sysext/fluid/Tests/"
         }
     },
