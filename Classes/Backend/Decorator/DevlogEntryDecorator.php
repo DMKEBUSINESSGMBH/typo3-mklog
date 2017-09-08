@@ -202,7 +202,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
                 '>+ show data</a>' .
                 '<pre id="log-togggle-%1$s-data" style="display:none;">%2$s</pre>',
             $entry->getProperty('uid'),
-            $entry->getExtraData()
+            htmlspecialchars($extraData)
         );
     }
 }
