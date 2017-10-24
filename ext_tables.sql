@@ -18,7 +18,7 @@ CREATE TABLE tx_mklog_devlog_entry (
     ext_key varchar(255) DEFAULT '' NOT NULL,
     host varchar(255) DEFAULT '' NOT NULL,
     message text NOT NULL,
-    extra_data blob,
+    extra_data mediumblob,
 
     crdate int(11) unsigned DEFAULT '0' NOT NULL,
     cruser_id int(11) unsigned DEFAULT '0' NOT NULL,
