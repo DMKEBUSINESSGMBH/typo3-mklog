@@ -8,7 +8,7 @@ host =
 min_log_level = 4
 
 # cat=base; type=string; label=Excluded Extensions: A comma seperated list of extension keys that should not be logged
-exclude_ext_keys = extbase
+exclude_ext_keys = extbase,TYPO3\CMS\Sv\AuthenticationService,TYPO3\CMS\Core\Authentication\AbstractUserAuthentication
 
 # cat=base; type=int; label=Max Log size: Maximum number of log entries to keep when cleaning up
 max_logs = 10000
