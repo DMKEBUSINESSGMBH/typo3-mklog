@@ -46,7 +46,7 @@ tx_rnbase::load('DMK\\Mklog\\WatchDog\\SchedulerWatchDog');
 tx_rnbase::load('DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog');
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\WatchDog\\SchedulerWatchDog'] = array(
     'extension' => $_EXTKEY,
-    'title' => 'DevLog WatchDog',
+    'title' => 'Watchdog',
     'description' => '',
     'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog'
 );

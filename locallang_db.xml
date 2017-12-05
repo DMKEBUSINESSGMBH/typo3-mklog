@@ -7,7 +7,7 @@
     <data type="array">
         <languageKey index="default" type="array">
 
-            <label index="scheduler_watchdog_name">MK Logging Watchdog</label>
+            <label index="scheduler_watchdog_name">tx_devlog Watchdog</label>
             <label index="scheduler_watchdog_description">Informs you by email about important errors in developer log</label>
             <label index="scheduler_watchdog_field_mklog_email">Email</label>
             <label index="scheduler_watchdog_field_mklog_force">Force a summary mail</label>
@@ -18,7 +18,7 @@
 
         </languageKey>
         <languageKey index="de" type="array">
-            <label index="scheduler_watchdog_name">MK Logging Watchdog</label>
+            <label index="scheduler_watchdog_name">tx_devlog Watchdog</label>
             <label index="scheduler_watchdog_description">Informiert per Email über fatale Fehler im Developer log</label>
             <label index="scheduler_watchdog_taskinfo">Sende Info-Emails an %s.</label>
             <label index="scheduler_watchdog_field_mklog_force">Email mit Zusammenfassung immer schicken.</label>
