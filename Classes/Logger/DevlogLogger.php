@@ -38,16 +38,29 @@ use \DMK\Mklog\Utility\SeverityUtility;
 class DevlogLogger extends AbstractLogger
 {
     /**
+     * We are during the log write process? prevent nesting loop
+     *
+     * @var bool
+     */
+    protected $whileWriting = false;
+
+    /**
      * Writes the log record
      *
      * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
      *
-     * @return WriterInterface $this
+     * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
     public function writeLog(
         \TYPO3\CMS\Core\Log\LogRecord $record
     ) {
         try {
+            //  prevent nesting write loops
+            if ($this->whileWriting) {
+                throw new \Exception('Nesting log writer calls prevented', 1513856342);
+            }
+            $this->whileWriting = true;
+
             $this->storeLog(
                 $record->getMessage(),
                 $record->getComponent(),
@@ -57,6 +70,8 @@ class DevlogLogger extends AbstractLogger
         } catch (\Exception $e) {
             $this->handleExceptionDuringLogging($e);
         }
+
+        $this->whileWriting = false;
 
         return $this;
     }
