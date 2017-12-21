@@ -240,6 +240,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
         // createFromFormat bzw. UNIX Timestamps haben per default GMT als Zeitzone.
         // Daher müssen wir zusätzlich die aktuelle Zeitzone setzen.
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
         return $dateTime;
     }
 

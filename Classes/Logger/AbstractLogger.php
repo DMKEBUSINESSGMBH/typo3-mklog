@@ -66,7 +66,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
 
         /* @var $entry \DMK\Mklog\Domain\Model\DevlogEntryModel */
         $entry = $repo->createNewModel();
-        $entry->setCrdate($GLOBALS['EXEC_TIME'] );
+        $entry->setCrdate($GLOBALS['EXEC_TIME']);
         $entry->setRunId($config->getCurrentRunId());
         $entry->setHost($entry->getHost());
         $entry->setMessage((string) $message);
