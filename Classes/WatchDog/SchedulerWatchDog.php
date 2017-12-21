@@ -190,15 +190,9 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     protected function getTransport()
     {
         if ($this->transport === null) {
-            $class = $this->getOptions()->getTransport();
-            $this->transport = \tx_rnbase::makeInstance($class);
-
-            if (!$this->transport instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
-                throw new \Exception(
-                    'The Transport "' . get_class($this->transport) . '" ' .
-                    'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"'
-                );
-            }
+            $this->transport = \DMK\Mklog\Factory::getTransport(
+                $this->getOptions()->getTransport()
+            );
         }
 
         return $this->transport;

@@ -114,4 +114,25 @@ final class Factory
             'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository'
         );
     }
+
+    /**
+     * Creates a transport based on the classname
+     *
+     * @param string $class
+     *
+     * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     */
+    public static function getTransport($class)
+    {
+        $transport = \tx_rnbase::makeInstance($class);
+
+        if (!$transport instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
+            throw new \Exception(
+                'The Transport "' . get_class($this->transport) . '" ' .
+                'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"'
+            );
+        }
+
+        return $transport;
+    }
 }

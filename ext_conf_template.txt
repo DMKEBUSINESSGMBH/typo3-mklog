@@ -16,7 +16,10 @@ max_logs = 10000
 # cat=gelf; type=boolean; label=Enable Gelf: Enables direct logging to a gelf transport
 gelf_enable = 1
 
-# cat=gelf; type=string; label=Gelf Credentials: example UDP credentials 127.0.0.1:12201
+# cat=gelf; type=options[Gelf UDP=DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf,Gelf HTTP=DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf]; label=Gelf Transport
+gelf_transport =
+
+# cat=gelf; type=string; label=Gelf Credentials: UDP example: 127.0.0.1:12201, HTTP example https://admin:admin@127.0.0.1:2345/gelf
 gelf_credentials =
 
 # cat=gelf; type=options[0 - Emergency=0,1 - Alert=1,2 - Critical=2,3 - Error=3,4 - Warning=4,5 - Notice=5,6 - Info=6,7 - Debug=7]; label=Minimum log level: Minimum message level required to ransport the message. Usualy it is 1, all other logs should be written into devlog table and transported with a scheduler to gelf.

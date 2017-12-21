@@ -175,6 +175,16 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
+     * Transport for gelf loging
+     *
+     * @return int
+     */
+    public function getGelfTransport()
+    {
+        return $this->getExtConf()->getGelfTransport() ?: 'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf';
+    }
+
+    /**
      * Credentials for gelf loging
      *
      * @return int

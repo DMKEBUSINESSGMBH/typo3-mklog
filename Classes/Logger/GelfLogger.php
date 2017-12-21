@@ -46,7 +46,6 @@ class GelfLogger extends AbstractLogger
         \TYPO3\CMS\Core\Log\LogRecord $record
     ) {
         $config = \DMK\Mklog\Factory::getConfigUtility();
-
         // check min log level
         if ((
             !$config->getGelfEnable() ||
@@ -63,7 +62,7 @@ class GelfLogger extends AbstractLogger
             )
         );
 
-        $transport = $this->getTransport();
+        $transport = $this->getTransport($config);
 
         $transport->initialize($options);
 
@@ -90,12 +89,15 @@ class GelfLogger extends AbstractLogger
     /**
      * Creates the transport
      *
+     * @param \DMK\Mklog\Utility\ConfigUtility $config
+     *
      * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
-    protected function getTransport()
-    {
-        return \tx_rnbase::makeInstance(
-            'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf'
+    protected function getTransport(
+        \DMK\Mklog\Utility\ConfigUtility $config
+    ) {
+        return \DMK\Mklog\Factory::getTransport(
+            $config->getGelfTransport()
         );
     }
 }
