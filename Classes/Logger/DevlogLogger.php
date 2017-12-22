@@ -144,7 +144,7 @@ class DevlogLogger extends AbstractLogger
                 $params['severity'] = SeverityUtility::WARNING;
                 break;
             case \tx_rnbase_util_Logger::LOGLEVEL_FATAL:
-                $params['severity'] = SeverityUtility::CRITICAL;
+                $params['severity'] = SeverityUtility::ERROR;
                 break;
         }
 
@@ -201,35 +201,5 @@ class DevlogLogger extends AbstractLogger
         }
 
         return $storage->getLoggingActive();
-    }
-
-    /**
-     * Send an exeption mail for all exceptions during the store log process
-     *
-     * @param \Exception $e
-     *
-     * @TODO: add recursive call check for exceptions (
-     *     throw exception, only block at secnd exception.
-     *     so the gelf logger can log the exception
-     *     and only a recursion of logging will prevented.
-     * )
-     *
-     * @return void
-     */
-    protected function handleExceptionDuringLogging(
-        \Exception $e
-    ) {
-        // try to send mail
-        $addr = \tx_rnbase_configurations::getExtensionCfgValue(
-            'rn_base',
-            'sendEmailOnException'
-        );
-        if ($addr) {
-            \tx_rnbase_util_Misc::sendErrorMail(
-                $addr,
-                'Mklog\DevlogLogger',
-                $e
-            );
-        }
     }
 }

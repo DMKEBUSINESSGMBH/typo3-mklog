@@ -24,6 +24,8 @@ namespace DMK\Mklog\Logger;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \DMK\Mklog\Utility\SeverityUtility;
+
 /**
  * Devlog logger
  *
@@ -40,19 +42,101 @@ class GelfLogger extends AbstractLogger
      *
      * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
      *
-     * @return WriterInterface $this
+     * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
     public function writeLog(
         \TYPO3\CMS\Core\Log\LogRecord $record
     ) {
+        try {
+            $this->storeLog(
+                $record->getMessage(),
+                $record->getComponent(),
+                $record->getLevel(),
+                $record->getData()
+            );
+        } catch (\Exception $e) {
+            $this->handleExceptionDuringLogging($e);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Old devlog Hook from the old TYPO3 API
+     *
+     * @param array $params
+     *
+     * @return void
+     */
+    public function sysLogHook(array $params)
+    {
+        // do nothing on syslog init
+        if (isset($params['initLog']) && $params['initLog']) {
+            return;
+        }
+
+        /*
+         * \TYPO3\CMS\Core\Utility\GeneralUtility::SYSLOG_SEVERITY_*
+         * SYSLOG_SEVERITY_INFO = 0;
+         * SYSLOG_SEVERITY_NOTICE = 1;
+         * SYSLOG_SEVERITY_WARNING = 2;
+         * SYSLOG_SEVERITY_ERROR = 3;
+         * SYSLOG_SEVERITY_FATAL = 4;
+         */
+
+        \tx_rnbase::load('tx_rnbase_util_Logger');
+        // map the old log levels to the new one
+        switch ((int) $params['severity']) {
+            case 4:
+                $params['severity'] = SeverityUtility::ALERT;
+                break;
+            case 3:
+                $params['severity'] = SeverityUtility::CRITICAL;
+                break;
+            case 2:
+                $params['severity'] = SeverityUtility::WARNING;
+                break;
+            case 1:
+                $params['severity'] = SeverityUtility::NOTICE;
+                break;
+            case 0:
+            default:
+                $params['severity'] = SeverityUtility::INFO;
+                break;
+        }
+
+        try {
+            $this->storeLog(
+                $params['msg'],
+                $params['extKey'],
+                $params['severity'],
+                ['__trace' => $params['backTrace']]
+            );
+        } catch (\Exception $e) {
+            $this->handleExceptionDuringLogging($e);
+        }
+    }
+
+    /**
+     * Stores a devlog entry
+     *
+     * @param string $message
+     * @param string $extension
+     * @param int $severity
+     * @param mixed $extraData
+     *
+     * @return void
+     */
+    protected function storeLog($message, $extension, $severity, $extraData)
+    {
         $config = \DMK\Mklog\Factory::getConfigUtility();
         // check min log level
         if ((
             !$config->getGelfEnable() ||
             !$config->getGelfCredentials() ||
-            $record->getLevel() > $config->getGelfMinLogLevel()
+            $severity > $config->getGelfMinLogLevel()
         )) {
-            return $this;
+            return;
         }
 
         $options = \tx_rnbase::makeInstance(
@@ -66,15 +150,15 @@ class GelfLogger extends AbstractLogger
 
         $transport->initialize($options);
 
-        $message = $this->createDevlogEntry(
-            $record->getMessage(),
-            $record->getComponent(),
-            $record->getLevel(),
-            $record->getData()
+        $gelfMsg = $this->createDevlogEntry(
+            $message,
+            $extension,
+            $severity,
+            $extraData
         );
 
         try {
-            $transport->publish($message);
+            $transport->publish($gelfMsg);
         } catch (\Exception $e) {
             // what todo on transport exception?
             // usualy we have a emergency and a other logger (file or mail) shold take over
@@ -82,8 +166,6 @@ class GelfLogger extends AbstractLogger
         }
 
         $transport->shutdown();
-
-        return $this;
     }
 
     /**

@@ -64,4 +64,6 @@ if (!empty($_EXTCONF['enable_devlog'])) {
 if (!empty($_EXTCONF['gelf_enable'])) {
     // register logger writer
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][($_EXTCONF['gelf_min_log_level'] ?: \DMK\Mklog\Utility\SeverityUtility::ALERT)]['DMK\\Mklog\\Logger\\GelfLogger'] = array();
+    // add system log hook, to log some critical logs directly
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['systemLog']['MklogGelfLoggerSysLogHook']  = 'EXT:mklog/Classes/Logger/DevlogLogger.php:DMK\\Mklog\\Logger\\GelfLogger->sysLogHook';
 }
