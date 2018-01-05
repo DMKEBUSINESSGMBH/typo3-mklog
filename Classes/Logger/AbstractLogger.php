@@ -105,6 +105,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         \tx_rnbase::load('tx_rnbase_util_TYPO3');
         $extraData['__feuser'] = \tx_rnbase_util_TYPO3::getFEUserUID();
         $extraData['__beuser'] = \tx_rnbase_util_TYPO3::getBEUserUID();
+        // add current uri
+        $extraData['__requesturl'] = \Tx_Rnbase_Utility_T3General::getIndpEnv('TYPO3_REQUEST_URL');
         // add trace to extradata
         $extraData['__trace'] = $this->getBacktrace();
 
