@@ -10,7 +10,7 @@
         "notification"
     ],
     "homepage": "http://www.dmk-ebusiness.de/",
-    "license": "GPL-2.0+",
+    "license": "GPL-2.0-or-later",
     "authors": [
         {
             "name": "Michael Wagner",
