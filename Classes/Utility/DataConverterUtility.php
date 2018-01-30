@@ -61,8 +61,13 @@ class DataConverterUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function decode($data)
     {
-        if ($data{0} !== '{') {
+        if (is_array($data)) {
             return $data;
+        }
+
+        // @TODO: what todo with non json data?
+        if ($data{0} !== '{') {
+            return ['data' => $data];
         }
 
         $data = json_decode($data);
