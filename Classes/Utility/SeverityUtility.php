@@ -93,7 +93,7 @@ final class SeverityUtility
      *
      * Examples: User logs in, SQL logs.
      *
-     * @var i
+     * @var int
      */
     const INFO = 6;
     /**
