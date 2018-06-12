@@ -161,6 +161,8 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
             $options['limit'] = $limit;
         }
 
+        $options['orderby'] = ['DEVLOGENTRY.crdate' => 'ASC'];
+
         return $repo->search($fields, $options);
     }
 
