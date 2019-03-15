@@ -39,7 +39,7 @@
     },
     "require": {
         "typo3/cms": "~6.2 || ~7.6 || ~8.7 || ~9.5",
-        "digedag/rn-base": ">=1.4"
+        "digedag/rn-base": "*"
     },
     "require-dev": {
         "namelesscoder/typo3-repository-client": "^1.2",
