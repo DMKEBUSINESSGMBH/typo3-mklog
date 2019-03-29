@@ -43,14 +43,14 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
      *
      * @var \Tx_Rnbase_Domain_Model_Data
      */
-    private $options = null;
+    protected $options = null;
 
     /**
      * The current configured transport
      *
      * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
-    private $transport = null;
+    protected $transport = null;
 
     /**
      * Returns a storage
