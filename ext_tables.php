@@ -9,7 +9,7 @@ if (TYPO3_MODE == 'BE') {
 
     // register web_MklogBackend
     tx_rnbase::load('DMK\\Mklog\\Backend\\ModuleBackend');
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+    tx_rnbase_util_Extensions::registerModule(
         'mklog',
         'web',
         'backend',
