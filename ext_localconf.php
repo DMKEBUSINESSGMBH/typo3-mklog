@@ -51,12 +51,12 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Wat
     'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog'
 );
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'EXT:mklog/Classes/Hooks/DataHandler.php:Tx_Mklog_Hooks_DataHandler';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'Tx_Mklog_Hooks_DataHandler';
 
 // is the devlog enabled?
 if (!empty($_EXTCONF['enable_devlog'])) {
     // the old devlog hook to log into tx_mklog_devlog_entry
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['devLog']['mklog'] = 'EXT:mklog/Classes/Logger/DevlogLogger.php:DMK\\Mklog\\Logger\\DevlogLogger->devLogHook';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['devLog']['mklog'] = \DMK\Mklog\Logger\DevlogLogger::class . '->devLogHook';
     // register logger writer
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][($_EXTCONF['min_log_level'] ?: \DMK\Mklog\Utility\SeverityUtility::DEBUG)]['DMK\\Mklog\\Logger\\DevlogLogger'] = array();
 }
@@ -65,5 +65,5 @@ if (!empty($_EXTCONF['gelf_enable'])) {
     // register logger writer
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][($_EXTCONF['gelf_min_log_level'] ?: \DMK\Mklog\Utility\SeverityUtility::ALERT)]['DMK\\Mklog\\Logger\\GelfLogger'] = array();
     // add system log hook, to log some critical logs directly
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['systemLog']['MklogGelfLoggerSysLogHook']  = 'EXT:mklog/Classes/Logger/GelfLogger.php:DMK\\Mklog\\Logger\\GelfLogger->sysLogHook';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['systemLog']['MklogGelfLoggerSysLogHook']  = \DMK\Mklog\Logger\GelfLogger::class . '->sysLogHook';
 }
