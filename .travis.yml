@@ -11,11 +11,13 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
 
 env:
   - TYPO3_VERSION="^6.2.14"
   - TYPO3_VERSION="^7.6.0"
   - TYPO3_VERSION="^8.7.0"
+  - TYPO3_VERSION="^9.5.0"
 
 matrix:
   exclude:
@@ -23,8 +25,16 @@ matrix:
       env: TYPO3_VERSION="^6.2.14"
     - php: 7.1
       env: TYPO3_VERSION="^6.2.14"
+    - php: 7.2
+      env: TYPO3_VERSION="^6.2.14"
     - php: 5.6
       env: TYPO3_VERSION="^8.7.0"
+    - php: 5.6
+      env: TYPO3_VERSION="^9.5.0"
+    - php: 7.0
+      env: TYPO3_VERSION="^9.5.0"
+    - php: 7.1
+      env: TYPO3_VERSION="^9.5.0"
 
 sudo: false
 
