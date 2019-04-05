@@ -43,9 +43,9 @@
     },
     "require-dev": {
         "namelesscoder/typo3-repository-client": "^1.2",
-        "nimut/testing-framework": "^1.0",
-        "mikey179/vfsStream": "^1.4",
-        "phpunit/phpunit": "^4.7 || ^5.0"
+        "nimut/testing-framework": "@stable",
+        "mikey179/vfsStream": "@stable",
+        "phpunit/phpunit": "@stable"
     },
     "autoload": {
         "classmap": [
