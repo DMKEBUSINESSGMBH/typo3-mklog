@@ -105,10 +105,10 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
             count($successes),
             count($failures)
         );
-        \tx_rnbase_util_Logger::devLog(
-            $msg,
+        $logMethod = $success ? 'debug' : 'warning';
+        \Tx_Rnbase_Utility_Logger::$logMethod(
             'mklog',
-            $success ? \tx_rnbase_util_Logger::LOGLEVEL_DEBUG : \tx_rnbase_util_Logger::LOGLEVEL_WARN,
+            $msg,
             array(
                 'transport' => $this->getTransportId(),
                 'successes' => $successes,
