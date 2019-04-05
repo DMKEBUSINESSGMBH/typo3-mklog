@@ -207,10 +207,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
 
         $dataHandler = tx_rnbase::makeInstance('Tx_Mklog_Hooks_DataHandler');
 
-        $dataHandlerParent = tx_rnbase::makeInstance(tx_rnbase_util_Typo3Classes::getDataHandlerClass());
         $dataHandlerParent = $this->getMock(
             tx_rnbase_util_Typo3Classes::getDataHandlerClass(),
-            array('compileAdminTables')
+            array('compileAdminTables'),
+            array(),
+            '',
+            false
         );
         $dataHandlerParent
             ->expects(self::once())
