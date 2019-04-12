@@ -168,7 +168,7 @@ class DevlogLogger extends AbstractLogger
     protected function isLoggingEnabled()
     {
         // skip logging, if there is no db.
-        if (empty($GLOBALS['TYPO3_DB']) || !is_object($GLOBALS['TYPO3_DB'])) {
+        if (!$this->isDatabaseConnected()) {
             return false;
         }
 
@@ -201,5 +201,13 @@ class DevlogLogger extends AbstractLogger
         }
 
         return $storage->getLoggingActive();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isDatabaseConnected()
+    {
+        return \Tx_Rnbase_Database_Connection::getInstance()->getDatabaseConnection()->isConnected();
     }
 }

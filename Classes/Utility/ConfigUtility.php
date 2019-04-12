@@ -70,9 +70,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
         if (!$this->getStorage()->hasExtConf()) {
             $this->getStorage()->setExtConf(
                 \Tx_Rnbase_Domain_Model_Data::getInstance(
-                    unserialize(
-                        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog']
-                    )
+                     \Tx_Rnbase_Configuration_Processor::getExtensionCfgValue('mklog', '')
                 )
             );
         }

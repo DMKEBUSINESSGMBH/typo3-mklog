@@ -15,7 +15,7 @@ if (!defined('TYPO3_MODE')) {
 tx_rnbase::load('DMK\Mklog\Factory');
 
 $_EXTKEY = isset($_EXTKEY) ? $_EXTKEY : 'mklog';
-$_EXTCONF = isset($_EXTCONF) ? $_EXTCONF : $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][$_EXTKEY];
+$_EXTCONF = isset($_EXTCONF) ? $_EXTCONF : \Tx_Rnbase_Configuration_Processor::getExtensionCfgValue($_EXTKEY, '');
 // Konfiguration umwandeln
 $_EXTCONF = is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF);
 

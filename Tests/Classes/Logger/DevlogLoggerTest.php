@@ -48,29 +48,6 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  */
 class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     *
-     * @return void
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->backup['TYPO3_DB'] = $GLOBALS['TYPO3_DB'];
-    }
-
-    /**
-     * Tears down the fixture, for example, close a network connection.
-     * This method is called after a test is executed.
-     *
-     * @return void
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-        $GLOBALS['TYPO3_DB'] = $this->backup['TYPO3_DB'];
-    }
 
     /**
      * Test the isLoggingEnabled method
@@ -82,8 +59,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function testIsLoggingEnabledWithoutDbShouldBeFalse()
     {
-        // unset the db!
-        unset($GLOBALS['TYPO3_DB']);
         // activate logging
         \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
@@ -109,24 +84,17 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
         // create an dummy db object for unittests outside of a typo3 env
-        $GLOBALS['TYPO3_DB'] = new \stdClass();
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
-        self::assertFalse(
-            $this->callInaccessibleMethod(
-                $this->getDevlogLoggerMock(),
-                'isLoggingEnabled'
-            )
-        );
+        $logger = $this->getDevlogLoggerMock();
+        self::assertFalse($this->callInaccessibleMethod($logger, 'isLoggingEnabled'));
 
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = false;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = false;
-        self::assertTrue(
-            $this->callInaccessibleMethod(
-                $this->getDevlogLoggerMock(),
-                'isLoggingEnabled'
-            )
-        );
+        $logger->expects(self::once())
+            ->method('isDatabaseConnected')
+            ->will(self::returnValue(true));
+        self::assertTrue($this->callInaccessibleMethod($logger, 'isLoggingEnabled'));
     }
 
     /**
@@ -224,7 +192,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger = $this->getMock(
             'DMK\\Mklog\\Logger\\DevlogLogger',
             array_merge(
-                array('getDevlogEntryRepository'),
+                array('getDevlogEntryRepository', 'isDatabaseConnected'),
                 $methods
             )
         );
