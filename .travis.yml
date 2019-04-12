@@ -65,6 +65,7 @@ before_script:
   # Restore composer.json
   - git checkout composer.json
   - export TYPO3_PATH_WEB=$PWD/.Build/Web
+  - touch $PWD/.Build/Web/typo3conf/LocalConfiguration.php
 
 script:
   - >
