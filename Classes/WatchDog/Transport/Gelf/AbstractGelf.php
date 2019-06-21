@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
 /***************************************************************
@@ -24,20 +25,18 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \DMK\Mklog\WatchDog\Transport\AbstractTransport;
+use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 
 \tx_rnbase::load('DMK\\Mklog\\WatchDog\\Transport\\AbstractTransport');
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
 /**
- * MK Log watchdog gelf transporter
+ * MK Log watchdog gelf transporter.
  *
  * All chunks MUST arrive within 5 seconds
  * or the server will discard all already arrived and still arriving chunks.
  * A message MUST NOT consist of more than 128 chunks.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -45,14 +44,14 @@ use \DMK\Mklog\WatchDog\Transport\AbstractTransport;
 abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
 {
     /**
-     * The gelf publisher
+     * The gelf publisher.
      *
      * @var \Gelf\PublisherInterface
      */
     private $publisher = null;
 
     /**
-     * An unique identifier for the transport
+     * An unique identifier for the transport.
      *
      * @return string
      */
@@ -62,18 +61,16 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
     }
 
     /**
-     * Creates the Transport
+     * Creates the Transport.
      *
      * @return \Gelf\Transport\AbstractTransport
      */
     abstract protected function getTransport();
 
     /**
-     * Initializes the Transport
+     * Initializes the Transport.
      *
      * @param \Tx_Rnbase_Domain_Model_Data $options
-     *
-     * @return void
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
@@ -84,11 +81,9 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
     }
 
     /**
-     * Publishes a message by the provider
+     * Publishes a message by the provider.
      *
      * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-     *
-     * @return void
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
@@ -108,7 +103,7 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
             $additionalData = array();
         }
 
-        $converter  = \DMK\Mklog\Factory::getDataConverterUtility();
+        $converter = \DMK\Mklog\Factory::getDataConverterUtility();
         foreach ($additionalData as $key => $value) {
             // the value shoult be an string, so we convert objects and arrays!
             if (!\is_scalar($value)) {
@@ -124,13 +119,13 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
     }
 
     /**
-     * Creates the Publisher
+     * Creates the Publisher.
      *
      * @return \Gelf\PublisherInterface
      */
     protected function getPublisher()
     {
-        if ($this->publisher === null) {
+        if (null === $this->publisher) {
             $this->publisher = new \Gelf\Publisher(
                 $this->getTransport()
             );

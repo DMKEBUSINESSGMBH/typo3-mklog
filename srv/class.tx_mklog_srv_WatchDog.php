@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright notice
+ *  Copyright notice.
  *
  *  (c) 2011 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  *  All rights reserved
@@ -27,19 +27,19 @@ tx_rnbase::load('Tx_Rnbase_Service_Base');
 tx_rnbase::load('Tx_Mklog_Utility_Devlog');
 
 /**
- * Service für WatchDog
+ * Service für WatchDog.
  *
  * @author René Nitzsche
  */
 class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
 {
-
     /**
-     * Versand von Infomails
-     * @param   string  $emailReceiver
-     * @param   date    $lastRun
-     * @param   array   $filters
-     * @param   array   $options
+     * Versand von Infomails.
+     *
+     * @param string $emailReceiver
+     * @param date   $lastRun
+     * @param array  $filters
+     * @param array  $options
      */
     public function triggerMails(
         $emailReceiver,
@@ -56,8 +56,9 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
 
     /**
      * @param DateTime $lastRun
-     * @param array $filters
-     * @param array $options
+     * @param array    $filters
+     * @param array    $options
+     *
      * @return array
      */
     protected function lookupMsgs(
@@ -71,7 +72,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
             $options['minimalSeverity'] : tx_rnbase_util_Logger::LOGLEVEL_WARN;
 
         $hasData = false;
-        for ($severity = $minimalSeverity; $severity < 4; $severity++) {
+        for ($severity = $minimalSeverity; $severity < 4; ++$severity) {
             $entries = $this->getLatestEntries($lastRun, $severity, $options);
             $infos['latest'][$severity] = $entries;
             if (count($entries)) {
@@ -86,8 +87,9 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
 
     /**
      * @param DateTime $lastRun
-     * @param int $severity
-     * @param array $options
+     * @param int      $severity
+     * @param array    $options
+     *
      * @return array
      */
     protected function getLatestEntries(DateTime $lastRun, $severity, array $options)
@@ -95,8 +97,8 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
         $what = '*';
         $from = Tx_Mklog_Utility_Devlog::getTableName();
         $options['enablefieldsoff'] = '1';
-        $options['where'] = 'crdate>='. $lastRun->format('U') .
-                            ' AND severity='. intval($severity);
+        $options['where'] = 'crdate>='.$lastRun->format('U').
+                            ' AND severity='.intval($severity);
         // notbremse, es können ziemlich viele logs vorhanden sein.
         if (!isset($options['limit'])) {
             $options['limit'] = 30;
@@ -113,7 +115,8 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
     }
 
     /**
-     * Anzahl aller Meldungen für alle Log-Level laden
+     * Anzahl aller Meldungen für alle Log-Level laden.
+     *
      * @param DateTime $lastRun
      */
     protected function getSummary(DateTime $lastRun)
@@ -123,18 +126,17 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
         $options = array();
         $options['groupby'] = 'severity';
         $options['enablefieldsoff'] = '1';
-        $options['where'] = 'crdate>='. $lastRun->format('U');
+        $options['where'] = 'crdate>='.$lastRun->format('U');
         $result = tx_rnbase_util_DB::doSelect($what, $from, $options);
 
         return $result;
     }
 
     /**
-     *
-     * @param string $emailReceiver
-     * @param array $infos
+     * @param string   $emailReceiver
+     * @param array    $infos
      * @param DateTime $lastRun
-     * @param array $options
+     * @param array    $options
      *
      * @return bool
      */
@@ -145,7 +147,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
         /* @var $mail tx_rnbase_util_Mail */
         $mail = tx_rnbase::makeInstance('tx_rnbase_util_Mail');
         $mail->setSubject(
-            'WatchDog for logger on site ' .
+            'WatchDog for logger on site '.
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
         );
         $mail->setFrom(
@@ -173,10 +175,10 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
     }
 
     /**
-     *
-     * @param array $infos
+     * @param array    $infos
      * @param DateTime $lastRun
-     * @param array $options
+     * @param array    $options
+     *
      * @return array
      */
     protected function buildMailContents(
@@ -187,11 +189,11 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
         $messageFieldName = Tx_Mklog_Utility_Devlog::getMessageFieldName();
         $extraDataFieldName = Tx_Mklog_Utility_Devlog::getExtraDataFieldName();
         $levels = $this->getSeverities();
-        $textPart =    'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
-        $htmlPart =    '<strong>This is an automatic email from TYPO3. Don\'t answer!</strong>';
-        $textPart .=    '== Developer Log summary since '.
-                        $lastRun->format('Y-m-d H:i:s') ."==\n\n";
-        $htmlPart .=    '<h2>Developer Log summary since '.
+        $textPart = 'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
+        $htmlPart = '<strong>This is an automatic email from TYPO3. Don\'t answer!</strong>';
+        $textPart .= '== Developer Log summary since '.
+                        $lastRun->format('Y-m-d H:i:s')."==\n\n";
+        $htmlPart .= '<h2>Developer Log summary since '.
                         $lastRun->format('Y-m-d H:i:s').'</h2>';
         $htmlPart .= "\n<ul>\n";
         foreach ($infos['summary'] as $data) {
@@ -262,5 +264,5 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/srv/class.tx_mklog_srv_WatchDog.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/srv/class.tx_mklog_srv_WatchDog.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/srv/class.tx_mklog_srv_WatchDog.php'];
 }

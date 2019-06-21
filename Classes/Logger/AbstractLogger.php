@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Logger;
 
 /***************************************************************
@@ -25,10 +26,8 @@ namespace DMK\Mklog\Logger;
  ***************************************************************/
 
 /**
- * Devlog logger
+ * Devlog logger.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -36,11 +35,9 @@ namespace DMK\Mklog\Logger;
 abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterface, \TYPO3\CMS\Core\SingletonInterface
 {
     /**
-     * Constructs this log writer
+     * Constructs this log writer.
      *
      * @param array $options Configuration options - depends on the actual log writer
-     *
-     * @return void
      */
     public function __construct(
         array $options = array()
@@ -49,12 +46,12 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     }
 
     /**
-     * Stores a devlog entry
+     * Stores a devlog entry.
      *
      * @param string $message
      * @param string $extension
-     * @param int $severity
-     * @param mixed $extraData
+     * @param int    $severity
+     * @param mixed  $extraData
      *
      * @return \DMK\Mklog\Domain\Model\DevlogEntryModel
      */
@@ -89,7 +86,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     }
 
     /**
-     * Progresses the extra data and adds some aditional informations
+     * Progresses the extra data and adds some aditional informations.
      *
      * @param mixed $extraData
      *
@@ -155,7 +152,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     }
 
     /**
-     * Send an exeption mail for all exceptions during the store log process
+     * Send an exeption mail for all exceptions during the store log process.
      *
      * @param \Exception $e
      *
@@ -164,8 +161,6 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      *     so the gelf logger can log the exception
      *     and only a recursion of logging will prevented.
      * )
-     *
-     * @return void
      */
     protected function handleExceptionDuringLogging(
         \Exception $e
@@ -185,7 +180,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     }
 
     /**
-     * Returns the devlog entry repository
+     * Returns the devlog entry repository.
      *
      * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
      */

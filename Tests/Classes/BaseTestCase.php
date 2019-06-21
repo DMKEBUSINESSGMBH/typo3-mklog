@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Tests;
 
 /***************************************************************
@@ -28,10 +29,8 @@ namespace DMK\Mklog\Tests;
 \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
 
 /**
- * Basis Testcase
+ * Basis Testcase.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -39,17 +38,15 @@ namespace DMK\Mklog\Tests;
 abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
 {
     /**
-     * Property to store backups for set up and tear down
+     * Property to store backups for set up and tear down.
      *
-     * @var array $backup
+     * @var array
      */
     protected $backup = array();
 
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
-     *
-     * @return void
      */
     protected function setUp()
     {
@@ -65,8 +62,6 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     /**
      * Tears down the fixture, for example, close a network connection.
      * This method is called after a test is executed.
-     *
-     * @return void
      */
     protected function tearDown()
     {
@@ -75,7 +70,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     }
 
     /**
-     * Returns the database connection
+     * Returns the database connection.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\Tx_Rnbase_Database_Connection
      */
@@ -90,7 +85,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     }
 
     /**
-     * Returns a devlog entry model mock
+     * Returns a devlog entry model mock.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Domain\Model\DevlogEntryModel
      */
@@ -106,7 +101,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     }
 
     /**
-     * Creates the repo mock
+     * Creates the repo mock.
      *
      * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Domain\Repository\DevlogEntryRepository
      */
@@ -117,7 +112,6 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
             'tx_rnbase_util_SearchGeneric',
             array('search')
         );
-
 
         \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
         \tx_rnbase::load('DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository');

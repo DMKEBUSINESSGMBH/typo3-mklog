@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog;
 
 /***************************************************************
@@ -28,10 +29,8 @@ namespace DMK\Mklog\WatchDog;
 \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
 
 /**
- * MK Log watchdog
+ * MK Log watchdog.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -39,27 +38,27 @@ namespace DMK\Mklog\WatchDog;
 class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
 {
     /**
-     * Internal options storage
+     * Internal options storage.
      *
      * @var \Tx_Rnbase_Domain_Model_Data
      */
     protected $options = null;
 
     /**
-     * The current configured transport
+     * The current configured transport.
      *
      * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
     protected $transport = null;
 
     /**
-     * Returns a storage
+     * Returns a storage.
      *
      * @return \Tx_Rnbase_Domain_Model_Data
      */
     public function getOptions()
     {
-        if ($this->options === null) {
+        if (null === $this->options) {
             $this->options = \tx_rnbase::makeInstance(
                 'Tx_Rnbase_Domain_Model_Data'
             );
@@ -132,7 +131,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Returns all untransportet messages
+     * Returns all untransportet messages.
      *
      * @return \Tx_Rnbase_Domain_Collection_Base
      */
@@ -153,7 +152,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
 
         $limit = $this->getOptions()->getMessageLimit();
         // fallback of 100, if no limit is configured
-        if ($limit === null) {
+        if (null === $limit) {
             $limit = 100;
         }
         $limit = (int) $limit;
@@ -167,11 +166,9 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Marks the message as transported
+     * Marks the message as transported.
      *
      * @param \DMK\Mklog\Domain\Model\DevlogEntryModel $message
-     *
-     * @return void
      */
     protected function markAsTransported(
         \DMK\Mklog\Domain\Model\DevlogEntryModel $message
@@ -185,13 +182,13 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Creates the transport
+     * Creates the transport.
      *
      * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
     protected function getTransport()
     {
-        if ($this->transport === null) {
+        if (null === $this->transport) {
             $this->transport = \DMK\Mklog\Factory::getTransport(
                 $this->getOptions()->getTransport()
             );
@@ -201,19 +198,19 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Creates the transport id
+     * Creates the transport id.
      *
      * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
     protected function getTransportId()
     {
-        return $this->getTransport()->getIdentifier() . ':' . $this->getTaskUid();
+        return $this->getTransport()->getIdentifier().':'.$this->getTaskUid();
     }
 
     /**
-     * This method returns the destination mail address as additional information
+     * This method returns the destination mail address as additional information.
      *
-     * @return  string  Information to display
+     * @return string Information to display
      */
     public function getAdditionalInformation()
     {
@@ -227,9 +224,9 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
 
         foreach ($this->getOptions() as $key => $value) {
             $key = \Tx_Rnbase_Utility_Strings::underscoredToLowerCamelCase($key);
-            $options[] = ucfirst($key) . ': ' . $value;
+            $options[] = ucfirst($key).': '.$value;
         }
 
-        return 'Options: ' . implode('; ', $options);
+        return 'Options: '.implode('; ', $options);
     }
 }

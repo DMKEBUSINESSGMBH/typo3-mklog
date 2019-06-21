@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Backend;
 
 /***************************************************************
@@ -30,18 +31,14 @@ namespace DMK\Mklog\Backend;
 \tx_rnbase::load('tx_rnbase_mod_BaseModule');
 
 /**
- * MK Log backend module
+ * MK Log backend module.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
 class ModuleBackend extends \tx_rnbase_mod_BaseModule
 {
     /**
      * Initializes the backend module by setting internal variables, initializing the menu.
-     *
-     * @return void
      */
     public function init()
     {
@@ -50,7 +47,7 @@ class ModuleBackend extends \tx_rnbase_mod_BaseModule
     }
 
     /**
-     * Method to get the extension key
+     * Method to get the extension key.
      *
      * @return string Extension key
      */

@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog\Transport;
 
 /***************************************************************
@@ -24,16 +25,14 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Utility\SeverityUtility;
 
 \tx_rnbase::load('DMK\\Mklog\\WatchDog\\Transport\\AbstractTransport');
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
 /**
- * MK Log watchdog mail transporter
+ * MK Log watchdog mail transporter.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -41,21 +40,21 @@ use \DMK\Mklog\Utility\SeverityUtility;
 class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
 {
     /**
-     * Messages to send
+     * Messages to send.
      *
      * @var array
      */
     private $messages = array();
 
     /**
-     * Unique message counts
+     * Unique message counts.
      *
      * @var array
      */
     private $uniqs = array();
 
     /**
-     * An unique identifier for the transport
+     * An unique identifier for the transport.
      *
      * @return string
      */
@@ -65,11 +64,9 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
     }
 
     /**
-     * Initializes the Transport
+     * Initializes the Transport.
      *
      * @param \Tx_Rnbase_Domain_Model_Data $options
-     *
-     * @return void
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
@@ -89,11 +86,9 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
     }
 
     /**
-     * Publishes a message by the provider
+     * Publishes a message by the provider.
      *
      * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-     *
-     * @return void
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
@@ -102,11 +97,9 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
     }
 
     /**
-     * Adds a Message to send
+     * Adds a Message to send.
      *
      * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-     *
-     * @return void
      */
     protected function addMessage(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
@@ -114,15 +107,15 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
         $level = $message->getLevel();
 
         // build message unique key
-        $key = md5($message->getFacility() . $message->getShortMessage());
+        $key = md5($message->getFacility().$message->getShortMessage());
 
         // set the summary count
-        $this->uniqs[$level]['summary']++;
+        ++$this->uniqs[$level]['summary'];
         // set the unique count
         if (!isset($this->uniqs[$level][$key])) {
             $this->uniqs[$level][$key] = 0;
         }
-        $this->uniqs[$level][$key]++;
+        ++$this->uniqs[$level][$key];
 
         // store the unique message
         $this->messages[$level][$key] = $message;
@@ -145,20 +138,18 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
 
     /**
      * Deinitializes the Transport.
-     * For this transport we send the Mail
-     *
-     * @return void
+     * For this transport we send the Mail.
      */
     public function shutdown()
     {
         // no messages? nothing todo!
-        if ($this->getMailCount() === 0) {
+        if (0 === $this->getMailCount()) {
             return;
         }
 
         $content = '';
-        $content .= 'This is an automatic email from TYPO3. Don\'t answer!' . LF . LF;
-        $content .= '== Developer Log summary' . LF . LF;
+        $content .= 'This is an automatic email from TYPO3. Don\'t answer!'.LF.LF;
+        $content .= '== Developer Log summary'.LF.LF;
 
         // create summary
         foreach ($this->uniqs as $level => $messages) {
@@ -166,12 +157,12 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
                 '%3$sLevel %1$s : %2$d items found',
                 $level,
                 $messages['summary'],
-                $messages['summary'] === 0 ? '  ' : '> '
+                0 === $messages['summary'] ? '  ' : '> '
             );
             $content .= LF;
         }
 
-        $content .= LF . LF . '== Latest entries by log level' . LF;
+        $content .= LF.LF.'== Latest entries by log level'.LF;
 
         foreach ($this->messages as $level => $messages) {
             // skip if there are no messages for this level
@@ -179,11 +170,11 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
                 continue;
             }
             $content .= sprintf(
-                LF . '=== Level %s (%d):',
+                LF.'=== Level %s (%d):',
                 $level,
                 $this->uniqs[$level]['summary']
             );
-            $content .= LF . LF;
+            $content .= LF.LF;
 
             /* @var $message \DMK\Mklog\WatchDog\Message\InterfaceMessage */
             foreach ($messages as $key => $message) {
@@ -195,7 +186,7 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
                     $message->getShortMessage(),
                     $this->uniqs[$level][$key]
                 );
-                $content .= LF . LF;
+                $content .= LF.LF;
             }
         }
 
@@ -204,11 +195,9 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
     }
 
     /**
-     * Sends the devlog content per mail
+     * Sends the devlog content per mail.
      *
      * @param string $content
-     *
-     * @return void
      */
     protected function sendMail(
         $content
@@ -216,7 +205,7 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
         /* @var $mail \tx_rnbase_util_Mail */
         $mail = \tx_rnbase::makeInstance('tx_rnbase_util_Mail');
         $mail->setSubject(
-            'DevLog WatchDog on site ' .
+            'DevLog WatchDog on site '.
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
         );
         $mail->setFrom(\DMK\Mklog\Factory::getConfigUtility()->getGlobalMailFrom());

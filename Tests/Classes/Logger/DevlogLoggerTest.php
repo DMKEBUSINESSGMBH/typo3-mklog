@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Logger;
 
 /***************************************************************
@@ -38,21 +39,17 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 }
 
 /**
- * Devlog Logger test
+ * Devlog Logger test.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
 class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-
     /**
-     * Test the isLoggingEnabled method
+     * Test the isLoggingEnabled method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -71,9 +68,8 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the isLoggingEnabled method
+     * Test the isLoggingEnabled method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -98,9 +94,8 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the isLoggingEnabled method
+     * Test the isLoggingEnabled method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -111,9 +106,8 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the storeLog method
+     * Test the storeLog method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -141,7 +135,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->with(
                 $this->callback(
                     function ($tablename) {
-                        return $tablename === 'tx_mklog_devlog_entry';
+                        return 'tx_mklog_devlog_entry' === $tablename;
                     }
                 ),
                 $this->callback(
@@ -172,7 +166,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                 )
             );
 
-
         $this->callInaccessibleMethod(
             array($logger, 'storeLog'),
             array($msg, $extKey, $severity, $extraData)
@@ -180,7 +173,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Returns the logger mock
+     * Returns the logger mock.
      *
      * @param array $methods
      *

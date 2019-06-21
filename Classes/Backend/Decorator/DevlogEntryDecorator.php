@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Backend\Decorator;
 
 /***************************************************************
@@ -24,16 +25,14 @@ namespace DMK\Mklog\Backend\Decorator;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \DMK\Mklog\Domain\Model\DevlogEntryModel;
-use \DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Domain\Model\DevlogEntryModel;
+use DMK\Mklog\Utility\SeverityUtility;
 
 \tx_rnbase::load('Tx_Rnbase_Backend_Decorator_BaseDecorator');
 
 /**
- * Devlog Entry decorator
+ * Devlog Entry decorator.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
 class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
@@ -43,9 +42,9 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
      * A childclass can extend this and wrap each value in a spac.
      * For example a strikethrough for disabled entries.
      *
-     * @param string $formatedValue
+     * @param string                                                 $formatedValue
      * @param \Tx_Rnbase_Domain_Model_DataInterface|DevlogEntryModel $entry
-     * @param string $columnName
+     * @param string                                                 $columnName
      *
      * @return string
      */
@@ -73,12 +72,12 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
         DevlogEntryModel $entry
     ) {
         return sprintf(
-            '<button ' .
-                'type="submit" ' .
-                'class="button button-runid" ' .
-                'name="SET[mklogDevlogEntryRunid]" ' .
-                'value="%1$s" ' .
-                'title="Filter this run"' .
+            '<button '.
+                'type="submit" '.
+                'class="button button-runid" '.
+                'name="SET[mklogDevlogEntryRunid]" '.
+                'value="%1$s" '.
+                'title="Filter this run"'.
             '>%2$s</button>',
             $entry->getRunId(),
             strftime('%d.%m.%y %H:%M:%S', $entry->getProperty('crdate'))
@@ -125,12 +124,12 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
         }
 
         return sprintf(
-            '<button ' .
-                'type="submit" ' .
-                'class="button button-severity severity severity-%2$s" ' .
-                'name="SET[mklogDevlogEntrySeverity]" ' .
-                'value="%1$s" ' .
-                'title="Filter %3$s (%1$s)"' .
+            '<button '.
+                'type="submit" '.
+                'class="button button-severity severity severity-%2$s" '.
+                'name="SET[mklogDevlogEntrySeverity]" '.
+                'value="%1$s" '.
+                'title="Filter %3$s (%1$s)"'.
             '>%4$s<span>%3$s</span></button>',
             $severityId,
             strtolower($severityName),
@@ -150,16 +149,17 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
         DevlogEntryModel $entry
     ) {
         return sprintf(
-            '<button ' .
-                'type="submit" ' .
-                'class="button button-extkey severity-%1$s" ' .
-                'name="SET[mklogDevlogEntryExtKey]" ' .
-                'value="%1$s" ' .
-                'title="Filter %1$s"' .
+            '<button '.
+                'type="submit" '.
+                'class="button button-extkey severity-%1$s" '.
+                'name="SET[mklogDevlogEntryExtKey]" '.
+                'value="%1$s" '.
+                'title="Filter %1$s"'.
             '>%1$s</button>',
             $entry->getExtKey()
         );
     }
+
     /**
      * Renders the message column.
      *
@@ -179,6 +179,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
             strlen($message) > 64 ? ' ...' : ''
         );
     }
+
     /**
      * Renders the extra_data column.
      *
@@ -196,10 +197,10 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
         }
 
         return sprintf(
-            '<a id="log-togggle-%1$s-link" ' .
-                'href="#log-togggle-%1$s-data" ' .
-                'onclick="DMK.DevLog.toggleData(%1$s);"' .
-                '>+ show data</a>' .
+            '<a id="log-togggle-%1$s-link" '.
+                'href="#log-togggle-%1$s-data" '.
+                'onclick="DMK.DevLog.toggleData(%1$s);"'.
+                '>+ show data</a>'.
                 '<pre id="log-togggle-%1$s-data" style="display:none;">%2$s</pre>',
             $entry->getProperty('uid'),
             htmlspecialchars($extraData)

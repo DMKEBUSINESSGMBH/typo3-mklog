@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog\Message;
 
 /***************************************************************
@@ -25,10 +26,8 @@ namespace DMK\Mklog\WatchDog\Message;
  ***************************************************************/
 
 /**
- * MK Log watchdog message iterface
+ * MK Log watchdog message iterface.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *        GNU Lesser General Public License, version 3 or later
@@ -36,49 +35,49 @@ namespace DMK\Mklog\WatchDog\Message;
 interface InterfaceMessage
 {
     /**
-     * Returns the short text of the message
+     * Returns the short text of the message.
      *
      * @return string
      */
     public function getShortMessage();
 
     /**
-     * Returns the full text of the message
+     * Returns the full text of the message.
      *
      * @return string
      */
     public function getFullMessage();
 
     /**
-     * Returns the timestamp of the message as a datetime object
+     * Returns the timestamp of the message as a datetime object.
      *
      * @return \DateTime
      */
     public function getTimestamp();
 
     /**
-     * Returns the log level of the message as a Psr\Log\Level-constant
+     * Returns the log level of the message as a Psr\Log\Level-constant.
      *
      * @return string
      */
     public function getLevel();
 
     /**
-     * Returns the facility of the message
+     * Returns the facility of the message.
      *
      * @return string
      */
     public function getFacility();
 
     /**
-     * Returns the facility of the message
+     * Returns the facility of the message.
      *
      * @return string
      */
     public function getHost();
 
     /**
-     * Returns the value of the additional field of the message
+     * Returns the value of the additional field of the message.
      *
      * @return array
      */

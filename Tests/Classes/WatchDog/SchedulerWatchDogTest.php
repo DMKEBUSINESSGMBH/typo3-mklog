@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Logger;
 
 /***************************************************************
@@ -38,10 +39,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 }
 
 /**
- * Scheduler WatchDog test
+ * Scheduler WatchDog test.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -49,9 +48,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
-     * Test the execute method
+     * Test the execute method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -86,10 +84,10 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
 
         $task->execute();
     }
+
     /**
-     * Test the execute method
+     * Test the execute method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -100,7 +98,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Returns the logger mock
+     * Returns the logger mock.
      *
      * @param array $methods
      *

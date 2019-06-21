@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Utility;
 
 /***************************************************************
@@ -27,12 +28,10 @@ namespace DMK\Mklog\Utility;
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
 /**
- * MK Log Severity Utility
+ * MK Log Severity Utility.
  *
  * Some code is taken from \TYPO3\CMS\Core\Log\LogLevel for backward compatibility
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Ingo Renner <ingo@typo3.org>
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -41,7 +40,7 @@ namespace DMK\Mklog\Utility;
 class DataConverterUtility implements \Tx_Rnbase_Interface_Singleton
 {
     /**
-     * Converts data into a string
+     * Converts data into a string.
      *
      * @param mixed $data
      *
@@ -53,7 +52,7 @@ class DataConverterUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Decodes an extra data string into an array
+     * Decodes an extra data string into an array.
      *
      * @param string $data
      *
@@ -66,7 +65,7 @@ class DataConverterUtility implements \Tx_Rnbase_Interface_Singleton
         }
 
         // @TODO: what todo with non json data?
-        if ($data{0} !== '{') {
+        if ('{' !== $data[0]) {
             return ['data' => $data];
         }
 

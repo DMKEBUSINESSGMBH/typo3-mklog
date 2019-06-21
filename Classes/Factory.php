@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog;
 
 /***************************************************************
@@ -25,10 +26,8 @@ namespace DMK\Mklog;
  ***************************************************************/
 
 /**
- * MK Log Factory
+ * MK Log Factory.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -36,7 +35,7 @@ namespace DMK\Mklog;
 final class Factory
 {
     /**
-     * Returns a storage
+     * Returns a storage.
      *
      * @return Tx_Rnbase_Domain_Model_Data
      */
@@ -44,7 +43,7 @@ final class Factory
     {
         static $storage = null;
 
-        if ($storage === null) {
+        if (null === $storage) {
             $storage = \tx_rnbase::makeInstance(
                 'Tx_Rnbase_Domain_Model_Data'
             );
@@ -54,7 +53,7 @@ final class Factory
     }
 
     /**
-     * Returns a cache
+     * Returns a cache.
      *
      * @return tx_rnbase_cache_ICache
      */
@@ -66,7 +65,7 @@ final class Factory
     }
 
     /**
-     * Returns the config
+     * Returns the config.
      *
      * @return \DMK\Mklog\Utility\ConfigUtility
      */
@@ -85,7 +84,7 @@ final class Factory
     }
 
     /**
-     * Returns the data converter
+     * Returns the data converter.
      *
      * @return \DMK\Mklog\Utility\DataConverterUtility
      */
@@ -104,7 +103,7 @@ final class Factory
     }
 
     /**
-     * Returns the devlog entry repository
+     * Returns the devlog entry repository.
      *
      * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
      */
@@ -116,7 +115,7 @@ final class Factory
     }
 
     /**
-     * Creates a transport based on the classname
+     * Creates a transport based on the classname.
      *
      * @param string $class
      *
@@ -128,7 +127,7 @@ final class Factory
 
         if (!$transport instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
             throw new \Exception(
-                'The Transport "' . get_class($this->transport) . '" ' .
+                'The Transport "'.get_class($this->transport).'" '.
                 'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"'
             );
         }

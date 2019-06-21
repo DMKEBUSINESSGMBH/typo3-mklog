@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Logger;
 
 /***************************************************************
@@ -24,13 +25,11 @@ namespace DMK\Mklog\Logger;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Utility\SeverityUtility;
 
 /**
- * Devlog logger
+ * Devlog logger.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -38,7 +37,7 @@ use \DMK\Mklog\Utility\SeverityUtility;
 class GelfLogger extends AbstractLogger
 {
     /**
-     * Writes the log record
+     * Writes the log record.
      *
      * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
      *
@@ -62,11 +61,9 @@ class GelfLogger extends AbstractLogger
     }
 
     /**
-     * Old devlog Hook from the old TYPO3 API
+     * Old devlog Hook from the old TYPO3 API.
      *
      * @param array $params
-     *
-     * @return void
      */
     public function sysLogHook(array $params)
     {
@@ -118,14 +115,12 @@ class GelfLogger extends AbstractLogger
     }
 
     /**
-     * Stores a devlog entry
+     * Stores a devlog entry.
      *
      * @param string $message
      * @param string $extension
-     * @param int $severity
-     * @param mixed $extraData
-     *
-     * @return void
+     * @param int    $severity
+     * @param mixed  $extraData
      */
     protected function storeLog($message, $extension, $severity, $extraData)
     {
@@ -169,7 +164,7 @@ class GelfLogger extends AbstractLogger
     }
 
     /**
-     * Creates the transport
+     * Creates the transport.
      *
      * @param \DMK\Mklog\Utility\ConfigUtility $config
      *

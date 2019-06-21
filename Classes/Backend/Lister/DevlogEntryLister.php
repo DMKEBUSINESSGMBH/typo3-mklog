@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Backend\Lister;
 
 /***************************************************************
@@ -24,21 +25,17 @@ namespace DMK\Mklog\Backend\Lister;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \DMK\Mklog\Backend\Decorator\DevlogEntryDecorator;
-
 \tx_rnbase::load('Tx_Rnbase_Backend_Lister_AbstractLister');
 
 /**
- * Devlog Entry lister
+ * Devlog Entry lister.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
 class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
 {
     /**
-     * The devlog entry repository
+     * The devlog entry repository.
      *
      * @return Tx_Rnbase_Domain_Repository_InterfaceSearch
      */
@@ -59,7 +56,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * Liefert die Spalten, in denen gesucht werden soll
+     * Liefert die Spalten, in denen gesucht werden soll.
      *
      * @return array
      */
@@ -73,7 +70,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * Initializes the filter array
+     * Initializes the filter array.
      *
      * @return Tx_Rnbase_Backend_Lister_AbstractLister
      */
@@ -84,28 +81,28 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $filter = $this->getFilter();
 
         $filter->setRunid(
-            $this->getModuleValue($this->getListerId() . 'Runid')
+            $this->getModuleValue($this->getListerId().'Runid')
         );
 
         $filter->setSeverity(
-            $this->getModuleValue($this->getListerId() . 'Severity')
+            $this->getModuleValue($this->getListerId().'Severity')
         );
         // remove filter value, if empty
-        if ($filter->getSeverity() === '') {
+        if ('' === $filter->getSeverity()) {
             $filter->unsSeverity();
         }
 
         $filter->setExtKey(
-            $this->getModuleValue($this->getListerId() . 'ExtKey')
+            $this->getModuleValue($this->getListerId().'ExtKey')
         );
 
         return $this;
     }
 
     /**
-     * Returns the complete search form
+     * Returns the complete search form.
      *
-     * @return  string
+     * @return string
      */
     public function getSearchFormData()
     {
@@ -119,7 +116,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $data['runid'] = array(
             'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
                 $this->getOptions()->getPid(),
-                'SET[' . $this->getListerId() . 'Runid]',
+                'SET['.$this->getListerId().'Runid]',
                 $filter->getRunid(),
                 $this->getLatestRuns()
             ),
@@ -129,7 +126,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $data['severity'] = array(
             'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
                 $this->getOptions()->getPid(),
-                'SET[' . $this->getListerId() . 'Severity]',
+                'SET['.$this->getListerId().'Severity]',
                 $filter->getSeverity(),
                 $this->getSeverityLevels()
             ),
@@ -139,7 +136,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $data['extkeys'] = array(
             'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
                 $this->getOptions()->getPid(),
-                'SET[' . $this->getListerId() . 'ExtKey]',
+                'SET['.$this->getListerId().'ExtKey]',
                 $filter->getExtKey(),
                 $this->getLoggedExtensions()
             ),
@@ -152,7 +149,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * Returns the latest log runs
+     * Returns the latest log runs.
      *
      * @return array
      */
@@ -171,7 +168,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * Returns the severity levels
+     * Returns the severity levels.
      *
      * @return array
      */
@@ -180,14 +177,14 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $items = array();
         $items[''] = '';
         foreach (\DMK\Mklog\Utility\SeverityUtility::getItems() as $id => $name) {
-            $items[$id] = $id . ' - ' . ucfirst(strtolower($name));
+            $items[$id] = $id.' - '.ucfirst(strtolower($name));
         }
 
         return $items;
     }
 
     /**
-     * Returns all extension keys who has logged into devlog
+     * Returns all extension keys who has logged into devlog.
      *
      * @return array
      */
@@ -207,12 +204,10 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * Initializes the fields and options for the repository search
+     * Initializes the fields and options for the repository search.
      *
      * @param array $fields
      * @param array $options
-     *
-     * @return void
      */
     protected function prepareFieldsAndOptions(
         array &$fields,
@@ -234,7 +229,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
             $fields['DEVLOGENTRY.run_id'][OP_EQ] = $filter->getRunid();
         }
 
-        if ($filter->getSeverity() !== null) {
+        if (null !== $filter->getSeverity()) {
             $fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $filter->getSeverity();
         }
 
@@ -244,7 +239,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * The decorator to render the rows
+     * The decorator to render the rows.
      *
      * @return string
      */

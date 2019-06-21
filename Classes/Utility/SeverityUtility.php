@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Utility;
 
 /***************************************************************
@@ -25,12 +26,10 @@ namespace DMK\Mklog\Utility;
  ***************************************************************/
 
 /**
- * MK Log Severity Utility
+ * MK Log Severity Utility.
  *
  * Some code is taken from \TYPO3\CMS\Core\Log\LogLevel for backward compatibility
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Ingo Renner <ingo@typo3.org>
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -39,7 +38,7 @@ namespace DMK\Mklog\Utility;
 final class SeverityUtility
 {
     /**
-     * Emergency: system is unusable
+     * Emergency: system is unusable.
      *
      * You'd likely not be able to reach the system. You better have an SLA in
      * place when this happens.
@@ -48,7 +47,7 @@ final class SeverityUtility
      */
     const EMERGENCY = 0;
     /**
-     * Alert: action must be taken immediately
+     * Alert: action must be taken immediately.
      *
      * Example: Entire website down, database unavailable, etc.
      *
@@ -56,7 +55,7 @@ final class SeverityUtility
      */
     const ALERT = 1;
     /**
-     * Critical: critical conditions
+     * Critical: critical conditions.
      *
      * Example: unexpected exception.
      *
@@ -64,7 +63,7 @@ final class SeverityUtility
      */
     const CRITICAL = 2;
     /**
-     * Error: error conditions
+     * Error: error conditions.
      *
      * Example: Runtime error.
      *
@@ -72,7 +71,7 @@ final class SeverityUtility
      */
     const ERROR = 3;
     /**
-     * Warning: warning conditions
+     * Warning: warning conditions.
      *
      * Examples: Use of deprecated APIs, undesirable things that are not
      * necessarily wrong.
@@ -81,7 +80,7 @@ final class SeverityUtility
      */
     const WARNING = 4;
     /**
-     * Notice: normal but significant condition
+     * Notice: normal but significant condition.
      *
      * Example: things you should have a look at, nothing to worry about though.
      *
@@ -89,7 +88,7 @@ final class SeverityUtility
      */
     const NOTICE = 5;
     /**
-     * Informational: informational messages
+     * Informational: informational messages.
      *
      * Examples: User logs in, SQL logs.
      *
@@ -97,7 +96,7 @@ final class SeverityUtility
      */
     const INFO = 6;
     /**
-     * Debug: debug-level messages
+     * Debug: debug-level messages.
      *
      * Example: Detailed status information.
      *
@@ -110,7 +109,7 @@ final class SeverityUtility
      *
      * @var array
      */
-    protected static $levels = array(
+    private static $levels = array(
         self::EMERGENCY => 'EMERGENCY',
         self::ALERT => 'ALERT',
         self::CRITICAL => 'CRITICAL',
@@ -118,15 +117,15 @@ final class SeverityUtility
         self::WARNING => 'WARNING',
         self::NOTICE => 'NOTICE',
         self::INFO => 'INFO',
-        self::DEBUG => 'DEBUG'
+        self::DEBUG => 'DEBUG',
     );
 
     /**
      * Resolves the name of a log level.
      *
-     * @param int $level Log level.
+     * @param int $level log level
      *
-     * @return string Log level name.
+     * @return string log level name
      */
     public static function getName($level)
     {
@@ -134,11 +133,11 @@ final class SeverityUtility
     }
 
     /**
-     * Returns a log level as a Psr\Log\Level-constant
+     * Returns a log level as a Psr\Log\Level-constant.
      *
-     * @param int $level Log level.
+     * @param int $level log level
      *
-     * @return string Log level name.
+     * @return string log level name
      */
     public static function getPsrLevelConstant($level)
     {
@@ -163,7 +162,7 @@ final class SeverityUtility
     }
 
     /**
-     * Returns all levels as array
+     * Returns all levels as array.
      *
      * @return array
      */
@@ -173,7 +172,7 @@ final class SeverityUtility
     }
 
     /**
-     * Returns all levels as array
+     * Returns all levels as array.
      *
      * @return array
      */

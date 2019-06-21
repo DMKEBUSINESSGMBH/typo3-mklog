@@ -22,13 +22,11 @@
  ***************************************************************/
 
 /**
- * Tx_Mklog_Utility_Devlog
+ * Tx_Mklog_Utility_Devlog.
  *
  * Achtung, diese KLasse ist ausschließlich für die tx_devlog Extension,
  * nicht für das interne devlog!
  *
- * @package         TYPO3
- * @subpackage      mklog
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
@@ -36,7 +34,7 @@
 class Tx_Mklog_Utility_Devlog
 {
     /**
-     * Get devlog extension table name
+     * Get devlog extension table name.
      *
      * @return string
      */
@@ -46,7 +44,7 @@ class Tx_Mklog_Utility_Devlog
     }
 
     /**
-     * Get messagef field name
+     * Get messagef field name.
      *
      * @return string
      */
@@ -56,7 +54,7 @@ class Tx_Mklog_Utility_Devlog
     }
 
     /**
-     * Get extra data field name
+     * Get extra data field name.
      *
      * @return string
      */
@@ -66,7 +64,7 @@ class Tx_Mklog_Utility_Devlog
     }
 
     /**
-     * Get extra data as array
+     * Get extra data as array.
      *
      * @param string $extraData
      *
@@ -84,7 +82,7 @@ class Tx_Mklog_Utility_Devlog
     }
 
     /**
-     * Get value by devlog extension version
+     * Get value by devlog extension version.
      *
      * @param string $valueBeforeVersion3
      * @param string $valueSinceVersion3

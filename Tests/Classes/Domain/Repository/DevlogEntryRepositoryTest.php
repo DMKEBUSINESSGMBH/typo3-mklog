@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Domain\Repository;
 
 /***************************************************************
@@ -38,10 +39,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 }
 
 /**
- * Devlog entry repository test
+ * Devlog entry repository test.
  *
- * @package TYPO3
- * @subpackage Tx_Hpsplaner
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -51,7 +50,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getSearchClass method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -70,7 +68,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getEmptyModel method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -94,7 +91,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the prepareGenericSearcher method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -152,7 +148,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the prepareGenericSearcher method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -194,7 +189,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getLatestRunIds method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -272,7 +266,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getLoggedExtensions method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -349,7 +342,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the isTableAvailable method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -381,7 +373,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the optimize method.
      *
-     * @return void
      *
      * @group unit
      * @test

@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Utility;
 
 /***************************************************************
@@ -25,10 +26,8 @@ namespace DMK\Mklog\Utility;
  ***************************************************************/
 
 /**
- * MK Log composer util
+ * MK Log composer util.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -36,15 +35,13 @@ namespace DMK\Mklog\Utility;
 final class ComposerUtility
 {
     /**
-     * Preloads the composer with the build in dependencies
-     *
-     * @return void
+     * Preloads the composer with the build in dependencies.
      */
     public static function autoload()
     {
         static $loaded = false;
 
-        if ($loaded === true) {
+        if (true === $loaded) {
             return;
         }
         require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(

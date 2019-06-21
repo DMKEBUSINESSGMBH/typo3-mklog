@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog\Transport;
 
 /***************************************************************
@@ -28,10 +29,8 @@ namespace DMK\Mklog\WatchDog\Transport;
 \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
 
 /**
- * MK Log watchdog abstract transport
+ * MK Log watchdog abstract transport.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -39,14 +38,14 @@ namespace DMK\Mklog\WatchDog\Transport;
 abstract class AbstractTransport implements InterfaceTransport
 {
     /**
-     * Internal options storage
+     * Internal options storage.
      *
      * @var Tx_Rnbase_Domain_Model_Data
      */
     private $options = null;
 
     /**
-     * Returns a storage
+     * Returns a storage.
      *
      * @return Tx_Rnbase_Domain_Model_Data
      */
@@ -56,11 +55,9 @@ abstract class AbstractTransport implements InterfaceTransport
     }
 
     /**
-     * Initializes the Transport
+     * Initializes the Transport.
      *
      * @param \Tx_Rnbase_Domain_Model_Data $options
-     *
-     * @return void
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
@@ -69,9 +66,7 @@ abstract class AbstractTransport implements InterfaceTransport
     }
 
     /**
-     * Deinitializes the Transport
-     *
-     * @return void
+     * Deinitializes the Transport.
      */
     public function shutdown()
     {

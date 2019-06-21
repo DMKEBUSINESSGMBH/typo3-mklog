@@ -1,7 +1,5 @@
 <?php
 /**
- * @package tx_mklib
- * @subpackage tx_mklib_tests_util
  * @author Michael Wagner
  *
  *  Copyright notice
@@ -30,17 +28,14 @@ tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
 tx_rnbase::load('tx_rnbase_util_Typo3Classes');
 
 /**
- * Tx_Mklib_Database_ConnectionTest
+ * Tx_Mklib_Database_ConnectionTest.
  *
- * @package         TYPO3
- * @subpackage      mklog
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
 {
-
     /**
      * @group unit
      */
@@ -193,7 +188,6 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
             ->method('removeLogTablesFromTablesThatCanBeCopied')
             ->with($dataHandlerParent);
 
-
         $dataHandler->processCmdmap_preProcess('copy', 'pages', 123, array(), $dataHandlerParent);
     }
 
@@ -224,7 +218,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
                         'tt_content',
                         'sys_template',
                         $devLogTable,
-                        $mklogTable
+                        $mklogTable,
                     )
                 )
             );

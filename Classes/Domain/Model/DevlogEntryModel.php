@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Domain\Model;
 
 /***************************************************************
@@ -27,41 +28,32 @@ namespace DMK\Mklog\Domain\Model;
 \tx_rnbase::load('Tx_Rnbase_Domain_Model_Base');
 
 /**
- * Devlog entry Model
+ * Devlog entry Model.
  *
- * @method int getPid()
+ * @method int              getPid()
  * @method DevlogEntryModel setPid() setPid(int $pid)
- * @method bool hasPid()
- *
- * @method int getRunId()
+ * @method bool             hasPid()
+ * @method int              getRunId()
  * @method DevlogEntryModel setRunId() setRunId(int $runId)
- * @method bool hasRunId()
- *
- * @method string getExtKey()
+ * @method bool             hasRunId()
+ * @method string           getExtKey()
  * @method DevlogEntryModel setExtKey() setExtKey(string $extKey)
- * @method bool hasExtKey()
- *
+ * @method bool             hasExtKey()
  * @method DevlogEntryModel setHost() setHost(string $host)
- * @method bool hasHost()
- *
- * @method string getMessage()
+ * @method bool             hasHost()
+ * @method string           getMessage()
  * @method DevlogEntryModel setMessage() setMessage(string $message)
- * @method bool hasMessage()
- *
- * @method int getSeverity()
+ * @method bool             hasMessage()
+ * @method int              getSeverity()
  * @method DevlogEntryModel setSeverity() setSeverity(int $severity)
- * @method bool hasSeverity()
- *
- * @method int getCruserId()
+ * @method bool             hasSeverity()
+ * @method int              getCruserId()
  * @method DevlogEntryModel setCruserId() setCruserId(int $cruserId)
- * @method bool hasCruserId()
- *
- * @method int getCrdate()
+ * @method bool             hasCruserId()
+ * @method int              getCrdate()
  * @method DevlogEntryModel setCrdate() setCrdate(int $crdate)
- * @method bool hasCrdate()
+ * @method bool             hasCrdate()
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -69,7 +61,7 @@ namespace DMK\Mklog\Domain\Model;
 class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
 {
     /**
-     * Override reset and dont load record after creating entry
+     * Override reset and dont load record after creating entry.
      *
      * @return Tx_Rnbase_Domain_Model_Base
      */
@@ -84,7 +76,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Liefert den aktuellen Tabellenname
+     * Liefert den aktuellen Tabellenname.
      *
      * @return Tabellenname als String
      */
@@ -94,7 +86,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * A list of scheduler task uids which has already transferred this message
+     * A list of scheduler task uids which has already transferred this message.
      *
      * @return array
      */
@@ -108,7 +100,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Adds a scheduler to the transport id list
+     * Adds a scheduler to the transport id list.
      *
      * @param string $transportId
      *
@@ -137,7 +129,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the extra data
+     * Returns the extra data.
      *
      * @return array
      */
@@ -149,7 +141,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Setter for extra data
+     * Setter for extra data.
      *
      * @param array $data
      *
@@ -165,7 +157,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the public values of extra data
+     * Returns the public values of extra data.
      *
      * @return mixed
      */
@@ -174,7 +166,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
         $data = array();
 
         foreach ($this->getExtraData() as $key => $value) {
-            if ($key{0} === '_' && $key{1} === '_') {
+            if ('_' === $key[0] && '_' === $key[1]) {
                 continue;
             }
             $data[$key] = $value;
@@ -184,7 +176,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the protected values of extra data
+     * Returns the protected values of extra data.
      *
      * @return mixed
      */
@@ -193,7 +185,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
         $data = array();
 
         foreach ($this->getExtraData() as $key => $value) {
-            if (!($key{0} === '_' && $key{1} === '_')) {
+            if (!('_' === $key[0] && '_' === $key[1])) {
                 continue;
             }
             $data[substr($key, 2)] = $value;
@@ -202,13 +194,12 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
         return $data;
     }
 
-
     /* *** ******************************************** *** *
      * *** \DMK\Mklog\WatchDog\Message\InterfaceMessage *** *
      * *** ******************************************** *** */
 
     /**
-     * Returns the short text of the message
+     * Returns the short text of the message.
      *
      * @return string
      */
@@ -218,7 +209,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the full text of the message
+     * Returns the full text of the message.
      *
      * @return string
      */
@@ -230,13 +221,13 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the timestamp of the message
+     * Returns the timestamp of the message.
      *
      * @return \DateTime
      */
     public function getTimestamp()
     {
-        $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate() . '.0216');
+        $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
         // createFromFormat bzw. UNIX Timestamps haben per default GMT als Zeitzone.
         // Daher müssen wir zusätzlich die aktuelle Zeitzone setzen.
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
@@ -245,7 +236,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the log level of the message as a Psr\Log\Level-constant
+     * Returns the log level of the message as a Psr\Log\Level-constant.
      *
      * @return string
      */
@@ -257,7 +248,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the facility of the message
+     * Returns the facility of the message.
      *
      * @return string
      */
@@ -267,7 +258,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the host of the message
+     * Returns the host of the message.
      *
      * @return string
      */
@@ -297,7 +288,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the value of the additional field of the message
+     * Returns the value of the additional field of the message.
      *
      * @return array
      */

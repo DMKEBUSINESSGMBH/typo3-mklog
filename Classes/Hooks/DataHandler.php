@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright notice
+ *  Copyright notice.
  *
  *  (c) 2016 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  *  All rights reserved
@@ -23,17 +23,14 @@
  */
 
 /**
- * Tx_Mklog_Hooks_DataHandler
+ * Tx_Mklog_Hooks_DataHandler.
  *
- * @package         TYPO3
- * @subpackage      mklog
  * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class Tx_Mklog_Hooks_DataHandler
 {
-
     /**
      * Wenn eine Seite gelöscht werden soll und darauf devlog Einträge liegen, dann können das nicht Admins
      * nur wenn sie Schreibrechte auf die devlog Tabelle haben. Dadurch werden beim kopieren von Seiten mit devlog
@@ -50,15 +47,13 @@ class Tx_Mklog_Hooks_DataHandler
      *
      * @param string $command
      * @param string $table
-     * @param int $id
-     * @param array $value
+     * @param int    $id
+     * @param array  $value
      * @param TYPO3\CMS\Core\DataHandling\DataHandler
-     *
-     * @return void
      */
     public function processCmdmap_preProcess($command, $table, $id, $value, $dataHandler)
     {
-        if ($table == 'pages') {
+        if ('pages' == $table) {
             switch ($command) {
                 case 'delete':
                     $this->deleteDevlogEntriesByPageId($id);
@@ -73,24 +68,20 @@ class Tx_Mklog_Hooks_DataHandler
 
     /**
      * @param int $pageId
-     *
-     * @return void
      */
     protected function deleteDevlogEntriesByPageId($pageId)
     {
         if (tx_rnbase_util_Extensions::isLoaded('devlog')) {
-            $this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = ' . intval($pageId));
+            $this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = '.intval($pageId));
         }
     }
 
     /**
      * @param int $pageId
-     *
-     * @return void
      */
     protected function deleteMklogEntriesByPageId($pageId)
     {
-        $this->getDatabaseConnection()->doDelete($this->getMklogTableName(), 'pid = ' . intval($pageId));
+        $this->getDatabaseConnection()->doDelete($this->getMklogTableName(), 'pid = '.intval($pageId));
     }
 
     /**
@@ -126,8 +117,6 @@ class Tx_Mklog_Hooks_DataHandler
      * auch nicht für Admins.
      *
      * @param TYPO3\CMS\Core\DataHandling\DataHandler
-     *
-     * @return void
      */
     protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler)
     {

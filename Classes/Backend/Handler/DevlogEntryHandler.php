@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Backend\Handler;
 
 /***************************************************************
@@ -27,10 +28,8 @@ namespace DMK\Mklog\Backend\Handler;
 \tx_rnbase::load('Tx_Rnbase_Backend_Handler_SearchHandler');
 
 /**
- * Devlog Entry handler
+ * Devlog Entry handler.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
 class DevlogEntryHandler extends \Tx_Rnbase_Backend_Handler_SearchHandler
@@ -57,7 +56,7 @@ class DevlogEntryHandler extends \Tx_Rnbase_Backend_Handler_SearchHandler
     }
 
     /**
-     * The class for the searcher
+     * The class for the searcher.
      *
      * @return string
      */
@@ -67,9 +66,7 @@ class DevlogEntryHandler extends \Tx_Rnbase_Backend_Handler_SearchHandler
     }
 
     /**
-     * Prepares the handler
-     *
-     * @return void
+     * Prepares the handler.
      */
     protected function prepare()
     {

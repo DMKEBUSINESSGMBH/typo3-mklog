@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Backend\Module;
 
 /***************************************************************
@@ -27,18 +28,16 @@ namespace DMK\Mklog\Backend\Module;
 \tx_rnbase::load('tx_rnbase_mod_ExtendedModFunc');
 
 /**
- * Devlog module
+ * Devlog module.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  */
 class DevlogModule extends \tx_rnbase_mod_ExtendedModFunc
 {
     /**
-     * Method getFuncId
+     * Method getFuncId.
      *
-     * @return  string
+     * @return string
      */
     protected function getFuncId()
     {
@@ -46,7 +45,7 @@ class DevlogModule extends \tx_rnbase_mod_ExtendedModFunc
     }
 
     /**
-     * Returns all sub handlers
+     * Returns all sub handlers.
      *
      * @return array
      */

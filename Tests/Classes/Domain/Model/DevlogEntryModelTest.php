@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Domain\Model;
 
 /***************************************************************
@@ -38,10 +39,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 }
 
 /**
- * Devlog entry model test
+ * Devlog entry model test.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -49,9 +48,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
-     * Test the getTableName method
+     * Test the getTableName method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -65,9 +63,8 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the getTransportIds method
+     * Test the getTransportIds method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -91,9 +88,8 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the getFullMessage method
+     * Test the getFullMessage method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -115,9 +111,8 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the getAdditionalData method
+     * Test the getAdditionalData method.
      *
-     * @return void
      *
      * @group unit
      * @test

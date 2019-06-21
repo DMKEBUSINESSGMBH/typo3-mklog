@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Utility;
 
 /***************************************************************
@@ -27,10 +28,8 @@ namespace DMK\Mklog\Utility;
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
 /**
- * MK Log Factory
+ * MK Log Factory.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -38,20 +37,20 @@ namespace DMK\Mklog\Utility;
 class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
 {
     /**
-     * Internal config storage
+     * Internal config storage.
      *
      * @var Tx_Rnbase_Domain_Model_Data
      */
     private $storage = null;
 
     /**
-     * Returns a storage
+     * Returns a storage.
      *
      * @return Tx_Rnbase_Domain_Model_Data
      */
     private function getStorage()
     {
-        if ($this->storage === null) {
+        if (null === $this->storage) {
             $this->storage = \tx_rnbase::makeInstance(
                 'Tx_Rnbase_Domain_Model_Data'
             );
@@ -79,7 +78,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * The current run id
+     * The current run id.
      *
      * @return int
      */
@@ -88,8 +87,8 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
         if (!$this->getStorage()->hasDevLogCurrentRunId()) {
             list($sec, $usec) = explode('.', (string) microtime(true));
             // miliseconds has to be exactly 6 sings long. otherwise the resulting number is too small.
-            $usec = $usec . str_repeat('0', 6 - strlen($usec));
-            $this->getStorage()->setDevLogCurrentRunId($sec . $usec);
+            $usec = $usec.str_repeat('0', 6 - strlen($usec));
+            $this->getStorage()->setDevLogCurrentRunId($sec.$usec);
         }
 
         return $this->getStorage()->getDevLogCurrentRunId();
@@ -116,7 +115,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Minimum log level to log
+     * Minimum log level to log.
      *
      * @return int
      */
@@ -126,7 +125,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Max rows to keep after cleanup
+     * Max rows to keep after cleanup.
      *
      * @return int
      */
@@ -136,7 +135,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Th extension keys to exclude from logging
+     * Th extension keys to exclude from logging.
      *
      * @return array
      */
@@ -163,7 +162,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Minimum log level for gelf logger
+     * Minimum log level for gelf logger.
      *
      * @return int
      */
@@ -173,7 +172,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Transport for gelf loging
+     * Transport for gelf loging.
      *
      * @return int
      */
@@ -183,7 +182,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * Credentials for gelf loging
+     * Credentials for gelf loging.
      *
      * @return int
      */
@@ -193,7 +192,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
-     * The global from mail address
+     * The global from mail address.
      *
      * @return array
      */

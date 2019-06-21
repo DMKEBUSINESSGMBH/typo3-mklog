@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Domain\Repository;
 
 /***************************************************************
@@ -27,10 +28,8 @@ namespace DMK\Mklog\Domain\Repository;
 \tx_rnbase::load('Tx_Rnbase_Domain_Repository_PersistenceRepository');
 
 /**
- * Devlog Entry Repository
+ * Devlog Entry Repository.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -38,9 +37,9 @@ namespace DMK\Mklog\Domain\Repository;
 class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
 {
     /**
-     * Liefert den Namen der Suchklasse
+     * Liefert den Namen der Suchklasse.
      *
-     * @return  string
+     * @return string
      */
     protected function getSearchClass()
     {
@@ -50,7 +49,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     /**
      * Liefert die Model Klasse.
      *
-     * @return  string
+     * @return string
      */
     protected function getWrapperClass()
     {
@@ -81,8 +80,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
 
     /**
      * Exists the table at the db?
-     *
-     * @return void
      */
     public function optimize()
     {
@@ -129,18 +126,16 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
             // delete all entries, older than the last exeution date!
             $this->getConnection()->doDelete(
                 $this->getEmptyModel()->getTableName(),
-                'run_id < ' . $lastExec
+                'run_id < '.$lastExec
             );
         }
     }
 
     /**
-     * Persists an model
+     * Persists an model.
      *
      * @param \Tx_Rnbase_Domain_Model_DomainInterface $model
-     * @param array|\Tx_Rnbase_Domain_Model_Data $options
-     *
-     * @return void
+     * @param array|\Tx_Rnbase_Domain_Model_Data      $options
      */
     public function persist(
         \Tx_Rnbase_Domain_Model_DomainInterface $model,
@@ -156,7 +151,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     }
 
     /**
-     * Returns the latest log runs
+     * Returns the latest log runs.
      *
      * @param int $limit
      *
@@ -179,7 +174,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     }
 
     /**
-     * Returns all extension keys who has logged into devlog
+     * Returns all extension keys who has logged into devlog.
      *
      * @return array
      */
@@ -198,9 +193,9 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     }
 
     /**
-     * Flattens an single select array
+     * Flattens an single select array.
      *
-     * @param array $items
+     * @param array  $items
      * @param string $field
      *
      * @return array
@@ -227,12 +222,10 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     }
 
     /**
-     * On default, return hidden and deleted fields in backend
+     * On default, return hidden and deleted fields in backend.
      *
      * @param array $fields
      * @param array $options
-     *
-     * @return void
      */
     protected function prepareFieldsAndOptions(
         array &$fields,
@@ -245,11 +238,9 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     }
 
     /**
-     * Prepares the simple generic searcher
+     * Prepares the simple generic searcher.
      *
      * @param array $options
-     *
-     * @return void
      */
     protected function prepareGenericSearcher(
         array &$options
@@ -269,9 +260,9 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
                 'wrapperclass' => get_class($model),
                 'alias' => array(
                     'DEVLOGENTRY' => array(
-                        'table' => $model->getTableName()
-                    )
-                )
+                        'table' => $model->getTableName(),
+                    ),
+                ),
             ),
             // searcher config overrides
             $options['searchdef']

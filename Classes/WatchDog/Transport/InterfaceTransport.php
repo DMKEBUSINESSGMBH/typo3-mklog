@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog\Transport;
 
 /***************************************************************
@@ -25,10 +26,8 @@ namespace DMK\Mklog\WatchDog\Transport;
  ***************************************************************/
 
 /**
- * MK Log watchdog transport interface
+ * MK Log watchdog transport interface.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -36,38 +35,32 @@ namespace DMK\Mklog\WatchDog\Transport;
 interface InterfaceTransport
 {
     /**
-     * An unique identifier for the transport
+     * An unique identifier for the transport.
      *
      * @return string
      */
     public function getIdentifier();
 
     /**
-     * Initializes the Transport
+     * Initializes the Transport.
      *
      * @param \Tx_Rnbase_Domain_Model_Data $options
-     *
-     * @return void
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
     );
 
     /**
-     * Publishes a message by the provider
+     * Publishes a message by the provider.
      *
      * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
-     *
-     * @return void
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
     );
 
     /**
-     * Deinitializes the Transport
-     *
-     * @return void
+     * Deinitializes the Transport.
      */
     public function shutdown();
 }

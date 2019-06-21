@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
 /***************************************************************
@@ -28,14 +29,12 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
 \tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
 
 /**
- * MK Log watchdog gelf transporter
+ * MK Log watchdog gelf transporter.
  *
  * All chunks MUST arrive within 5 seconds
  * or the server will discard all already arrived and still arriving chunks.
  * A message MUST NOT consist of more than 128 chunks.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -43,7 +42,7 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
 class UdpGelf extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
 {
     /**
-     * Creates the Transport
+     * Creates the Transport.
      *
      * @return \Gelf\Transport\AbstractTransport
      */

@@ -28,50 +28,46 @@ tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 tx_rnbase::load('Tx_Mklog_Utility_Devlog');
 
 /**
- * tx_mklog_scheduler_WatchDog
+ * tx_mklog_scheduler_WatchDog.
  *
- * @package         TYPO3
- * @subpackage      mklog
  * @author          René Nitzsche
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */
 class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
 {
-
     /**
-     * Email address(es) for notification mail
+     * Email address(es) for notification mail.
      *
-     * @var     string
+     * @var string
      */
     private $email;
 
-     /**
-      *
-      * @var int
-      */
+    /**
+     * @var int
+     */
     private $severity;
 
-     /**
-      * @var boolean
-      */
+    /**
+     * @var bool
+     */
     private $force;
 
-     /**
-      * @var boolean
-      */
+    /**
+     * @var bool
+     */
     private $dataVar;
 
-     /**
-      * @var boolean
-      */
+    /**
+     * @var bool
+     */
     private $groupEntries;
 
     /**
      * Function executed from the Scheduler.
-     * Sends an email
+     * Sends an email.
      *
-     * @return  bool
+     * @return bool
      */
     public function execute()
     {
@@ -91,7 +87,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
 
             //damit jede Nachricht nur einmal kommt, auch wenn sie mehrmals vorhanden ist
             if ($this->getGroupEntries()) {
-                $options['groupby'] = Tx_Mklog_Utility_Devlog::getMessageFieldName() . ',extkey';
+                $options['groupby'] = Tx_Mklog_Utility_Devlog::getMessageFieldName().',extkey';
                 // wir wollen aber wissen wie oft jede Nachricht vorhanden ist
                 $options['count'] = true;
             }
@@ -112,6 +108,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
 
     /**
      * @param int $taskId
+     *
      * @return DateTime
      */
     protected function getLastRunTime($taskId)
@@ -144,7 +141,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
         return tx_rnbase_util_DB::doUpdate(
             'tx_scheduler_task',
             'uid='.intval($taskId),
-            array('tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s')
+            array('tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s'),
             )
         );
     }
@@ -190,8 +187,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * @param string    $emails
-     * @return void
+     * @param string $emails
      */
     public function setEmailReceiver($emails)
     {
@@ -209,8 +205,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * @param int   $minimalSeverity
-     * @return void
+     * @param int $minimalSeverity
      */
     public function setMinimalSeverity($minimalSeverity)
     {
@@ -218,40 +213,37 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
     }
 
     /**
-     * Set force summary
+     * Set force summary.
      *
-     * @param int   $forceSummaryMail
-     * @return void
+     * @param int $forceSummaryMail
      */
     public function setForceSummaryMail($forceSummaryMail)
     {
-        $this->force = (boolean) $forceSummaryMail;
+        $this->force = (bool) $forceSummaryMail;
     }
 
     /**
-     * Set data var
+     * Set data var.
      *
      * @param array $includeDataVar
-     * @return void
      */
     public function setIncludeDataVar($includeDataVar)
     {
-        $this->dataVar = (boolean) $includeDataVar;
+        $this->dataVar = (bool) $includeDataVar;
     }
 
     /**
-     * @param bool   $groupEntries
-     * @return void
+     * @param bool $groupEntries
      */
     public function setGroupEntries($groupEntries)
     {
-        $this->groupEntries = (boolean) $groupEntries;
+        $this->groupEntries = (bool) $groupEntries;
     }
 
     /**
-     * This method returns the destination mail address as additional information
+     * This method returns the destination mail address as additional information.
      *
-     * @return  string  Information to display
+     * @return string Information to display
      */
     public function getAdditionalInformation()
     {
@@ -263,5 +255,5 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/scheduler/class.tx_mklog_scheduler_WatchDog.php']) {
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/scheduler/class.tx_mklog_scheduler_WatchDog.php']);
+    include_once $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mklog/scheduler/class.tx_mklog_scheduler_WatchDog.php'];
 }

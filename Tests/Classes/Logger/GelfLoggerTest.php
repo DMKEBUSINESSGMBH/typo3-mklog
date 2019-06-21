@@ -1,4 +1,5 @@
 <?php
+
 namespace DMK\Mklog\Logger;
 
 /***************************************************************
@@ -38,10 +39,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 }
 
 /**
- * Gelf Logger test
+ * Gelf Logger test.
  *
- * @package TYPO3
- * @subpackage DMK\Mklog
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -49,9 +48,8 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
 class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
-     * Test the writeLog method
+     * Test the writeLog method.
      *
-     * @return void
      *
      * @group unit
      * @test
@@ -64,7 +62,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Returns the logger mock
+     * Returns the logger mock.
      *
      * @return PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Logger\GelfLogger
      */
