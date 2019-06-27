@@ -1,6 +1,32 @@
 ChangeLog
 =========
 
+9.5.0
+------
+
+  * added support to TYPO3 9.5
+  
+3.1.6
+------
+
+  * cleanup send entries ordered by crdate
+  * some optimizations and fixes
+  
+3.1.3
+------
+
+  * gelf logger path in syslog config fixed
+  
+3.1.2
+------
+
+  * Bugfix in data converter utility, decode returns always an array now
+  
+3.1.1
+------
+
+  * Request url added to extra data
+
 3.1.0
 ------
 
