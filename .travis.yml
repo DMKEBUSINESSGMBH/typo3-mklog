@@ -61,7 +61,7 @@ before_script:
     else
       travis_wait 30 composer require typo3/cms="$TYPO3_VERSION"
     fi
-  - composer require -o digedag/rn-base="dev-migration_to_95"
+  - composer require -o digedag/rn-base="dev-master"
   # Restore composer.json
   - git checkout composer.json
   - export TYPO3_PATH_WEB=$PWD/.Build/Web

@@ -30,7 +30,7 @@ $EM_CONF[$_EXTKEY] = array(
     'version' => '3.1.6',
     'constraints' => array(
         'depends' => array(
-            'rn_base' => '1.4.0-',
+            'rn_base' => '1.10.0-',
             'typo3' => '6.2.14-9.5.99',
             'scheduler' => '',
         ),
