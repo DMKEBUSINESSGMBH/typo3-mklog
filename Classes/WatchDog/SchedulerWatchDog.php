@@ -38,18 +38,59 @@ namespace DMK\Mklog\WatchDog;
 class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
 {
     /**
+     * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
+     * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
+     *
+     * @var \Tx_Rnbase_Domain_Model_Data
+     *
+     * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
+     */
+    private $options = null;
+
+    /**
      * Internal options storage.
      *
      * @var \Tx_Rnbase_Domain_Model_Data
      */
-    protected $options = null;
+    protected $schedulerOptions = null;
+
+    /**
+     * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
+     * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
+     *
+     * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     *
+     * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
+     */
+    private $transport = null;
 
     /**
      * The current configured transport.
      *
      * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
-    protected $transport = null;
+    protected $messageTransport = null;
+
+    /**
+     * After the update to TYPO3 9 the private $options variable can't be serialized and therefore not saved in the
+     * database anymore as our parent implemented the __sleep() method to return the class variables which should be
+     * serialized/saved. So to keep the possibly saved $options we need to move them to $schedulerOptions if present.
+     * Otherwise the $options will be lost after the scheduler is executed/saved. Same for $transport.
+     */
+    public function __wakeup()
+    {
+        if (method_exists(parent::class, '__wakeup')) {
+            parent::__wakeup();
+        }
+
+        if ($this->options && !$this->schedulerOptions) {
+            $this->schedulerOptions = $this->options;
+        }
+
+        if ($this->transport && !$this->messageTransport) {
+            $this->messageTransport = $this->transport;
+        }
+    }
 
     /**
      * Returns a storage.
@@ -58,13 +99,13 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
      */
     public function getOptions()
     {
-        if (null === $this->options) {
-            $this->options = \tx_rnbase::makeInstance(
+        if (null === $this->schedulerOptions) {
+            $this->schedulerOptions = \tx_rnbase::makeInstance(
                 'Tx_Rnbase_Domain_Model_Data'
             );
         }
 
-        return $this->options;
+        return $this->schedulerOptions;
     }
 
     /**
@@ -188,13 +229,13 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
      */
     protected function getTransport()
     {
-        if (null === $this->transport) {
-            $this->transport = \DMK\Mklog\Factory::getTransport(
+        if (null === $this->messageTransport) {
+            $this->messageTransport = \DMK\Mklog\Factory::getTransport(
                 $this->getOptions()->getTransport()
             );
         }
 
-        return $this->transport;
+        return $this->messageTransport;
     }
 
     /**
