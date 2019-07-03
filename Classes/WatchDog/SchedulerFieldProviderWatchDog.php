@@ -42,7 +42,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @param array               $taskInfo     Reference to the array containing the info used in the add/edit form
      * @param object              $task         When editing, reference to the current task object. Null when adding.
-     * @param tx_scheduler_Module $parentObject Reference to the calling object (Scheduler's BE module)
+     * @param tx_scheduler_Module $schedulerModule Reference to the calling object (Scheduler's BE module)
      *
      * @return array Array Containg all the information pertaining to the additional fields
      *               The array is multidimensional, keyed to the task class name and each field's id
@@ -56,13 +56,15 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     protected function _getAdditionalFields(
         array &$taskInfo,
         $task,
-        $parentObject
+        $schedulerModule
     ) {
         // @codingStandardsIgnoreEnd
 
         // Initialize extra field value
         if (empty($taskInfo['mklog_watchdog_transport'])) {
-            if ('edit' == $parentObject->CMD) {
+            $action = \tx_rnbase_util_TYPO3::isTYPO90OrHigher() ?
+                $schedulerModule->getCurrentAction() : $schedulerModule->CMD;
+            if ('edit' == $action) {
                 // Editing a task, set to internal value if data was not submitted already
                 $taskInfo['mklog_watchdog_transport'] = $task->getOptions()->getTransport();
                 $taskInfo['mklog_watchdog_credentials'] = $task->getOptions()->getCredentials();
