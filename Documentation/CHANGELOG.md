@@ -4,7 +4,7 @@ ChangeLog
 9.5.1
 ------
 
-  * fixed compatibility issues for TYPO43 8.7 and 9.5. Please check that your schedulers have the correct configuration still set. If not you need to reconfigure them.
+  * fixed compatibility issues for TYPO3 8.7 and 9.5. Please check that your schedulers have the correct configuration still set. If not you need to reconfigure them.
   
 9.5.0
 ------
