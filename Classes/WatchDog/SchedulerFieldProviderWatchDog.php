@@ -233,8 +233,9 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
         $credentials = trim($credentials);
         if (empty($credentials)) {
             $flashMessageClass = \tx_rnbase_util_Typo3Classes::getFlashMessageClass();
-            $schedulerModule->addMessage(
+            \tx_rnbase_util_Misc::addFlashMessage(
                 'The credentials for the transport are required!',
+                '',
                 $flashMessageClass::ERROR
             );
 
