@@ -40,7 +40,7 @@
     "require": {
         "typo3/cms-core": "^6.2 || ^7.6 || ^8.7 || ^9.5",
         "typo3/cms-scheduler": "^6.2 || ^7.6 || ^8.7 || ^9.5",
-        "digedag/rn-base": ">=1.10.0"
+        "digedag/rn-base": ">=1.10.2"
     },
     "require-dev": {
         "namelesscoder/typo3-repository-client": "^1.2",
