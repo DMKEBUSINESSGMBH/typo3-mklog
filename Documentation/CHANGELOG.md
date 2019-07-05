@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+9.5.2
+------
+
+  * require rn_base >= v1.10.2 so logging works again
+  * use rn_base utility to add flash message in schedulers
+  
 9.5.1
 ------
 
