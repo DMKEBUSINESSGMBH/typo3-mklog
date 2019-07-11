@@ -2,6 +2,9 @@
 
 namespace DMK\Mklog\WatchDog;
 
+use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  * Copyright notice
  *
@@ -95,6 +98,35 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
     public function testExecuteWithMessages()
     {
         self::markTestIncomplete();
+    }
+
+    /**
+     * @group unit
+     * @test
+     */
+    public function testFindMessagesRespectsWhitelistAndBlacklist()
+    {
+        $expectedFields = [
+            'CUSTOM' => 'NOT FIND_IN_SET(\'\', `transport_ids`)',
+            'DEVLOGENTRY.ext_key' => [
+                'IN STR' => 'mklog',
+                'NOTIN STR' => 'rn_base',
+            ],
+        ];
+        $expectedOptions = [
+            'limit' => 100,
+            'orderby' => ['DEVLOGENTRY.crdate' => 'ASC'],
+        ];
+        $repository = $this->getAccessibleMock(DevlogEntryRepository::class, ['search']);
+        $repository->expects(self::once())
+            ->method('search')
+            ->with($expectedFields, $expectedOptions);
+        GeneralUtility::setSingletonInstance(DevlogEntryRepository::class, $repository);
+
+        $task = $this->getSchedulerMock(['getTransportId']);
+        $task->getOptions()->setExtensionWhitelist('mklog');
+        $task->getOptions()->setExtensionBlacklist('rn_base');
+        $this->callInaccessibleMethod($task, 'findMessages');
     }
 
     /**
