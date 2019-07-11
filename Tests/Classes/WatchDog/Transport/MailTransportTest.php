@@ -47,7 +47,7 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
+class MailTransportTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     protected function setUp()
     {
