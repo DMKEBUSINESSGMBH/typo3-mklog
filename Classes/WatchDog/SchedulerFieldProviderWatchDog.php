@@ -40,8 +40,8 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      * This method is used to define new fields for adding or editing a task
      * In this case, it adds an email field.
      *
-     * @param array               $taskInfo     Reference to the array containing the info used in the add/edit form
-     * @param object              $task         When editing, reference to the current task object. Null when adding.
+     * @param array               $taskInfo        Reference to the array containing the info used in the add/edit form
+     * @param object              $task            When editing, reference to the current task object. Null when adding.
      * @param tx_scheduler_Module $schedulerModule Reference to the calling object (Scheduler's BE module)
      *
      * @return array Array Containg all the information pertaining to the additional fields
@@ -70,12 +70,16 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
                 $taskInfo['mklog_watchdog_credentials'] = $task->getOptions()->getCredentials();
                 $taskInfo['mklog_watchdog_severity'] = $task->getOptions()->getSeverity();
                 $taskInfo['mklog_watchdog_messagelimit'] = $task->getOptions()->getMessageLimit();
+                $taskInfo['mklog_watchdog_extension_whitelist'] = $task->getOptions()->getExtensionWhitelist();
+                $taskInfo['mklog_watchdog_extension_blacklist'] = $task->getOptions()->getExtensionBlacklist();
             } else {
                 // Otherwise set an empty value, as it will not be used anyway
                 $taskInfo['mklog_watchdog_transport'] = '';
                 $taskInfo['mklog_watchdog_credentials'] = '';
                 $taskInfo['mklog_watchdog_severity'] = \DMK\Mklog\Utility\SeverityUtility::DEBUG;
                 $taskInfo['mklog_watchdog_messagelimit'] = '100';
+                $taskInfo['mklog_watchdog_extension_whitelist'] = '';
+                $taskInfo['mklog_watchdog_extension_blacklist'] = '';
             }
         }
 
@@ -86,6 +90,8 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
         $additionalFields['field_mklog_watchdog_credentials'] = $this->getCredentialsField($taskInfo);
         $additionalFields['field_mklog_watchdog_severity'] = $this->getSeverityField($taskInfo);
         $additionalFields['field_mklog_watchdog_messagelimit'] = $this->getMessageLimitField($taskInfo);
+        $additionalFields['field_mklog_watchdog_whitelist'] = $this->getExtensionWhitelistField($taskInfo);
+        $additionalFields['field_mklog_watchdog_blacklist'] = $this->getExtensionBlacklistField($taskInfo);
 
         return $additionalFields;
     }
@@ -140,19 +146,30 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @return array
      */
-    protected function getCredentialsField(
-        array &$taskInfo
-    ) {
+    protected function getCredentialsField(array &$taskInfo)
+    {
+        return $this->getInputField('credentials', 'Credentials', $taskInfo);
+    }
+
+    /**
+     * @param string $fieldName
+     * @param string $label
+     * @param array  $taskInfo
+     *
+     * @return array
+     */
+    protected function getInputField(string $fieldName, string $label, array &$taskInfo): array
+    {
         $fieldCode = '<input '.
             'type="text" '.
-            'name="tx_scheduler[mklog_watchdog_credentials]" '.
-            'id="field_mklog_watchdog_credentials" '.
-            'value="'.$taskInfo['mklog_watchdog_credentials'].'" '.
+            'name="tx_scheduler[mklog_watchdog_'.$fieldName.']" '.
+            'id="field_mklog_watchdog_'.$fieldName.'" '.
+            'value="'.$taskInfo['mklog_watchdog_'.$fieldName].'" '.
             'size="50" />';
 
         return array(
             'code' => $fieldCode,
-            'label' => 'Credentials',
+            'label' => $label,
         );
     }
 
@@ -197,20 +214,29 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @return array
      */
-    protected function getMessageLimitField(
-        array &$taskInfo
-    ) {
-        $fieldCode = '<input '.
-            'type="text" '.
-            'name="tx_scheduler[mklog_watchdog_messagelimit]" '.
-            'id="field_mklog_watchdog_messagelimit" '.
-            'value="'.$taskInfo['mklog_watchdog_messagelimit'].'" '.
-            'size="50" />';
+    protected function getMessageLimitField(array &$taskInfo)
+    {
+        return $this->getInputField('messagelimit', 'Message limit per run', $taskInfo);
+    }
 
-        return array(
-            'code' => $fieldCode,
-            'label' => 'Message limit per run',
-        );
+    /**
+     * @param array $taskInfo
+     *
+     * @return array
+     */
+    protected function getExtensionWhitelistField(array &$taskInfo): array
+    {
+        return $this->getInputField('extension_whitelist', 'Extension whitelist', $taskInfo);
+    }
+
+    /**
+     * @param array $taskInfo
+     *
+     * @return array
+     */
+    protected function getExtensionBlacklistField(array &$taskInfo): array
+    {
+        return $this->getInputField('extension_blacklist', 'Extension blacklist', $taskInfo);
     }
 
     /**
@@ -263,6 +289,8 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
             ->setCredentials($submittedData['mklog_watchdog_credentials'])
             ->setSeverity((int) $submittedData['mklog_watchdog_severity'])
             ->setMessageLimit((int) $submittedData['mklog_watchdog_messagelimit'])
+            ->setExtensionWhitelist($submittedData['mklog_watchdog_extension_whitelist'])
+            ->setExtensionBlacklist($submittedData['mklog_watchdog_extension_blacklist'])
         );
     }
 }

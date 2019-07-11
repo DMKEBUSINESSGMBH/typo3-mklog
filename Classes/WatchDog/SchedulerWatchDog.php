@@ -191,6 +191,14 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
             $fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
         }
 
+        if ($this->getOptions()->getExtensionWhitelist()) {
+            $fields['DEVLOGENTRY.ext_key'][OP_IN] = $this->getOptions()->getExtensionWhitelist();
+        }
+
+        if ($this->getOptions()->getExtensionBlacklist()) {
+            $fields['DEVLOGENTRY.ext_key'][OP_NOTIN] = $this->getOptions()->getExtensionBlacklist();
+        }
+
         $limit = $this->getOptions()->getMessageLimit();
         // fallback of 100, if no limit is configured
         if (null === $limit) {
