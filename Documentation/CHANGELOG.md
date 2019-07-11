@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+9.5.3
+------
+
+  * added option to configure extension white- and blacklist and custom mail subject in WatchDog scheduler
+  
 9.5.2
 ------
 
