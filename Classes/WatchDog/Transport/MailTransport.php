@@ -205,8 +205,10 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
         /* @var $mail \tx_rnbase_util_Mail */
         $mail = \tx_rnbase::makeInstance('tx_rnbase_util_Mail');
         $mail->setSubject(
-            'DevLog WatchDog on site '.
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
+            sprintf(
+                $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
+            )
         );
         $mail->setFrom(\DMK\Mklog\Factory::getConfigUtility()->getGlobalMailFrom());
         $mail->setTo($this->getOptions()->getCredentials());

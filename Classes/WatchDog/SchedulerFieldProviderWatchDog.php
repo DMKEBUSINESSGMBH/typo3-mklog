@@ -72,6 +72,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
                 $taskInfo['mklog_watchdog_messagelimit'] = $task->getOptions()->getMessageLimit();
                 $taskInfo['mklog_watchdog_extension_whitelist'] = $task->getOptions()->getExtensionWhitelist();
                 $taskInfo['mklog_watchdog_extension_blacklist'] = $task->getOptions()->getExtensionBlacklist();
+                $taskInfo['mklog_watchdog_mail_subject'] = $task->getOptions()->getMailSubject();
             } else {
                 // Otherwise set an empty value, as it will not be used anyway
                 $taskInfo['mklog_watchdog_transport'] = '';
@@ -80,6 +81,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
                 $taskInfo['mklog_watchdog_messagelimit'] = '100';
                 $taskInfo['mklog_watchdog_extension_whitelist'] = '';
                 $taskInfo['mklog_watchdog_extension_blacklist'] = '';
+                $taskInfo['mklog_watchdog_mail_subject'] = '';
             }
         }
 
@@ -92,6 +94,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
         $additionalFields['field_mklog_watchdog_messagelimit'] = $this->getMessageLimitField($taskInfo);
         $additionalFields['field_mklog_watchdog_whitelist'] = $this->getExtensionWhitelistField($taskInfo);
         $additionalFields['field_mklog_watchdog_blacklist'] = $this->getExtensionBlacklistField($taskInfo);
+        $additionalFields['field_mklog_watchdog_mail_subject'] = $this->getMailSubjectField($taskInfo);
 
         return $additionalFields;
     }
@@ -240,6 +243,16 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     }
 
     /**
+     * @param array $taskInfo
+     *
+     * @return array
+     */
+    protected function getMailSubjectField(array &$taskInfo): array
+    {
+        return $this->getInputField('mail_subject', 'Custom mail subject', $taskInfo);
+    }
+
+    /**
      * This method checks any additional data that is relevant to the specific task
      * If the task class is not relevant, the method is expected to return true.
      *
@@ -291,6 +304,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
             ->setMessageLimit((int) $submittedData['mklog_watchdog_messagelimit'])
             ->setExtensionWhitelist($submittedData['mklog_watchdog_extension_whitelist'])
             ->setExtensionBlacklist($submittedData['mklog_watchdog_extension_blacklist'])
+            ->setMailSubject($submittedData['mklog_watchdog_mail_subject'])
         );
     }
 }
