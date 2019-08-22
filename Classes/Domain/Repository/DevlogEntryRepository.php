@@ -110,7 +110,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
                     'what' => 'run_id',
                     'offset' => $maxRows,
                     'limit' => 1,
-                    'orderby' => array('DEVLOGENTRY.run_id' => 'ASC'),
+                    'orderby' => array('DEVLOGENTRY.run_id' => 'DESC'),
                 )
             );
 
