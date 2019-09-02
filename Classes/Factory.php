@@ -127,7 +127,7 @@ final class Factory
 
         if (!$transport instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
             throw new \Exception(
-                'The Transport "'.get_class($this->transport).'" '.
+                'The Transport "'.get_class($transport).'" '.
                 'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"'
             );
         }
