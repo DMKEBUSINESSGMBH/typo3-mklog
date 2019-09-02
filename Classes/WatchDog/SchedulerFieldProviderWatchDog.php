@@ -161,7 +161,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @return array
      */
-    protected function getInputField(string $fieldName, string $label, array &$taskInfo): array
+    protected function getInputField(string $fieldName, string $label, array &$taskInfo)
     {
         $fieldCode = '<input '.
             'type="text" '.
@@ -227,7 +227,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @return array
      */
-    protected function getExtensionWhitelistField(array &$taskInfo): array
+    protected function getExtensionWhitelistField(array &$taskInfo)
     {
         return $this->getInputField('extension_whitelist', 'Extension whitelist', $taskInfo);
     }
@@ -237,7 +237,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @return array
      */
-    protected function getExtensionBlacklistField(array &$taskInfo): array
+    protected function getExtensionBlacklistField(array &$taskInfo)
     {
         return $this->getInputField('extension_blacklist', 'Extension blacklist', $taskInfo);
     }
@@ -247,7 +247,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *
      * @return array
      */
-    protected function getMailSubjectField(array &$taskInfo): array
+    protected function getMailSubjectField(array &$taskInfo)
     {
         return $this->getInputField('mail_subject', 'Custom mail subject', $taskInfo);
     }
