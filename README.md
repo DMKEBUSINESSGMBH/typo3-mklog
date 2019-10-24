@@ -4,6 +4,7 @@ MK LOGGER
 [![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
 [![Total Downloads](https://img.shields.io/packagist/dt/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
 [![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mklog.svg?maxAge=3600&style=flat-square)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
+[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/DMKEBUSINESSGMBH/typo3-mklog/master?maxAge=3600&style=flat-square)](https://scrutinizer-ci.com/g/DMKEBUSINESSGMBH/typo3-mklog/?branch=master)
 [![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
 
 
