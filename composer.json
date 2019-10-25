@@ -34,7 +34,6 @@
         "issues": "https://github.com/DMKEBUSINESSGMBH/typo3-mklog"
     },
     "replace": {
-        "mklog": "self.version",
         "typo3-ter/mklog": "self.version"
     },
     "require": {
@@ -82,6 +81,7 @@
     "extra": {
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "mklog",
             "web-dir": ".Build/Web"
         }
     }
