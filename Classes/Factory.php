@@ -103,6 +103,28 @@ final class Factory
     }
 
     /**
+     * Returns the data converter.
+     *
+     * @return \DMK\Mklog\Utility\EntryDataParserUtility
+     */
+
+
+    /**
+     * Creates a devlog entry extra data parser instance.
+     *
+     * @param Domain\Model\DevlogEntryModel $devlogEntry
+     *
+     * @return \DMK\Mklog\Utility\EntryDataParserUtility
+     */
+    public static function getEntryDataParserUtility(\DMK\Mklog\Domain\Model\DevlogEntryModel $devlogEntry)
+    {
+        return \tx_rnbase::makeInstance(
+            'DMK\\Mklog\\Utility\\EntryDataParserUtility',
+            $devlogEntry
+        );
+    }
+
+    /**
      * Returns the devlog entry repository.
      *
      * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
