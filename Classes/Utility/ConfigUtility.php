@@ -135,6 +135,19 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     }
 
     /**
+     * Max size of extra_data in byte.
+     *
+     * @return int
+     */
+    public function getMaxTransportExtraDataSize()
+    {
+        $maxSize = (int) $this->getExtConf()->getMaxTransportExtraDataSize();
+        $maxSize = $maxSize ?: \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB;
+
+        return $maxSize;
+    }
+
+    /**
      * Th extension keys to exclude from logging.
      *
      * @return array

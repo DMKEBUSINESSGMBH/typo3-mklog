@@ -120,7 +120,7 @@ class EntryDataParserUtility
         $striped = 0;
         $rawLen = $this->getStringSize($this->converter->encode($jsonData));
         // reduce max len by 30 char length stripped comment
-        $maxLen = abs($maxLen ?: self::SIZE_8MB) - 30;
+        $maxLen = abs($maxLen ?: Factory::getConfigUtility()->getMaxTransportExtraDataSize()) - 30;
 
         // we remove data entries from the end while we have the maxlength
         while (true) {

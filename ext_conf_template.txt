@@ -13,6 +13,9 @@ exclude_ext_keys = extbase,TYPO3\CMS\Sv\AuthenticationService,TYPO3\CMS\Core\Aut
 # cat=base; type=int; label=Max Log size: Maximum number of log entries to keep when cleaning up
 max_logs = 10000
 
+# cat=base; type=options[512KB=524288,1MB=1048576,2MB=2097152,4MB=4194304,8MB=8388608,16MB=16777216]; label=Max ExtraData Size: Maximum size of the extradata for WatchDog Transports. Current maximum of database mediumblob are 16MB.
+max_transport_extra_data_size = 8388608
+
 # cat=gelf; type=boolean; label=Enable Gelf: Enables direct logging to a gelf transport
 gelf_enable = 1
 

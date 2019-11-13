@@ -207,9 +207,9 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the full text of the message.
+     * Returns the full text of the message for the WatchDog-Transport.
      *
-     * The Message is shortened if bigger than 8MB.
+     * The Message is shortened if bigger as configured max_extra_data_size.
      *
      * @return string
      */
@@ -288,9 +288,9 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
-     * Returns the value of the additional field of the message.
+     * Returns the value of the additional field of the message for the WatchDog-Transport.
      *
-     * The Message is shortened if bigger than 8MB.
+     * The Message is shortened if bigger as configured max_extra_data_size.
      *
      * @return array
      */
