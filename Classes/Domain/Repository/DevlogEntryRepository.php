@@ -146,6 +146,14 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         // there is no tca, so skip this check!
         $options->setSkipTcaColumnElimination(true);
 
+        // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
+        $model->setProperty(
+            'extra_data',
+            \DMK\Mklog\Factory::getEntryDataParserUtility($model)->getShortenedRaw(
+                \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB * 2
+            )
+        );
+
         parent::persist($model, $options);
     }
 
