@@ -180,7 +180,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
     protected function formatExtraDataColumn(
         DevlogEntryModel $entry
     ) {
-        $parser = Factory::getEntryDataParserUtility($entry);
+        $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($entry);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);
 
         if (empty($extraData)) {
