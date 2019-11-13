@@ -154,8 +154,6 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     /**
      * Send an exeption mail for all exceptions during the store log process.
      *
-     * @param \Exception $e
-     *
      * @TODO: add recursive call check for exceptions (
      *     throw exception, only block at secnd exception.
      *     so the gelf logger can log the exception

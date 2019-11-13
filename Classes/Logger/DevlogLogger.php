@@ -118,8 +118,6 @@ class DevlogLogger extends AbstractLogger
 
     /**
      * Old devlog Hook from the old TYPO3 API.
-     *
-     * @param array $params
      */
     public function devLogHook(array $params)
     {

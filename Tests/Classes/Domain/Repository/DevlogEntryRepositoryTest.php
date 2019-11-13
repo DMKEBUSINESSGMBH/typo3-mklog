@@ -50,7 +50,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getSearchClass method.
      *
-     *
      * @group unit
      * @test
      */
@@ -67,7 +66,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the getEmptyModel method.
-     *
      *
      * @group unit
      * @test
@@ -90,7 +88,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the prepareGenericSearcher method.
-     *
      *
      * @group unit
      * @test
@@ -148,7 +145,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the prepareGenericSearcher method.
      *
-     *
      * @group unit
      * @test
      */
@@ -188,7 +184,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the getLatestRunIds method.
-     *
      *
      * @group unit
      * @test
@@ -266,7 +261,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getLoggedExtensions method.
      *
-     *
      * @group unit
      * @test
      */
@@ -342,7 +336,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the isTableAvailable method.
      *
-     *
      * @group unit
      * @test
      */
@@ -372,7 +365,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the optimize method.
-     *
      *
      * @group unit
      * @test

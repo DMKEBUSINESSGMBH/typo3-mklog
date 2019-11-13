@@ -62,8 +62,6 @@ class GelfLogger extends AbstractLogger
 
     /**
      * Old devlog Hook from the old TYPO3 API.
-     *
-     * @param array $params
      */
     public function sysLogHook(array $params)
     {
@@ -165,8 +163,6 @@ class GelfLogger extends AbstractLogger
 
     /**
      * Creates the transport.
-     *
-     * @param \DMK\Mklog\Utility\ConfigUtility $config
      *
      * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */

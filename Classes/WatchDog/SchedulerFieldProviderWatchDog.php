@@ -145,8 +145,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     /**
      * Creates the credentials input field.
      *
-     * @param array $taskInfo
-     *
      * @return array
      */
     protected function getCredentialsField(array &$taskInfo)
@@ -155,10 +153,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     }
 
     /**
-     * @param string $fieldName
-     * @param string $label
-     * @param array  $taskInfo
-     *
      * @return array
      */
     protected function getInputField(string $fieldName, string $label, array &$taskInfo)
@@ -178,8 +172,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
 
     /**
      * Creates the severity drop down.
-     *
-     * @param array $taskInfo
      *
      * @return array
      */
@@ -213,8 +205,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     /**
      * Creates the transport drop down.
      *
-     * @param array $taskInfo
-     *
      * @return array
      */
     protected function getMessageLimitField(array &$taskInfo)
@@ -223,8 +213,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     }
 
     /**
-     * @param array $taskInfo
-     *
      * @return array
      */
     protected function getExtensionWhitelistField(array &$taskInfo)
@@ -233,8 +221,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     }
 
     /**
-     * @param array $taskInfo
-     *
      * @return array
      */
     protected function getExtensionBlacklistField(array &$taskInfo)
@@ -243,8 +229,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     }
 
     /**
-     * @param array $taskInfo
-     *
      * @return array
      */
     protected function getMailSubjectField(array &$taskInfo)

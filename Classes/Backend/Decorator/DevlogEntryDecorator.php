@@ -64,8 +64,6 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
     /**
      * Renders the crdate column.
      *
-     * @param DevlogEntryModel $entry
-     *
      * @return string
      */
     protected function formatCrdateColumn(
@@ -86,8 +84,6 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
 
     /**
      * Renders the severity column.
-     *
-     * @param DevlogEntryModel $entry
      *
      * @return string
      */
@@ -141,8 +137,6 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
     /**
      * Renders the ext_key column.
      *
-     * @param DevlogEntryModel $entry
-     *
      * @return string
      */
     protected function formatExtKeyColumn(
@@ -163,8 +157,6 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
     /**
      * Renders the message column.
      *
-     * @param DevlogEntryModel $entry
-     *
      * @return string
      */
     protected function formatMessageColumn(
@@ -182,8 +174,6 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
 
     /**
      * Renders the extra_data column.
-     *
-     * @param DevlogEntryModel $entry
      *
      * @return string
      */

@@ -143,8 +143,6 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     /**
      * Setter for extra data.
      *
-     * @param array $data
-     *
      * @return DevlogEntryModel
      */
     public function setExtraData(

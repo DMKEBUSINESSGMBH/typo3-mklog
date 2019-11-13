@@ -134,8 +134,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     /**
      * Persists an model.
      *
-     * @param \Tx_Rnbase_Domain_Model_DomainInterface $model
-     * @param array|\Tx_Rnbase_Domain_Model_Data      $options
+     * @param array|\Tx_Rnbase_Domain_Model_Data $options
      */
     public function persist(
         \Tx_Rnbase_Domain_Model_DomainInterface $model,
@@ -195,7 +194,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     /**
      * Flattens an single select array.
      *
-     * @param array  $items
      * @param string $field
      *
      * @return array
@@ -223,9 +221,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
 
     /**
      * On default, return hidden and deleted fields in backend.
-     *
-     * @param array $fields
-     * @param array $options
      */
     protected function prepareFieldsAndOptions(
         array &$fields,
@@ -239,8 +234,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
 
     /**
      * Prepares the simple generic searcher.
-     *
-     * @param array $options
      */
     protected function prepareGenericSearcher(
         array &$options

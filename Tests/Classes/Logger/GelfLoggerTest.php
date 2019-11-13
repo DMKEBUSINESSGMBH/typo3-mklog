@@ -50,7 +50,6 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the writeLog method.
      *
-     *
      * @group unit
      * @test
      */

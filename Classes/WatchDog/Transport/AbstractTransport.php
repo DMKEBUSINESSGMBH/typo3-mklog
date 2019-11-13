@@ -56,8 +56,6 @@ abstract class AbstractTransport implements InterfaceTransport
 
     /**
      * Initializes the Transport.
-     *
-     * @param \Tx_Rnbase_Domain_Model_Data $options
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options

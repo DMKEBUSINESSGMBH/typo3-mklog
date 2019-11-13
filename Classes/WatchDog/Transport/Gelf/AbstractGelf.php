@@ -69,8 +69,6 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
 
     /**
      * Initializes the Transport.
-     *
-     * @param \Tx_Rnbase_Domain_Model_Data $options
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
@@ -82,8 +80,6 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
 
     /**
      * Publishes a message by the provider.
-     *
-     * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message

@@ -43,8 +43,6 @@ interface InterfaceTransport
 
     /**
      * Initializes the Transport.
-     *
-     * @param \Tx_Rnbase_Domain_Model_Data $options
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
@@ -52,8 +50,6 @@ interface InterfaceTransport
 
     /**
      * Publishes a message by the provider.
-     *
-     * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message

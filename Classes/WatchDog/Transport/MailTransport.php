@@ -65,8 +65,6 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
 
     /**
      * Initializes the Transport.
-     *
-     * @param \Tx_Rnbase_Domain_Model_Data $options
      */
     public function initialize(
         \Tx_Rnbase_Domain_Model_Data $options
@@ -87,8 +85,6 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
 
     /**
      * Publishes a message by the provider.
-     *
-     * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
@@ -98,8 +94,6 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
 
     /**
      * Adds a Message to send.
-     *
-     * @param \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
      */
     protected function addMessage(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message

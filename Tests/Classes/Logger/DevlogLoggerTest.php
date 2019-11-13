@@ -50,7 +50,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the isLoggingEnabled method.
      *
-     *
      * @group unit
      * @test
      */
@@ -69,7 +68,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the isLoggingEnabled method.
-     *
      *
      * @group unit
      * @test
@@ -96,7 +94,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the isLoggingEnabled method.
      *
-     *
      * @group unit
      * @test
      */
@@ -107,7 +104,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the storeLog method.
-     *
      *
      * @group unit
      * @test
@@ -174,8 +170,6 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Returns the logger mock.
-     *
-     * @param array $methods
      *
      * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Logger\DevlogLogger
      */

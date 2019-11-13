@@ -205,9 +205,6 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
 
     /**
      * Initializes the fields and options for the repository search.
-     *
-     * @param array $fields
-     * @param array $options
      */
     protected function prepareFieldsAndOptions(
         array &$fields,
@@ -250,8 +247,6 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
 
     /**
      * Liefert die Spalten für den Decorator.
-     *
-     * @param array $columns
      *
      * @return array
      */

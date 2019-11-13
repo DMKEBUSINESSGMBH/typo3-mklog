@@ -216,8 +216,6 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
 
     /**
      * Marks the message as transported.
-     *
-     * @param \DMK\Mklog\Domain\Model\DevlogEntryModel $message
      */
     protected function markAsTransported(
         \DMK\Mklog\Domain\Model\DevlogEntryModel $message

@@ -50,7 +50,6 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the createDevlogEntry method.
      *
-     *
      * @group unit
      * @test
      */

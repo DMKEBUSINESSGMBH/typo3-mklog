@@ -53,7 +53,6 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the execute method.
      *
-     *
      * @group unit
      * @test
      */
@@ -90,7 +89,6 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the execute method.
-     *
      *
      * @group unit
      * @test
@@ -131,8 +129,6 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Returns the logger mock.
-     *
-     * @param array $methods
      *
      * @return PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\WatchDog\SchedulerWatchDog
      */

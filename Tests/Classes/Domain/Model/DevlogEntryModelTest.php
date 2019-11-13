@@ -50,7 +50,6 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getTableName method.
      *
-     *
      * @group unit
      * @test
      */
@@ -64,7 +63,6 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the getTransportIds method.
-     *
      *
      * @group unit
      * @test
@@ -90,7 +88,6 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Test the getFullMessage method.
      *
-     *
      * @group unit
      * @test
      */
@@ -112,7 +109,6 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
 
     /**
      * Test the getAdditionalData method.
-     *
      *
      * @group unit
      * @test
