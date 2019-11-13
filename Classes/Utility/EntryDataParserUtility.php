@@ -58,6 +58,8 @@ class EntryDataParserUtility
     }
 
     /**
+     * Returns the shortened raw extra data as json string.
+     *
      * @param int $maxLen
      *
      * @return string
@@ -75,6 +77,23 @@ class EntryDataParserUtility
     }
 
     /**
+     * Returns the shortened external data as json sting.
+     *
+     * @param int $maxLen
+     *
+     * @return array
+     */
+    public function getShortenedInternalExtraData($maxLen = null)
+    {
+        return $this->stripJson(
+            $this->devlogEntry->getInternalExtraData(),
+            $maxLen
+        );
+    }
+
+    /**
+     * Returns the shortened external data as json sting.
+     *
      * @param int $maxLen
      *
      * @return array
@@ -90,7 +109,7 @@ class EntryDataParserUtility
     /**
      * Strip json data to fit in max len.
      *
-     * Data entries will be removed from the end while the max len matches
+     * Data entries will be removed from the end while the max len matches.
      *
      * @param int $maxLen
      *
@@ -101,7 +120,7 @@ class EntryDataParserUtility
         $striped = 0;
         $rawLen = $this->getStringSize($this->converter->encode($jsonData));
         // reduce max len by 30 char length stripped comment
-        $maxLen = abs($maxLen ?: self::SIZE_1MB) - 30;
+        $maxLen = abs($maxLen ?: self::SIZE_8MB) - 30;
 
         // we remove data entries from the end while we have the maxlength
         while (true) {
@@ -110,7 +129,7 @@ class EntryDataParserUtility
                 break;
             }
             array_pop($jsonData);
-            $striped++;
+            ++$striped;
         }
 
         if ($striped > 0) {
@@ -124,6 +143,7 @@ class EntryDataParserUtility
      * Calculates the String size in byte.
      *
      * @param string $data
+     *
      * @return int
      */
     protected function getStringSize($data)
