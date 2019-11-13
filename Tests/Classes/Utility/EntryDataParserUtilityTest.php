@@ -52,6 +52,7 @@ use DMK\Mklog\Utility\EntryDataParserUtility;
 class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     private const FIXTURE_EXTRA_DATA_JSON = '{"foo":"bar","bar":"baz","baz":"foo"}';
+    private const FIXTURE_EXTRA_DATA_INT_JSON = '{"__foo":"bar","__bar":"baz","__baz":"foo"}';
     private const FIXTURE_EXTRA_DATA_JSON_ARRAY = ['foo' => 'bar', 'bar' => 'baz', 'baz' => 'foo'];
 
     /**
@@ -93,6 +94,48 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
         $this->assertEquals(
             '{"...":"Striped by 3 elements."}',
             $this->getEntryDataParserUtility()->getShortenedRaw(40)
+        );
+    }
+
+    /**
+     * Test the getShortenedExternalExtraData method.
+     *
+     * @group unit
+     * @test
+     */
+    public function getShortenedInternalExtraDataReturnsCompleteData()
+    {
+        $this->assertEquals(
+            self::FIXTURE_EXTRA_DATA_JSON_ARRAY,
+            $this->getEntryDataParserUtility(self::FIXTURE_EXTRA_DATA_INT_JSON)->getShortenedInternalExtraData()
+        );
+    }
+
+    /**
+     * Test the getShortenedExternalExtraData method.
+     *
+     * @group unit
+     * @test
+     */
+    public function getShortenedInternalExtraDataReturnsShortData()
+    {
+        $this->assertEquals(
+            ['foo' => 'bar', '...' => 'Striped by 2 elements.'],
+            $this->getEntryDataParserUtility(self::FIXTURE_EXTRA_DATA_INT_JSON)->getShortenedInternalExtraData(50)
+        );
+    }
+
+    /**
+     * Test the getShortenedExternalExtraData method.
+     *
+     * @group unit
+     * @test
+     */
+    public function getShortenedInternalExtraDataReturnsEmptyData()
+    {
+        $this->assertEquals(
+            ['...' => 'Striped by 3 elements.'],
+            $this->getEntryDataParserUtility(self::FIXTURE_EXTRA_DATA_INT_JSON)->getShortenedInternalExtraData(40)
         );
     }
 
@@ -145,15 +188,18 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @return EntryDataParserUtility
      */
-    protected function getEntryDataParserUtility(DevlogEntryModel $devLogEntry = null)
+    protected function getEntryDataParserUtility($devLogEntryOrExtraData = null)
     {
-        if (null === $devLogEntry) {
-            $devLogEntry = $this->getModel(
-                ['extra_data' => self::FIXTURE_EXTRA_DATA_JSON],
+        if (null === $devLogEntryOrExtraData) {
+            $devLogEntryOrExtraData = self::FIXTURE_EXTRA_DATA_JSON;
+        }
+        if (is_string($devLogEntryOrExtraData)) {
+            $devLogEntryOrExtraData = $this->getModel(
+                ['extra_data' => $devLogEntryOrExtraData],
                 DevlogEntryModel::class
             );
         }
 
-        return Factory::getEntryDataParserUtility($devLogEntry);
+        return Factory::getEntryDataParserUtility($devLogEntryOrExtraData);
     }
 }
