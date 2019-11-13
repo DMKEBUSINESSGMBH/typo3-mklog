@@ -108,7 +108,6 @@ final class Factory
      * @return \DMK\Mklog\Utility\EntryDataParserUtility
      */
 
-
     /**
      * Creates a devlog entry extra data parser instance.
      *

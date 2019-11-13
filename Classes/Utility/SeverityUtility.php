@@ -109,7 +109,7 @@ final class SeverityUtility
      *
      * @var array
      */
-    private static $levels = array(
+    private static $levels = [
         self::EMERGENCY => 'EMERGENCY',
         self::ALERT => 'ALERT',
         self::CRITICAL => 'CRITICAL',
@@ -118,7 +118,7 @@ final class SeverityUtility
         self::NOTICE => 'NOTICE',
         self::INFO => 'INFO',
         self::DEBUG => 'DEBUG',
-    );
+    ];
 
     /**
      * Resolves the name of a log level.
@@ -178,11 +178,11 @@ final class SeverityUtility
      */
     public static function getTcaItems()
     {
-        $levels = array();
-        $levels[] = array('', '');
+        $levels = [];
+        $levels[] = ['', ''];
 
         foreach (self::$levels as $id => $name) {
-            $levels[] = array($id, $name);
+            $levels[] = [$id, $name];
         }
 
         return $levels;

@@ -93,7 +93,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     public function getTransportIds()
     {
         if ($this->isPropertyEmpty('transport_ids')) {
-            return array();
+            return [];
         }
 
         return explode(',', $this->getProperty('transport_ids'));
@@ -161,7 +161,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
      */
     public function getExternalExtraData()
     {
-        $data = array();
+        $data = [];
 
         foreach ($this->getExtraData() as $key => $value) {
             if ('_' === $key[0] && '_' === $key[1]) {
@@ -180,7 +180,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
      */
     public function getInternalExtraData()
     {
-        $data = array();
+        $data = [];
 
         foreach ($this->getExtraData() as $key => $value) {
             if (!('_' === $key[0] && '_' === $key[1])) {

@@ -51,11 +51,11 @@ class DevlogModule extends \tx_rnbase_mod_ExtendedModFunc
      */
     protected function getSubMenuItems()
     {
-        return array(
+        return [
             \tx_rnbase::makeInstance(
                 'DMK\\Mklog\\Backend\\Handler\\DevlogEntryHandler'
             ),
-        );
+        ];
     }
 
     /**

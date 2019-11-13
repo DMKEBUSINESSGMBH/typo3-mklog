@@ -73,12 +73,12 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
             ->expects(self::once())
             ->method('shutdown');
 
-        $task = $this->getSchedulerMock(array('findMessages', 'getTransport'));
+        $task = $this->getSchedulerMock(['findMessages', 'getTransport']);
 
         $task
             ->expects(self::once())
             ->method('findMessages')
-            ->will(self::returnValue(array()));
+            ->will(self::returnValue([]));
         $task
             ->expects(self::any())
             ->method('getTransport')
@@ -133,15 +133,15 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
      * @return PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\WatchDog\SchedulerWatchDog
      */
     protected function getSchedulerMock(
-        array $methods = array()
+        array $methods = []
     ) {
         $logger = $this->getMock(
             'DMK\\Mklog\\WatchDog\\SchedulerWatchDog',
             array_merge(
-                array('getDevlogEntryRepository'),
+                ['getDevlogEntryRepository'],
                 $methods
             ),
-            array(),
+            [],
             '',
             false,
             false

@@ -44,14 +44,14 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
      *
      * @var array
      */
-    private $messages = array();
+    private $messages = [];
 
     /**
      * Unique message counts.
      *
      * @var array
      */
-    private $uniqs = array();
+    private $uniqs = [];
 
     /**
      * An unique identifier for the transport.
@@ -77,9 +77,9 @@ class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Si
                 continue;
             }
             $psrLevel = SeverityUtility::getPsrLevelConstant($level);
-            $this->uniqs[$psrLevel] = array();
+            $this->uniqs[$psrLevel] = [];
             $this->uniqs[$psrLevel]['summary'] = 0;
-            $this->messages[$psrLevel] = array();
+            $this->messages[$psrLevel] = [];
         }
     }
 

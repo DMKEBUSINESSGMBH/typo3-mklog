@@ -86,7 +86,7 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
         }
 
         // Write the code for the field
-        $additionalFields = array();
+        $additionalFields = [];
 
         $additionalFields['field_mklog_watchdog_transport'] = $this->getTransportField($taskInfo);
         $additionalFields['field_mklog_watchdog_credentials'] = $this->getCredentialsField($taskInfo);
@@ -102,8 +102,6 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
     /**
      * Creates the transport drop down.
      *
-     * @param array $taskInfo
-     *
      * @return array
      */
     protected function getTransportField(
@@ -114,15 +112,15 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
             'id="field_mklog_watchdog_transport" '.
         '>';
 
-        foreach (array(
-            'Mail' => array(
+        foreach ([
+            'Mail' => [
                 'DMK\Mklog\WatchDog\Transport\MailTransport' => 'Mail Message',
-            ),
-            'Gelf (GrayLog)' => array(
+            ],
+            'Gelf (GrayLog)' => [
                 'DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf' => 'Gelf HTTP',
                 'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf' => 'Gelf UDP',
-            ),
-        ) as $group => $subs) {
+            ],
+        ] as $group => $subs) {
             $fieldCode .= '<optgroup label="'.$group.'">';
             foreach ($subs as $key => $label) {
                 $fieldCode .= sprintf(
@@ -136,10 +134,10 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
         }
         $fieldCode .= '</select>';
 
-        return array(
+        return [
             'code' => $fieldCode,
             'label' => 'Transport',
-        );
+        ];
     }
 
     /**
@@ -164,10 +162,10 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
             'value="'.$taskInfo['mklog_watchdog_'.$fieldName].'" '.
             'size="50" />';
 
-        return array(
+        return [
             'code' => $fieldCode,
             'label' => $label,
-        );
+        ];
     }
 
     /**
@@ -196,10 +194,10 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
         }
         $fieldCode .= '</select>';
 
-        return array(
+        return [
             'code' => $fieldCode,
             'label' => 'Min Severity',
-        );
+        ];
     }
 
     /**

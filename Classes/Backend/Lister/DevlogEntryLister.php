@@ -62,11 +62,11 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
      */
     protected function getSearchColumns()
     {
-        return array(
+        return [
             'DEVLOGENTRY.uid',
             'DEVLOGENTRY.ext_key',
             'DEVLOGENTRY.message',
-        );
+        ];
     }
 
     /**
@@ -113,7 +113,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
 
         $filter = $this->getFilter();
 
-        $data['runid'] = array(
+        $data['runid'] = [
             'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
                 $this->getOptions()->getPid(),
                 'SET['.$this->getListerId().'Runid]',
@@ -121,9 +121,9 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
                 $this->getLatestRuns()
             ),
             'label' => '###LABEL_FILTER_RUNID###',
-        );
+        ];
 
-        $data['severity'] = array(
+        $data['severity'] = [
             'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
                 $this->getOptions()->getPid(),
                 'SET['.$this->getListerId().'Severity]',
@@ -131,9 +131,9 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
                 $this->getSeverityLevels()
             ),
             'label' => '###LABEL_FILTER_SEVERITY###',
-        );
+        ];
 
-        $data['extkeys'] = array(
+        $data['extkeys'] = [
             'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
                 $this->getOptions()->getPid(),
                 'SET['.$this->getListerId().'ExtKey]',
@@ -141,7 +141,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
                 $this->getLoggedExtensions()
             ),
             'label' => '###LABEL_FILTER_EXTKEYS###',
-        );
+        ];
 
         $data['updatebutton'] = $button;
 
@@ -158,7 +158,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
         $latestRuns = $repo->getLatestRunIds();
 
-        $items = array('' => '');
+        $items = ['' => ''];
 
         foreach ($latestRuns as $id) {
             $items[$id] = strftime('%d.%m.%y %H:%M:%S', substr($id, 0, 10));
@@ -174,7 +174,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
      */
     public function getSeverityLevels()
     {
-        $items = array();
+        $items = [];
         $items[''] = '';
         foreach (\DMK\Mklog\Utility\SeverityUtility::getItems() as $id => $name) {
             $items[$id] = $id.' - '.ucfirst(strtolower($name));
@@ -193,7 +193,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
         $extKeys = $repo->getLoggedExtensions();
 
-        $items = array('' => '');
+        $items = ['' => ''];
 
         /* @var $item \DMK\Mklog\Domain\Model\DevlogEntryModel */
         foreach ($extKeys as $extKey) {
@@ -253,26 +253,26 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     protected function addDecoratorColumns(
         array &$columns
     ) {
-        $columns['crdate'] = array(
+        $columns['crdate'] = [
             'title' => 'label_tableheader_crdate',
             'decorator' => $this->getDecorator(),
-        );
-        $columns['severity'] = array(
+        ];
+        $columns['severity'] = [
             'title' => 'label_tableheader_severity',
             'decorator' => $this->getDecorator(),
-        );
-        $columns['ext_key'] = array(
+        ];
+        $columns['ext_key'] = [
             'title' => 'label_tableheader_ext_key',
             'decorator' => $this->getDecorator(),
-        );
-        $columns['message'] = array(
+        ];
+        $columns['message'] = [
             'title' => 'label_tableheader_message',
             'decorator' => $this->getDecorator(),
-        );
-        $columns['extra_data'] = array(
+        ];
+        $columns['extra_data'] = [
             'title' => 'label_tableheader_extra_data',
             'decorator' => $this->getDecorator(),
-        );
+        ];
 
         return $columns;
     }

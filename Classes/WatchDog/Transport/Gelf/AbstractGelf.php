@@ -96,7 +96,7 @@ abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Inte
 
         $additionalData = $message->getAdditionalData();
         if (!is_array($additionalData)) {
-            $additionalData = array();
+            $additionalData = [];
         }
 
         $converter = \DMK\Mklog\Factory::getDataConverterUtility();

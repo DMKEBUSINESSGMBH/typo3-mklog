@@ -113,9 +113,9 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $msg = 'msg';
         $extKey = 'mklog';
         $severity = 7;
-        $extraData = array('foo' => 1, 'bar' => array('baz'));
+        $extraData = ['foo' => 1, 'bar' => ['baz']];
 
-        $logger = $this->getDevlogLoggerMock(array('isLoggingEnabled'));
+        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled']);
 
         $logger
             ->expects(self::any())
@@ -152,7 +152,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                         $that->assertTrue(is_string($data['extra_data']));
                         $logData = json_decode($data['extra_data'], true);
                         $that->assertSame(1, $logData['foo']);
-                        $that->assertSame(array('baz'), $logData['bar']);
+                        $that->assertSame(['baz'], $logData['bar']);
                         $that->assertArrayHasKey('__feuser', $logData);
                         $that->assertArrayHasKey('__beuser', $logData);
                         $that->assertArrayHasKey('__trace', $logData);
@@ -163,8 +163,8 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             );
 
         $this->callInaccessibleMethod(
-            array($logger, 'storeLog'),
-            array($msg, $extKey, $severity, $extraData)
+            [$logger, 'storeLog'],
+            [$msg, $extKey, $severity, $extraData]
         );
     }
 
@@ -174,12 +174,12 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Logger\DevlogLogger
      */
     protected function getDevlogLoggerMock(
-        array $methods = array()
+        array $methods = []
     ) {
         $logger = $this->getMock(
             'DMK\\Mklog\\Logger\\DevlogLogger',
             array_merge(
-                array('getDevlogEntryRepository', 'isDatabaseConnected'),
+                ['getDevlogEntryRepository', 'isDatabaseConnected'],
                 $methods
             )
         );

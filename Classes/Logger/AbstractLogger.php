@@ -40,7 +40,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      * @param array $options Configuration options - depends on the actual log writer
      */
     public function __construct(
-        array $options = array()
+        array $options = []
     ) {
         // $this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
     }
@@ -96,7 +96,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     {
         // force extra_data to be an array!
         if (!is_array($extraData)) {
-            $extraData = array('extra' => $extraData);
+            $extraData = ['extra' => $extraData];
         }
         // add userdata
         \tx_rnbase::load('tx_rnbase_util_TYPO3');
@@ -123,7 +123,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         );
 
         $lastIgnoreKey = 0;
-        $ignoreClasses = array(
+        $ignoreClasses = [
             // ignore internal loger calls
             'DMK\\Mklog\\Logger\\',
             // ignore core devlog and logerr calls
@@ -132,7 +132,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             // ignore rnbase loggers
             'Tx_Rnbase_Utility_Logger',
             'tx_rnbase_util_Logger',
-        );
+        ];
 
         foreach ($trace as $key => $path) {
             $ignore = false;

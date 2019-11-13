@@ -134,9 +134,9 @@ class GelfLogger extends AbstractLogger
 
         $options = \tx_rnbase::makeInstance(
             'Tx_Rnbase_Domain_Model_Data',
-            array(
+            [
                 'credentials' => $config->getGelfCredentials(),
-            )
+            ]
         );
 
         $transport = $this->getTransport($config);

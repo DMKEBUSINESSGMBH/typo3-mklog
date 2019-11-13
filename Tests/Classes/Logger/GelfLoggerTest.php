@@ -69,7 +69,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     {
         $logger = $this->getMock(
             'DMK\\Mklog\\Logger\\GelfLogger',
-            array('getDevlogEntryRepository')
+            ['getDevlogEntryRepository']
         );
 
         $logger

@@ -122,7 +122,7 @@ class Tx_Mklog_Hooks_DataHandler
     {
         $tablesThatCanBeCopied = array_flip($dataHandler->compileAdminTables());
 
-        $tablesThatShouldNotBeCopied = array($this->getDevlogTableName(), $this->getMklogTableName());
+        $tablesThatShouldNotBeCopied = [$this->getDevlogTableName(), $this->getMklogTableName()];
         foreach ($tablesThatShouldNotBeCopied as $tableThatShouldNotBeCopied) {
             if (isset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied])) {
                 unset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied]);

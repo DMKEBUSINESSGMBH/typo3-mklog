@@ -115,7 +115,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
      */
     public function execute()
     {
-        $failures = $successes = array();
+        $failures = $successes = [];
 
         $transport = $this->getTransport();
 
@@ -149,11 +149,11 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
         \Tx_Rnbase_Utility_Logger::$logMethod(
             'mklog',
             $msg,
-            array(
+            [
                 'transport' => $this->getTransportId(),
                 'successes' => $successes,
                 'failures' => $failures,
-            )
+            ]
         );
 
         // create a flash message for the beuser
@@ -180,7 +180,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     {
         $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
 
-        $fields = $options = array();
+        $fields = $options = [];
 
         $fields[SEARCH_FIELD_CUSTOM] = sprintf(
             'NOT FIND_IN_SET(\'%s\', `transport_ids`)',
@@ -267,7 +267,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
 
         \tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
-        $options = array();
+        $options = [];
 
         foreach ($this->getOptions() as $key => $value) {
             $key = \Tx_Rnbase_Utility_Strings::underscoredToLowerCamelCase($key);

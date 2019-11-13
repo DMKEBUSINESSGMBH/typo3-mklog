@@ -241,11 +241,11 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
             )
             ->will(
                 $this->returnValue(
-                    array(
-                        array('run_id' => '14780947042869'),
-                        array('run_id' => '14780821110468'),
-                        array('run_id' => '1478080061308'),
-                    )
+                    [
+                        ['run_id' => '14780947042869'],
+                        ['run_id' => '14780821110468'],
+                        ['run_id' => '1478080061308'],
+                    ]
                 )
             );
 
@@ -316,11 +316,11 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
             )
             ->will(
                 $this->returnValue(
-                    array(
-                        array('ext_key' => 'rn_base'),
-                        array('ext_key' => 'mklog'),
-                        array('ext_key' => 'mkpostman'),
-                    )
+                    [
+                        ['ext_key' => 'rn_base'],
+                        ['ext_key' => 'mklog'],
+                        ['ext_key' => 'mkpostman'],
+                    ]
                 )
             );
 
@@ -345,13 +345,13 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 
         $db = $this->getMock(
             '\TYPO3\CMS\Core\Database\DatabaseConnection',
-            array('admin_get_fields')
+            ['admin_get_fields']
         );
         $db
             ->expects(self::once())
             ->method('admin_get_fields')
             ->with(self::equalTo($this->getDevlogEntryModel()->getTableName()))
-            ->will(self::returnValue(array()));
+            ->will(self::returnValue([]));
 
         $connection = $this->callInaccessibleMethod($repo, 'getConnection');
 

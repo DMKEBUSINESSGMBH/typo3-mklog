@@ -42,7 +42,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
      *
      * @var array
      */
-    protected $backup = array();
+    protected $backup = [];
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -66,7 +66,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     protected function tearDown()
     {
         // reset extconf cache
-        \DMK\Mklog\Factory::getConfigUtility()->getExtConf()->setProperty(array());
+        \DMK\Mklog\Factory::getConfigUtility()->getExtConf()->setProperty([]);
     }
 
     /**
@@ -92,10 +92,10 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     protected function getDevlogEntryModel()
     {
         return $this->getModel(
-            array(
+            [
                 'uid' => 5,
                 'pid' => 7,
-            ),
+            ],
             'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel'
         );
     }
@@ -110,14 +110,14 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
         \tx_rnbase::load('tx_rnbase_util_SearchGeneric');
         $searcher = $this->getMock(
             'tx_rnbase_util_SearchGeneric',
-            array('search')
+            ['search']
         );
 
         \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
         \tx_rnbase::load('DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository');
         $repo = $this->getMock(
             'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository',
-            array('getSearcher', 'getConnection', 'getEmptyModel')
+            ['getSearcher', 'getConnection', 'getEmptyModel']
         );
 
         $repo

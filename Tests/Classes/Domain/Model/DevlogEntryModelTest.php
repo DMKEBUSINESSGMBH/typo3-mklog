@@ -95,10 +95,10 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     {
         $model = $this->getDevlogEntryModel();
         $model->setExtraData(
-            array(
+            [
                 'foo' => 'bar',
                 '__beuser' => 13,
-            )
+            ]
         );
 
         $data = $model->getFullMessage();
@@ -117,11 +117,11 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     {
         $model = $this->getDevlogEntryModel();
         $model->setExtraData(
-            array(
+            [
                 'foo' => 'bar',
                 '__feuser' => 40,
                 '__beuser' => 13,
-            )
+            ]
         );
 
         $data = $model->getAdditionalData();

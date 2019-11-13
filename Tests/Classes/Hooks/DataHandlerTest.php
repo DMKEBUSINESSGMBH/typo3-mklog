@@ -62,12 +62,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteDevlogEntriesByPageIdNotWhenCommandDeleteButTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
             ->method('deleteDevlogEntriesByPageId');
 
-        $dataHandler->processCmdmap_preProcess('delete', 'pages_not', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('delete', 'pages_not', 123, [], null);
     }
 
     /**
@@ -75,12 +75,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteDevlogEntriesByPageIdNotWhenCommandNotDeleteButTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
             ->method('deleteDevlogEntriesByPageId');
 
-        $dataHandler->processCmdmap_preProcess('not_delete', 'pages', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('not_delete', 'pages', 123, [], null);
     }
 
     /**
@@ -88,12 +88,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteDevlogEntriesByPageIdNotWhenCommandNotDeleteAndTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
             ->method('deleteDevlogEntriesByPageId');
 
-        $dataHandler->processCmdmap_preProcess('not_delete', 'pages_not', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('not_delete', 'pages_not', 123, [], null);
     }
 
     /**
@@ -101,13 +101,13 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteDevlogEntriesByPageIdWhenCommandDeleteAndTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::once())
             ->method('deleteDevlogEntriesByPageId')
             ->with(123);
 
-        $dataHandler->processCmdmap_preProcess('delete', 'pages', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('delete', 'pages', 123, [], null);
     }
 
     /**
@@ -119,8 +119,8 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
             self::markTestSkipped('devlog muss installiert sein');
         }
 
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('getDatabaseConnection', 'getDevLogTableName'));
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doDelete'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['getDatabaseConnection', 'getDevLogTableName']);
+        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doDelete']);
 
         $databaseConnection->expects(self::once())
             ->method('doDelete')
@@ -142,12 +142,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandCopyButTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('removeLogTablesFromTablesThatCanBeCopied'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandler->expects(self::never())
             ->method('removeLogTablesFromTablesThatCanBeCopied');
 
-        $dataHandler->processCmdmap_preProcess('copy', 'pages_not', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('copy', 'pages_not', 123, [], null);
     }
 
     /**
@@ -155,12 +155,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyButTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('removeLogTablesFromTablesThatCanBeCopied'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandler->expects(self::never())
             ->method('removeLogTablesFromTablesThatCanBeCopied');
 
-        $dataHandler->processCmdmap_preProcess('not_copy', 'pages', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('not_copy', 'pages', 123, [], null);
     }
 
     /**
@@ -168,12 +168,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyAndTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('removeLogTablesFromTablesThatCanBeCopied'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandler->expects(self::never())
             ->method('removeLogTablesFromTablesThatCanBeCopied');
 
-        $dataHandler->processCmdmap_preProcess('not_copy', 'pages_not', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('not_copy', 'pages_not', 123, [], null);
     }
 
     /**
@@ -181,14 +181,14 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedWhenCommandCopyAndTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('removeLogTablesFromTablesThatCanBeCopied'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandlerParent = 'test';
         $dataHandler->expects(self::once())
             ->method('removeLogTablesFromTablesThatCanBeCopied')
             ->with($dataHandlerParent);
 
-        $dataHandler->processCmdmap_preProcess('copy', 'pages', 123, array(), $dataHandlerParent);
+        $dataHandler->processCmdmap_preProcess('copy', 'pages', 123, [], $dataHandlerParent);
     }
 
     /**
@@ -203,8 +203,8 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
 
         $dataHandlerParent = $this->getMock(
             tx_rnbase_util_Typo3Classes::getDataHandlerClass(),
-            array('compileAdminTables'),
-            array(),
+            ['compileAdminTables'],
+            [],
             '',
             false
         );
@@ -213,13 +213,13 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
             ->method('compileAdminTables')
             ->will(
                 self::returnValue(
-                    array(
+                    [
                         'pages',
                         'tt_content',
                         'sys_template',
                         $devLogTable,
                         $mklogTable,
-                    )
+                    ]
                 )
             );
 
@@ -249,12 +249,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteMklogEntriesByPageIdNotWhenCommandDeleteButTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
             ->method('deleteMklogEntriesByPageId');
 
-        $dataHandler->processCmdmap_preProcess('delete', 'pages_not', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('delete', 'pages_not', 123, [], null);
     }
 
     /**
@@ -262,12 +262,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteMklogEntriesByPageIdNotWhenCommandNotDeleteButTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
         ->method('deleteMklogEntriesByPageId');
 
-        $dataHandler->processCmdmap_preProcess('not_delete', 'pages', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('not_delete', 'pages', 123, [], null);
     }
 
     /**
@@ -275,12 +275,12 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteMklogEntriesByPageIdNotWhenCommandNotDeleteAndTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
         ->method('deleteMklogEntriesByPageId');
 
-        $dataHandler->processCmdmap_preProcess('not_delete', 'pages_not', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('not_delete', 'pages_not', 123, [], null);
     }
 
     /**
@@ -288,13 +288,13 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsDeleteMklogEntriesByPageIdWhenCommandDeleteAndTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteDevlogEntriesByPageId', 'deleteMklogEntriesByPageId']);
 
         $dataHandler->expects(self::once())
         ->method('deleteMklogEntriesByPageId')
         ->with(123);
 
-        $dataHandler->processCmdmap_preProcess('delete', 'pages', 123, array(), null);
+        $dataHandler->processCmdmap_preProcess('delete', 'pages', 123, [], null);
     }
 
     /**
@@ -302,8 +302,8 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testDeleteMklogEntriesByPageId()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', array('getDatabaseConnection'));
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', array('doDelete'));
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['getDatabaseConnection']);
+        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doDelete']);
 
         $databaseConnection->expects(self::once())
             ->method('doDelete')

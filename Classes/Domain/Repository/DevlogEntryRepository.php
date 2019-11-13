@@ -99,19 +99,19 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         }
 
         // fetch current rows
-        $numRows = $this->search(array(), array('count' => true));
+        $numRows = $this->search([], ['count' => true]);
 
         // there are log entries to delete
         if ($numRows > $maxRows) {
             // fetch the execution date from the latest log entry
             $collection = $this->search(
-                array(),
-                array(
+                [],
+                [
                     'what' => 'run_id',
                     'offset' => $maxRows,
                     'limit' => 1,
-                    'orderby' => array('DEVLOGENTRY.run_id' => 'DESC'),
-                )
+                    'orderby' => ['DEVLOGENTRY.run_id' => 'DESC'],
+                ]
             );
 
             if ($collection->isEmpty()) {
@@ -159,7 +159,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
     public function getLatestRunIds(
         $limit = 50
     ) {
-        $fields = $options = array();
+        $fields = $options = [];
 
         $options['what'] = 'DEVLOGENTRY.run_id';
         $options['groupby'] = 'DEVLOGENTRY.run_id';
@@ -179,7 +179,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
      */
     public function getLoggedExtensions()
     {
-        $fields = $options = array();
+        $fields = $options = [];
 
         $options['what'] = 'DEVLOGENTRY.ext_key';
         $options['groupby'] = 'DEVLOGENTRY.ext_key';
@@ -203,17 +203,17 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         $field
     ) {
         if (empty($items)) {
-            return array();
+            return [];
         }
 
         $items = call_user_func_array('array_merge_recursive', $items);
 
         if (empty($items)) {
-            return array();
+            return [];
         }
 
         if (!is_array($items[$field])) {
-            $items[$field] = array($items[$field]);
+            $items[$field] = [$items[$field]];
         }
 
         return $items[$field];
@@ -239,24 +239,24 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         array &$options
     ) {
         if (empty($options['searchdef']) || !is_array($options['searchdef'])) {
-            $options['searchdef'] = array();
+            $options['searchdef'] = [];
         }
 
         $model = $this->getEmptyModel();
         \tx_rnbase::load('tx_rnbase_util_Arrays');
         $options['searchdef'] = \tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
             // default searcher config
-            array(
+            [
                 'usealias' => 1,
                 'basetable' => $model->getTableName(),
                 'basetablealias' => 'DEVLOGENTRY',
                 'wrapperclass' => get_class($model),
-                'alias' => array(
-                    'DEVLOGENTRY' => array(
+                'alias' => [
+                    'DEVLOGENTRY' => [
                         'table' => $model->getTableName(),
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             // searcher config overrides
             $options['searchdef']
         );
