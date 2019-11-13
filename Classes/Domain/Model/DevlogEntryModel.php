@@ -211,12 +211,14 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     /**
      * Returns the full text of the message.
      *
+     * The Message is shortened if bigger than 8MB.
+     *
      * @return string
      */
     public function getFullMessage()
     {
         return \DMK\Mklog\Factory::getDataConverterUtility()->encode(
-            $this->getExternalExtraData()
+            \DMK\Mklog\Factory::getEntryDataParserUtility($this)->getShortenedExternalExtraData()
         );
     }
 
@@ -290,10 +292,12 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     /**
      * Returns the value of the additional field of the message.
      *
+     * The Message is shortened if bigger than 8MB.
+     *
      * @return array
      */
     public function getAdditionalData()
     {
-        return $this->getInternalExtraData();
+        return \DMK\Mklog\Factory::getEntryDataParserUtility($this)->getShortenedInternalExtraData();
     }
 }
