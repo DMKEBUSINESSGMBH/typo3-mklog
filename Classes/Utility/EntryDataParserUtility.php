@@ -37,9 +37,9 @@ use DMK\Mklog\Factory;
  */
 class EntryDataParserUtility
 {
-    public const SIZE_512KB = 524288;
-    public const SIZE_1MB = 1048576;
-    public const SIZE_8MB = 8388608;
+    const SIZE_512KB = 524288;
+    const SIZE_1MB = 1048576;
+    const SIZE_8MB = 8388608;
 
     /**
      * @var DevlogEntryModel
