@@ -13,7 +13,7 @@ composer require dmk/mklog
 ```
 
 Now add the following to your AdditionalConfiguration.php if you want to use the log 
-writer during error handling:
+writers during error handling:
 ```php
     if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mklog']['enable_devlog'])) {
         $minLogLevel = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mklog']['min_log_level']
@@ -21,9 +21,15 @@ writer during error handling:
         $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$minLogLevel][\DMK\Mklog\Logger\DevlogLogger::class]
             = [];
     }
+    if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mklog']['gelf_enable'])) {
+        $minLogLevel = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mklog']['gelf_min_log_level']
+            ?: \DMK\Mklog\Utility\SeverityUtility::ALERT;
+        $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$minLogLevel][\DMK\Mklog\Logger\GelfLogger::class]
+            = [];
+    }
 ```
-Otherwise the log writer won't be available during error handling of TYPO3 as the 
-registration in the ext_localconf.php happends to late for the error handler.
+Otherwise the log writers won't be available during error handling of TYPO3 as the 
+registration in the ext_localconf.php happends too late for the error handler.
 
 ## Developer Log
 
