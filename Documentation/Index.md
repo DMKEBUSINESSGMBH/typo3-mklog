@@ -12,6 +12,19 @@ From project root you need to run
 composer require dmk/mklog
 ```
 
+Now add the following to your AdditionalConfiguration.php if you want to use the log 
+writer during error handling:
+```php
+    if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mklog']['enable_devlog'])) {
+        $minLogLevel = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['mklog']['min_log_level']
+            ?: \DMK\Mklog\Utility\SeverityUtility::DEBUG;
+        $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$minLogLevel][\DMK\Mklog\Logger\DevlogLogger::class]
+            = [];
+    }
+```
+Otherwise the log writer won't be available during error handling of TYPO3 as the 
+registration in the ext_localconf.php happends to late for the error handler.
+
 ## Developer Log
 
 TYPO3 provides a functionality for logging information for the purposes of development and debugging.
