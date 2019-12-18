@@ -1,6 +1,49 @@
 ChangeLog
 =========
 
+9.5.11
+------
+
+  * added documentation how to register log writer for error handling
+  
+9.5.10
+------
+
+  * Add configuration for max extradata size for watchdog transports
+  * Remove class constant visibility in test
+  * Remove class constant visibility for backward compatibility to php 7.0 and php 5.6
+  * Add usage of entry data parser on persist into db
+  * Cleanup cs fo exception in factory
+  * Disable phpdoc align and superfluousphpdoc rules
+  * Add tests for shortened internal data
+  * Cleanup short array syntax
+  * Add tests generated var/log/ folder and composer.lock file to gitignore
+  * Fix factory namespace in decorator
+  * Cleanup php doc
+  * Add usage of entry data parser for gelf transports
+  * Add usage of entry data parser in be module
+  * Add method to short internal data if required
+  * Add new entry data parser utility class
+  * Fix extension key in composer json
+  * Add scrutinizer badge
+  
+9.5.6
+------
+
+  * support PHP 5.6 again
+  * fix transport factory exception
+  
+9.5.5
+------
+
+  * devlog entry table optimization
+  * use current time for log entries
+  
+9.5.4
+------
+
+  * fixed test case class name
+  
 9.5.3
 ------
 
