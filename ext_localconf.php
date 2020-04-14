@@ -48,6 +48,13 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Wat
     'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog',
 );
 
+//cleanup task
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Task\\CleanupLogTableTask'] = array(
+    'extension' => $_EXTKEY,
+    'title' => 'LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:scheduler_cleanup_log_table_name',
+    'description' => 'LLL:EXT:'.$_EXTKEY.'/locallang_db.xml:scheduler_cleanup_log_table_description',
+);
+
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'Tx_Mklog_Hooks_DataHandler';
 
 // is the devlog enabled?

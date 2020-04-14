@@ -103,9 +103,6 @@ class DevlogLogger extends AbstractLogger
 
         $repo = $this->getDevlogEntryRepository();
 
-        // optimize the log table
-        $repo->optimize();
-
         $entry = $this->createDevlogEntry(
             $message,
             $extension,
