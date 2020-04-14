@@ -51,9 +51,14 @@ The informations are stored in a database table and can be browsed using the bui
    A comma seperated list of extension keys that should not be logged
  * **max_logs**  
    The absolute limit of log messages stored in the database. 
-   If that limit is reached all older logrund are deleted. 
+   If that limit is reached all older log entries will be deleted by scheduler task (see next section). 
    If you don't want any limit, set this parameter to zero.
 
+#### Cleanup log table
+To clean up the log entry table you can add the "Cleanup mklog entries" scheduler task.
+It will delete all older entries above the **max_log** limit.
+
+It's recommended to execute this task regularly, to limit the growth of the log table. 
 
 ## Gelf Logger
 
