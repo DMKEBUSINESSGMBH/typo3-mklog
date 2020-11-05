@@ -1,11 +1,12 @@
 MK LOGGER
 =========
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-6.2%20%7C%207.6%20%7C%208.7%20%7C%209.5-orange?maxAge=3600&style=flat-square&logo=typo3)
+[![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mklog)
 [![Total Downloads](https://img.shields.io/packagist/dt/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mklog.svg?maxAge=3600&style=flat-square)](https://travis-ci.org/DMKEBUSINESSGMBH/typo3-mklog)
-[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/DMKEBUSINESSGMBH/typo3-mklog/master?maxAge=3600&style=flat-square)](https://scrutinizer-ci.com/g/DMKEBUSINESSGMBH/typo3-mklog/?branch=master)
-[![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
+[![Build Status](https://img.shields.io/travis/DMKEBUSINESSGMBH/typo3-mklog.svg?maxAge=3600&style=flat-square&logo=travis)](https://travis-ci.com/DMKEBUSINESSGMBH/typo3-mklog)
+[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/DMKEBUSINESSGMBH/typo3-mklog/master?maxAge=3600&style=flat-square&logo=scrutinizerci)](https://scrutinizer-ci.com/g/DMKEBUSINESSGMBH/typo3-mklog/?branch=master)
+[![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=3600&style=flat-square&logo=gnu)](https://packagist.org/packages/dmk/mklog)
 
 
 This extension offers a developer log. 
