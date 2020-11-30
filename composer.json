@@ -37,13 +37,13 @@
         "typo3-ter/mklog": "self.version"
     },
     "require": {
-        "typo3/cms-core": "^6.2 || ^7.6 || ^8.7 || ^9.5",
-        "typo3/cms-scheduler": "^6.2 || ^7.6 || ^8.7 || ^9.5",
+        "typo3/cms-core": "^6.2 || ^7.6 || ^8.7 || ^9.5 || ^10.4",
+        "typo3/cms-scheduler": "^6.2 || ^7.6 || ^8.7 || ^9.5 || ^10.4",
         "digedag/rn-base": ">=1.10.2"
     },
     "require-dev": {
         "namelesscoder/typo3-repository-client": "^1.2",
-        "nimut/testing-framework": "^1.0 || ^4.0",
+        "nimut/testing-framework": "^1.0 || ^5.0",
         "mikey179/vfsstream": "^1.4 || ^1.6",
         "phpunit/phpunit": "^4.7 || ^5.0 || ^7.0",
         "friendsofphp/php-cs-fixer": "~2@stable"
