@@ -206,13 +206,20 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
     /**
      * The global from mail address.
      *
-     * @return array
+     * @return string
      */
     public function getGlobalMailFrom()
     {
-        return \tx_rnbase_configurations::getExtensionCfgValue(
-            'rn_base',
-            'fromEmail'
-        );
+        $mail = $this->getExtConf('from_mail', '');
+
+        // fallback to old variant if installed
+        if (empty($mail) && ExtensionManagementUtility::isLoaded('rn_base')) {
+            $mail = \tx_rnbase_configurations::getExtensionCfgValue(
+                'rn_base',
+                'fromEmail'
+            );
+        }
+
+        return $mail;
     }
 }
