@@ -25,6 +25,10 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
+use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
 /**
  * MK Log watchdog scheduler fields.
  *
@@ -32,7 +36,7 @@ namespace DMK\Mklog\WatchDog;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
+class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 {
     /**
      * This method is used to define new fields for adding or editing a task
@@ -51,11 +55,8 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      *               ['cshLabel'] => The code of the CSH label
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
-    protected function _getAdditionalFields(
-        array &$taskInfo,
-        $task,
-        $schedulerModule
-    ) {
+    public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
+    {
         // @codingStandardsIgnoreEnd
 
         // Initialize extra field value
@@ -242,10 +243,8 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
-    protected function _validateAdditionalFields(
-        array &$submittedData,
-        $schedulerModule
-    ) {
+    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
+    {
         // @codingStandardsIgnoreEnd
 
         $credentials = &$submittedData['mklog_watchdog_credentials'];
@@ -268,14 +267,12 @@ class SchedulerFieldProviderWatchDog extends \Tx_Rnbase_Scheduler_FieldProvider
      * This method is used to save any additional input into the current task object
      * if the task class matches.
      *
-     * @param array                    $submittedData Array containing the data submitted by the user
-     * @param Tx_Rnbase_Scheduler_Task $task          Reference to the current task object
+     * @param array $submittedData Array containing the data submitted by the user
+     * @param AbstractTask $task Reference to the current task object
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
-    protected function _saveAdditionalFields(
-        array $submittedData,
-        \Tx_Rnbase_Scheduler_Task $task
-    ) {
+    public function saveAdditionalFields(array $submittedData, AbstractTask $task)
+    {
         // @codingStandardsIgnoreEnd
         ($task->getOptions()
             ->setTransport($submittedData['mklog_watchdog_transport'])

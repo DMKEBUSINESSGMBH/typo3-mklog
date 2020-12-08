@@ -2,10 +2,6 @@
 
 namespace DMK\Mklog\WatchDog;
 
-use DMK\Mklog\Domain\Model\GenericArrayObject;
-use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /***************************************************************
  * Copyright notice
  *
@@ -29,18 +25,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-if (!\class_exists('tx_rnbase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'rn_base',
-        'class.tx_rnbase.php'
-    );
-}
-if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'mklog',
-        'Tests/Classes/BaseTestCase.php'
-    );
-}
+use DMK\Mklog\Domain\Model\GenericArrayObject;
+use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Scheduler WatchDog test.

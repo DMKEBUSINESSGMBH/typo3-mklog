@@ -28,6 +28,7 @@ namespace DMK\Mklog\WatchDog;
 use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
@@ -284,11 +285,14 @@ class SchedulerWatchDog extends AbstractTask
 
         $options = [];
 
-        foreach ($this->getOptions() as $key => $value) {
-            $key = \Tx_Rnbase_Utility_Strings::underscoredToLowerCamelCase($key);
-            $options[] = ucfirst($key).': '.$value;
+        foreach ($this->getOptions()->toArray() as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+            $key = GeneralUtility::underscoredToLowerCamelCase($key);
+            $options[] = '  '.ucfirst($key).': '.$value;
         }
 
-        return 'Options: '.implode('; ', $options);
+        return 'Options: '.LF.implode('; '.LF, $options);
     }
 }
