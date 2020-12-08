@@ -118,7 +118,6 @@ class DevlogLogger extends AbstractLogger
      */
     public function devLogHook(array $params)
     {
-        \tx_rnbase::load('tx_rnbase_util_Logger');
         // map the old log levels to the new one
         switch ((int) $params['severity']) {
             case \tx_rnbase_util_Logger::LOGLEVEL_DEBUG:

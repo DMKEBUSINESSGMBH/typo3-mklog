@@ -25,8 +25,6 @@ namespace DMK\Mklog\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('Tx_Rnbase_Domain_Model_Base');
-
 /**
  * Devlog entry Model.
  *

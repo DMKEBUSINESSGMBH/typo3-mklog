@@ -25,9 +25,6 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
-\tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
-
 /**
  * MK Log watchdog abstract transport.
  *

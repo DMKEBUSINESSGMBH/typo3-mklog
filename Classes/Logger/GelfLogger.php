@@ -78,8 +78,6 @@ class GelfLogger extends AbstractLogger
          * SYSLOG_SEVERITY_ERROR = 3;
          * SYSLOG_SEVERITY_FATAL = 4;
          */
-
-        \tx_rnbase::load('tx_rnbase_util_Logger');
         // map the old log levels to the new one
         switch ((int) $params['severity']) {
             case 4:

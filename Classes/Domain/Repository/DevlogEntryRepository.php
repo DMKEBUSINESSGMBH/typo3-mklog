@@ -140,7 +140,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         \Tx_Rnbase_Domain_Model_DomainInterface $model,
         $options = null
     ) {
-        \tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
         $options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
 
         // there is no tca, so skip this check!

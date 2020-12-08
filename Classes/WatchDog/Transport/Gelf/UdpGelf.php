@@ -25,9 +25,6 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('DMK\\Mklog\\WatchDog\\Transport\\AbstractTransport');
-\tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
-
 /**
  * MK Log watchdog gelf transporter.
  *

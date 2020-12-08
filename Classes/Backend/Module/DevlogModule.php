@@ -25,8 +25,6 @@ namespace DMK\Mklog\Backend\Module;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('tx_rnbase_mod_ExtendedModFunc');
-
 /**
  * Devlog module.
  *

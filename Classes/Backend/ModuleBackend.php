@@ -28,8 +28,6 @@ namespace DMK\Mklog\Backend;
 // error_reporting(E_ALL & ~E_NOTICE);
 // ini_set("display_errors", 1);
 
-\tx_rnbase::load('tx_rnbase_mod_BaseModule');
-
 /**
  * MK Log backend module.
  *

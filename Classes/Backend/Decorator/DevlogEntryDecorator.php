@@ -28,8 +28,6 @@ namespace DMK\Mklog\Backend\Decorator;
 use DMK\Mklog\Domain\Model\DevlogEntryModel;
 use DMK\Mklog\Utility\SeverityUtility;
 
-\tx_rnbase::load('Tx_Rnbase_Backend_Decorator_BaseDecorator');
-
 /**
  * Devlog Entry decorator.
  *
@@ -115,7 +113,6 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
         }
 
         if (!empty($icon)) {
-            \tx_rnbase::load('tx_rnbase_mod_Util');
             $icon = \tx_rnbase_mod_Util::getSpriteIcon($icon);
         }
 

@@ -25,9 +25,6 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('Tx_Rnbase_Scheduler_Task');
-\tx_rnbase::load('Tx_Rnbase_Domain_Model_Data');
-
 /**
  * MK Log watchdog.
  *
@@ -137,7 +134,6 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
         // shutdown the transport
         $transport->shutdown();
 
-        \tx_rnbase::load('tx_rnbase_util_Logger');
         $success = empty($failures);
         $msg = sprintf(
             'WatchDog %1$s has %2$d messages send and %3$d failures.',
@@ -157,9 +153,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
         );
 
         // create a flash message for the beuser
-        \tx_rnbase::load('tx_rnbase_util_TYPO3');
         if (\tx_rnbase_util_TYPO3::getBEUserUID()) {
-            \tx_rnbase::load('tx_rnbase_util_Misc');
             \tx_rnbase_util_Misc::addFlashMessage(
                 $msg,
                 'MK LOGGER WatchDog',
@@ -264,8 +258,6 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
         if ($this->getOptions()->isEmpty()) {
             return '';
         }
-
-        \tx_rnbase::load('Tx_Rnbase_Utility_Strings');
 
         $options = [];
 

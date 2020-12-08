@@ -99,7 +99,6 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             $extraData = ['extra' => $extraData];
         }
         // add userdata
-        \tx_rnbase::load('tx_rnbase_util_TYPO3');
         $extraData['__feuser'] = \tx_rnbase_util_TYPO3::getFEUserUID();
         $extraData['__beuser'] = \tx_rnbase_util_TYPO3::getBEUserUID();
         // add current uri
@@ -117,7 +116,6 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      */
     private function getBacktrace()
     {
-        \tx_rnbase::load('tx_rnbase_util_Debug');
         $trace = array_reverse(
             \tx_rnbase_util_Debug::getTracePaths()
         );

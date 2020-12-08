@@ -27,9 +27,6 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
 use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 
-\tx_rnbase::load('DMK\\Mklog\\WatchDog\\Transport\\AbstractTransport');
-\tx_rnbase::load('Tx_Rnbase_Interface_Singleton');
-
 /**
  * MK Log watchdog gelf transporter.
  *

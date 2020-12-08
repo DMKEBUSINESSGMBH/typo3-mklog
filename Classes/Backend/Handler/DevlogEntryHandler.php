@@ -25,8 +25,6 @@ namespace DMK\Mklog\Backend\Handler;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('Tx_Rnbase_Backend_Handler_SearchHandler');
-
 /**
  * Devlog Entry handler.
  *
