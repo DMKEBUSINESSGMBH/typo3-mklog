@@ -28,7 +28,6 @@ namespace DMK\Mklog\Domain\Model;
 use DMK\Mklog\WatchDog\Message\InterfaceMessage;
 use Tx_Rnbase_Domain_Model_RecordInterface as LegacyRecordInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 
 /**
  * Devlog entry Model.
@@ -37,9 +36,19 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntry extends AbstractDomainObject implements InterfaceMessage, LegacyRecordInterface
+class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
 {
     public const TABLENAME = 'tx_mklog_devlog_entry';
+
+    /**
+     * @var int The uid of the record. The uid is only unique in the context of the database table.
+     */
+    protected $uid;
+
+    /**
+     * @var int the id of the page the record is "stored"
+     */
+    protected $pid;
 
     /**
      * @var int
@@ -100,11 +109,12 @@ class DevlogEntry extends AbstractDomainObject implements InterfaceMessage, Lega
     public function getRecord()
     {
         $values = [];
-        foreach ($this->_getProperties() as $property => $value) {
-            if (null === $value) {
+
+        foreach (get_object_vars($this) as $propertyName => $value) {
+            if (null === $value || '_' === $propertyName[0]) {
                 continue;
             }
-            $column = GeneralUtility::camelCaseToLowerCaseUnderscored($property);
+            $column = GeneralUtility::camelCaseToLowerCaseUnderscored($propertyName);
             $values[$column] = $value;
         }
 
@@ -135,6 +145,54 @@ class DevlogEntry extends AbstractDomainObject implements InterfaceMessage, Lega
     public function getTableName()
     {
         return self::TABLENAME;
+    }
+
+    /**
+     * Getter for uid.
+     *
+     * @return int the uid or NULL if none set yet
+     */
+    public function getUid()
+    {
+        if (null !== $this->uid) {
+            return (int) $this->uid;
+        }
+
+        return null;
+    }
+
+    /**
+     * Setter for the uid.
+     *
+     * @param int $uid
+     */
+    public function setUid($uid): void
+    {
+        $this->uid = $uid;
+    }
+
+    /**
+     * Getter for the pid.
+     *
+     * @return int|null the pid or NULL if none set yet
+     */
+    public function getPid()
+    {
+        if (null === $this->pid) {
+            return null;
+        }
+
+        return (int) $this->pid;
+    }
+
+    /**
+     * Setter for the pid.
+     *
+     * @param int $pid
+     */
+    public function setPid($pid): void
+    {
+        $this->pid = $pid;
     }
 
     /**

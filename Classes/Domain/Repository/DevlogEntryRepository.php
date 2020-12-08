@@ -150,7 +150,7 @@ class DevlogEntryRepository
         $connection = $this->getConnection();
         $query = $connection->createQueryBuilder()->insert($this->getTableName())->values($model->getRecord());
         if ($query->execute()) {
-            $model->_setProperty('uid', $connection->lastInsertId($this->getTableName()));
+            $model->setUid($connection->lastInsertId($this->getTableName()));
         }
     }
 }
