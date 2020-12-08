@@ -1,6 +1,6 @@
 <?php
 
-namespace DMK\Mklog\Domain\Repository;
+namespace DMK\Mklog\Backend\Repository;
 
 /***************************************************************
  * Copyright notice
@@ -25,18 +25,7 @@ namespace DMK\Mklog\Domain\Repository;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-if (!\class_exists('tx_rnbase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'rn_base',
-        'class.tx_rnbase.php'
-    );
-}
-if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'mklog',
-        'Tests/Classes/BaseTestCase.php'
-    );
-}
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Devlog entry repository test.
@@ -47,6 +36,19 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  */
 class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 {
+    /**
+     * Sets up the fixture, for example, open a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp()
+    {
+        if (!ExtensionManagementUtility::isLoaded('rn_base')) {
+            $this->markTestSkipped('Skipped because rn_base is missing');
+        }
+
+        parent::setUp();
+    }
+
     /**
      * Test the getSearchClass method.
      *
@@ -342,5 +344,39 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     public function testOptimize()
     {
         self::markTestIncomplete();
+    }
+
+    /**
+     * Creates the repo mock.
+     *
+     * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Backend\Repository\DevlogEntryRepository
+     */
+    protected function getDevlogEntryRepository()
+    {
+        \tx_rnbase::load('tx_rnbase_util_SearchGeneric');
+        $searcher = $this->getMock(
+            'tx_rnbase_util_SearchGeneric',
+            ['search']
+        );
+
+        $repo = $this->getMock(
+            'DMK\\Mklog\\Backend\\Repository\\DevlogEntryRepository',
+            ['getSearcher', 'getConnection', 'getEmptyModel']
+        );
+
+        $repo
+            ->expects(self::any())
+            ->method('getEmptyModel')
+            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Domain\\Model\\DevlogEntry')));
+        $repo
+            ->expects(self::any())
+            ->method('getSearcher')
+            ->will(self::returnValue($searcher));
+        $repo
+            ->expects(self::any())
+            ->method('getConnection')
+            ->will(self::returnValue($this->getDatabaseConnection()));
+
+        return $repo;
     }
 }

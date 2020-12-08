@@ -25,6 +25,10 @@ namespace DMK\Mklog\Tests;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Model\DevlogEntry;
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+
 /**
  * Basis Testcase.
  *
@@ -50,7 +54,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
-        unset(\DMK\Mklog\Factory::getStorage()->LoggingActive);
+        \DMK\Mklog\Factory::getStorage()->unsLoggingActive();
         $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
         // just call to create the initial config
         $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getExtConf'], ['enable_devlog']);
@@ -103,34 +107,32 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     /**
      * Creates the repo mock.
      *
-     * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Domain\Repository\DevlogEntryRepository
+     * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Backend\Repository\DevlogEntryRepository
      */
     protected function getDevlogEntryRepository()
     {
-        \tx_rnbase::load('tx_rnbase_util_SearchGeneric');
-        $searcher = $this->getMock(
-            'tx_rnbase_util_SearchGeneric',
-            ['search']
-        );
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor();
+        $connection = $this->getMockBuilder(Connection::class)
+            ->disableOriginalConstructor();
 
-        \tx_rnbase::load('DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository');
         $repo = $this->getMock(
             'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository',
-            ['getSearcher', 'getConnection', 'getEmptyModel']
+            ['countAll', 'createQueryBuilder', 'getConnection', 'createNewModel']
         );
 
         $repo
             ->expects(self::any())
-            ->method('getEmptyModel')
-            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Domain\\Model\\DevlogEntry')));
+            ->method('createNewModel')
+            ->will(self::returnValue($this->getMock(DevlogEntry::class)));
         $repo
             ->expects(self::any())
-            ->method('getSearcher')
-            ->will(self::returnValue($searcher));
+            ->method('createQueryBuilder')
+            ->will(self::returnValue($queryBuilder->getMock()));
         $repo
             ->expects(self::any())
             ->method('getConnection')
-            ->will(self::returnValue($this->getDatabaseConnection()));
+            ->will(self::returnValue($connection->getMock()));
 
         return $repo;
     }
