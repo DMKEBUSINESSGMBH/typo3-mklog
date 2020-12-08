@@ -115,7 +115,7 @@ final class Factory
      *
      * @return \DMK\Mklog\Utility\EntryDataParserUtility
      */
-    public static function getEntryDataParserUtility(\DMK\Mklog\Domain\Model\DevlogEntryModel $devlogEntry)
+    public static function getEntryDataParserUtility(Domain\Model\DevlogEntryModel $devlogEntry)
     {
         return \tx_rnbase::makeInstance(
             'DMK\\Mklog\\Utility\\EntryDataParserUtility',

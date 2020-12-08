@@ -79,8 +79,8 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
             $lastRun = $this->getLastRunTime($taskId);
             /* @var $srv tx_mklog_srv_WatchDog */
             $srv = tx_rnbase_util_Misc::getService('mklog', 'WatchDog');
-            $filters = array();
-            $options = array();
+            $filters = [];
+            $options = [];
             $options['minimalSeverity'] = $this->getMinimalSeverity();
             $options['forceSummaryMail'] = $this->getForceSummaryMail();
             $options['includeDataVar'] = $this->getIncludeDataVar();
@@ -98,7 +98,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
             tx_rnbase_util_Logger::fatal(
                 'WatchDog failed!',
                 'mklog',
-                array('Exception' => $e->getMessage())
+                ['Exception' => $e->getMessage()]
             );
             $success = false;
         }
@@ -113,7 +113,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
      */
     protected function getLastRunTime($taskId)
     {
-        $options = array();
+        $options = [];
         $options['enablefieldsoff'] = 1;
         $options['where'] = 'uid='.intval($taskId);
         $ret = tx_rnbase_util_DB::doSelect(
@@ -141,8 +141,8 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
         return tx_rnbase_util_DB::doUpdate(
             'tx_scheduler_task',
             'uid='.intval($taskId),
-            array('tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s'),
-            )
+            ['tx_mklog_lastrun' => $lastRun->format('Y-m-d H:i:s'),
+            ]
         );
     }
 
@@ -195,9 +195,7 @@ class tx_mklog_scheduler_WatchDog extends Tx_Rnbase_Scheduler_Task
 
         foreach ($emails as $email) {
             if (!Tx_Rnbase_Utility_Strings::validEmail($email)) {
-                throw new Exception(
-                    'tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!'
-                );
+                throw new Exception('tx_mklog_scheduler_WatchDog->setEmail(): Invalid email address given!');
             }
         }
 

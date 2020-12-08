@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace DMK\Mklog\Task;
@@ -6,7 +7,7 @@ namespace DMK\Mklog\Task;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
- * Class OptimizeTableTask
+ * Class OptimizeTableTask.
  *
  * @author  Mario Seidel
  * @license http://www.gnu.org/licenses/lgpl.html

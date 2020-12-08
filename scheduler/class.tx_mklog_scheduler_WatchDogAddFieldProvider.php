@@ -77,18 +77,18 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider extends Tx_Rnbase_Scheduler_Fi
         }
 
         // Write the code for the field
-        $additionalFields = array();
+        $additionalFields = [];
 
         // Email
         $fieldID = 'field_'.MKLOG_FIELD_EMAIL;
         // Note: Name qualifier MUST be "tx_scheduler" as the tx_scheduler's BE module is used!
         $fieldCode = '<input type="text" name="tx_scheduler['.MKLOG_FIELD_EMAIL.']" id="'.$fieldID.
                         '" value="'.$taskInfo[MKLOG_FIELD_EMAIL].'" size="50" />';
-        $additionalFields[$fieldID] = array(
+        $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_EMAIL,
             'cshKey' => '_MOD_tools_txschedulerM1',
-        );
+        ];
 
         // Minimum severity
         $fieldID = 'field_'.MKLOG_FIELD_SEVERITY;
@@ -100,11 +100,11 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider extends Tx_Rnbase_Scheduler_Fi
             $fieldCode .= '<option value="'.$key.'" '.($taskInfo[MKLOG_FIELD_SEVERITY] == $key ? 'selected="selected"' : '').' />'.$label."</option>\n";
         }
         $fieldCode .= '</select>';
-        $additionalFields[$fieldID] = array(
+        $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_SEVERITY,
             'cshKey' => '_MOD_tools_txschedulerM1',
-        );
+        ];
 
         // Force summary
         $fieldID = 'field_'.MKLOG_FIELD_FORCE;
@@ -112,11 +112,11 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider extends Tx_Rnbase_Scheduler_Fi
                         '" value="1" '.($taskInfo[MKLOG_FIELD_FORCE] ? 'checked="checked"' : '').' /> Yes';
         $fieldCode .= '<input type="radio" name="tx_scheduler['.MKLOG_FIELD_FORCE.']" id="'.$fieldID.
                         '" value="0" '.($taskInfo[MKLOG_FIELD_FORCE] ? '' : 'checked="checked"').' /> No';
-        $additionalFields[$fieldID] = array(
+        $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_FORCE,
             'cshKey' => '_MOD_tools_txschedulerM1',
-        );
+        ];
 
         // data_var
         $fieldID = 'field_'.MKLOG_FIELD_DATAVAR;
@@ -124,11 +124,11 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider extends Tx_Rnbase_Scheduler_Fi
                         '" value="1" '.($taskInfo[MKLOG_FIELD_DATAVAR] ? 'checked="checked"' : '').' /> Yes';
         $fieldCode .= '<input type="radio" name="tx_scheduler['.MKLOG_FIELD_DATAVAR.']" id="'.$fieldID.
                         '" value="0" '.($taskInfo[MKLOG_FIELD_DATAVAR] ? '' : 'checked="checked"').' /> No';
-        $additionalFields[$fieldID] = array(
+        $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_DATAVAR,
             'cshKey' => '_MOD_tools_txschedulerM1',
-        );
+        ];
 
         // data_var
         $fieldID = 'field_'.MKLOG_FIELD_GROUP_ENTRIES;
@@ -142,11 +142,11 @@ class tx_mklog_scheduler_WatchDogAddFieldProvider extends Tx_Rnbase_Scheduler_Fi
                         '" value="1" '.($fieldValue ? 'checked="checked"' : '').' /> Yes';
         $fieldCode .= '<input type="radio" name="tx_scheduler['.MKLOG_FIELD_GROUP_ENTRIES.']" id="'.$fieldID.
                         '" value="0" '.($fieldValue ? '' : 'checked="checked"').' /> No';
-        $additionalFields[$fieldID] = array(
+        $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => 'LLL:EXT:mklog/locallang_db.xml:scheduler_watchdog_field_'.MKLOG_FIELD_GROUP_ENTRIES,
             'cshKey' => '_MOD_tools_txschedulerM1',
-        );
+        ];
 
         return $additionalFields;
     }

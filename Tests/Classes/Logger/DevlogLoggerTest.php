@@ -135,7 +135,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                     }
                 ),
                 $this->callback(
-                    function ($data) use ($that, $msg, $extKey, $severity, $extraData) {
+                    function ($data) use ($that, $msg, $extKey, $severity) {
                         $that->assertSame(
                             \DMK\Mklog\Factory::getConfigUtility()->getCurrentRunId(),
                             $data['run_id']

@@ -1,6 +1,6 @@
 <?php
 
-defined('TYPO3_MODE') || die('Access denied.');
+defined('TYPO3_MODE') || exit('Access denied.');
 
 if (TYPO3_MODE == 'BE') {
     // add be module ts
@@ -15,14 +15,14 @@ if (TYPO3_MODE == 'BE') {
         'web',
         'backend',
         'bottom',
-        array(
-        ),
-        array(
+        [
+        ],
+        [
             'access' => 'user,group',
             'routeTarget' => 'DMK\\Mklog\\Backend\\ModuleBackend',
             'icon' => 'EXT:mklog/ext_icon.png',
             'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
-        )
+        ]
     );
 
     // register devlog be module

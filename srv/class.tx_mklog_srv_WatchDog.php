@@ -44,8 +44,8 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
     public function triggerMails(
         $emailReceiver,
         $lastRun,
-        $filters = array(),
-        $options = array()
+        $filters = [],
+        $options = []
     ) {
         $infos = $this->lookupMsgs($lastRun, $filters, $options);
         // muss eine Mail verschickt werden?
@@ -63,10 +63,10 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
      */
     protected function lookupMsgs(
         DateTime $lastRun,
-        array $filters = array(),
-        array $options = array()
+        array $filters = [],
+        array $options = []
     ) {
-        $infos = array();
+        $infos = [];
         $infos['summary'] = $this->getSummary($lastRun);
         $minimalSeverity = isset($options['minimalSeverity']) ?
             $options['minimalSeverity'] : tx_rnbase_util_Logger::LOGLEVEL_WARN;
@@ -123,7 +123,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
     {
         $what = 'severity, count(uid) As cnt';
         $from = Tx_Mklog_Utility_Devlog::getTableName();
-        $options = array();
+        $options = [];
         $options['groupby'] = 'severity';
         $options['enablefieldsoff'] = '1';
         $options['where'] = 'crdate>='.$lastRun->format('U');
@@ -140,7 +140,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
      *
      * @return bool
      */
-    protected function sendMail($emailReceiver, array $infos, DateTime $lastRun, array $options = array())
+    protected function sendMail($emailReceiver, array $infos, DateTime $lastRun, array $options = [])
     {
         $contentArr = $this->buildMailContents($infos, $lastRun, $options);
 
@@ -165,13 +165,13 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
      */
     public function getSeverities()
     {
-        return array(
+        return [
             tx_rnbase_util_Logger::LOGLEVEL_DEBUG => 'DEBUG',
             tx_rnbase_util_Logger::LOGLEVEL_INFO => 'INFO',
             tx_rnbase_util_Logger::LOGLEVEL_NOTICE => 'NOTICE',
             tx_rnbase_util_Logger::LOGLEVEL_WARN => 'WARN',
             tx_rnbase_util_Logger::LOGLEVEL_FATAL => 'FATAL',
-        );
+        ];
     }
 
     /**
@@ -184,7 +184,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
     protected function buildMailContents(
         array $infos,
         DateTime $lastRun,
-        array $options = array()
+        array $options = []
     ) {
         $messageFieldName = Tx_Mklog_Utility_Devlog::getMessageFieldName();
         $extraDataFieldName = Tx_Mklog_Utility_Devlog::getExtraDataFieldName();
@@ -259,7 +259,7 @@ class tx_mklog_srv_WatchDog extends Tx_Rnbase_Service_Base
             }
         }
 
-        return array('text' => $textPart, 'html' => $htmlPart);
+        return ['text' => $textPart, 'html' => $htmlPart];
     }
 }
 
