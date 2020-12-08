@@ -25,7 +25,7 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Domain\Model\GenericArrayObject;
 
 /**
  * MK Log watchdog abstract transport.
@@ -39,14 +39,14 @@ abstract class AbstractTransport implements InterfaceTransport
     /**
      * Internal options storage.
      *
-     * @var GenericData
+     * @var GenericArrayObject
      */
     private $options = null;
 
     /**
      * Returns a storage.
      *
-     * @return GenericData
+     * @return GenericArrayObject
      */
     public function getOptions()
     {
@@ -57,9 +57,9 @@ abstract class AbstractTransport implements InterfaceTransport
      * Initializes the Transport.
      */
     public function initialize(
-        GenericData $options
+        GenericArrayObject $options
     ) {
-        $this->options = GenericData::getInstance($options);
+        $this->options = GenericArrayObject::getInstance($options);
     }
 
     /**

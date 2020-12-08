@@ -2,11 +2,9 @@
 
 namespace DMK\Mklog\WatchDog\Transport;
 
-use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Tests\BaseTestCase;
-use tx_rnbase_util_Extensions;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use function class_exists;
 
 /***************************************************************
  * Copyright notice
@@ -61,7 +59,7 @@ class MailTransportTest extends BaseTestCase
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
         $mailTransport->initialize(GeneralUtility::makeInstance(
-            GenericData::class
+            GenericArrayObject::class
         ));
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');
@@ -81,7 +79,7 @@ class MailTransportTest extends BaseTestCase
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
         $mailTransport->initialize(GeneralUtility::makeInstance(
-            GenericData::class, ['mail_subject' => 'test subject on %s']
+            GenericArrayObject::class, ['mail_subject' => 'test subject on %s']
         ));
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');

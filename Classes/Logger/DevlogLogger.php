@@ -180,20 +180,20 @@ class DevlogLogger extends AbstractLogger
 
         $storage = \DMK\Mklog\Factory::getStorage();
 
-        if (isset($storage->LoggingActive)) {
-            return $storage->LoggingActive;
+        if ($storage->hasLoggingActive()) {
+            return $storage->getLoggingActive();
         }
 
         $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
         $config = \DMK\Mklog\Factory::getConfigUtility();
 
-        $storage->LoggingActive = true;
+        $storage->setLoggingActive(true);
 
         if (!$config->getEnableDevLog()) {
-            $storage->LoggingActive = false;
+            $storage->setLoggingActive(false);
         }
 
-        return $storage->LoggingActive;
+        return $storage->getLoggingActive();
     }
 
     /**

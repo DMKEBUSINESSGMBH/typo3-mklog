@@ -2,7 +2,7 @@
 
 namespace DMK\Mklog\WatchDog;
 
-use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -66,7 +66,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         $transport
             ->expects(self::once())
             ->method('initialize')
-            ->with(self::isInstanceOf(GenericData::class));
+            ->with(self::isInstanceOf(GenericArrayObject::class));
         $transport
             ->expects(self::never())
             ->method('publish');

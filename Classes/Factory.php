@@ -2,14 +2,6 @@
 
 namespace DMK\Mklog;
 
-use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
-use DMK\Mklog\Utility\ConfigUtility;
-use DMK\Mklog\Utility\DataConverterUtility;
-use DMK\Mklog\Utility\EntryDataParserUtility;
-use DMK\Mklog\WatchDog\Transport\InterfaceTransport;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-
 /***************************************************************
  * Copyright notice
  *
@@ -33,6 +25,15 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Model\GenericArrayObject as StorageObject;
+use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
+use DMK\Mklog\Utility\ConfigUtility;
+use DMK\Mklog\Utility\DataConverterUtility;
+use DMK\Mklog\Utility\EntryDataParserUtility;
+use DMK\Mklog\WatchDog\Transport\InterfaceTransport;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /**
  * MK Log Factory.
  *
@@ -45,14 +46,14 @@ final class Factory
     /**
      * Returns a storage.
      *
-     * @return \stdClass
+     * @return StorageObject
      */
     public static function getStorage()
     {
         static $storage = null;
 
         if (null === $storage) {
-            $storage = new \stdClass();
+            $storage = StorageObject::getInstance();
         }
 
         return $storage;
@@ -88,11 +89,13 @@ final class Factory
     public static function getConfigUtility()
     {
         $storage = self::getStorage();
-        if (empty($storage->ConfigUtility)) {
-            $storage->ConfigUtility = self::makeInstance(ConfigUtility::class);
+        if (!$storage->hasConfigUtility()) {
+            $storage->setConfigUtility(
+                self::makeInstance(ConfigUtility::class)
+            );
         }
 
-        return $storage->ConfigUtility;
+        return $storage->getConfigUtility();
     }
 
     /**
@@ -103,11 +106,13 @@ final class Factory
     public static function getDataConverterUtility()
     {
         $storage = self::getStorage();
-        if (empty($storage->DataConverterUtility)) {
-            $storage->DataConverterUtility = self::makeInstance(DataConverterUtility::class);
+        if (!$storage->hasDataConverterUtility()) {
+            $storage->setDataConverterUtility(
+                self::makeInstance(DataConverterUtility::class)
+            );
         }
 
-        return $storage->DataConverterUtility;
+        return $storage->getDataConverterUtility();
     }
 
     /**

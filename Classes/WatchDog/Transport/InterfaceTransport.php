@@ -25,7 +25,7 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\WatchDog\Message\InterfaceMessage;
 
 /**
@@ -48,7 +48,7 @@ interface InterfaceTransport
      * Initializes the Transport.
      */
     public function initialize(
-        GenericData $options
+        GenericArrayObject $options
     );
 
     /**

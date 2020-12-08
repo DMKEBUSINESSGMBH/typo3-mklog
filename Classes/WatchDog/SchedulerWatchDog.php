@@ -26,7 +26,8 @@ namespace DMK\Mklog\WatchDog;
  ***************************************************************/
 
 use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
-use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Domain\Model\GenericArrayObject;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
 /**
@@ -42,7 +43,7 @@ class SchedulerWatchDog extends AbstractTask
      * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
      * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
      *
-     * @var GenericData
+     * @var GenericArrayObject
      *
      * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
      */
@@ -51,7 +52,7 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * Internal options storage.
      *
-     * @var GenericData
+     * @var GenericArrayObject
      */
     protected $schedulerOptions = null;
 
@@ -91,19 +92,21 @@ class SchedulerWatchDog extends AbstractTask
         if ($this->transport && !$this->messageTransport) {
             $this->messageTransport = $this->transport;
         }
+
+        if (ExtensionManagementUtility::isLoaded('rn_base') && $this->schedulerOptions instanceof \Tx_Rnbase_Domain_Model_Data) {
+            $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->toArray());
+        }
     }
 
     /**
      * Returns a storage.
      *
-     * @return GenericData
+     * @return GenericArrayObject
      */
     public function getOptions()
     {
         if (null === $this->schedulerOptions) {
-            $this->schedulerOptions = \tx_rnbase::makeInstance(
-                GenericData::class
-            );
+            $this->schedulerOptions = GenericArrayObject::getInstance();
         }
 
         return $this->schedulerOptions;

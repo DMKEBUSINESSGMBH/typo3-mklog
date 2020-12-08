@@ -25,7 +25,7 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 
 /**
@@ -69,7 +69,7 @@ abstract class AbstractGelf extends AbstractTransport implements \TYPO3\CMS\Core
      * Initializes the Transport.
      */
     public function initialize(
-        GenericData $options
+        GenericArrayObject $options
     ) {
         parent::initialize($options);
 

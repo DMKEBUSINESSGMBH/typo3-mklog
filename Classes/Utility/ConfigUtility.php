@@ -25,6 +25,7 @@ namespace DMK\Mklog\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Model\GenericArrayObject as ConfigObject;
 use DMK\Mklog\Factory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -42,19 +43,19 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Internal config storage.
      *
-     * @var \stdClass|null
+     * @var ConfigObject
      */
     private $storage = null;
 
     /**
      * Returns a storage.
      *
-     * @return \stdClass
+     * @return ConfigObject
      */
     protected function getStorage()
     {
         if (null === $this->storage) {
-            $this->storage = new \stdClass();
+            $this->storage = ConfigObject::getInstance();
         }
 
         return $this->storage;
@@ -70,24 +71,30 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     protected function getExtConf($key, $default = null)
     {
         $storage = $this->getStorage();
-        if (empty($storage->extConf)) {
+        if (!$storage->hasExtConf()) {
             if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog'])) {
-                $storage->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog']);
+                $storage->setExtConf(
+                    unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog'])
+                );
             }
 
             if (VersionUtility::isTypo3Version9OrHigher()) {
-                $storage->extConf = Factory::makeInstance(ExtensionConfiguration::class)->get(
-                    'mklog',
-                    ''
+                $storage->setExtConf(
+                    Factory::makeInstance(ExtensionConfiguration::class)->get(
+                        'mklog',
+                        ''
+                    )
                 );
             }
         }
 
-        if (empty($storage->extConf[$key])) {
+        $extConf = $storage->getExtConf();
+
+        if (empty($extConf[$key])) {
             return $default;
         }
 
-        return $storage->extConf[$key];
+        return $extConf[$key];
     }
 
     /**
@@ -98,14 +105,14 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     public function getCurrentRunId()
     {
         $storage = $this->getStorage();
-        if (empty($storage->DevLogCurrentRunId)) {
+        if ($storage->hasDevLogCurrentRunId()) {
             [$sec, $usec] = explode('.', (string) microtime(true));
             // miliseconds has to be exactly 6 sings long. otherwise the resulting number is too small.
             $usec = $usec.str_repeat('0', 6 - strlen($usec));
-            $storage->DevLogCurrentRunId = $sec.$usec;
+            $storage->setDevLogCurrentRunId($sec.$usec);
         }
 
-        return $storage->DevLogCurrentRunId;
+        return $storage->getDevLogCurrentRunId();
     }
 
     /**
@@ -224,7 +231,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getGlobalMailFrom()
     {
-        $mail = $this->getExtConf('from_mail', '');
+        $mail = $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress']);
 
         // fallback to old variant if installed
         if (empty($mail) && ExtensionManagementUtility::isLoaded('rn_base')) {

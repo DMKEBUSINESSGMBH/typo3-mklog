@@ -56,7 +56,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     public function testIsLoggingEnabledWithoutDbShouldBeFalse()
     {
         // activate logging
-        \DMK\Mklog\Factory::getStorage()->LoggingActive = true;
+        \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
         self::assertFalse(
             $this->callInaccessibleMethod(
@@ -75,7 +75,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     public function testIsLoggingEnabledWithDisabledLogInGlobals()
     {
         // activate logging
-        \DMK\Mklog\Factory::getStorage()->LoggingActive = true;
+        \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
         // create an dummy db object for unittests outside of a typo3 env
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;

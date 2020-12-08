@@ -42,7 +42,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     public function __construct(
         array $options = []
     ) {
-        // $this->options = \DMK\Mklog\Domain\Model\GenericData::getInstance($options);
+        // $this->options = \DMK\Mklog\Domain\Model\GenericArrayObject::getInstance($options);
     }
 
     /**

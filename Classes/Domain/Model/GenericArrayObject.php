@@ -33,7 +33,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @author Michael Wagner
  */
-class GenericData
+class GenericArrayObject
 {
     /**
      * @var array
@@ -49,11 +49,11 @@ class GenericData
     }
 
     /**
-     * @param array |GenericData $data
+     * @param array |GenericArrayObject $data
      *
-     * @return GenericData
+     * @return GenericArrayObject
      */
-    public static function getInstance($data = null)
+    public static function getInstance($data = [])
     {
         if ($data instanceof self) {
             return $data;
@@ -70,7 +70,7 @@ class GenericData
         }
 
         // use get_called_class for backwards compatibility!
-        return Factory::makeInstance(GenericData::class, $data);
+        return Factory::makeInstance(GenericArrayObject::class, $data);
     }
 
     /**
@@ -131,6 +131,14 @@ class GenericData
     public function hasProperty($property)
     {
         return isset($this->data[$property]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty($this->data);
     }
 
     /**
