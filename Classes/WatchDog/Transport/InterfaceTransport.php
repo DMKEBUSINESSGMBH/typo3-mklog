@@ -25,6 +25,9 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\WatchDog\Message\InterfaceMessage;
+
 /**
  * MK Log watchdog transport interface.
  *
@@ -45,14 +48,14 @@ interface InterfaceTransport
      * Initializes the Transport.
      */
     public function initialize(
-        \Tx_Rnbase_Domain_Model_Data $options
+        GenericData $options
     );
 
     /**
      * Publishes a message by the provider.
      */
     public function publish(
-        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+        InterfaceMessage $message
     );
 
     /**

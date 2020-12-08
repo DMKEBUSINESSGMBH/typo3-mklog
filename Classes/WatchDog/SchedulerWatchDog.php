@@ -25,6 +25,10 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
+use DMK\Mklog\Domain\Model\GenericData;
+use TYPO3\CMS\Scheduler\Task\AbstractTask;
+
 /**
  * MK Log watchdog.
  *
@@ -32,13 +36,13 @@ namespace DMK\Mklog\WatchDog;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
+class SchedulerWatchDog extends AbstractTask
 {
     /**
      * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
      * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
      *
-     * @var \Tx_Rnbase_Domain_Model_Data
+     * @var GenericData
      *
      * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
      */
@@ -47,7 +51,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     /**
      * Internal options storage.
      *
-     * @var \Tx_Rnbase_Domain_Model_Data
+     * @var GenericData
      */
     protected $schedulerOptions = null;
 
@@ -92,13 +96,13 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     /**
      * Returns a storage.
      *
-     * @return \Tx_Rnbase_Domain_Model_Data
+     * @return GenericData
      */
     public function getOptions()
     {
         if (null === $this->schedulerOptions) {
             $this->schedulerOptions = \tx_rnbase::makeInstance(
-                'Tx_Rnbase_Domain_Model_Data'
+                GenericData::class
             );
         }
 
@@ -173,6 +177,16 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
     protected function findMessages()
     {
         $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+        $repo = new DevlogEntryRepository();
+
+        /*
+            SELECT DEVLOGENTRY.* FROM tx_mklog_devlog_entry AS DEVLOGENTRY
+            WHERE DEVLOGENTRY.severity <= 7
+            AND DEVLOGENTRY.ext_key IN (\'mklog\')
+            AND DEVLOGENTRY.ext_key NOT IN (\'testlog\')
+            AND NOT FIND_IN_SET(\'mkLogMail:26\', `transport_ids`)
+            ORDER BY DEVLOGENTRY.crdate ASC LIMIT 5',
+         */
 
         $fields = $options = [];
 
@@ -204,6 +218,12 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
         }
 
         $options['orderby'] = ['DEVLOGENTRY.crdate' => 'ASC'];
+
+        $options['sqlonly'] = 1;
+        echo '<h1>DEBUG: '.__FILE__.' Line: '.__LINE__.'</h1><pre>'.var_export([
+                $repo->search($fields, $options),
+            ], true).'</pre>';
+        exit('DEBUG: '.__FILE__.' Line: '.__LINE__);
 
         return $repo->search($fields, $options);
     }

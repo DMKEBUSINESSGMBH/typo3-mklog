@@ -25,6 +25,7 @@ namespace DMK\Mklog\Logger;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Model\GenericData;
 use DMK\Mklog\Utility\SeverityUtility;
 use DMK\Mklog\Utility\VersionUtility;
 use TYPO3\CMS\Core\Log\LogLevel;
@@ -139,7 +140,7 @@ class GelfLogger extends AbstractLogger
         }
 
         $options = \tx_rnbase::makeInstance(
-            'Tx_Rnbase_Domain_Model_Data',
+            GenericData::class,
             [
                 'credentials' => $config->getGelfCredentials(),
             ]

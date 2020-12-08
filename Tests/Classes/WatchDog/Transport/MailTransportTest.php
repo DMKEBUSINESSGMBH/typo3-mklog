@@ -2,7 +2,11 @@
 
 namespace DMK\Mklog\WatchDog\Transport;
 
+use DMK\Mklog\Domain\Model\GenericData;
+use DMK\Mklog\Tests\BaseTestCase;
+use tx_rnbase_util_Extensions;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use function class_exists;
 
 /***************************************************************
  * Copyright notice
@@ -27,19 +31,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-if (!\class_exists('tx_rnbase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'rn_base',
-        'class.tx_rnbase.php'
-    );
-}
-if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'mklog',
-        'Tests/Classes/BaseTestCase.php'
-    );
-}
-
 /**
  * Class SchedulerWatchDogTest.
  *
@@ -47,7 +38,7 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class MailTransportTest extends \DMK\Mklog\Tests\BaseTestCase
+class MailTransportTest extends BaseTestCase
 {
     protected function setUp()
     {
@@ -70,7 +61,7 @@ class MailTransportTest extends \DMK\Mklog\Tests\BaseTestCase
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
         $mailTransport->initialize(GeneralUtility::makeInstance(
-            'Tx_Rnbase_Domain_Model_Data'
+            GenericData::class
         ));
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');
@@ -90,7 +81,7 @@ class MailTransportTest extends \DMK\Mklog\Tests\BaseTestCase
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
         $mailTransport->initialize(GeneralUtility::makeInstance(
-            'Tx_Rnbase_Domain_Model_Data', ['mail_subject' => 'test subject on %s']
+            GenericData::class, ['mail_subject' => 'test subject on %s']
         ));
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');

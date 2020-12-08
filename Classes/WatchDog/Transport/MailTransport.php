@@ -64,7 +64,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      * Initializes the Transport.
      */
     public function initialize(
-        \Tx_Rnbase_Domain_Model_Data $options
+        \DMK\Mklog\Domain\Model\GenericData $options
     ) {
         parent::initialize($options);
 

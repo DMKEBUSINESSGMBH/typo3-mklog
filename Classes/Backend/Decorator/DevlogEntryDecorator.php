@@ -26,6 +26,7 @@ namespace DMK\Mklog\Backend\Decorator;
  ***************************************************************/
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
+use DMK\Mklog\Domain\Model\GenericData;
 use DMK\Mklog\Utility\SeverityUtility;
 
 /**
@@ -45,7 +46,7 @@ class DevlogEntryDecorator
     /**
      * The internal options object.
      *
-     * @var \Tx_Rnbase_Domain_Model_Data
+     * @var GenericData
      */
     private $options = null;
 
@@ -53,7 +54,7 @@ class DevlogEntryDecorator
      * Constructor.
      *
      * @param \tx_rnbase_mod_BaseModule          $mod
-     * @param array|\Tx_Rnbase_Domain_Model_Data $options
+     * @param array|GenericData $options
      */
     public function __construct(
         \tx_rnbase_mod_BaseModule $mod,
@@ -61,7 +62,7 @@ class DevlogEntryDecorator
     ) {
         $this->mod = $mod;
 
-        $this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
+        $this->options = GenericData::getInstance($options);
     }
 
     /**
