@@ -37,16 +37,21 @@
         "typo3-ter/mklog": "self.version"
     },
     "require": {
-        "typo3/cms-core": "^6.2 || ^7.6 || ^8.7 || ^9.5 || ^10.4",
-        "typo3/cms-scheduler": "^6.2 || ^7.6 || ^8.7 || ^9.5 || ^10.4",
-        "digedag/rn-base": ">=1.10.2"
+        "typo3/cms-core": "^7.6.32 || ^8.7.32 || ^9.5.23 || ^10.4.10",
+        "typo3/cms-scheduler": "^7.6.32 || ^8.7.32 || ^9.5.23 || ^10.4.10",
+        "digedag/rn-base": "^1.12.4"
     },
     "require-dev": {
-        "namelesscoder/typo3-repository-client": "^1.2",
-        "nimut/testing-framework": "^1.0 || ^5.0",
         "mikey179/vfsstream": "^1.4 || ^1.6",
-        "phpunit/phpunit": "^4.7 || ^5.0 || ^7.0",
-        "friendsofphp/php-cs-fixer": "~2@stable"
+        "php-parallel-lint/php-parallel-lint": "^1.2",
+        "sebastian/phpcpd": "^5.0",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpmd/phpmd": "^2.9",
+        "phpstan/phpstan": "^0.12.8",
+        "phpstan/extension-installer": "^1.0",
+        "saschaegerer/phpstan-typo3": "^0.13",
+        "dmk/phpstan-rnbase": "^0.0.3",
+        "nimut/testing-framework": "^1.1 || ^2.0 || ^3.0 || ^4.0 || ^5.0"
     },
     "autoload": {
         "classmap": [
@@ -75,7 +80,37 @@
     "scripts": {
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
-            "[ -L .Build/Web/typo3conf/ext/mklog ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mklog"
+            "[ -L .Build/Web/typo3conf/ext/mklog ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mklog",
+            "[ -L .Build/Web/typo3conf/LocalConfiguration.php ] || ln -snvf ../../../Tests/Fixtures/LocalConfiguration.php .Build/Web/typo3conf/LocalConfiguration.php"
+        ],
+        "test:phpcs": [
+            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
+            ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
+        ],
+        "test:phpmd": [
+            "[ -e .Build/bin/phpmd ] || composer update --ansi",
+            ".Build/bin/phpmd ./Classes/ text phpmd.xml"
+        ],
+        "test:phpstan": [
+            "[ -e .Build/bin/phpstan ] || composer update --ansi",
+            ".Build/bin/phpstan analyse -c phpstan.neon --memory-limit=512M --ansi"
+        ],
+        "test:phpunit": [
+            "[ -e .Build/bin/phpunit ] || composer update --ansi",
+            "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit"
+        ],
+        "test": [
+            "@test:phpcs",
+            "@test:phpmd",
+            "@test:phpstan",
+            "@test:phpunit"
+        ],
+        "fix:phpcs": [
+            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
+            ".Build/bin/php-cs-fixer fix -v"
+        ],
+        "fix": [
+            "@fix:phpcs"
         ]
     },
     "extra": {

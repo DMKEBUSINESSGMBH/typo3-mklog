@@ -1,0 +1,13 @@
+parameters:
+    level: 1
+    autoload_files:
+        - "%currentWorkingDirectory%/.Build/vendor/autoload.php"
+    paths:
+        - %currentWorkingDirectory%/Classes
+        - %currentWorkingDirectory%/ext_localconf.php
+        - %currentWorkingDirectory%/ext_tables.php
+        - %currentWorkingDirectory%/ext_emconf.php
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Constant TYPO3_MODE not found#'
+        - '#Undefined variable: \$_EXTKEY#'
