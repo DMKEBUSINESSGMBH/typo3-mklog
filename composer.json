@@ -55,8 +55,6 @@
     },
     "autoload": {
         "classmap": [
-            "scheduler/",
-            "srv/",
             "Classes/"
         ],
         "psr-4": {
@@ -82,6 +80,13 @@
             "mkdir -p .Build/Web/typo3conf/ext/",
             "[ -L .Build/Web/typo3conf/ext/mklog ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mklog",
             "[ -L .Build/Web/typo3conf/LocalConfiguration.php ] || ln -snvf ../../../Tests/Fixtures/LocalConfiguration.php .Build/Web/typo3conf/LocalConfiguration.php"
+        ],
+        "lint:php": [
+            "[ -e bin/parallel-lint ] || composer update",
+            "bin/parallel-lint ./packages/*/Classes"
+        ],
+        "lint": [
+            "@lint:php"
         ],
         "test:phpcs": [
             "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
