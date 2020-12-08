@@ -34,7 +34,7 @@ use DMK\Mklog\Utility\SeverityUtility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class MailTransport extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
+class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
      * Messages to send.

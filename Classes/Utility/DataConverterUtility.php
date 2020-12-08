@@ -35,7 +35,7 @@ namespace DMK\Mklog\Utility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DataConverterUtility implements \Tx_Rnbase_Interface_Singleton
+class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
      * Converts data into a string.

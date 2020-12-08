@@ -38,7 +38,7 @@ use DMK\Mklog\WatchDog\Transport\AbstractTransport;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class AbstractGelf extends AbstractTransport implements \Tx_Rnbase_Interface_Singleton
+abstract class AbstractGelf extends AbstractTransport implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
      * The gelf publisher.
