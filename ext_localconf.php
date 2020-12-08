@@ -6,10 +6,6 @@ if (!defined('TYPO3_MODE')) {
 
 call_user_func(
     function () {
-        $_EXTCONF = isset($_EXTCONF) ? $_EXTCONF : \Tx_Rnbase_Configuration_Processor::getExtensionCfgValue('mklog');
-        // Konfiguration umwandeln
-        $_EXTCONF = is_array($_EXTCONF) ? $_EXTCONF : unserialize($_EXTCONF);
-
         $config = \DMK\Mklog\Factory::getConfigUtility();
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\WatchDog\\SchedulerWatchDog'] = [

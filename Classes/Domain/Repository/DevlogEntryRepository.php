@@ -49,8 +49,6 @@ class DevlogEntryRepository
     /**
      * Creates an new model instance.
      *
-     * @param array $record
-     *
      * @return DevlogEntry
      */
     public function createNewModel()
@@ -61,7 +59,7 @@ class DevlogEntryRepository
     /**
      * @return \TYPO3\CMS\Core\Database\Connection
      */
-    protected function getConnection()
+    public function getConnection()
     {
         return Factory::makeInstance(ConnectionPool::class)->getConnectionForTable($this->getTableName());
     }

@@ -177,14 +177,12 @@ class DevlogLogger extends AbstractLogger
         }
 
         // now check some cachable options
-
         $storage = \DMK\Mklog\Factory::getStorage();
 
         if ($storage->hasLoggingActive()) {
             return $storage->getLoggingActive();
         }
 
-        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
         $config = \DMK\Mklog\Factory::getConfigUtility();
 
         $storage->setLoggingActive(true);

@@ -102,7 +102,7 @@
         ],
         "test:phpunit": [
             "[ -e .Build/bin/phpunit ] || composer update --ansi",
-            "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit"
+            "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit --colors=always"
         ],
         "test": [
             "@test:phpcs",
