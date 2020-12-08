@@ -25,6 +25,8 @@ namespace DMK\Mklog\Backend\Handler;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
+
 /**
  * Devlog Entry handler.
  *
@@ -70,9 +72,7 @@ class DevlogEntryHandler extends \Tx_Rnbase_Backend_Handler_SearchHandler
     {
         $options = $this->getOptions();
 
-        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
-        $options->setBaseTableName(
-            $repo->getEmptyModel()->getTableName()
-        );
+        $repo = new DevlogEntryRepository();
+        $options->setBaseTableName($repo->getTableName());
     }
 }

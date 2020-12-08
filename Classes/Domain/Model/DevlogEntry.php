@@ -25,54 +25,106 @@ namespace DMK\Mklog\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\WatchDog\Message\InterfaceMessage;
+use Tx_Rnbase_Domain_Model_RecordInterface as LegacyRecordInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
+
 /**
  * Devlog entry Model.
- *
- * @method int              getPid()
- * @method DevlogEntryModel setPid() setPid(int $pid)
- * @method bool             hasPid()
- * @method int              getRunId()
- * @method DevlogEntryModel setRunId() setRunId(int $runId)
- * @method bool             hasRunId()
- * @method string           getExtKey()
- * @method DevlogEntryModel setExtKey() setExtKey(string $extKey)
- * @method bool             hasExtKey()
- * @method DevlogEntryModel setHost() setHost(string $host)
- * @method bool             hasHost()
- * @method string           getMessage()
- * @method DevlogEntryModel setMessage() setMessage(string $message)
- * @method bool             hasMessage()
- * @method int              getSeverity()
- * @method DevlogEntryModel setSeverity() setSeverity(int $severity)
- * @method bool             hasSeverity()
- * @method int              getCruserId()
- * @method DevlogEntryModel setCruserId() setCruserId(int $cruserId)
- * @method bool             hasCruserId()
- * @method int              getCrdate()
- * @method DevlogEntryModel setCrdate() setCrdate(int $crdate)
- * @method bool             hasCrdate()
  *
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
+class DevlogEntry extends AbstractDomainObject implements InterfaceMessage, LegacyRecordInterface
 {
     public const TABLENAME = 'tx_mklog_devlog_entry';
 
     /**
-     * Override reset and dont load record after creating entry.
-     *
-     * @return Tx_Rnbase_Domain_Model_Base
+     * @var int
      */
-    public function reset()
+    protected $crdate;
+
+    /**
+     * @var string As varchar(50)
+     */
+    protected $runId;
+    /**
+     * @var int
+     */
+    protected $severity;
+    /**
+     * @var string As varchar(255)
+     */
+    protected $extKey;
+    /**
+     * @var string As varchar(255)
+     */
+    protected $host;
+    /**
+     * @var string As text
+     */
+    protected $message;
+    /**
+     * @var string As mediumblob
+     */
+    protected $extraData;
+    /**
+     * @var int
+     */
+    protected $cruserId;
+    /**
+     * @var string As varchar(60)
+     */
+    protected $transportIds;
+
+    public function __construct(array $record = null)
     {
-        //$this->loadRecord();
+        //@TODO: legacy rnbase make instance model support, remove if rn_base isn't used anymore
+        if (null !== $record && is_array($record)) {
+            foreach ($record as $columnName => $value) {
+                $propertyName = GeneralUtility::underscoredToLowerCamelCase($columnName);
+                if (property_exists($this, $propertyName)) {
+                    $this->{$propertyName} = $value;
+                }
+            }
+        }
+    }
 
-        // set the modified state to clean
-        $this->resetCleanState();
+    /**
+     * @return array
+     *
+     * @TODO: legacy rnbase model support, remove if rn_base isn't used anymore
+     */
+    public function getRecord()
+    {
+        $values = [];
+        foreach ($this->_getProperties() as $property => $value) {
+            if (null === $value) {
+                continue;
+            }
+            $column = GeneralUtility::camelCaseToLowerCaseUnderscored($property);
+            $values[$column] = $value;
+        }
 
-        return $this;
+        return $values;
+    }
+
+    /**
+     * @return array
+     *
+     * @TODO: legacy rnbase model support, remove if rn_base isn't used anymore
+     */
+    public function getProperty($property)
+    {
+        $properties = $this->getRecord();
+
+        if (isset($properties[$property])) {
+            return $properties[$property];
+        }
+
+        return null;
     }
 
     /**
@@ -86,17 +138,137 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     }
 
     /**
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
+
+    /**
+     * @param int $crdate
+     *
+     * @return self
+     */
+    public function setCrdate($crdate)
+    {
+        $this->crdate = $crdate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRunId()
+    {
+        return $this->runId;
+    }
+
+    /**
+     * @param string $runId
+     *
+     * @return self
+     */
+    public function setRunId($runId)
+    {
+        $this->runId = $runId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSeverity()
+    {
+        return $this->severity;
+    }
+
+    /**
+     * @param int $severity
+     *
+     * @return self
+     */
+    public function setSeverity($severity)
+    {
+        $this->severity = $severity;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtKey()
+    {
+        return $this->extKey;
+    }
+
+    /**
+     * @param string $extKey
+     *
+     * @return self
+     */
+    public function setExtKey($extKey)
+    {
+        $this->extKey = $extKey;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return self
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCruserId()
+    {
+        return $this->cruserId;
+    }
+
+    /**
+     * @param int $cruserId
+     *
+     * @return self
+     */
+    public function setCruserId($cruserId)
+    {
+        $this->cruserId = $cruserId;
+
+        return $this;
+    }
+
+    /**
      * A list of scheduler task uids which has already transferred this message.
      *
      * @return array
      */
     public function getTransportIds()
     {
-        if ($this->isPropertyEmpty('transport_ids')) {
+        if (empty($this->transportIds)) {
             return [];
         }
 
-        return explode(',', $this->getProperty('transport_ids'));
+        return explode(',', $this->transportIds);
     }
 
     /**
@@ -104,7 +276,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
      *
      * @param string $transportId
      *
-     * @return array
+     * @return self
      */
     public function addTransportId(
         $transportId
@@ -112,10 +284,9 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
         $ids = $this->getTransportIds();
         $ids[] = $transportId;
 
-        return $this->setProperty(
-            'transport_ids',
-            implode(',', array_unique($ids))
-        );
+        $this->transportIds = implode(',', array_unique($ids));
+
+        return $this;
     }
 
     /**
@@ -125,7 +296,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
      */
     public function getExtraDataRaw()
     {
-        return $this->getProperty('extra_data');
+        return $this->extraData;
     }
 
     /**
@@ -143,15 +314,27 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     /**
      * Setter for extra data.
      *
-     * @return DevlogEntryModel
+     * @return DevlogEntry
      */
     public function setExtraData(
         array $data
     ) {
-        return $this->setProperty(
-            'extra_data',
-            \DMK\Mklog\Factory::getDataConverterUtility()->encode($data)
-        );
+        $this->extraData = \DMK\Mklog\Factory::getDataConverterUtility()->encode($data);
+
+        return $this;
+    }
+
+    /**
+     * Setter for extra data.
+     *
+     * @return DevlogEntry
+     */
+    public function setExtraDataEncoded(
+        string $data
+    ) {
+        $this->extraData = $data;
+
+        return $this;
     }
 
     /**
@@ -264,7 +447,7 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
      */
     public function getHost()
     {
-        $host = $this->getProperty('host');
+        $host = $this->host;
 
         // first check ext conf
         if (empty($host)) {
@@ -285,6 +468,20 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
         }
 
         return $host;
+    }
+
+    /**
+     * Set the host.
+     *
+     * @param $host
+     *
+     * @return self
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+
+        return $this;
     }
 
     /**

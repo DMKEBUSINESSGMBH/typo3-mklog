@@ -38,7 +38,7 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
     );
 }
 
-use DMK\Mklog\Domain\Model\DevlogEntryModel;
+use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\EntryDataParserUtility;
 
@@ -184,7 +184,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Creates an parser instance.
      *
-     * @param DevlogEntryModel|null $devLogEntry
+     * @param DevlogEntry|null $devLogEntry
      *
      * @return EntryDataParserUtility
      */
@@ -196,7 +196,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
         if (is_string($devLogEntryOrExtraData)) {
             $devLogEntryOrExtraData = $this->getModel(
                 ['extra_data' => $devLogEntryOrExtraData],
-                DevlogEntryModel::class
+                DevlogEntry::class
             );
         }
 

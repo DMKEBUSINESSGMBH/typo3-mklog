@@ -2,6 +2,10 @@
 
 namespace DMK\Mklog\Backend\Lister;
 
+use DMK\Mklog\Backend\Decorator\DevlogEntryDecorator;
+use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
+use DMK\Mklog\Factory;
+
 /***************************************************************
  * Copyright notice
  *
@@ -35,11 +39,11 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     /**
      * The devlog entry repository.
      *
-     * @return Tx_Rnbase_Domain_Repository_InterfaceSearch
+     * @return DevlogEntryRepository
      */
     protected function getRepository()
     {
-        return \DMK\Mklog\Factory::getDevlogEntryRepository();
+        return new DevlogEntryRepository();
     }
 
     /**
@@ -70,7 +74,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     /**
      * Initializes the filter array.
      *
-     * @return Tx_Rnbase_Backend_Lister_AbstractLister
+     * @return self
      */
     public function initFilter()
     {
@@ -153,7 +157,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
      */
     public function getLatestRuns()
     {
-        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+        $repo = new DevlogEntryRepository();
         $latestRuns = $repo->getLatestRunIds();
 
         $items = ['' => ''];
@@ -188,12 +192,12 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
      */
     public function getLoggedExtensions()
     {
-        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+        $repo = new DevlogEntryRepository();
         $extKeys = $repo->getLoggedExtensions();
 
         $items = ['' => ''];
 
-        /* @var $item \DMK\Mklog\Domain\Model\DevlogEntryModel */
+        /* @var $item \DMK\Mklog\Domain\Model\DevlogEntry */
         foreach ($extKeys as $extKey) {
             $items[$extKey] = $extKey;
         }
@@ -234,13 +238,22 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
     }
 
     /**
-     * The decorator to render the rows.
+     * The decorator instace.
      *
-     * @return string
+     * @return Tx_Rnbase_Backend_Decorator_InterfaceDecorator
      */
-    protected function getDecoratorClass()
+    protected function getDecorator()
     {
-        return 'DMK\\Mklog\\Backend\\Decorator\\DevlogEntryDecorator';
+        if (!$this->getStorage()->hasDecorator()) {
+            $decorator = Factory::makeInstance(
+                DevlogEntryDecorator::class,
+                $this->getModule(),
+                $this->getOptions()
+            );
+            $this->getStorage()->setDecorator($decorator);
+        }
+
+        return $this->getStorage()->getDecorator();
     }
 
     /**

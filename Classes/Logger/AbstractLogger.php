@@ -53,7 +53,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      * @param int    $severity
      * @param mixed  $extraData
      *
-     * @return \DMK\Mklog\Domain\Model\DevlogEntryModel
+     * @return \DMK\Mklog\Domain\Model\DevlogEntry
      */
     protected function createDevlogEntry($message, $extension, $severity, $extraData)
     {
@@ -61,7 +61,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
 
         $repo = $this->getDevlogEntryRepository();
 
-        /* @var $entry \DMK\Mklog\Domain\Model\DevlogEntryModel */
+        /* @var $entry \DMK\Mklog\Domain\Model\DevlogEntry */
         $entry = $repo->createNewModel();
         $entry->setCrdate(time());
         $entry->setRunId($config->getCurrentRunId());

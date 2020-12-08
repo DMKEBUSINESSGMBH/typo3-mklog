@@ -2,7 +2,8 @@
 
 defined('TYPO3_MODE') || exit('Access denied.');
 
-if (TYPO3_MODE == 'BE') {
+// register be module if rn_base is installed
+if (TYPO3_MODE == 'BE' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rn_base')) {
     // add be module ts
     tx_rnbase_util_Extensions::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/TypoScript/Backend/pageTSconfig.txt">'

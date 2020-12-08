@@ -25,7 +25,7 @@ namespace DMK\Mklog\Backend\Decorator;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Domain\Model\DevlogEntryModel;
+use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Utility\SeverityUtility;
 
 /**
@@ -33,22 +33,79 @@ use DMK\Mklog\Utility\SeverityUtility;
  *
  * @author Michael Wagner
  */
-class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
+class DevlogEntryDecorator
 {
+    /**
+     * The module.
+     *
+     * @var \tx_rnbase_mod_BaseModule
+     */
+    private $mod = null;
+
+    /**
+     * The internal options object.
+     *
+     * @var \Tx_Rnbase_Domain_Model_Data
+     */
+    private $options = null;
+
+    /**
+     * Constructor.
+     *
+     * @param \tx_rnbase_mod_BaseModule          $mod
+     * @param array|\Tx_Rnbase_Domain_Model_Data $options
+     */
+    public function __construct(
+        \tx_rnbase_mod_BaseModule $mod,
+        $options = []
+    ) {
+        $this->mod = $mod;
+
+        $this->options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
+    }
+
+    /**
+     * Formats a value.
+     *
+     * @param string                               $columnValue
+     * @param string                               $columnName
+     * @param array                                $record
+     * @param DevlogEntry $entry
+     *
+     * @return string
+     */
+    public function format(
+        $columnValue,
+        $columnName,
+        array $record,
+        DevlogEntry $entry
+    ) {
+        $return = $columnValue;
+
+        $method = \Tx_Rnbase_Utility_Strings::underscoredToLowerCamelCase($columnName);
+        $method = 'format'.ucfirst($method).'Column';
+
+        if (method_exists($this, $method)) {
+            $return = $this->{$method}($entry);
+        }
+
+        return $this->wrapValue($return, $entry, $columnName);
+    }
+
     /**
      * Wraps the Value.
      * A childclass can extend this and wrap each value in a spac.
      * For example a strikethrough for disabled entries.
      *
-     * @param string                                                 $formatedValue
-     * @param \Tx_Rnbase_Domain_Model_DataInterface|DevlogEntryModel $entry
-     * @param string                                                 $columnName
+     * @param string $formatedValue
+     * @param DevlogEntry $entry
+     * @param string $columnName
      *
      * @return string
      */
     protected function wrapValue(
         $formatedValue,
-        \Tx_Rnbase_Domain_Model_DataInterface $entry,
+        DevlogEntry $entry,
         $columnName
     ) {
         return sprintf(
@@ -65,7 +122,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
      * @return string
      */
     protected function formatCrdateColumn(
-        DevlogEntryModel $entry
+        DevlogEntry $entry
     ) {
         return sprintf(
             '<button '.
@@ -86,7 +143,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
      * @return string
      */
     protected function formatSeverityColumn(
-        DevlogEntryModel $entry
+        DevlogEntry $entry
     ) {
         $severityId = $entry->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
@@ -137,7 +194,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
      * @return string
      */
     protected function formatExtKeyColumn(
-        DevlogEntryModel $entry
+        DevlogEntry $entry
     ) {
         return sprintf(
             '<button '.
@@ -157,7 +214,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
      * @return string
      */
     protected function formatMessageColumn(
-        DevlogEntryModel $entry
+        DevlogEntry $entry
     ) {
         $message = $entry->getMessage();
 
@@ -175,7 +232,7 @@ class DevlogEntryDecorator extends \Tx_Rnbase_Backend_Decorator_BaseDecorator
      * @return string
      */
     protected function formatExtraDataColumn(
-        DevlogEntryModel $entry
+        DevlogEntry $entry
     ) {
         $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($entry);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);

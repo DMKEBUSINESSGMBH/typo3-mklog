@@ -45,7 +45,7 @@ if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
+class DevlogEntryTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
      * Test the getTableName method.
@@ -57,7 +57,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
     {
         self::assertSame(
             'tx_mklog_devlog_entry',
-            $this->getDevlogEntryModel()->getTableName()
+            $this->getDevlogEntry()->getTableName()
         );
     }
 
@@ -69,7 +69,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function testGetAndAddTransportIds()
     {
-        $model = $this->getDevlogEntryModel();
+        $model = $this->getDevlogEntry();
 
         self::assertTrue(is_array($model->getTransportIds()));
         self::assertEmpty($model->getTransportIds());
@@ -93,7 +93,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function testGetFullMessage()
     {
-        $model = $this->getDevlogEntryModel();
+        $model = $this->getDevlogEntry();
         $model->setExtraData(
             [
                 'foo' => 'bar',
@@ -115,7 +115,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function testGetAdditionalData()
     {
-        $model = $this->getDevlogEntryModel();
+        $model = $this->getDevlogEntry();
         $model->setExtraData(
             [
                 'foo' => 'bar',

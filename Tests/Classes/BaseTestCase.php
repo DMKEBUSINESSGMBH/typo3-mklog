@@ -90,16 +90,16 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     /**
      * Returns a devlog entry model mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Domain\Model\DevlogEntryModel
+     * @return \PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Domain\Model\DevlogEntry
      */
-    protected function getDevlogEntryModel()
+    protected function getDevlogEntry()
     {
         return $this->getModel(
             [
                 'uid' => 5,
                 'pid' => 7,
             ],
-            'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel'
+            'DMK\\Mklog\\Domain\\Model\\DevlogEntry'
         );
     }
 
@@ -126,7 +126,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
         $repo
             ->expects(self::any())
             ->method('getEmptyModel')
-            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel')));
+            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Domain\\Model\\DevlogEntry')));
         $repo
             ->expects(self::any())
             ->method('getSearcher')

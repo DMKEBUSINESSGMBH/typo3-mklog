@@ -25,7 +25,9 @@ namespace DMK\Mklog\Domain\Repository;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Domain\Model\DevlogEntryModel;
+use DMK\Mklog\Domain\Model\DevlogEntry;
+use DMK\Mklog\Factory;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /**
  * Devlog Entry Repository.
@@ -34,34 +36,54 @@ use DMK\Mklog\Domain\Model\DevlogEntryModel;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
+class DevlogEntryRepository
 {
     /**
      * @return string
      */
     public function getTableName()
     {
-        return DevlogEntryModel::TABLENAME;
+        return DevlogEntry::TABLENAME;
     }
 
     /**
-     * Liefert den Namen der Suchklasse.
+     * Creates an new model instance.
      *
-     * @return string
+     * @param array $record
+     *
+     * @return DevlogEntry
      */
-    protected function getSearchClass()
+    public function createNewModel()
     {
-        return 'tx_rnbase_util_SearchGeneric';
+        return Factory::makeInstance(DevlogEntry::class);
     }
 
     /**
-     * Liefert die Model Klasse.
-     *
-     * @return string
+     * @return \TYPO3\CMS\Core\Database\Connection
      */
-    protected function getWrapperClass()
+    protected function getConnection()
     {
-        return 'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel';
+        return Factory::makeInstance(ConnectionPool::class)->getConnectionForTable($this->getTableName());
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
+     */
+    protected function createQueryBuilder()
+    {
+        return $this->getConnection()->createQueryBuilder();
+    }
+
+    /**
+     * @return int
+     */
+    public function countAll()
+    {
+        return $this->createQueryBuilder()
+            ->count('uid')
+            ->from($this->getTableName())
+            ->execute()
+            ->fetchOne();
     }
 
     /**
@@ -85,172 +107,50 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         }
 
         // fetch current rows
-        $numRows = $this->search([], ['count' => true]);
+        $numRows = $this->countAll();
 
         // there are log entries to delete
         if ($numRows > $maxRows) {
             // fetch the execution date from the latest log entry
-            $collection = $this->search(
-                [],
-                [
-                    'what' => 'run_id',
-                    'offset' => $maxRows,
-                    'limit' => 1,
-                    'orderby' => ['DEVLOGENTRY.run_id' => 'DESC'],
-                ]
-            );
+            $qb = $this->createQueryBuilder();
+            $query = $qb
+                ->select('run_id')
+                ->from($this->getTableName())
+                ->orderBy('run_id', 'DESC')
+                ->setFirstResult($maxRows)
+                ->setMaxResults(1);
 
-            if ($collection->isEmpty()) {
-                return;
-            }
-            $lastExec = reset($collection->first());
+            $lastExec = $query->execute()->fetchOne();
+
             // nothing found to delete!?
             if (empty($lastExec)) {
                 return;
             }
 
             // delete all entries, older than the last exeution date!
-            $this->getConnection()->doDelete(
-                $this->getEmptyModel()->getTableName(),
-                'run_id < '.$lastExec
-            );
+            $qb = $this->createQueryBuilder();
+            $query = $qb->delete($this->getTableName())->where('run_id < '.$lastExec);
+            $query->execute();
         }
     }
 
     /**
      * Persists an model.
-     *
-     * @param array|\Tx_Rnbase_Domain_Model_Data $options
      */
     public function persist(
-        \Tx_Rnbase_Domain_Model_DomainInterface $model,
-        $options = null
+        DevlogEntry $model
     ) {
-        $options = \Tx_Rnbase_Domain_Model_Data::getInstance($options);
-
-        // there is no tca, so skip this check!
-        $options->setSkipTcaColumnElimination(true);
-
         // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
-        $model->setProperty(
-            'extra_data',
+        $model->setExtraDataEncoded(
             \DMK\Mklog\Factory::getEntryDataParserUtility($model)->getShortenedRaw(
                 \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB * 2
             )
         );
 
-        parent::persist($model, $options);
-    }
-
-    /**
-     * Returns the latest log runs.
-     *
-     * @param int $limit
-     *
-     * @return array
-     */
-    public function getLatestRunIds(
-        $limit = 50
-    ) {
-        $fields = $options = [];
-
-        $options['what'] = 'DEVLOGENTRY.run_id';
-        $options['groupby'] = 'DEVLOGENTRY.run_id';
-        $options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
-        $options['limit'] = (int) $limit;
-        $options['collection'] = false;
-
-        $items = $this->search($fields, $options);
-
-        return $this->convertSingleSelectToFlatArray($items, 'run_id');
-    }
-
-    /**
-     * Returns all extension keys who has logged into devlog.
-     *
-     * @return array
-     */
-    public function getLoggedExtensions()
-    {
-        $fields = $options = [];
-
-        $options['what'] = 'DEVLOGENTRY.ext_key';
-        $options['groupby'] = 'DEVLOGENTRY.ext_key';
-        $options['orderby']['DEVLOGENTRY.ext_key'] = 'DESC';
-        $options['collection'] = false;
-
-        $items = $this->search($fields, $options);
-
-        return $this->convertSingleSelectToFlatArray($items, 'ext_key');
-    }
-
-    /**
-     * Flattens an single select array.
-     *
-     * @param string $field
-     *
-     * @return array
-     */
-    private function convertSingleSelectToFlatArray(
-        array $items,
-        $field
-    ) {
-        if (empty($items)) {
-            return [];
+        $connection = $this->getConnection();
+        $query = $connection->createQueryBuilder()->insert($this->getTableName())->values($model->getRecord());
+        if ($query->execute()) {
+            $model->_setProperty('uid', $connection->lastInsertId($this->getTableName()));
         }
-
-        $items = call_user_func_array('array_merge_recursive', $items);
-
-        if (empty($items)) {
-            return [];
-        }
-
-        if (!is_array($items[$field])) {
-            $items[$field] = [$items[$field]];
-        }
-
-        return $items[$field];
-    }
-
-    /**
-     * On default, return hidden and deleted fields in backend.
-     */
-    protected function prepareFieldsAndOptions(
-        array &$fields,
-        array &$options
-    ) {
-        // there is no tca for the table!
-        $options['enablefieldsoff'] = true;
-        parent::prepareFieldsAndOptions($fields, $options);
-        $this->prepareGenericSearcher($options);
-    }
-
-    /**
-     * Prepares the simple generic searcher.
-     */
-    protected function prepareGenericSearcher(
-        array &$options
-    ) {
-        if (empty($options['searchdef']) || !is_array($options['searchdef'])) {
-            $options['searchdef'] = [];
-        }
-
-        $model = $this->getEmptyModel();
-        $options['searchdef'] = \tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
-            // default searcher config
-            [
-                'usealias' => 1,
-                'basetable' => $model->getTableName(),
-                'basetablealias' => 'DEVLOGENTRY',
-                'wrapperclass' => get_class($model),
-                'alias' => [
-                    'DEVLOGENTRY' => [
-                        'table' => $model->getTableName(),
-                    ],
-                ],
-            ],
-            // searcher config overrides
-            $options['searchdef']
-        );
     }
 }

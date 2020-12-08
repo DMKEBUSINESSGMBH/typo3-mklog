@@ -77,7 +77,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
             'getEmptyModel'
         );
         self::assertInstanceOf(
-            'DMK\\Mklog\\Domain\\Model\\DevlogEntryModel',
+            'DMK\\Mklog\\Domain\\Model\\DevlogEntry',
             $model
         );
         self::assertSame(

@@ -119,7 +119,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
         // initialize the transport
         $transport->initialize($this->getOptions());
 
-        /* @var $message \DMK\Mklog\Domain\Model\DevlogEntryModel */
+        /* @var $message \DMK\Mklog\Domain\Model\DevlogEntry */
         foreach ($this->findMessages() as $message) {
             try {
                 $transport->publish($message);
@@ -212,7 +212,7 @@ class SchedulerWatchDog extends \Tx_Rnbase_Scheduler_Task
      * Marks the message as transported.
      */
     protected function markAsTransported(
-        \DMK\Mklog\Domain\Model\DevlogEntryModel $message
+        \DMK\Mklog\Domain\Model\DevlogEntry $message
     ) {
         $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
         $repo->persist(

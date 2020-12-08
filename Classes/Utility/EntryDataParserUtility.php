@@ -25,7 +25,7 @@ namespace DMK\Mklog\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Domain\Model\DevlogEntryModel;
+use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
 
 /**
@@ -42,7 +42,7 @@ class EntryDataParserUtility
     const SIZE_8MB = 8388608;
 
     /**
-     * @var DevlogEntryModel
+     * @var DevlogEntry
      */
     protected $devlogEntry;
 
@@ -51,7 +51,7 @@ class EntryDataParserUtility
      */
     protected $converter;
 
-    public function __construct(DevlogEntryModel $devlogEntry)
+    public function __construct(DevlogEntry $devlogEntry)
     {
         $this->devlogEntry = $devlogEntry;
         $this->converter = Factory::getDataConverterUtility();

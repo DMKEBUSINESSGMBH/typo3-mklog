@@ -113,11 +113,11 @@ final class Factory
     /**
      * Creates a devlog entry extra data parser instance.
      *
-     * @param Domain\Model\DevlogEntryModel $devlogEntry
+     * @param Domain\Model\DevlogEntry $devlogEntry
      *
      * @return \DMK\Mklog\Utility\EntryDataParserUtility
      */
-    public static function getEntryDataParserUtility(Domain\Model\DevlogEntryModel $devlogEntry)
+    public static function getEntryDataParserUtility(Domain\Model\DevlogEntry $devlogEntry)
     {
         return self::makeInstance(EntryDataParserUtility::class, $devlogEntry);
     }
@@ -129,7 +129,8 @@ final class Factory
      */
     public static function getDevlogEntryRepository()
     {
-        return self::makeInstance(DevlogEntryRepository::class);
+        // @TODO: old di is deprecated, refactor if typo3 9 support will be dropped.
+        return self::getObjectManager()->get(DevlogEntryRepository::class);
     }
 
     /**
