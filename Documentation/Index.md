@@ -145,22 +145,11 @@ The credentials are Transport specific:
  * **Message limit per run**  
    Max message count to send throu the transport for each scheduler run. Set to `0` to disable the limit.
 
-### tx_devlog Scheduler
-
-![](Images/SchedulerTask.png)
-
-You have to provide an email address which receives the mails.
-
-Furthermore you can choose from which severity on devlog entries should be sent. If you set it to WARN, all entries with the serverity of WARN and ERROR will be sent via mail.
-
-Note, you will only get entries which are new since the last run. If nothing new no mail will be sent. Except if you force a summary mail.
-
-It is even possible to include the data\_var/extra\_data field of a devlog entry into the mail.
 
 Additional features
 -------------------
 
-Normally when a page is copied the tx_devlog entries are copied along (depending on the permissions).
+Normally when a page is copied the devlog entries are copied along (depending on the permissions).
 This is annoying and can lead to confusion as those entries are recognized as new even though they aren't.
 That's why this extensions hooks into the copy process and removes the devlog table from the list of tables which can be copied.
 This happens for all admins as well.

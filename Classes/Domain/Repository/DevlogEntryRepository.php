@@ -25,7 +25,7 @@ namespace DMK\Mklog\Domain\Repository;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-\tx_rnbase::load('Tx_Rnbase_Domain_Repository_PersistenceRepository');
+use DMK\Mklog\Domain\Model\DevlogEntryModel;
 
 /**
  * Devlog Entry Repository.
@@ -36,6 +36,14 @@ namespace DMK\Mklog\Domain\Repository;
  */
 class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
 {
+    /**
+     * @return string
+     */
+    public function getTableName()
+    {
+        return DevlogEntryModel::TABLENAME;
+    }
+
     /**
      * Liefert den Namen der Suchklasse.
      *
@@ -250,7 +258,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         }
 
         $model = $this->getEmptyModel();
-        \tx_rnbase::load('tx_rnbase_util_Arrays');
         $options['searchdef'] = \tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
             // default searcher config
             [

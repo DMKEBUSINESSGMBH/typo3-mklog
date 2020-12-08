@@ -32,6 +32,14 @@
 class Tx_Mklog_Hooks_DataHandler
 {
     /**
+     * @return string
+     */
+    protected function getTableName()
+    {
+        return \DMK\Mklog\Factory::getDevlogEntryRepository()->getTableName();
+    }
+
+    /**
      * Wenn eine Seite gelöscht werden soll und darauf devlog Einträge liegen, dann können das nicht Admins
      * nur wenn sie Schreibrechte auf die devlog Tabelle haben. Dadurch werden beim kopieren von Seiten mit devlog
      * Einträgen diese Einträge auch mitkopiert. Das führt dann zu unerwarteten WatchDog Meldungen, da diese neu
@@ -56,8 +64,7 @@ class Tx_Mklog_Hooks_DataHandler
         if ('pages' == $table) {
             switch ($command) {
                 case 'delete':
-                    $this->deleteDevlogEntriesByPageId($id);
-                    $this->deleteMklogEntriesByPageId($id);
+                    $this->deleteLogEntriesByPageId($id);
                     break;
                 case 'copy':
                     $this->removeLogTablesFromTablesThatCanBeCopied($dataHandler);
@@ -69,19 +76,9 @@ class Tx_Mklog_Hooks_DataHandler
     /**
      * @param int $pageId
      */
-    protected function deleteDevlogEntriesByPageId($pageId)
+    protected function deleteLogEntriesByPageId($pageId)
     {
-        if (tx_rnbase_util_Extensions::isLoaded('devlog')) {
-            $this->getDatabaseConnection()->doDelete($this->getDevlogTableName(), 'pid = '.intval($pageId));
-        }
-    }
-
-    /**
-     * @param int $pageId
-     */
-    protected function deleteMklogEntriesByPageId($pageId)
-    {
-        $this->getDatabaseConnection()->doDelete($this->getMklogTableName(), 'pid = '.intval($pageId));
+        $this->getDatabaseConnection()->doDelete($this->getTableName(), 'pid = '.intval($pageId));
     }
 
     /**
@@ -89,27 +86,7 @@ class Tx_Mklog_Hooks_DataHandler
      */
     protected function getDatabaseConnection()
     {
-        tx_rnbase::load('Tx_Rnbase_Database_Connection');
-
         return Tx_Rnbase_Database_Connection::getInstance();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getDevlogTableName()
-    {
-        tx_rnbase::load('Tx_Mklog_Utility_Devlog');
-
-        return Tx_Mklog_Utility_Devlog::getTableName();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getMklogTableName()
-    {
-        return \DMK\Mklog\Factory::getDevlogEntryRepository()->getEmptyModel()->getTableName();
     }
 
     /**
@@ -122,11 +99,8 @@ class Tx_Mklog_Hooks_DataHandler
     {
         $tablesThatCanBeCopied = array_flip($dataHandler->compileAdminTables());
 
-        $tablesThatShouldNotBeCopied = [$this->getDevlogTableName(), $this->getMklogTableName()];
-        foreach ($tablesThatShouldNotBeCopied as $tableThatShouldNotBeCopied) {
-            if (isset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied])) {
-                unset($tablesThatCanBeCopied[$tableThatShouldNotBeCopied]);
-            }
+        if (isset($tablesThatCanBeCopied[$this->getTableName()])) {
+            unset($tablesThatCanBeCopied[$this->getTableName()]);
         }
 
         $dataHandler->copyWhichTables = implode(',', array_flip($tablesThatCanBeCopied));

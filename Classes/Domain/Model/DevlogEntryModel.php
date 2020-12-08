@@ -58,6 +58,8 @@ namespace DMK\Mklog\Domain\Model;
  */
 class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklog\WatchDog\Message\InterfaceMessage
 {
+    public const TABLENAME = 'tx_mklog_devlog_entry';
+
     /**
      * Override reset and dont load record after creating entry.
      *
@@ -76,11 +78,11 @@ class DevlogEntryModel extends \Tx_Rnbase_Domain_Model_Base implements \DMK\Mklo
     /**
      * Liefert den aktuellen Tabellenname.
      *
-     * @return Tabellenname als String
+     * @return string
      */
     public function getTableName()
     {
-        return 'tx_mklog_devlog_entry';
+        return self::TABLENAME;
     }
 
     /**
