@@ -22,6 +22,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use DMK\Mklog\Domain\Model\DevlogEntry;
+
 /**
  * Tx_Mklog_Hooks_DataHandler.
  *
@@ -36,7 +38,7 @@ class Tx_Mklog_Hooks_DataHandler
      */
     protected function getTableName()
     {
-        return \DMK\Mklog\Factory::getDevlogEntryRepository()->getTableName();
+        return DevlogEntry::TABLENAME;
     }
 
     /**
