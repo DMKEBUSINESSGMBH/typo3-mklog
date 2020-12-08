@@ -82,25 +82,42 @@ Just that this was created.
 
 ## How to log
 
-We recommend to use the static utility `Tx_Rnbase_Utility_Logger` as warpper.
+We recommend using the TYPO3 Logging Framework.
 
-The recommend way  with the wrapper
+Use LoggerAwareTrait in your class to automatically instantiate:
+```php
+class LogExample implements \Psr\Log\LoggerAwareInterface
+{
+   use LoggerAwareTrait;
+   protected function myFunctionWithLogging() {
+      $this->logger->debug('only a debug info');
+   }
+}
+```
+Or instantiate the logger in the classic way with makeInstance:
+```php
+$logManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+    \TYPO3\CMS\Core\Log\LogManager::class
+);
+$logger = $logManager->getLogger('tx_myext');
+$logger->debug('only a debug info');
+```
+You can read more in the official documentation at https://docs.typo3.org/m/typo3/reference-coreapi/10.4/en-us/ApiOverview/Logging/Quickstart/Index.html
+
+
+When rn_base is installed the static utility `Tx_Rnbase_Utility_Logger` can be used as short warpper.
 ```php
     Tx_Rnbase_Utility_Logger::debug('tx_myext', 'only a debug info');
 ```
-The direct way
-```php
-    $logManager = t3lib_div::makeInstance('TYPO3\\CMS\\Core\\Log\\LogManager');
-    $logger = $logManager->getLogger($'tx_myext');
-    $logger->debug('only a debug info');
-```
-The old way with the wrapper over the classic logging hook 
+
+The old way over the classic logging hook (devlog) can be used too.  
+With the rn_base wrapper over the classic logging hook:
 ```php
     tx_rnbase_util_Logger::debug('only a debug info', 'tx_myext');
 ```
-The old direct way over the classic logging hook 
+Or the direct way:
 ```php
-    t3lib_div::devLog('only a debug info', 'tx_myext', -1);
+    \TYPO3\CMS\Core\Utility\GeneralUtility::devLog('only a debug info', 'tx_myext', -1);
 ```
 
 
