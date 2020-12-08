@@ -4,7 +4,7 @@ enable_devlog = 1
 # cat=base; type=string; label=The Host of this TYPO3 istance: The host, which will be used for reporting. For example: "dmk-ebusiness.de". Leave empty to use TYPO3_HOST_ONLY or gethostname  as determination.
 host =
 
-# cat=basic; type=string; label=From address for mails
+# cat=base; type=string; label=From address for mails
 from_mail =
 
 # cat=base; type=options[Debug=7,Info=6,Notice=5,Warning=4,Error=3,Critical=2,Alert=1,Emergency=0]; label=Minimum log level: Minimum message level required for actually writing to the log table
