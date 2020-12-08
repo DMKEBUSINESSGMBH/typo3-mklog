@@ -191,9 +191,6 @@ class DevlogLogger extends AbstractLogger
 
         if (!$config->getEnableDevLog()) {
             $storage->LoggingActive = false;
-        } elseif (!$repo->isTableAvailable()) {
-            // check for exsisting db table
-            $storage->LoggingActive = false;
         }
 
         return $storage->LoggingActive;

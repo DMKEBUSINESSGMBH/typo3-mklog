@@ -334,36 +334,6 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
-     * Test the isTableAvailable method.
-     *
-     * @group unit
-     * @test
-     */
-    public function testIsTableAvailable()
-    {
-        $repo = $this->getDevlogEntryRepository();
-
-        $db = $this->getMock(
-            '\TYPO3\CMS\Core\Database\DatabaseConnection',
-            ['admin_get_fields']
-        );
-        $db
-            ->expects(self::once())
-            ->method('admin_get_fields')
-            ->with(self::equalTo($this->getDevlogEntryModel()->getTableName()))
-            ->will(self::returnValue([]));
-
-        $connection = $this->callInaccessibleMethod($repo, 'getConnection');
-
-        $connection
-            ->expects(self::once())
-            ->method('getDatabaseConnection')
-            ->will(self::returnValue($db));
-
-        self::assertFalse($repo->isTableAvailable());
-    }
-
-    /**
      * Test the optimize method.
      *
      * @group unit

@@ -66,28 +66,6 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
 
     /**
      * Exists the table at the db?
-     *
-     * @return bool
-     */
-    public function isTableAvailable()
-    {
-        $db = $this->getConnection()->getDatabaseConnection();
-
-        if ($db instanceof \tx_rnbase_util_db_IDatabase) {
-            // @FIXME: $db is'nt TYPO3_DB with admin_get_fields. since new rn_base version it is tx_rnbase_util_db_IDatabase!
-            // find a way to check if the table exists!
-            return true;
-        }
-
-        $tableFields = $db->admin_get_fields(
-            $this->getEmptyModel()->getTableName()
-        );
-
-        return !empty($tableFields);
-    }
-
-    /**
-     * Exists the table at the db?
      */
     public function optimize()
     {
