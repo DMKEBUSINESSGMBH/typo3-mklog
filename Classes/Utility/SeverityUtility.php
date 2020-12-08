@@ -143,21 +143,21 @@ final class SeverityUtility
     {
         switch ($level) {
             case self::EMERGENCY:
-                return 'emergency';
+                return \Psr\Log\LogLevel::EMERGENCY;
             case self::ALERT:
-                return 'alert';
+                return \Psr\Log\LogLevel::ALERT;
             case self::CRITICAL:
-                return 'critical';
+                return \Psr\Log\LogLevel::CRITICAL;
             case self::ERROR:
-                return 'error';
+                return \Psr\Log\LogLevel::ERROR;
             case self::WARNING:
-                return 'warning';
+                return \Psr\Log\LogLevel::WARNING;
             case self::NOTICE:
-                return 'notice';
+                return \Psr\Log\LogLevel::NOTICE;
             case self::INFO:
-                return 'info';
+                return \Psr\Log\LogLevel::INFO;
             case self::DEBUG:
-                return 'debug';
+                return \Psr\Log\LogLevel::DEBUG;
         }
     }
 

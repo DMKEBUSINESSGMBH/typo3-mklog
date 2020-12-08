@@ -29,7 +29,6 @@ use DMK\Mklog\Factory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 /**
  * MK Log Factory.
@@ -76,7 +75,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
                 $storage->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog']);
             }
 
-            if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 9000000) {
+            if (VersionUtility::isTypo3Version9OrHigher()) {
                 $storage->extConf = Factory::makeInstance(ExtensionConfiguration::class)->get(
                     'mklog',
                     ''

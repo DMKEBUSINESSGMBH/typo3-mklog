@@ -26,6 +26,8 @@ namespace DMK\Mklog\Logger;
  ***************************************************************/
 
 use DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Utility\VersionUtility;
+use TYPO3\CMS\Core\Log\LogLevel;
 
 /**
  * Devlog logger.
@@ -121,6 +123,12 @@ class GelfLogger extends AbstractLogger
     protected function storeLog($message, $extension, $severity, $extraData)
     {
         $config = \DMK\Mklog\Factory::getConfigUtility();
+
+        // since typo3 10 psr-3 is used, we has to convert the loglevel to int
+        if (VersionUtility::isTypo3Version10OrHigher()) {
+            $severity = LogLevel::normalizeLevel($severity);
+        }
+
         // check min log level
         if ((
             !$config->getGelfEnable() ||
