@@ -53,10 +53,12 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
-        \DMK\Mklog\Factory::getStorage()->unsLoggingActive();
-        $extConf = \DMK\Mklog\Factory::getConfigUtility()->getExtConf();
-        $extConf->setMinLogLevel(7);
-        $extConf->setExcludeExtKeys('');
+        unset(\DMK\Mklog\Factory::getStorage()->LoggingActive);
+        $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
+        // just call to create the initial config
+        $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getExtConf'], ['enable_devlog']);
+        $configStorage->extConf['min_log_level'] = 7;
+        $configStorage->extConf['exclude_ext_keys'] = '';
     }
 
     /**
@@ -66,7 +68,8 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     protected function tearDown()
     {
         // reset extconf cache
-        \DMK\Mklog\Factory::getConfigUtility()->getExtConf()->setProperty([]);
+        $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
+        $configStorage->extConf = null;
     }
 
     /**

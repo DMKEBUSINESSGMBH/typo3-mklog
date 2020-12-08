@@ -2,6 +2,14 @@
 
 namespace DMK\Mklog;
 
+use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
+use DMK\Mklog\Utility\ConfigUtility;
+use DMK\Mklog\Utility\DataConverterUtility;
+use DMK\Mklog\Utility\EntryDataParserUtility;
+use DMK\Mklog\WatchDog\Transport\InterfaceTransport;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+
 /***************************************************************
  * Copyright notice
  *
@@ -37,31 +45,39 @@ final class Factory
     /**
      * Returns a storage.
      *
-     * @return Tx_Rnbase_Domain_Model_Data
+     * @return \stdClass
      */
     public static function getStorage()
     {
         static $storage = null;
 
         if (null === $storage) {
-            $storage = \tx_rnbase::makeInstance(
-                'Tx_Rnbase_Domain_Model_Data'
-            );
+            $storage = new \stdClass();
         }
 
         return $storage;
     }
 
     /**
-     * Returns a cache.
+     * @param string $className
+     * @param array<int, mixed> $constructorArguments
      *
-     * @return tx_rnbase_cache_ICache
+     * @return object the created instance
      */
-    public static function getCache()
+    public static function makeInstance($className)
     {
-        \tx_rnbase::load('tx_rnbase_cache_Manager');
+        return call_user_func_array(
+            [GeneralUtility::class, 'makeInstance'],
+            func_get_args()
+        );
+    }
 
-        return \tx_rnbase_cache_Manager::getCache('mklog');
+    /**
+     * @return ObjectManager
+     */
+    public static function getObjectManager()
+    {
+        return self::makeInstance(ObjectManager::class);
     }
 
     /**
@@ -72,15 +88,11 @@ final class Factory
     public static function getConfigUtility()
     {
         $storage = self::getStorage();
-        if (!$storage->hasConfigUtility()) {
-            $storage->setConfigUtility(
-                \tx_rnbase::makeInstance(
-                    'DMK\\Mklog\\Utility\\ConfigUtility'
-                )
-            );
+        if (empty($storage->ConfigUtility)) {
+            $storage->ConfigUtility = self::makeInstance(ConfigUtility::class);
         }
 
-        return $storage->getConfigUtility();
+        return $storage->ConfigUtility;
     }
 
     /**
@@ -91,22 +103,12 @@ final class Factory
     public static function getDataConverterUtility()
     {
         $storage = self::getStorage();
-        if (!$storage->hasDataConverterUtility()) {
-            $storage->setDataConverterUtility(
-                \tx_rnbase::makeInstance(
-                    'DMK\\Mklog\\Utility\\DataConverterUtility'
-                )
-            );
+        if (empty($storage->DataConverterUtility)) {
+            $storage->DataConverterUtility = self::makeInstance(DataConverterUtility::class);
         }
 
-        return $storage->getDataConverterUtility();
+        return $storage->DataConverterUtility;
     }
-
-    /**
-     * Returns the data converter.
-     *
-     * @return \DMK\Mklog\Utility\EntryDataParserUtility
-     */
 
     /**
      * Creates a devlog entry extra data parser instance.
@@ -117,10 +119,7 @@ final class Factory
      */
     public static function getEntryDataParserUtility(Domain\Model\DevlogEntryModel $devlogEntry)
     {
-        return \tx_rnbase::makeInstance(
-            'DMK\\Mklog\\Utility\\EntryDataParserUtility',
-            $devlogEntry
-        );
+        return self::makeInstance(EntryDataParserUtility::class, $devlogEntry);
     }
 
     /**
@@ -130,9 +129,7 @@ final class Factory
      */
     public static function getDevlogEntryRepository()
     {
-        return \tx_rnbase::makeInstance(
-            'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository'
-        );
+        return self::makeInstance(DevlogEntryRepository::class);
     }
 
     /**
@@ -144,10 +141,10 @@ final class Factory
      */
     public static function getTransport($class)
     {
-        $transport = \tx_rnbase::makeInstance($class);
+        $transport = self::makeInstance($class);
 
-        if (!$transport instanceof \DMK\Mklog\WatchDog\Transport\InterfaceTransport) {
-            throw new \Exception('The Transport "'.get_class($transport).'" '.'has to implement the "\DMK\Mklog\WatchDog\Transport\InterfaceTransport"');
+        if (!$transport instanceof InterfaceTransport) {
+            throw new \Exception(sprintf('The Transport "%1$s" '.'has to implement the "%2$s"', get_class($transport), InterfaceTransport::class));
         }
 
         return $transport;

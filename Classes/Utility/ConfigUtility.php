@@ -25,6 +25,11 @@ namespace DMK\Mklog\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Factory;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 /**
  * MK Log Factory.
@@ -33,47 +38,57 @@ namespace DMK\Mklog\Utility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
+class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
      * Internal config storage.
      *
-     * @var Tx_Rnbase_Domain_Model_Data
+     * @var \stdClass|null
      */
     private $storage = null;
 
     /**
      * Returns a storage.
      *
-     * @return Tx_Rnbase_Domain_Model_Data
+     * @return \stdClass
      */
-    private function getStorage()
+    protected function getStorage()
     {
         if (null === $this->storage) {
-            $this->storage = \tx_rnbase::makeInstance(
-                'Tx_Rnbase_Domain_Model_Data'
-            );
+            $this->storage = new \stdClass();
         }
 
         return $this->storage;
     }
 
     /**
-     * Is the devlog enabled?
+     * The extension configuration!
      *
-     * @return \Tx_Rnbase_Domain_Model_Data
+     * @param string $key
+     *
+     * @return int|string|null
      */
-    public function getExtConf()
+    protected function getExtConf($key, $default = null)
     {
-        if (!$this->getStorage()->hasExtConf()) {
-            $this->getStorage()->setExtConf(
-                \Tx_Rnbase_Domain_Model_Data::getInstance(
-                     \Tx_Rnbase_Configuration_Processor::getExtensionCfgValue('mklog')
-                )
-            );
+        $storage = $this->getStorage();
+        if (empty($storage->extConf)) {
+            if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog'])) {
+                $storage->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog']);
+            }
+
+            if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 9000000) {
+                $storage->extConf = Factory::makeInstance(ExtensionConfiguration::class)->get(
+                    'mklog',
+                    ''
+                );
+            }
         }
 
-        return $this->getStorage()->getExtConf();
+        if (empty($storage->extConf[$key])) {
+            return $default;
+        }
+
+        return $storage->extConf[$key];
     }
 
     /**
@@ -83,14 +98,15 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getCurrentRunId()
     {
-        if (!$this->getStorage()->hasDevLogCurrentRunId()) {
-            list($sec, $usec) = explode('.', (string) microtime(true));
+        $storage = $this->getStorage();
+        if (empty($storage->DevLogCurrentRunId)) {
+            [$sec, $usec] = explode('.', (string) microtime(true));
             // miliseconds has to be exactly 6 sings long. otherwise the resulting number is too small.
             $usec = $usec.str_repeat('0', 6 - strlen($usec));
-            $this->getStorage()->setDevLogCurrentRunId($sec.$usec);
+            $storage->DevLogCurrentRunId = $sec.$usec;
         }
 
-        return $this->getStorage()->getDevLogCurrentRunId();
+        return $storage->DevLogCurrentRunId;
     }
 
     /**
@@ -100,7 +116,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getEnableDevLog()
     {
-        return (bool) $this->getExtConf()->getEnableDevlog();
+        return (bool) $this->getExtConf('enable_devlog');
     }
 
     /**
@@ -110,7 +126,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getHost()
     {
-        return $this->getExtConf()->getHost();
+        return $this->getExtConf('host', '');
     }
 
     /**
@@ -120,7 +136,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getMinLogLevel()
     {
-        return (int) $this->getExtConf()->getMinLogLevel();
+        return (int) $this->getExtConf('min_log_level');
     }
 
     /**
@@ -130,7 +146,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getMaxLogs()
     {
-        return (int) $this->getExtConf()->getMaxLogs();
+        return (int) $this->getExtConf('max_logs');
     }
 
     /**
@@ -140,7 +156,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getMaxTransportExtraDataSize()
     {
-        $maxSize = (int) $this->getExtConf()->getMaxTransportExtraDataSize();
+        $maxSize = (int) $this->getExtConf('max_transport_extra_data_size');
         $maxSize = $maxSize ?: \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB;
 
         return $maxSize;
@@ -153,14 +169,13 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getExcludeExtKeys()
     {
-        $extKeys = $this->getExtConf()->getExcludeExtKeys();
+        $extKeys = $this->getExtConf('exclude_ext_keys', []);
+
         if (!is_array($extKeys)) {
-            \tx_rnbase::load('Tx_Rnbase_Utility_Strings');
-            $extKeys = \Tx_Rnbase_Utility_Strings::trimExplode(',', $extKeys);
-            $this->getExtConf()->setExcludeExtKeys($extKeys);
+            $extKeys = GeneralUtility::trimExplode(',', $extKeys);
         }
 
-        return $this->getExtConf()->getExcludeExtKeys();
+        return $extKeys;
     }
 
     /**
@@ -170,7 +185,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getGelfEnable()
     {
-        return (bool) $this->getExtConf()->getGelfEnable();
+        return (bool) $this->getExtConf('gelf_enable');
     }
 
     /**
@@ -180,7 +195,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getGelfMinLogLevel()
     {
-        return (int) $this->getExtConf()->getGelfMinLogLevel();
+        return (int) $this->getExtConf('gelf_min_log_level');
     }
 
     /**
@@ -190,7 +205,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getGelfTransport()
     {
-        return $this->getExtConf()->getGelfTransport() ?: 'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf';
+        return $this->getExtConf('gelf_transport') ?: 'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf';
     }
 
     /**
@@ -200,7 +215,7 @@ class ConfigUtility implements \Tx_Rnbase_Interface_Singleton
      */
     public function getGelfCredentials()
     {
-        return $this->getExtConf()->getGelfCredentials();
+        return $this->getExtConf('gelf_credentials');
     }
 
     /**
