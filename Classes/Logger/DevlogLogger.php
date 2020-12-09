@@ -25,8 +25,10 @@ namespace DMK\Mklog\Logger;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\SeverityUtility;
 use DMK\Mklog\Utility\VersionUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogLevel;
 
 /**
@@ -127,19 +129,19 @@ class DevlogLogger extends AbstractLogger
     {
         // map the old log levels to the new one
         switch ((int) $params['severity']) {
-            case \tx_rnbase_util_Logger::LOGLEVEL_DEBUG:
+            case -1:
                 $params['severity'] = SeverityUtility::DEBUG;
                 break;
-            case \tx_rnbase_util_Logger::LOGLEVEL_INFO:
+            case 0:
                 $params['severity'] = SeverityUtility::INFO;
                 break;
-            case \tx_rnbase_util_Logger::LOGLEVEL_NOTICE:
+            case 1:
                 $params['severity'] = SeverityUtility::NOTICE;
                 break;
-            case \tx_rnbase_util_Logger::LOGLEVEL_WARN:
+            case 2:
                 $params['severity'] = SeverityUtility::WARNING;
                 break;
-            case \tx_rnbase_util_Logger::LOGLEVEL_FATAL:
+            case 3:
                 $params['severity'] = SeverityUtility::ERROR;
                 break;
         }
@@ -199,6 +201,9 @@ class DevlogLogger extends AbstractLogger
      */
     protected function isDatabaseConnected()
     {
-        return \Tx_Rnbase_Database_Connection::getInstance()->getDatabaseConnection()->isConnected();
+        $connectionManager = Factory::makeInstance(ConnectionPool::class);
+        $connection = $connectionManager->getConnectionByName($connectionManager::DEFAULT_CONNECTION_NAME);
+
+        return $connection->isConnected();
     }
 }
