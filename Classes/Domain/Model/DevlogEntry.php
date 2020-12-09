@@ -103,10 +103,8 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
 
     /**
      * @return array
-     *
-     * @TODO: legacy rnbase model support, remove if rn_base isn't used anymore
      */
-    public function getRecord()
+    public function getRecord(): array
     {
         $values = [];
 
@@ -142,7 +140,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return self::TABLENAME;
     }
@@ -152,23 +150,23 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return int the uid or NULL if none set yet
      */
-    public function getUid()
+    public function getUid(): int
     {
-        if (null !== $this->uid) {
-            return (int) $this->uid;
-        }
-
-        return null;
+        return (int) $this->uid;
     }
 
     /**
      * Setter for the uid.
      *
      * @param int $uid
+     *
+     * @return self
      */
-    public function setUid($uid): void
+    public function setUid($uid): self
     {
         $this->uid = $uid;
+
+        return $this;
     }
 
     /**
@@ -176,12 +174,8 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return int|null the pid or NULL if none set yet
      */
-    public function getPid()
+    public function getPid(): int
     {
-        if (null === $this->pid) {
-            return null;
-        }
-
         return (int) $this->pid;
     }
 
@@ -189,18 +183,22 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      * Setter for the pid.
      *
      * @param int $pid
+     *
+     * @return self
      */
-    public function setPid($pid): void
+    public function setPid($pid): self
     {
         $this->pid = $pid;
+
+        return $this;
     }
 
     /**
      * @return int
      */
-    public function getCrdate()
+    public function getCrdate(): int
     {
-        return $this->crdate;
+        return (int) $this->crdate;
     }
 
     /**
@@ -210,7 +208,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      */
     public function setCrdate($crdate)
     {
-        $this->crdate = $crdate;
+        $this->crdate = (int) $crdate;
 
         return $this;
     }
@@ -218,7 +216,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * @return string
      */
-    public function getRunId()
+    public function getRunId(): string
     {
         return $this->runId;
     }
@@ -238,9 +236,9 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * @return int
      */
-    public function getSeverity()
+    public function getSeverity(): int
     {
-        return $this->severity;
+        return (int) $this->severity;
     }
 
     /**
@@ -250,7 +248,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      */
     public function setSeverity($severity)
     {
-        $this->severity = $severity;
+        $this->severity = (int) $severity;
 
         return $this;
     }
@@ -258,7 +256,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * @return string
      */
-    public function getExtKey()
+    public function getExtKey(): string
     {
         return $this->extKey;
     }
@@ -278,7 +276,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -298,9 +296,9 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * @return int
      */
-    public function getCruserId()
+    public function getCruserId(): int
     {
-        return $this->cruserId;
+        return (int) $this->cruserId;
     }
 
     /**
@@ -310,7 +308,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      */
     public function setCruserId($cruserId)
     {
-        $this->cruserId = $cruserId;
+        $this->cruserId = (int) $cruserId;
 
         return $this;
     }
@@ -320,7 +318,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return array
      */
-    public function getTransportIds()
+    public function getTransportIds(): array
     {
         if (empty($this->transportIds)) {
             return [];
@@ -336,9 +334,24 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return self
      */
+    public function setTransportIdsRaw(
+        $transportIds
+    ): self {
+        $this->transportIds = $transportIds;
+
+        return $this;
+    }
+
+    /**
+     * Adds a scheduler to the transport id list.
+     *
+     * @param string $transportId
+     *
+     * @return self
+     */
     public function addTransportId(
         $transportId
-    ) {
+    ): self {
         $ids = $this->getTransportIds();
         $ids[] = $transportId;
 
@@ -352,7 +365,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getExtraDataRaw()
+    public function getExtraDataRaw(): string
     {
         return $this->extraData;
     }
@@ -362,7 +375,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return array
      */
-    private function getExtraData()
+    private function getExtraData(): array
     {
         return \DMK\Mklog\Factory::getDataConverterUtility()->decode(
             $this->getExtraDataRaw()
@@ -372,11 +385,11 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * Setter for extra data.
      *
-     * @return DevlogEntry
+     * @return self
      */
     public function setExtraData(
         array $data
-    ) {
+    ): self {
         $this->extraData = \DMK\Mklog\Factory::getDataConverterUtility()->encode($data);
 
         return $this;
@@ -385,11 +398,11 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * Setter for extra data.
      *
-     * @return DevlogEntry
+     * @return self
      */
     public function setExtraDataEncoded(
         string $data
-    ) {
+    ): self {
         $this->extraData = $data;
 
         return $this;
@@ -398,9 +411,9 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * Returns the public values of extra data.
      *
-     * @return mixed
+     * @return array
      */
-    public function getExternalExtraData()
+    public function getExternalExtraData(): array
     {
         $data = [];
 
@@ -417,9 +430,9 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
     /**
      * Returns the protected values of extra data.
      *
-     * @return mixed
+     * @return array
      */
-    public function getInternalExtraData()
+    public function getInternalExtraData(): array
     {
         $data = [];
 
@@ -442,7 +455,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getShortMessage()
+    public function getShortMessage(): string
     {
         return $this->getMessage();
     }
@@ -454,7 +467,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getFullMessage()
+    public function getFullMessage(): string
     {
         return \DMK\Mklog\Factory::getDataConverterUtility()->encode(
             \DMK\Mklog\Factory::getEntryDataParserUtility($this)->getShortenedExternalExtraData()
@@ -466,7 +479,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return \DateTime
      */
-    public function getTimestamp()
+    public function getTimestamp(): \DateTime
     {
         $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
         // createFromFormat bzw. UNIX Timestamps haben per default GMT als Zeitzone.
@@ -481,7 +494,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getLevel()
+    public function getLevel(): string
     {
         return \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant(
             $this->getSeverity()
@@ -493,7 +506,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getFacility()
+    public function getFacility(): string
     {
         return $this->getExtKey();
     }
@@ -503,7 +516,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return string
      */
-    public function getHost()
+    public function getHost(): string
     {
         $host = $this->host;
 
@@ -535,7 +548,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return self
      */
-    public function setHost($host)
+    public function setHost($host): self
     {
         $this->host = $host;
 
@@ -549,7 +562,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      *
      * @return array
      */
-    public function getAdditionalData()
+    public function getAdditionalData(): array
     {
         return \DMK\Mklog\Factory::getEntryDataParserUtility($this)->getShortenedInternalExtraData();
     }

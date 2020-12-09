@@ -5,7 +5,7 @@ namespace DMK\Mklog\Domain\Repository;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,9 +25,14 @@ namespace DMK\Mklog\Domain\Repository;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Mapper\DevlogEntryMapper;
 use DMK\Mklog\Domain\Model\DevlogEntry;
+use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Factory;
+use Doctrine\DBAL\FetchMode;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
 /**
  * Devlog Entry Repository.
@@ -41,7 +46,7 @@ class DevlogEntryRepository
     /**
      * @return string
      */
-    public function getTableName()
+    public function getTableName(): string
     {
         return DevlogEntry::TABLENAME;
     }
@@ -51,43 +56,51 @@ class DevlogEntryRepository
      *
      * @return DevlogEntry
      */
-    public function createNewModel()
+    public function createNewModel(): DevlogEntry
     {
         return Factory::makeInstance(DevlogEntry::class);
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Database\Connection
+     * @return Connection
      */
-    public function getConnection()
+    protected function getConnection(): Connection
     {
         return Factory::makeInstance(ConnectionPool::class)->getConnectionForTable($this->getTableName());
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
+     * @return QueryBuilder
      */
-    protected function createQueryBuilder()
+    protected function createQueryBuilder(): QueryBuilder
     {
         return $this->getConnection()->createQueryBuilder();
     }
 
     /**
+     * @return QueryBuilder
+     */
+    public function createSearchQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder()->select('*')->from($this->getTableName());
+    }
+
+    /**
      * @return int
      */
-    public function countAll()
+    public function countAll(): int
     {
         return $this->createQueryBuilder()
             ->count('uid')
             ->from($this->getTableName())
             ->execute()
-            ->fetchOne();
+            ->fetchColumn();
     }
 
     /**
      * Exists the table at the db?
      */
-    public function optimize()
+    public function optimize(): void
     {
         static $optimized = false;
 
@@ -133,11 +146,70 @@ class DevlogEntryRepository
     }
 
     /**
+     * @param DevlogEntryDemand $demand
+     *
+     * @return array<DevlogEntry>
+     */
+    public function findByDemand(DevlogEntryDemand $demand): array
+    {
+        $queryBuilder = $this->createSearchQueryBuilder();
+
+        if ($demand->hasTransportId()) {
+            $queryBuilder->where(
+                sprintf(
+                    'NOT FIND_IN_SET(\'%s\', `transport_ids`)',
+                    $demand->getTransportId()
+                )
+            );
+        }
+
+        if ($demand->hasSeverity()) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->lte('severity', $demand->getSeverity())
+            );
+        }
+
+        if ($demand->hasExtensionWhitelist()) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->in(
+                    'ext_key',
+                    $this->quoteInArray(
+                        $demand->getExtensionWhitelist()
+                    )
+                )
+            );
+        }
+
+        if ($demand->hasExtensionBlacklist()) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->notIn(
+                    'ext_key',
+                    $this->quoteInArray(
+                        $demand->getExtensionBlacklist()
+                    )
+                )
+            );
+        }
+
+        if ($demand->hasMaxResults()) {
+            $queryBuilder->setMaxResults($demand->getMaxResults());
+        }
+
+        if ($demand->hasOrderBy()) {
+            $queryBuilder->orderBy($demand->getOrderByField(), $demand->getOrderByDirection());
+        }
+
+        return DevlogEntryMapper::fromResults(
+            $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE)
+        );
+    }
+
+    /**
      * Persists an model.
      */
     public function persist(
         DevlogEntry $model
-    ) {
+    ): void {
         // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
         $model->setExtraDataEncoded(
             \DMK\Mklog\Factory::getEntryDataParserUtility($model)->getShortenedRaw(
@@ -145,10 +217,54 @@ class DevlogEntryRepository
             )
         );
 
+        if ($model->getUid() > 0) {
+            $this->persistUpdate($model);
+        } else {
+            $this->persistNew($model);
+        }
+    }
+
+    /**
+     * @param DevlogEntry $model
+     */
+    private function persistUpdate(DevlogEntry $model): void
+    {
+        $connection = $this->getConnection();
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder = $queryBuilder
+            ->update($this->getTableName())
+            ->where($queryBuilder->expr()->eq('uid', $model->getUid()))
+        ;
+        foreach ($model->getRecord() as $property => $value) {
+            $queryBuilder->set($property, $value);
+        }
+        $queryBuilder->execute();
+    }
+
+    /**
+     * @param DevlogEntry $model
+     */
+    private function persistNew(DevlogEntry $model): void
+    {
         $connection = $this->getConnection();
         $query = $connection->createQueryBuilder()->insert($this->getTableName())->values($model->getRecord());
         if ($query->execute()) {
             $model->setUid($connection->lastInsertId($this->getTableName()));
         }
+    }
+
+    /**
+     * @param string $list
+     *
+     * @return string[]
+     */
+    private function quoteInArray(array $list): array
+    {
+        return array_map(
+            function ($entry) {
+                return '\''.(string) $entry.'\'';
+            },
+            $list
+        );
     }
 }
