@@ -5,7 +5,7 @@ namespace DMK\Mklog\WatchDog;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,8 +25,10 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
+use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
+use DMK\Mklog\Factory;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
@@ -100,6 +102,19 @@ class SchedulerWatchDog extends AbstractTask
     }
 
     /**
+     * @return \TYPO3\CMS\Core\Log\Logger
+     */
+    private function getLogger(): \TYPO3\CMS\Core\Log\Logger
+    {
+        $name = 'DMK.Mklog.WatchDog.SchedulerWatchDog';
+        if ($this->logger->getName() !== $name) {
+            $this->logger = Factory::makeInstance(LogManager::class)->getLogger($name);
+        }
+
+        return $this->logger;
+    }
+
+    /**
      * Returns a storage.
      *
      * @return GenericArrayObject
@@ -149,9 +164,9 @@ class SchedulerWatchDog extends AbstractTask
             count($successes),
             count($failures)
         );
-        $logMethod = $success ? 'debug' : 'warning';
-        \Tx_Rnbase_Utility_Logger::$logMethod(
-            'mklog',
+
+        $this->getLogger()->log(
+            $success ? 'debug' : 'warning',
             $msg,
             [
                 'transport' => $this->getTransportId(),
@@ -161,13 +176,17 @@ class SchedulerWatchDog extends AbstractTask
         );
 
         // create a flash message for the beuser
-        if (\tx_rnbase_util_TYPO3::getBEUserUID()) {
-            \tx_rnbase_util_Misc::addFlashMessage(
+        if (isset($GLOBALS['BE_USER']) && is_object($GLOBALS['BE_USER']) && isset($GLOBALS['BE_USER']->user['uid'])) {
+            $flashMessage = Factory::makeInstance(
+                \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 $msg,
                 'MK LOGGER WatchDog',
                 $success ? 0 : 2,
                 false
             );
+            /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
+            $flashMessageService = Factory::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
+            $flashMessageService->getMessageQueueByIdentifier()->enqueue($flashMessage);
         }
 
         return $success;
@@ -176,60 +195,50 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * Returns all untransportet messages.
      *
-     * @return \Tx_Rnbase_Domain_Collection_Base
+     * @return array
      */
-    protected function findMessages()
+    protected function findMessages(): array
     {
-        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
-        $repo = new DevlogEntryRepository();
+        return Factory::getDevlogEntryRepository()->findByDemand($this->getDevlogEntryDemand());
+    }
 
-        /*
-            SELECT DEVLOGENTRY.* FROM tx_mklog_devlog_entry AS DEVLOGENTRY
-            WHERE DEVLOGENTRY.severity <= 7
-            AND DEVLOGENTRY.ext_key IN (\'mklog\')
-            AND DEVLOGENTRY.ext_key NOT IN (\'testlog\')
-            AND NOT FIND_IN_SET(\'mkLogMail:26\', `transport_ids`)
-            ORDER BY DEVLOGENTRY.crdate ASC LIMIT 5',
-         */
+    /**
+     * @return DevlogEntryDemand
+     */
+    private function getDevlogEntryDemand()
+    {
+        $options = $this->getOptions();
+        $demand = Factory::makeInstance(DevlogEntryDemand::class);
 
-        $fields = $options = [];
-
-        $fields[SEARCH_FIELD_CUSTOM] = sprintf(
-            'NOT FIND_IN_SET(\'%s\', `transport_ids`)',
-            $this->getTransportId()
-        );
-
-        if ($this->getOptions()->getSeverity()) {
-            $fields['DEVLOGENTRY.severity'][OP_LTEQ_INT] = $this->getOptions()->getSeverity();
+        $demand->setTransportId($this->getTransportId());
+        if ($options->getSeverity()) {
+            $demand->setSeverity($options->getSeverity());
         }
 
-        if ($this->getOptions()->getExtensionWhitelist()) {
-            $fields['DEVLOGENTRY.ext_key'][OP_IN] = $this->getOptions()->getExtensionWhitelist();
+        if ($options->getExtensionWhitelist()) {
+            $demand->setExtensionWhitelist(
+                GeneralUtility::trimExplode(',', $options->getExtensionWhitelist(), true)
+            );
+        }
+        if ($options->getExtensionBlacklist()) {
+            $demand->setExtensionBlacklist(
+                GeneralUtility::trimExplode(',', $options->getExtensionBlacklist(), true)
+            );
         }
 
-        if ($this->getOptions()->getExtensionBlacklist()) {
-            $fields['DEVLOGENTRY.ext_key'][OP_NOTIN] = $this->getOptions()->getExtensionBlacklist();
-        }
-
-        $limit = $this->getOptions()->getMessageLimit();
+        $limit = $options->getMessageLimit();
         // fallback of 100, if no limit is configured
         if (null === $limit) {
             $limit = 100;
         }
         $limit = (int) $limit;
         if ($limit > 0) {
-            $options['limit'] = $limit;
+            $demand->setMaxResults($limit);
         }
 
-        $options['orderby'] = ['DEVLOGENTRY.crdate' => 'ASC'];
+        $demand->setOrderBy('crdate', 'ASC');
 
-        $options['sqlonly'] = 1;
-        echo '<h1>DEBUG: '.__FILE__.' Line: '.__LINE__.'</h1><pre>'.var_export([
-                $repo->search($fields, $options),
-            ], true).'</pre>';
-        exit('DEBUG: '.__FILE__.' Line: '.__LINE__);
-
-        return $repo->search($fields, $options);
+        return $demand;
     }
 
     /**
