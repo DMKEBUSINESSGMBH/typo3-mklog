@@ -2,7 +2,7 @@
 /**
  *  Copyright notice.
  *
- *  (c) 2016 DMK E-Business GmbH <dev@dmk-ebusiness.de>
+ *  (c) 2020 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,7 +27,8 @@ use DMK\Mklog\Domain\Model\DevlogEntry;
 /**
  * Tx_Mklog_Hooks_DataHandler.
  *
- * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
+ * @author          Hannes Bochmann
+ * @author          Michael Wagner
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
  */

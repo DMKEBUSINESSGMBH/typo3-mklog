@@ -4,7 +4,7 @@
  *
  *  Copyright notice
  *
- *  (c) 2011 Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ *  (c) 2020 Michael Wagner <michael.wagner@dmk-ebusiness.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -23,9 +23,6 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-tx_rnbase::load('Tx_Mklog_Hooks_DataHandler');
-tx_rnbase::load('tx_rnbase_tests_BaseTestCase');
-tx_rnbase::load('tx_rnbase_util_Typo3Classes');
 
 /**
  * Tx_Mklib_Database_ConnectionTest.

@@ -2,16 +2,10 @@
 
 namespace DMK\Mklog\WatchDog\Transport;
 
-use DMK\Mklog\Domain\Model\GenericArrayObject;
-use DMK\Mklog\Factory;
-use DMK\Mklog\Tests\BaseTestCase;
-use TYPO3\CMS\Core\Mail\MailMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,6 +24,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use DMK\Mklog\Domain\Model\GenericArrayObject;
+use DMK\Mklog\Factory;
+use DMK\Mklog\Tests\BaseTestCase;
+use TYPO3\CMS\Core\Mail\MailMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class SchedulerWatchDogTest.

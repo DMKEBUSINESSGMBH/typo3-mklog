@@ -5,7 +5,7 @@ namespace DMK\Mklog\Utility;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -30,7 +30,7 @@ namespace DMK\Mklog\Utility;
  *
  * Some code is taken from \TYPO3\CMS\Core\Log\LogLevel for backward compatibility
  *
- * @author Ingo Renner <ingo@typo3.org>
+ * @author Ingo Renner
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
