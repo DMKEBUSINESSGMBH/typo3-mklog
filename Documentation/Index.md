@@ -154,7 +154,7 @@ Currently there are a mail and some gelf transports.
 The credentials are Transport specific:
 
  * **Mail Message**  
-   Only the email: `john@dohe.org`
+   The mail to address: `John Dohe<john@dohe.org>`
  * **Gelf UDP**  
    The host and port of the server: `127.0.0.1:12201`
  * **Gelf HTTP**  

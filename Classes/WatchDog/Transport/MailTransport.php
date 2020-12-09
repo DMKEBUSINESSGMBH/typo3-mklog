@@ -5,7 +5,7 @@ namespace DMK\Mklog\WatchDog\Transport;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,7 +25,10 @@ namespace DMK\Mklog\WatchDog\Transport;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\SeverityUtility;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\MailMessage;
 
 /**
  * MK Log watchdog mail transporter.
@@ -193,18 +196,23 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     protected function sendMail(
         $content
     ) {
-        /* @var $mail \tx_rnbase_util_Mail */
-        $mail = \tx_rnbase::makeInstance('tx_rnbase_util_Mail');
-        $mail->setSubject(
-            sprintf(
-                $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
-            )
-        );
-        $mail->setFrom(\DMK\Mklog\Factory::getConfigUtility()->getGlobalMailFrom());
-        $mail->setTo($this->getOptions()->getCredentials());
-        $mail->setTextPart($content);
+        $mail = Factory::makeInstance(MailMessage::class);
 
-        $mail->send();
+        $mail
+            ->from(
+                Address::create(Factory::getConfigUtility()->getGlobalMailFrom())
+            )
+            ->to(
+                Address::create($this->getOptions()->getCredentials())
+            )
+            ->subject(
+                sprintf(
+                    $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
+                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
+                )
+            )
+            ->text($content)
+            ->send()
+        ;
     }
 }

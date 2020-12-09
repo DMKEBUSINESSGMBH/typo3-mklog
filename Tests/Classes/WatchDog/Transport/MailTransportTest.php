@@ -3,7 +3,9 @@
 namespace DMK\Mklog\WatchDog\Transport;
 
 use DMK\Mklog\Domain\Model\GenericArrayObject;
+use DMK\Mklog\Factory;
 use DMK\Mklog\Tests\BaseTestCase;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
@@ -51,16 +53,20 @@ class MailTransportTest extends BaseTestCase
      */
     public function testSendMailWithDefaultSubject()
     {
-        $mailUtility = $this->getMock('tx_rnbase_util_Mail', ['send', 'setSubject']);
+        $mailUtility = $this->getMock(MailMessage::class, ['subject', 'send']);
         $mailUtility->expects(self::once())
-            ->method('setSubject')
-            ->with('DevLog WatchDog on site test site');
-        GeneralUtility::addInstance('tx_rnbase_util_Mail', $mailUtility);
+            ->method('subject')
+            ->with('DevLog WatchDog on site test site')
+            ->willReturnSelf();
+        GeneralUtility::addInstance(MailMessage::class, $mailUtility);
 
-        $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
-        $mailTransport->initialize(GeneralUtility::makeInstance(
-            GenericArrayObject::class
-        ));
+        $mailTransport = Factory::makeInstance(MailTransport::class);
+        $mailTransport->initialize(
+            Factory::makeInstance(
+                GenericArrayObject::class,
+                ['credentials' => 'John Dohe<john@dohe.org>']
+            )
+        );
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');
     }
@@ -71,16 +77,23 @@ class MailTransportTest extends BaseTestCase
      */
     public function testSendMailWithSubjectFromOptions()
     {
-        $mailUtility = $this->getMock('tx_rnbase_util_Mail', ['send', 'setSubject']);
+        $mailUtility = $this->getMock(MailMessage::class, ['subject', 'send']);
         $mailUtility->expects(self::once())
-            ->method('setSubject')
-            ->with('test subject on test site');
-        GeneralUtility::addInstance('tx_rnbase_util_Mail', $mailUtility);
+            ->method('subject')
+            ->with('test subject on test site')
+            ->willReturnSelf();
+        GeneralUtility::addInstance(MailMessage::class, $mailUtility);
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
-        $mailTransport->initialize(GeneralUtility::makeInstance(
-            GenericArrayObject::class, ['mail_subject' => 'test subject on %s']
-        ));
+        $mailTransport->initialize(
+            Factory::makeInstance(
+                GenericArrayObject::class,
+                [
+                    'credentials' => 'John Dohe<john@dohe.org>',
+                    'mail_subject' => 'test subject on %s',
+                    ]
+                )
+        );
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');
     }

@@ -58,8 +58,16 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
         $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
         // just call to create the initial config
         $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getExtConf'], ['enable_devlog']);
-        $configStorage->extConf['min_log_level'] = 7;
-        $configStorage->extConf['exclude_ext_keys'] = '';
+        $configStorage->setExtConf(
+            array_merge(
+                $configStorage->getExtConf(),
+                [
+                    'min_log_level' => 7,
+                    'exclude_ext_keys' => '',
+                    'from_mail' => 'John Dohe<john@dohe.org>',
+                ]
+            )
+        );
     }
 
     /**
@@ -70,7 +78,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
     {
         // reset extconf cache
         $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
-        $configStorage->extConf = null;
+        $configStorage->unsExtConf();
     }
 
     /**
