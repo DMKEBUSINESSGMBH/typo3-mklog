@@ -5,7 +5,7 @@ namespace DMK\Mklog\Logger;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,19 +24,6 @@ namespace DMK\Mklog\Logger;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-if (!\class_exists('tx_rnbase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'rn_base',
-        'class.tx_rnbase.php'
-    );
-}
-if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'mklog',
-        'Tests/Classes/BaseTestCase.php'
-    );
-}
 
 /**
  * Gelf Logger test.

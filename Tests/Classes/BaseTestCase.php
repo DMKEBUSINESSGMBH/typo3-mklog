@@ -26,6 +26,7 @@ namespace DMK\Mklog\Tests;
  ***************************************************************/
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
+use DMK\Mklog\Factory;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 
@@ -126,13 +127,13 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
 
         $repo = $this->getMock(
             'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository',
-            ['countAll', 'createQueryBuilder', 'getConnection', 'createNewModel']
+            ['countAll', 'persist', 'createQueryBuilder', 'getConnection', 'createNewModel']
         );
 
         $repo
             ->expects(self::any())
             ->method('createNewModel')
-            ->will(self::returnValue($this->getMock(DevlogEntry::class)));
+            ->will(self::returnValue(Factory::makeInstance(DevlogEntry::class)));
         $repo
             ->expects(self::any())
             ->method('createQueryBuilder')

@@ -5,7 +5,7 @@ namespace DMK\Mklog\Logger;
 /***************************************************************
  * Copyright notice
  *
- * (c) 2016 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,6 +24,8 @@ namespace DMK\Mklog\Logger;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use DMK\Mklog\Domain\Model\DevlogEntry;
 
 /**
  * Devlog Logger test.
@@ -111,37 +113,35 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 
         $that = $this; // workaround for php 5.3
         $repo = $this->callInaccessibleMethod($logger, 'getDevlogEntryRepository');
-        $connection = $this->callInaccessibleMethod($repo, 'getConnection');
-        $connection
+        $repo
             ->expects(self::once())
-            ->method('doInsert')
+            ->method('persist')
             ->with(
                 $this->callback(
-                    function ($tablename) {
-                        return 'tx_mklog_devlog_entry' === $tablename;
-                    }
-                ),
-                $this->callback(
-                    function ($data) use ($that, $msg, $extKey, $severity) {
-                        $that->assertSame(
-                            \DMK\Mklog\Factory::getConfigUtility()->getCurrentRunId(),
-                            $data['run_id']
-                        );
-
-                        $that->assertGreaterThan(time() - 60, $data['crdate']);
-                        $that->assertSame(0, $data['pid']);
-                        $that->assertSame($msg, $data['message']);
-                        $that->assertSame($extKey, $data['ext_key']);
-                        $that->assertSame($severity, $data['severity']);
+                    function (DevlogEntry $model) use ($that) {
+                        $this->assertSame(0, $model->getPid());
+                        $that->assertGreaterThan(time() - 60, $model->getCrdate());
+                        $this->assertSame('msg', $model->getMessage());
+                        $this->assertSame('mklog', $model->getExtKey());
+                        $this->assertSame(7, $model->getSeverity());
                         // how to check? on cli it is 0, on be runs the current user id!
-                        $that->assertArrayHasKey('cruser_id', $data);
-                        $that->assertArrayHasKey('extra_data', $data);
-                        $that->assertTrue(is_string($data['extra_data']));
-                        $logData = json_decode($data['extra_data'], true);
+                        // $this->assertSame(0, $model->getCruserId());
+
+                        $extradata = $model->getExternalExtraData();
+                        $that->assertArrayHasKey('foo', $extradata);
+                        $that->assertArrayHasKey('bar', $extradata);
+                        $extradata = $model->getInternalExtraData();
+                        $that->assertArrayHasKey('feuser', $extradata);
+                        $that->assertArrayHasKey('beuser', $extradata);
+                        $that->assertArrayHasKey('requesturl', $extradata);
+                        $that->assertArrayHasKey('trace', $extradata);
+
+                        $logData = json_decode($model->getExtraDataRaw(), true);
                         $that->assertSame(1, $logData['foo']);
                         $that->assertSame(['baz'], $logData['bar']);
                         $that->assertArrayHasKey('__feuser', $logData);
                         $that->assertArrayHasKey('__beuser', $logData);
+                        $that->assertArrayHasKey('__requesturl', $logData);
                         $that->assertArrayHasKey('__trace', $logData);
 
                         return true;
@@ -158,13 +158,13 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Returns the logger mock.
      *
-     * @return PHPUnit_Framework_MockObject_MockObject|DMK\Mklog\Logger\DevlogLogger
+     * @return PHPUnit_Framework_MockObject_MockObject|DevlogLogger
      */
     protected function getDevlogLoggerMock(
         array $methods = []
     ) {
         $logger = $this->getMock(
-            'DMK\\Mklog\\Logger\\DevlogLogger',
+            DevlogLogger::class,
             array_merge(
                 ['getDevlogEntryRepository', 'isDatabaseConnected'],
                 $methods
