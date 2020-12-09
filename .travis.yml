@@ -7,73 +7,57 @@ notifications:
     on_success: change
     on_failure: always
 
-php:
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
-
-env:
-  - TYPO3_VERSION="^6.2.14"
-  - TYPO3_VERSION="^7.6.0"
-  - TYPO3_VERSION="^8.7.0"
-  - TYPO3_VERSION="^9.5.0"
-
-matrix:
-  exclude:
-    - php: 7.0
-      env: TYPO3_VERSION="^6.2.14"
-    - php: 7.1
-      env: TYPO3_VERSION="^6.2.14"
-    - php: 7.2
-      env: TYPO3_VERSION="^6.2.14"
-    - php: 7.2
-      env: TYPO3_VERSION="^7.6.0"
-    - php: 5.6
-      env: TYPO3_VERSION="^8.7.0"
-    - php: 5.6
-      env: TYPO3_VERSION="^9.5.0"
-    - php: 7.0
-      env: TYPO3_VERSION="^9.5.0"
-    - php: 7.1
-      env: TYPO3_VERSION="^9.5.0"
-
-sudo: false
-
-addons:
-  apt:
-    packages:
-      - parallel
-
 cache:
   directories:
-    - $HOME/.composer/cache
+    - $HOME/.config/composer/cache
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - composer self-update --1
+  - composer self-update
   - composer --version
 
 before_script:
-  - |
-    if [ $TYPO3_VERSION == "^9.5.0" ]; then
-      composer require typo3/minimal="$TYPO3_VERSION"
-    else
-      travis_wait 30 composer require typo3/cms="$TYPO3_VERSION"
-    fi
+  - composer remove --no-update typo3/cms typo3/cms-core
+  - composer require "$TYPO3_CORE"
   # Restore composer.json
   - git checkout composer.json
   - export TYPO3_PATH_WEB=$PWD/.Build/Web
-  - cp $PWD/.Build/Web/typo3conf/ext/mklog/Tests/Fixtures/LocalConfiguration.php $PWD/.Build/Web/typo3conf/LocalConfiguration.php
 
 script:
   - >
     echo;
     echo "Running unit tests";
-    .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Classes/
+    .Build/bin/phpunit -c phpunit.xml
 
-# disabled, because there are direct tx_rnbase::load calls in the files!
-#  - >
-#    echo;
-#    echo "Running php lint";
-#    find . -name \*.php ! -path "./.Build/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+jobs:
+  include:
+    - stage: test
+      php: 7.1
+      env: TYPO3_CORE="typo3/cms=^8.7.32"
+    - stage: test
+      php: 7.2
+      env: TYPO3_CORE="typo3/cms=^8.7.32"
+    - stage: test
+      php: 7.3
+      env: TYPO3_CORE="typo3/cms=^8.7.32"
+    - stage: test
+      php: 7.4
+      env: TYPO3_CORE="typo3/cms=^8.7.32"
+    - stage: test
+      php: 7.2
+      env: TYPO3_CORE="typo3/minimal=^9.5"
+    - stage: test
+      php: 7.3
+      env: TYPO3_CORE="typo3/minimal=^9.5"
+    - stage: test
+      php: 7.4
+      env: TYPO3_CORE="typo3/minimal=^9.5"
+    - stage: test
+      php: 7.2
+      env: TYPO3_CORE="typo3/minimal=^10.4"
+    - stage: test
+      php: 7.3
+      env: TYPO3_CORE="typo3/minimal=^10.4"
+    - stage: test
+      php: 7.4
+      env: TYPO3_CORE="typo3/minimal=^10.4"
