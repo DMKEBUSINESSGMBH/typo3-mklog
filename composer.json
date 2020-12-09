@@ -82,8 +82,8 @@
             "[ -L .Build/Web/typo3conf/LocalConfiguration.php ] || ln -snvf ../../../Tests/Fixtures/LocalConfiguration.php .Build/Web/typo3conf/LocalConfiguration.php"
         ],
         "lint:php": [
-            "[ -e bin/parallel-lint ] || composer update",
-            "bin/parallel-lint ./packages/*/Classes"
+            "[ -e .Build/bin/parallel-lint ] || composer update",
+            ".Build/bin/parallel-lint ./Classes"
         ],
         "lint": [
             "@lint:php"
