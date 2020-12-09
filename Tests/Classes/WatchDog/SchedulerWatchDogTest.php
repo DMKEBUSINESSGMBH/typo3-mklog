@@ -25,9 +25,8 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
-use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Scheduler WatchDog test.
@@ -90,29 +89,29 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
      * @group unit
      * @test
      */
-    public function testFindMessagesRespectsWhitelistAndBlacklist()
+    public function testGetDemandRespects()
     {
-        $expectedFields = [
-            'CUSTOM' => 'NOT FIND_IN_SET(\'\', `transport_ids`)',
-            'DEVLOGENTRY.ext_key' => [
-                'IN STR' => 'mklog',
-                'NOTIN STR' => 'rn_base',
-            ],
-        ];
-        $expectedOptions = [
-            'limit' => 100,
-            'orderby' => ['DEVLOGENTRY.crdate' => 'ASC'],
-        ];
-        $repository = $this->getAccessibleMock(DevlogEntryRepository::class, ['search']);
-        $repository->expects(self::once())
-            ->method('search')
-            ->with($expectedFields, $expectedOptions);
-        GeneralUtility::setSingletonInstance(DevlogEntryRepository::class, $repository);
-
         $task = $this->getSchedulerMock(['getTransportId']);
+
+        $task
+            ->expects(self::once())
+            ->method('getTransportId')
+            ->will(self::returnValue('identifier:uid'));
+
+        $task->getOptions()->setSeverity(5);
+        $task->getOptions()->setMessageLimit(10);
         $task->getOptions()->setExtensionWhitelist('mklog');
         $task->getOptions()->setExtensionBlacklist('rn_base');
-        $this->callInaccessibleMethod($task, 'findMessages');
+        /* @var DevlogEntryDemand $demand */
+        $demand = $this->callInaccessibleMethod($task, 'getDevlogEntryDemand');
+
+        $this->assertSame('identifier:uid', $demand->getTransportId());
+        $this->assertSame(5, $demand->getSeverity());
+        $this->assertSame(['mklog'], $demand->getExtensionWhitelist());
+        $this->assertSame(['rn_base'], $demand->getExtensionBlacklist());
+        $this->assertSame(10, $demand->getMaxResults());
+        $this->assertSame('crdate', $demand->getOrderByField());
+        $this->assertSame('ASC', $demand->getOrderByDirection());
     }
 
     /**
@@ -124,9 +123,17 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         array $methods = []
     ) {
         $logger = $this->getMock(
-            'DMK\\Mklog\\WatchDog\\SchedulerWatchDog',
+            \TYPO3\CMS\Core\Log\Logger::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $task = $this->getMock(
+            SchedulerWatchDog::class,
             array_merge(
-                ['getDevlogEntryRepository'],
+                ['getDevlogEntryRepository', 'getLogger'],
                 $methods
             ),
             [],
@@ -135,11 +142,16 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
             false
         );
 
-        $logger
+        $task
             ->expects(self::any())
             ->method('getDevlogEntryRepository')
             ->will(self::returnValue($this->getDevlogEntryRepository()));
 
-        return $logger;
+        $task
+            ->expects(self::any())
+            ->method('getLogger')
+            ->will(self::returnValue($logger));
+
+        return $task;
     }
 }

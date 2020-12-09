@@ -104,7 +104,7 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * @return \TYPO3\CMS\Core\Log\Logger
      */
-    private function getLogger(): \TYPO3\CMS\Core\Log\Logger
+    protected function getLogger(): \TYPO3\CMS\Core\Log\Logger
     {
         $name = 'DMK.Mklog.WatchDog.SchedulerWatchDog';
         if ($this->logger->getName() !== $name) {
@@ -205,7 +205,7 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * @return DevlogEntryDemand
      */
-    private function getDevlogEntryDemand()
+    protected function getDevlogEntryDemand()
     {
         $options = $this->getOptions();
         $demand = Factory::makeInstance(DevlogEntryDemand::class);
