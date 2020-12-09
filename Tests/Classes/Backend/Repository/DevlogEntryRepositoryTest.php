@@ -367,7 +367,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
         $repo
             ->expects(self::any())
             ->method('getEmptyModel')
-            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Domain\\Model\\DevlogEntry')));
+            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Backend\\Model\\DevlogEntry')));
         $repo
             ->expects(self::any())
             ->method('getSearcher')

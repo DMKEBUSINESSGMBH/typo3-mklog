@@ -26,7 +26,6 @@ namespace DMK\Mklog\Domain\Model;
  ***************************************************************/
 
 use DMK\Mklog\WatchDog\Message\InterfaceMessage;
-use Tx_Rnbase_Domain_Model_RecordInterface as LegacyRecordInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -36,7 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
+class DevlogEntry implements InterfaceMessage
 {
     public const TABLENAME = 'tx_mklog_devlog_entry';
 
@@ -88,19 +87,6 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
      */
     protected $transportIds;
 
-    public function __construct(array $record = null)
-    {
-        //@TODO: legacy rnbase make instance model support, remove if rn_base isn't used anymore
-        if (null !== $record && is_array($record)) {
-            foreach ($record as $columnName => $value) {
-                $propertyName = GeneralUtility::underscoredToLowerCamelCase($columnName);
-                if (property_exists($this, $propertyName)) {
-                    $this->{$propertyName} = $value;
-                }
-            }
-        }
-    }
-
     /**
      * @return array
      */
@@ -117,22 +103,6 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
         }
 
         return $values;
-    }
-
-    /**
-     * @return array
-     *
-     * @TODO: legacy rnbase model support, remove if rn_base isn't used anymore
-     */
-    public function getProperty($property)
-    {
-        $properties = $this->getRecord();
-
-        if (isset($properties[$property])) {
-            return $properties[$property];
-        }
-
-        return null;
     }
 
     /**
@@ -528,9 +498,7 @@ class DevlogEntry implements InterfaceMessage, LegacyRecordInterface
 
         // now check the domain
         if (empty($host)) {
-            $utility = \tx_rnbase_util_Typo3Classes::getGeneralUtilityClass();
-
-            $host = $utility::getIndpEnv('TYPO3_HOST_ONLY');
+            $host = GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY');
         }
 
         // as fallback use the server hostname

@@ -104,13 +104,13 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
      */
     protected function getDevlogEntry()
     {
-        return $this->getModel(
-            [
-                'uid' => 5,
-                'pid' => 7,
-            ],
-            'DMK\\Mklog\\Domain\\Model\\DevlogEntry'
-        );
+        /* @var DevlogEntry $entity */
+        $entity = Factory::makeInstance(DevlogEntry::class);
+
+        $entity->setUid(5);
+        $entity->setPid(7);
+
+        return $entity;
     }
 
     /**

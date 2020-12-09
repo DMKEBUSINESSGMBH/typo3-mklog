@@ -61,7 +61,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
      */
     protected function getWrapperClass()
     {
-        return 'DMK\\Mklog\\Domain\\Model\\DevlogEntry';
+        return 'DMK\\Mklog\\Backend\\Model\\DevlogEntry';
     }
 
     /**

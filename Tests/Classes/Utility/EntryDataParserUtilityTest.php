@@ -25,19 +25,6 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-if (!\class_exists('tx_rnbase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'rn_base',
-        'class.tx_rnbase.php'
-    );
-}
-if (!\class_exists('DMK\\Mklog\\Tests\\BaseTestCase')) {
-    require_once \tx_rnbase_util_Extensions::extPath(
-        'mklog',
-        'Tests/Classes/BaseTestCase.php'
-    );
-}
-
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\EntryDataParserUtility;
@@ -194,10 +181,8 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
             $devLogEntryOrExtraData = self::FIXTURE_EXTRA_DATA_JSON;
         }
         if (is_string($devLogEntryOrExtraData)) {
-            $devLogEntryOrExtraData = $this->getModel(
-                ['extra_data' => $devLogEntryOrExtraData],
-                DevlogEntry::class
-            );
+            $devLogEntryOrExtraData = Factory::makeInstance(DevlogEntry::class)
+                ->setExtraDataEncoded($devLogEntryOrExtraData);
         }
 
         return Factory::getEntryDataParserUtility($devLogEntryOrExtraData);
