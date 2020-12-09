@@ -16,8 +16,7 @@ if (TYPO3_MODE == 'BE' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::is
         'web',
         'backend',
         'bottom',
-        [
-        ],
+        [],
         [
             'access' => 'user,group',
             'routeTarget' => 'DMK\\Mklog\\Backend\\ModuleBackend',
