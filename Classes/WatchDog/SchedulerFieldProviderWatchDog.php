@@ -25,6 +25,8 @@ namespace DMK\Mklog\WatchDog;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\VersionUtility;
 use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
@@ -61,7 +63,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
         // Initialize extra field value
         if (empty($taskInfo['mklog_watchdog_transport'])) {
-            $action = \tx_rnbase_util_TYPO3::isTYPO90OrHigher() ?
+            $action = VersionUtility::isTypo3Version9OrHigher() ?
                 $schedulerModule->getCurrentAction() : $schedulerModule->CMD;
             if ('edit' == $action) {
                 // Editing a task, set to internal value if data was not submitted already
@@ -250,12 +252,15 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         $credentials = &$submittedData['mklog_watchdog_credentials'];
         $credentials = trim($credentials);
         if (empty($credentials)) {
-            $flashMessageClass = \tx_rnbase_util_Typo3Classes::getFlashMessageClass();
-            \tx_rnbase_util_Misc::addFlashMessage(
+            $flashMessage = Factory::makeInstance(
+                \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 'The credentials for the transport are required!',
-                '',
-                $flashMessageClass::ERROR
+                'MK LOGGER WatchDog',
+                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
             );
+            /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
+            $flashMessageService = Factory::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
+            $flashMessageService->getMessageQueueByIdentifier()->enqueue($flashMessage);
 
             return false;
         }
