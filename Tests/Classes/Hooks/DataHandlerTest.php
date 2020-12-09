@@ -39,17 +39,6 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
     /**
      * @group unit
      */
-    public function testGetDatabaseConnection()
-    {
-        self::assertInstanceOf(
-            'Tx_Rnbase_Database_Connection',
-            $this->callInaccessibleMethod(tx_rnbase::makeInstance('Tx_Mklog_Hooks_DataHandler'), 'getDatabaseConnection')
-        );
-    }
-
-    /**
-     * @group unit
-     */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandCopyButTableNotPages()
     {
         $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
@@ -205,16 +194,11 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testdeleteLogEntriesByPageId()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['getDatabaseConnection']);
-        $databaseConnection = $this->getMock('Tx_Rnbase_Database_Connection', ['doDelete']);
-
-        $databaseConnection->expects(self::once())
-            ->method('doDelete')
-            ->with('tx_mklog_devlog_entry', 'pid = 123');
+        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteLogEntriesByPageId']);
 
         $dataHandler->expects(self::once())
-            ->method('getDatabaseConnection')
-            ->will(self::returnValue($databaseConnection));
+            ->method('deleteLogEntriesByPageId')
+            ->with(123);
 
         $this->callInaccessibleMethod($dataHandler, 'deleteLogEntriesByPageId', 123);
     }

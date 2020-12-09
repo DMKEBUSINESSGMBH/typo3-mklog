@@ -205,6 +205,16 @@ class DevlogEntryRepository
     }
 
     /**
+     * @param int $pid
+     */
+    public function deletyByPid(int $pid): void
+    {
+        $qb = $this->createQueryBuilder();
+        $query = $qb->delete($this->getTableName())->where('pid = '.$pid);
+        $query->execute();
+    }
+
+    /**
      * Persists an model.
      */
     public function persist(

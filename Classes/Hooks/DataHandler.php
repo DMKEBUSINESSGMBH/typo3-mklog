@@ -80,15 +80,7 @@ class Tx_Mklog_Hooks_DataHandler
      */
     protected function deleteLogEntriesByPageId($pageId)
     {
-        $this->getDatabaseConnection()->doDelete($this->getTableName(), 'pid = '.intval($pageId));
-    }
-
-    /**
-     * @return Tx_Rnbase_Database_Connection
-     */
-    protected function getDatabaseConnection()
-    {
-        return Tx_Rnbase_Database_Connection::getInstance();
+        \DMK\Mklog\Factory::getDevlogEntryRepository()->deletyByPid();
     }
 
     /**
