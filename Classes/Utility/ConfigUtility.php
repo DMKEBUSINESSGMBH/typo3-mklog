@@ -105,7 +105,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     public function getCurrentRunId()
     {
         $storage = $this->getStorage();
-        if ($storage->hasDevLogCurrentRunId()) {
+        if (!$storage->hasDevLogCurrentRunId()) {
             [$sec, $usec] = explode('.', (string) microtime(true));
             // miliseconds has to be exactly 6 sings long. otherwise the resulting number is too small.
             $usec = $usec.str_repeat('0', 6 - strlen($usec));
