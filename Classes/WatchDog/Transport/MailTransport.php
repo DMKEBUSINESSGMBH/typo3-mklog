@@ -27,6 +27,7 @@ namespace DMK\Mklog\WatchDog\Transport;
 
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Utility\VersionUtility;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\MailMessage;
 
@@ -195,24 +196,50 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      */
     protected function sendMail(
         $content
-    ) {
-        $mail = Factory::makeInstance(MailMessage::class);
+    ): bool {
 
+        $subject = sprintf(
+            $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
+        );
+        $from = Address::create(Factory::getConfigUtility()->getGlobalMailFrom());
+        $to = Address::create($this->getOptions()->getCredentials());
+
+        if (!VersionUtility::isTypo3Version10OrHigher()) {
+            return $this->sendMailLegacy($content, $subject, $from, $to);
+        }
+
+        $mail = Factory::makeInstance(MailMessage::class);
         $mail
-            ->from(
-                Address::create(Factory::getConfigUtility()->getGlobalMailFrom())
-            )
-            ->to(
-                Address::create($this->getOptions()->getCredentials())
-            )
-            ->subject(
-                sprintf(
-                    $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
-                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
-                )
-            )
+            ->from($from)
+            ->to($to)
+            ->subject($subject)
             ->text($content)
-            ->send()
         ;
+        return $mail->send();
+    }
+
+    /**
+     * Sends the devlog content per mail for typo3 9 or earlier
+     *
+     * @param string $content
+     * @param string $subject
+     * @param Address $from
+     * @param Address $to
+     */
+    protected function sendMailLegacy(
+        string $content,
+        string $subject,
+        Address $from,
+        Address $to
+    ): bool {
+        $mail = Factory::makeInstance(MailMessage::class);
+        $mail
+            ->setFrom($from->getAddress())
+            ->setTo($to->getAddress())
+            ->setSubject($subject)
+            ->setBody($content)
+        ;
+        return $mail->send() > 0;
     }
 }
