@@ -25,8 +25,6 @@ namespace DMK\Mklog\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Core\Environment;
-
 /**
  * MK Log composer util.
  *
@@ -47,7 +45,7 @@ final class ComposerUtility
             return;
         }
 
-        if (Environment::isComposerMode()) {
+        if (static::isComposerMode()) {
             $hasToLoad = false;
 
             return;
@@ -58,5 +56,18 @@ final class ComposerUtility
             'Resources/Private/PHP/Composer/autoload.php'
         );
         $hasToLoad = false;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isComposerMode(): bool
+    {
+        // typo3 8 has not a Environment class, so we ask the bootstrap
+        if (!VersionUtility::isTypo3Version9OrHigher()) {
+            return \TYPO3\CMS\Core\Core\Bootstrap::usesComposerClassLoading();
+        }
+
+        return \TYPO3\CMS\Core\Core\Environment::isComposerMode();
     }
 }

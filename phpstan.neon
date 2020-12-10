@@ -12,3 +12,6 @@ parameters:
     ignoreErrors:
         - '#Constant TYPO3_MODE not found#'
         - '#Undefined variable: \$_EXTKEY#'
+        -
+            message: '/Call to an undefined static method/'
+            path: %currentWorkingDirectory%/Classes/Utility/ComposerUtility.php
