@@ -150,7 +150,7 @@ class DevlogEntryDecorator
     ) {
         $severityId = $entry->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
-        $icon = $this->getSeverityIconClass();
+        $icon = $this->getSeverityIconClass($severityId);
 
         if (!empty($icon)) {
             $icon = \tx_rnbase_mod_Util::getSpriteIcon($icon);
