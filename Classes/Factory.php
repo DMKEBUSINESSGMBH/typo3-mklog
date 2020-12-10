@@ -31,6 +31,7 @@ use DMK\Mklog\Utility\ConfigUtility;
 use DMK\Mklog\Utility\DataConverterUtility;
 use DMK\Mklog\Utility\EntryDataParserUtility;
 use DMK\Mklog\WatchDog\Transport\InterfaceTransport;
+use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -64,8 +65,10 @@ final class Factory
      * @param array<int, mixed> $constructorArguments
      *
      * @return object the created instance
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public static function makeInstance($className)
+    public static function makeInstance($className, ...$constructorArguments)
     {
         return call_user_func_array(
             [GeneralUtility::class, 'makeInstance'],
@@ -150,7 +153,7 @@ final class Factory
         $transport = self::makeInstance($class);
 
         if (!$transport instanceof InterfaceTransport) {
-            throw new \Exception(sprintf('The Transport "%1$s" '.'has to implement the "%2$s"', get_class($transport), InterfaceTransport::class));
+            throw new Exception(sprintf('The Transport "%1$s" '.'has to implement the "%2$s"', get_class($transport), InterfaceTransport::class));
         }
 
         return $transport;

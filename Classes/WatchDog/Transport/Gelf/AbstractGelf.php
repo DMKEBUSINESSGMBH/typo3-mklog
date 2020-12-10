@@ -26,7 +26,15 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  ***************************************************************/
 
 use DMK\Mklog\Domain\Model\GenericArrayObject;
+use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\ComposerUtility;
+use DMK\Mklog\WatchDog\Message\InterfaceMessage;
 use DMK\Mklog\WatchDog\Transport\AbstractTransport;
+use Gelf\Message;
+use Gelf\Publisher;
+use Gelf\PublisherInterface;
+use function is_scalar;
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * MK Log watchdog gelf transporter.
@@ -39,12 +47,12 @@ use DMK\Mklog\WatchDog\Transport\AbstractTransport;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class AbstractGelf extends AbstractTransport implements \TYPO3\CMS\Core\SingletonInterface
+abstract class AbstractGelf extends AbstractTransport implements SingletonInterface
 {
     /**
      * The gelf publisher.
      *
-     * @var \Gelf\PublisherInterface
+     * @var PublisherInterface
      */
     private $publisher = null;
 
@@ -73,16 +81,16 @@ abstract class AbstractGelf extends AbstractTransport implements \TYPO3\CMS\Core
     ) {
         parent::initialize($options);
 
-        \DMK\Mklog\Utility\ComposerUtility::autoload();
+        ComposerUtility::autoload();
     }
 
     /**
      * Publishes a message by the provider.
      */
     public function publish(
-        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+        InterfaceMessage $message
     ) {
-        $gelfMsg = new \Gelf\Message();
+        $gelfMsg = new Message();
         $gelfMsg
             ->setVersion('1.1')
             ->setHost($message->getHost())
@@ -97,10 +105,10 @@ abstract class AbstractGelf extends AbstractTransport implements \TYPO3\CMS\Core
             $additionalData = [];
         }
 
-        $converter = \DMK\Mklog\Factory::getDataConverterUtility();
+        $converter = Factory::getDataConverterUtility();
         foreach ($additionalData as $key => $value) {
             // the value shoult be an string, so we convert objects and arrays!
-            if (!\is_scalar($value)) {
+            if (!is_scalar($value)) {
                 $value = $converter->encode($value);
             }
             $gelfMsg->setAdditional(
@@ -115,12 +123,12 @@ abstract class AbstractGelf extends AbstractTransport implements \TYPO3\CMS\Core
     /**
      * Creates the Publisher.
      *
-     * @return \Gelf\PublisherInterface
+     * @return PublisherInterface
      */
     protected function getPublisher()
     {
         if (null === $this->publisher) {
-            $this->publisher = new \Gelf\Publisher(
+            $this->publisher = new Publisher(
                 $this->getTransport()
             );
         }

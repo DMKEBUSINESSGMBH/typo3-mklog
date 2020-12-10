@@ -1,5 +1,8 @@
 <?php
-/**
+
+namespace DMK\Mklog\Hooks;
+
+/*
  *  Copyright notice.
  *
  *  (c) 2020 DMK E-Business GmbH <dev@dmk-ebusiness.de>
@@ -31,8 +34,10 @@ use DMK\Mklog\Domain\Model\DevlogEntry;
  * @author          Michael Wagner
  * @license         http://www.gnu.org/licenses/lgpl.html
  *                  GNU Lesser General Public License, version 3 or later
+ *
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
  */
-class Tx_Mklog_Hooks_DataHandler
+class DataHandler
 {
     /**
      * @return string
@@ -58,16 +63,18 @@ class Tx_Mklog_Hooks_DataHandler
      *
      * @param string $command
      * @param string $table
-     * @param int    $id
-     * @param array  $value
-     * @param TYPO3\CMS\Core\DataHandling\DataHandler
+     * @param int $pageId
+     * @param array $value
+     * @param \TYPO3\CMS\Core\DataHandling\DataHandler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function processCmdmap_preProcess($command, $table, $id, $value, $dataHandler)
+    public function processCmdmap_preProcess($command, $table, $pageId, $value, $dataHandler)
     {
         if ('pages' == $table) {
             switch ($command) {
                 case 'delete':
-                    $this->deleteLogEntriesByPageId($id);
+                    $this->deleteLogEntriesByPageId($pageId);
                     break;
                 case 'copy':
                     $this->removeLogTablesFromTablesThatCanBeCopied($dataHandler);
@@ -81,7 +88,7 @@ class Tx_Mklog_Hooks_DataHandler
      */
     protected function deleteLogEntriesByPageId($pageId)
     {
-        \DMK\Mklog\Factory::getDevlogEntryRepository()->deletyByPid();
+        \DMK\Mklog\Factory::getDevlogEntryRepository()->deletyByPid($pageId);
     }
 
     /**

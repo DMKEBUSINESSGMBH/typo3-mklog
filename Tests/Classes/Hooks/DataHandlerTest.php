@@ -1,10 +1,11 @@
 <?php
-/**
- * @author Michael Wagner
+
+namespace DMK\Mklog\Logger;
+
+/*
+ *  Copyright notice.
  *
- *  Copyright notice
- *
- *  (c) 2020 Michael Wagner <michael.wagner@dmk-ebusiness.de>
+ *  (c) 2020 DMK E-Business GmbH <dev@dmk-ebusiness.de>
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -24,21 +25,25 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use DMK\Mklog\Hooks\DataHandler;
+use DMK\Mklog\Tests\BaseTestCase;
+
 /**
  * Tx_Mklib_Database_ConnectionTest.
  *
- * @author          Hannes Bochmann <hannes.bochmann@dmk-ebusiness.de>
- * @license         http://www.gnu.org/licenses/lgpl.html
- *                  GNU Lesser General Public License, version 3 or later
+ * @author Hannes Bochmann
+ * @author Michael Wagner
+ * @license http://www.gnu.org/licenses/lgpl.html
+ *          GNU Lesser General Public License, version 3 or later
  */
-class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
+class DataHandlerTest extends BaseTestCase
 {
     /**
      * @group unit
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandCopyButTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
+        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandler->expects(self::never())
             ->method('removeLogTablesFromTablesThatCanBeCopied');
@@ -51,7 +56,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyButTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
+        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandler->expects(self::never())
             ->method('removeLogTablesFromTablesThatCanBeCopied');
@@ -64,7 +69,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyAndTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
+        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandler->expects(self::never())
             ->method('removeLogTablesFromTablesThatCanBeCopied');
@@ -77,7 +82,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedWhenCommandCopyAndTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['removeLogTablesFromTablesThatCanBeCopied']);
+        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
         $dataHandlerParent = 'test';
         $dataHandler->expects(self::once())
@@ -94,7 +99,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
     {
         $mklogTable = 'tx_mklog_devlog_entry';
 
-        $dataHandler = tx_rnbase::makeInstance('Tx_Mklog_Hooks_DataHandler');
+        $dataHandler = tx_rnbase::makeInstance(DataHandler::class);
 
         $dataHandlerParent = $this->getMock(
             tx_rnbase_util_Typo3Classes::getDataHandlerClass(),
@@ -138,7 +143,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandDeleteButTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteLogEntriesByPageId']);
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
             ->method('deleteLogEntriesByPageId');
@@ -151,7 +156,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandNotDeleteButTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteLogEntriesByPageId']);
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
         ->method('deleteLogEntriesByPageId');
@@ -164,7 +169,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandNotDeleteAndTableNotPages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteLogEntriesByPageId']);
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
         $dataHandler->expects(self::never())
         ->method('deleteLogEntriesByPageId');
@@ -177,7 +182,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdWhenCommandDeleteAndTablePages()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteLogEntriesByPageId']);
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
         $dataHandler->expects(self::once())
         ->method('deleteLogEntriesByPageId')
@@ -191,7 +196,7 @@ class Tx_Mklog_Hooks_DataHandlerTest extends tx_rnbase_tests_BaseTestCase
      */
     public function testdeleteLogEntriesByPageId()
     {
-        $dataHandler = $this->getMock('Tx_Mklog_Hooks_DataHandler', ['deleteLogEntriesByPageId']);
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
         $dataHandler->expects(self::once())
             ->method('deleteLogEntriesByPageId')

@@ -28,6 +28,7 @@ namespace DMK\Mklog\Logger;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\SeverityUtility;
 use DMK\Mklog\Utility\VersionUtility;
+use Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogLevel;
 
@@ -60,7 +61,7 @@ class DevlogLogger extends AbstractLogger
         try {
             //  prevent nesting write loops
             if ($this->whileWriting) {
-                throw new \Exception('Nesting log writer calls prevented', 1513856342);
+                throw new Exception('Nesting log writer calls prevented', 1513856342);
             }
             $this->whileWriting = true;
 
@@ -162,6 +163,8 @@ class DevlogLogger extends AbstractLogger
      * Is logging enabled?
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function isLoggingEnabled()
     {
@@ -189,7 +192,7 @@ class DevlogLogger extends AbstractLogger
 
         $storage->setLoggingActive(true);
 
-        if (!$config->getEnableDevLog()) {
+        if (!$config->isEnableDevLog()) {
             $storage->setLoggingActive(false);
         }
 

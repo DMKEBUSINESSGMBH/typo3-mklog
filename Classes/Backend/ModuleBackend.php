@@ -37,6 +37,9 @@ class ModuleBackend extends \tx_rnbase_mod_BaseModule
 {
     /**
      * Initializes the backend module by setting internal variables, initializing the menu.
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function init()
     {

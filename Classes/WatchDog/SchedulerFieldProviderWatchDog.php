@@ -65,6 +65,16 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         if (empty($taskInfo['mklog_watchdog_transport'])) {
             $action = VersionUtility::isTypo3Version9OrHigher() ?
                 $schedulerModule->getCurrentAction() : $schedulerModule->CMD;
+
+            // initialuze an empty value, as it will not be used anyway
+            $taskInfo['mklog_watchdog_transport'] = '';
+            $taskInfo['mklog_watchdog_credentials'] = '';
+            $taskInfo['mklog_watchdog_severity'] = \DMK\Mklog\Utility\SeverityUtility::DEBUG;
+            $taskInfo['mklog_watchdog_messagelimit'] = '100';
+            $taskInfo['mklog_watchdog_extension_whitelist'] = '';
+            $taskInfo['mklog_watchdog_extension_blacklist'] = '';
+            $taskInfo['mklog_watchdog_mail_subject'] = '';
+
             if ('edit' == $action) {
                 // Editing a task, set to internal value if data was not submitted already
                 $taskInfo['mklog_watchdog_transport'] = $task->getOptions()->getTransport();
@@ -74,15 +84,6 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
                 $taskInfo['mklog_watchdog_extension_whitelist'] = $task->getOptions()->getExtensionWhitelist();
                 $taskInfo['mklog_watchdog_extension_blacklist'] = $task->getOptions()->getExtensionBlacklist();
                 $taskInfo['mklog_watchdog_mail_subject'] = $task->getOptions()->getMailSubject();
-            } else {
-                // Otherwise set an empty value, as it will not be used anyway
-                $taskInfo['mklog_watchdog_transport'] = '';
-                $taskInfo['mklog_watchdog_credentials'] = '';
-                $taskInfo['mklog_watchdog_severity'] = \DMK\Mklog\Utility\SeverityUtility::DEBUG;
-                $taskInfo['mklog_watchdog_messagelimit'] = '100';
-                $taskInfo['mklog_watchdog_extension_whitelist'] = '';
-                $taskInfo['mklog_watchdog_extension_blacklist'] = '';
-                $taskInfo['mklog_watchdog_mail_subject'] = '';
             }
         }
 
@@ -243,12 +244,13 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * @param tx_scheduler_Module $scheduler     Module Reference to the calling object
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
     {
         // @codingStandardsIgnoreEnd
-
         $credentials = &$submittedData['mklog_watchdog_credentials'];
         $credentials = trim($credentials);
         if (empty($credentials)) {

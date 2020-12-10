@@ -25,6 +25,8 @@ namespace DMK\Mklog\Domain\Model;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DateTime;
+use DateTimeZone;
 use DMK\Mklog\WatchDog\Message\InterfaceMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -34,6 +36,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class DevlogEntry implements InterfaceMessage
 {
@@ -447,14 +452,14 @@ class DevlogEntry implements InterfaceMessage
     /**
      * Returns the timestamp of the message.
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getTimestamp(): \DateTime
+    public function getTimestamp(): DateTime
     {
-        $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
+        $dateTime = DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
         // createFromFormat bzw. UNIX Timestamps haben per default GMT als Zeitzone.
         // Daher müssen wir zusätzlich die aktuelle Zeitzone setzen.
-        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $dateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
 
         return $dateTime;
     }

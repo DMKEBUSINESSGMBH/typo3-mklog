@@ -40,17 +40,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterface, \TYPO3\CMS\Core\SingletonInterface
 {
     /**
-     * Constructs this log writer.
-     *
-     * @param array $options Configuration options - depends on the actual log writer
-     */
-    public function __construct(
-        array $options = []
-    ) {
-        // $this->options = \DMK\Mklog\Domain\Model\GenericArrayObject::getInstance($options);
-    }
-
-    /**
      * Stores a devlog entry.
      *
      * @param string $message

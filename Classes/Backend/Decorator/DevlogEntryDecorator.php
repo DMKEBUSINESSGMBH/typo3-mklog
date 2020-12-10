@@ -74,6 +74,8 @@ class DevlogEntryDecorator
      * @param DevlogEntry $entry
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function format(
         $columnValue,
@@ -148,6 +150,34 @@ class DevlogEntryDecorator
     ) {
         $severityId = $entry->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
+        $icon = $this->getSeverityIconClass();
+
+        if (!empty($icon)) {
+            $icon = \tx_rnbase_mod_Util::getSpriteIcon($icon);
+        }
+
+        return sprintf(
+            '<button '.
+                'type="submit" '.
+                'class="button button-severity severity severity-%2$s" '.
+                'name="SET[mklogDevlogEntrySeverity]" '.
+                'value="%1$s" '.
+                'title="Filter %3$s (%1$s)"'.
+            '>%4$s<span>%3$s</span></button>',
+            $severityId,
+            strtolower($severityName),
+            ucfirst(strtolower($severityName)),
+            $icon
+        );
+    }
+
+    /**
+     * @param $severityId
+     *
+     * @return string
+     */
+    private function getSeverityIconClass($severityId)
+    {
         $icon = '';
         switch ($severityId) {
             case SeverityUtility::DEBUG:
@@ -170,23 +200,7 @@ class DevlogEntryDecorator
                 break;
         }
 
-        if (!empty($icon)) {
-            $icon = \tx_rnbase_mod_Util::getSpriteIcon($icon);
-        }
-
-        return sprintf(
-            '<button '.
-                'type="submit" '.
-                'class="button button-severity severity severity-%2$s" '.
-                'name="SET[mklogDevlogEntrySeverity]" '.
-                'value="%1$s" '.
-                'title="Filter %3$s (%1$s)"'.
-            '>%4$s<span>%3$s</span></button>',
-            $severityId,
-            strtolower($severityName),
-            ucfirst(strtolower($severityName)),
-            $icon
-        );
+        return $icon;
     }
 
     /**

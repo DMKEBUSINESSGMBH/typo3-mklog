@@ -26,6 +26,7 @@ namespace DMK\Mklog\Domain\Model;
  ***************************************************************/
 
 use DMK\Mklog\Factory;
+use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -58,15 +59,15 @@ class GenericArrayObject
         if ($data instanceof self) {
             return $data;
         }
-        if (is_array($data)) {
-            // create data instances recursive!
-            foreach ($data as $key => $value) {
-                if (is_array($value)) {
-                    $data[$key] = static::getInstance($value);
-                }
-            }
-        } else {
+        if (!is_array($data)) {
             $data = [];
+        }
+
+        // create data instances recursive!
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = static::getInstance($value);
+            }
         }
 
         // use get_called_class for backwards compatibility!
@@ -84,10 +85,12 @@ class GenericArrayObject
         if (is_array($property)) {
             // wir Überschreiben den kompletten record
             $this->data = $property;
-        } else {
-            // wir setzen einen bestimmten wert
-            $this->data[$property] = $value;
+
+            return $this;
         }
+
+        // wir setzen einen bestimmten wert
+        $this->data[$property] = $value;
 
         return $this;
     }
@@ -164,7 +167,7 @@ class GenericArrayObject
             default:
         }
 
-        throw new \Exception('Sorry, Invalid method "'.get_class($this).'::'.$method.'"', 1607447254);
+        throw new Exception('Sorry, Invalid method "'.get_class($this).'::'.$method.'"', 1607447254);
     }
 
     /**

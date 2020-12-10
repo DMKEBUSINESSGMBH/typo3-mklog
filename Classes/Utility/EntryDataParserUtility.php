@@ -118,7 +118,6 @@ class EntryDataParserUtility
     protected function stripJson(array $jsonData, $maxLen = null)
     {
         $striped = 0;
-        $rawLen = $this->getStringSize($this->converter->encode($jsonData));
         // reduce max len by 30 char length stripped comment
         $maxLen = abs($maxLen ?: Factory::getConfigUtility()->getMaxTransportExtraDataSize()) - 30;
 

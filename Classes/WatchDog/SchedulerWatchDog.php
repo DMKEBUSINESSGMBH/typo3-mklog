@@ -150,8 +150,8 @@ class SchedulerWatchDog extends AbstractTask
                 // mark entry as send for current transport
                 $this->markAsTransported($message);
                 $successes[$message->getUid()] = '';
-            } catch (\Exception $e) {
-                $failures[$message->getUid()] = $e->getMessage();
+            } catch (\Exception $exception) {
+                $failures[$message->getUid()] = $exception->getMessage();
             }
         }
 
