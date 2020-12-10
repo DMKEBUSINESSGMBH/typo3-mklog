@@ -139,12 +139,9 @@ class GelfLogger extends AbstractLogger
             return;
         }
 
-        $options = \tx_rnbase::makeInstance(
-            GenericArrayObject::class,
-            [
-                'credentials' => $config->getGelfCredentials(),
-            ]
-        );
+        $options = GenericArrayObject::getInstance([
+            'credentials' => $config->getGelfCredentials(),
+        ]);
 
         $transport = $this->getTransport($config);
 

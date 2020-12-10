@@ -28,6 +28,7 @@ namespace DMK\Mklog\WatchDog;
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\Typo3Utility;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -176,7 +177,7 @@ class SchedulerWatchDog extends AbstractTask
         );
 
         // create a flash message for the beuser
-        if (isset($GLOBALS['BE_USER']) && is_object($GLOBALS['BE_USER']) && isset($GLOBALS['BE_USER']->user['uid'])) {
+        if (Typo3Utility::getBeUserId()) {
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 $msg,

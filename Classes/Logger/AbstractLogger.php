@@ -25,6 +25,11 @@ namespace DMK\Mklog\Logger;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use DMK\Mklog\Utility\Typo3Utility;
+use TYPO3\CMS\Core\Utility\DebugUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Devlog logger.
  *
@@ -71,14 +76,11 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $entry->setSeverity((int) $severity);
         $entry->setPid(0);
 
-        if (TYPO3_MODE === 'FE' && isset($GLOBALS['TSFE'])) {
-            $entry->setPid((int) $GLOBALS['TSFE']->id);
+        if (null !== Typo3Utility::getTsFe()) {
+            $entry->setPid((int) Typo3Utility::getTsFe()->id);
         }
 
-        $entry->setCruserId(0);
-        if (!empty($GLOBALS['BE_USER']->user['uid'])) {
-            $entry->setCruserId((int) $GLOBALS['BE_USER']->user['uid']);
-        }
+        $entry->setCruserId(Typo3Utility::getBeUserId());
 
         $entry->setExtraData($this->progressExtraData($extraData));
 
@@ -99,10 +101,10 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             $extraData = ['extra' => $extraData];
         }
         // add userdata
-        $extraData['__feuser'] = \tx_rnbase_util_TYPO3::getFEUserUID();
-        $extraData['__beuser'] = \tx_rnbase_util_TYPO3::getBEUserUID();
+        $extraData['__feuser'] = Typo3Utility::getFeUserId();
+        $extraData['__beuser'] = Typo3Utility::getBeUserId();
         // add current uri
-        $extraData['__requesturl'] = \Tx_Rnbase_Utility_T3General::getIndpEnv('TYPO3_REQUEST_URL');
+        $extraData['__requesturl'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL');
         // add trace to extradata
         $extraData['__trace'] = $this->getBacktrace();
 
@@ -117,7 +119,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     private function getBacktrace()
     {
         $trace = array_reverse(
-            \tx_rnbase_util_Debug::getTracePaths()
+            explode(' // ', DebugUtility::debugTrail())
         );
 
         $lastIgnoreKey = 0;
@@ -125,6 +127,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             // ignore internal loger calls
             'DMK\\Mklog\\Logger\\',
             // ignore core devlog and logerr calls
+            'Psr\\Log\\AbstractLogger',
             'TYPO3\\CMS\\Core\\Log\\',
             'TYPO3\\CMS\\Core\\Utility\\GeneralUtility::devLog',
             // ignore rnbase loggers
@@ -135,7 +138,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         foreach ($trace as $key => $path) {
             $ignore = false;
             foreach ($ignoreClasses as $ignoreClass) {
-                $ignore = \Tx_Rnbase_Utility_Strings::isFirstPartOfStr($path, $ignoreClass);
+                $ignore = GeneralUtility::isFirstPartOfStr($path, $ignoreClass);
                 if ($ignore) {
                     break;
                 }
@@ -159,19 +162,21 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      * )
      */
     protected function handleExceptionDuringLogging(
-        \Exception $e
+        \Exception $exception
     ) {
-        // try to send mail
-        $addr = \tx_rnbase_configurations::getExtensionCfgValue(
-            'rn_base',
-            'sendEmailOnException'
-        );
-        if ($addr) {
-            \tx_rnbase_util_Misc::sendErrorMail(
-                $addr,
-                'Mklog\DevlogLogger',
-                $e
+        if (ExtensionManagementUtility::isLoaded('rn_base')) {
+            // try to send mail
+            $address = \tx_rnbase_configurations::getExtensionCfgValue(
+                'rn_base',
+                'sendEmailOnException'
             );
+            if ($address) {
+                \tx_rnbase_util_Misc::sendErrorMail(
+                    $address,
+                    'Mklog\DevlogLogger',
+                    $exception
+                );
+            }
         }
     }
 

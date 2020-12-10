@@ -197,7 +197,6 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     protected function sendMail(
         $content
     ): bool {
-
         $subject = sprintf(
             $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
             $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
@@ -216,11 +215,12 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             ->subject($subject)
             ->text($content)
         ;
+
         return $mail->send();
     }
 
     /**
-     * Sends the devlog content per mail for typo3 9 or earlier
+     * Sends the devlog content per mail for typo3 9 or earlier.
      *
      * @param string $content
      * @param string $subject
@@ -240,6 +240,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             ->setSubject($subject)
             ->setBody($content)
         ;
+
         return $mail->send() > 0;
     }
 }
