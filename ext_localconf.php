@@ -22,7 +22,7 @@ call_user_func(
             'description' => 'LLL:EXT:'.'mklog'.'/locallang_db.xml:scheduler_cleanup_log_table_description',
         ];
 
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'Tx_Mklog_Hooks_DataHandler';
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = \DMK\Mklog\Hooks\DataHandler::class;
 
         // is the devlog enabled?
         if ($config->isEnableDevLog()) {
