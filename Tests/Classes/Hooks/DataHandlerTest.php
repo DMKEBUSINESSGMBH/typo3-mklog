@@ -25,6 +25,7 @@ namespace DMK\Mklog\Logger;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use DMK\Mklog\Factory;
 use DMK\Mklog\Hooks\DataHandler;
 use DMK\Mklog\Tests\BaseTestCase;
 
@@ -99,10 +100,10 @@ class DataHandlerTest extends BaseTestCase
     {
         $mklogTable = 'tx_mklog_devlog_entry';
 
-        $dataHandler = tx_rnbase::makeInstance(DataHandler::class);
+        $dataHandler = Factory::makeInstance(DataHandler::class);
 
         $dataHandlerParent = $this->getMock(
-            tx_rnbase_util_Typo3Classes::getDataHandlerClass(),
+            \TYPO3\CMS\Core\DataHandling\DataHandler::class,
             ['compileAdminTables'],
             [],
             '',
