@@ -26,6 +26,7 @@ namespace DMK\Mklog\WatchDog\Transport;
  ***************************************************************/
 
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\ComposerUtility;
 use DMK\Mklog\Utility\SeverityUtility;
 use DMK\Mklog\Utility\VersionUtility;
 use Symfony\Component\Mime\Address;
@@ -71,6 +72,8 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
         \DMK\Mklog\Domain\Model\GenericArrayObject $options
     ) {
         parent::initialize($options);
+
+        ComposerUtility::autoload();
 
         $levels = SeverityUtility::getItems();
         foreach (array_keys($levels) as $level) {

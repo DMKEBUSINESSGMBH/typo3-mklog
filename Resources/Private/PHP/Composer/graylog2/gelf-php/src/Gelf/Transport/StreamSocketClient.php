@@ -12,6 +12,7 @@
 namespace Gelf\Transport;
 
 use RuntimeException;
+use ParagonIE\ConstantTime\Binary;
 
 /**
  * StreamSocketClient is a very simple OO-Wrapper around the PHP
@@ -198,14 +199,38 @@ class StreamSocketClient
      */
     public function write($buffer)
     {
-        $socket = $this->getSocket();
-        $byteCount = @fwrite($socket, $buffer);
+        $buffer = (string) $buffer;
+        $bufLen = Binary::safeStrlen($buffer);
 
-        if ($byteCount === false) {
-            throw new \RuntimeException("Failed to write to socket");
+        $socket = $this->getSocket();
+        $written = 0;
+
+        while ($written < $bufLen) {
+            // PHP's fwrite does not behave nice in regards to errors, so we wrap
+            // it with a temporary error handler and treat every warning/notice as
+            // a error
+            $failed = false;
+            $errorMessage = "Failed to write to socket";
+            set_error_handler(function ($errno, $errstr) use (&$failed, &$errorMessage) {
+                $failed = true;
+                $errorMessage .= ": $errstr ($errno)";
+            });
+            $byteCount = fwrite($socket, Binary::safeSubstr($buffer, $written));
+            restore_error_handler();
+
+            if ($byteCount === 0 && defined('HHVM_VERSION')) {
+                $failed = true;
+            }
+
+            if ($failed || $byteCount === false) {
+                throw new \RuntimeException($errorMessage);
+            }
+
+            $written += $byteCount;
         }
 
-        return $byteCount;
+
+        return $written;
     }
 
     /**
@@ -234,6 +259,16 @@ class StreamSocketClient
     }
 
     /**
+     * Checks if the socket is closed
+     *
+     * @return bool
+     */
+    public function isClosed()
+    {
+        return $this->socket === null;
+    }
+
+    /**
      * Returns the current connect-timeout
      *
      * @return int
@@ -250,6 +285,34 @@ class StreamSocketClient
      */
     public function setConnectTimeout($timeout)
     {
+        if (!$this->isClosed()) {
+            throw new \LogicException("Cannot change socket properties with an open connection");
+        }
+
         $this->connectTimeout = $timeout;
+    }
+
+    /**
+     * Returns the stream context
+     *
+     * @return array
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * Sets the stream context
+     *
+     * @param array $context
+     */
+    public function setContext(array $context)
+    {
+        if (!$this->isClosed()) {
+            throw new \LogicException("Cannot change socket properties with an open connection");
+        }
+
+        $this->context = $context;
     }
 }

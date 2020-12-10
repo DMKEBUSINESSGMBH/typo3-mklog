@@ -25,6 +25,8 @@ namespace DMK\Mklog\Utility;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Core\Environment;
+
 /**
  * MK Log composer util.
  *
@@ -39,15 +41,22 @@ final class ComposerUtility
      */
     public static function autoload()
     {
-        static $loaded = false;
+        static $hasToLoad = true;
 
-        if (true === $loaded) {
+        if (false === $hasToLoad) {
             return;
         }
+
+        if (Environment::isComposerMode()) {
+            $hasToLoad = false;
+
+            return;
+        }
+
         require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
             'mklog',
             'Resources/Private/PHP/Composer/autoload.php'
         );
-        $loaded = true;
+        $hasToLoad = false;
     }
 }

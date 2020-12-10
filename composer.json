@@ -39,6 +39,7 @@
     "require": {
         "typo3/cms-core": "^8.7.32 || ^9.5.23 || ^10.4.10",
         "typo3/cms-scheduler": "^8.7.32 || ^9.5.23 || ^10.4.10",
+        "graylog2/gelf-php": "~1",
         "symfony/mime": "^4.4 || ^5.2",
         "egulias/email-validator": "^2.1",
         "php": ">=7.1.0"

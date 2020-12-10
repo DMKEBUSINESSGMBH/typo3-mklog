@@ -27,20 +27,26 @@ use RuntimeException;
  */
 class HttpTransport extends AbstractTransport
 {
+    const DEFAULT_HOST = "127.0.0.1";
+    const DEFAULT_PORT = 12202;
+    const DEFAULT_PATH = "/gelf";
+    
+    const AUTO_SSL_PORT = 443;
+    
     /**
      * @var string
      */
-    protected $host = "127.0.0.1";
+    protected $host;
 
     /**
      * @var int
      */
-    protected $port = 12202;
+    protected $port;
 
     /**
      * @var string
      */
-    protected $path = "/gelf";
+    protected $path;
 
     /**
      * @var StreamSocketClient
@@ -58,6 +64,16 @@ class HttpTransport extends AbstractTransport
     protected $authentication = null;
 
     /**
+     * @var string|null
+     */
+    protected $proxyUri = null;
+
+    /**
+     * @var bool
+     */
+    protected $requestFullUri = false;
+
+    /**
      * Class constructor
      *
      * @param string|null     $host       when NULL or empty default-host is used
@@ -65,13 +81,21 @@ class HttpTransport extends AbstractTransport
      * @param string|null     $path       when NULL or empty default-path is used
      * @param SslOptions|null $sslOptions when null not SSL is used
      */
-    public function __construct($host = null, $port = null, $path = null, SslOptions $sslOptions = null)
-    {
-        $this->host = $host ?: $this->host;
-        $this->port = $port ?: $this->port;
-        $this->path = ($path === null) ? $this->path : $path;
-        $this->sslOptions = $sslOptions;
+    public function __construct(
+        $host = self::DEFAULT_HOST,
+        $port = self::DEFAULT_PORT,
+        $path = self::DEFAULT_PATH,
+        SslOptions $sslOptions = null
+    ) {
+        $this->host = $host;
+        $this->port = $port;
+        $this->path = $path;
 
+        if ($port == self::AUTO_SSL_PORT && $sslOptions == null) {
+            $sslOptions = new SslOptions();
+        }
+
+        $this->sslOptions = $sslOptions;
         $this->messageEncoder = new DefaultEncoder();
         $this->socketClient = new StreamSocketClient(
             $this->getScheme(),
@@ -85,7 +109,7 @@ class HttpTransport extends AbstractTransport
      * Creates a HttpTransport from a URI
      *
      * Supports http and https schemes, port-, path- and auth-definitions
-     * If the port is ommitted 80 and 443 are used respectively.
+     * If the port is omitted 80 and 443 are used respectively.
      * If a username but no password is given, and empty password is used.
      * If a https URI is given, the provided SslOptions (with a fallback to
      * the default SslOptions) are used.
@@ -121,7 +145,7 @@ class HttpTransport extends AbstractTransport
          
         // merge defaults and real data and build transport
         $parsed = array_merge($defaults, $parsed);
-        $transport = new self($parsed['host'], $parsed['port'], $parsed['path'], $sslOptions);
+        $transport = new static($parsed['host'], $parsed['port'], $parsed['path'], $sslOptions);
 
         // add optional authentication
         if ($parsed['user']) {
@@ -140,6 +164,20 @@ class HttpTransport extends AbstractTransport
     public function setAuthentication($username, $password)
     {
         $this->authentication = $username . ":" . $password;
+    }
+
+    /**
+     * Enables HTTP proxy
+     *
+     * @param $proxyUri
+     * @param bool $requestFullUri
+     */
+    public function setProxy($proxyUri, $requestFullUri = false)
+    {
+        $this->proxyUri = $proxyUri;
+        $this->requestFullUri = $requestFullUri;
+
+        $this->socketClient->setContext($this->getContext());
     }
 
     /**
@@ -174,7 +212,7 @@ class HttpTransport extends AbstractTransport
         $request[] = ""; // blank line to separate headers from body
         $request[] = $rawMessage;
 
-        $request = implode($request, "\r\n");
+        $request = implode("\r\n", $request);
 
         $byteCount = $this->socketClient->write($request);
         $headers = $this->readResponseHeaders();
@@ -203,7 +241,7 @@ class HttpTransport extends AbstractTransport
     private function readResponseHeaders()
     {
         $chunkSize = 1024; // number of bytes to read at once
-        $delimiter = "\r\n\r\n"; // delimiter between headers and rsponse
+        $delimiter = "\r\n\r\n"; // delimiter between headers and response
         $response = "";
 
         do {
@@ -229,24 +267,20 @@ class HttpTransport extends AbstractTransport
      */
     private function getContext()
     {
-        if (null === $this->sslOptions) {
-            return array();
+        $options = array();
+
+        if (null !== $this->sslOptions) {
+            $options = array_merge($options, $this->sslOptions->toStreamContext($this->host));
         }
 
-        $context = $this->sslOptions->toStreamContext();
-        
-        // If SNI is available hint on server-name
-        if (defined('HHVM_VERSION') ||  defined('OPENSSL_TLSEXT_SERVER_NAME')) {
-            $context['ssl']['SNI_enabled'] = true;
-            $context['ssl']['SNI_server_name'] = $this->host;
-        }
-        
-        // If verify_peer is active we also check for a valid CN
-        if ($this->sslOptions->getVerifyPeer()) {
-            $context['ssl']['CN_match'] = $this->host;
+        if (null !== $this->proxyUri) {
+            $options['http'] = array(
+                'proxy' => $this->proxyUri,
+                'request_fulluri' => $this->requestFullUri
+            );
         }
 
-        return $context;
+        return $options;
     }
 
     /**

@@ -22,6 +22,7 @@ use RuntimeException;
  */
 class Message implements MessageInterface
 {
+
     protected $host;
     protected $shortMessage;
     protected $fullMessage;
@@ -109,9 +110,9 @@ class Message implements MessageInterface
             }
         } elseif (is_string($level)) {
             $level = strtolower($level);
-            $map = array_flip(self::$psrLevels);
-            if (isset($map[$level])) {
-                return $map[$level];
+            $syslogLevel = array_search($level, self::$psrLevels);
+            if (false !== $syslogLevel) {
+                return $syslogLevel;
             }
         }
 
@@ -128,7 +129,7 @@ class Message implements MessageInterface
     public function setVersion($version)
     {
         $this->version = $version;
-        
+
         return $this;
     }
 
@@ -255,7 +256,8 @@ class Message implements MessageInterface
 
     public function setAdditional($key, $value)
     {
-        if (!$key) {
+        $key = (string)$key;
+        if ($key === '') {
             throw new RuntimeException("Additional field key cannot be empty");
         }
 
@@ -299,7 +301,10 @@ class Message implements MessageInterface
 
         // return after filtering empty strings and null values
         return array_filter($message, function ($message) {
-            return is_bool($message) || strlen($message);
+            return is_bool($message)
+                || (is_string($message) && strlen($message))
+                || is_int($message)
+                || !empty($message);
         });
     }
 }
