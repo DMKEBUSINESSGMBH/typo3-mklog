@@ -86,6 +86,7 @@ class SchedulerWatchDog extends AbstractTask
     public function __wakeup()
     {
         if (method_exists(parent::class, '__wakeup')) {
+            /* @phpstan-ignore-next-line */
             parent::__wakeup();
         }
 
@@ -95,10 +96,6 @@ class SchedulerWatchDog extends AbstractTask
 
         if ($this->transport && !$this->messageTransport) {
             $this->messageTransport = $this->transport;
-        }
-
-        if (ExtensionManagementUtility::isLoaded('rn_base') && $this->schedulerOptions instanceof \Tx_Rnbase_Domain_Model_Data) {
-            $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->toArray());
         }
     }
 
@@ -126,6 +123,10 @@ class SchedulerWatchDog extends AbstractTask
             $this->schedulerOptions = GenericArrayObject::getInstance();
         }
 
+        if (ExtensionManagementUtility::isLoaded('rn_base') && $this->schedulerOptions instanceof \Tx_Rnbase_Domain_Model_Data) {
+            $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->toArray());
+        }
+
         return $this->schedulerOptions;
     }
 
@@ -150,8 +151,8 @@ class SchedulerWatchDog extends AbstractTask
                 // mark entry as send for current transport
                 $this->markAsTransported($message);
                 $successes[$message->getUid()] = '';
-            } catch (\Exception $e) {
-                $failures[$message->getUid()] = $e->getMessage();
+            } catch (\Exception $exception) {
+                $failures[$message->getUid()] = $exception->getMessage();
             }
         }
 
@@ -303,6 +304,6 @@ class SchedulerWatchDog extends AbstractTask
             $options[] = '  '.ucfirst($key).': '.$value;
         }
 
-        return 'Options: '.LF.implode('; '.LF, $options);
+        return 'Options: '.PHP_EOL.implode('; '.PHP_EOL, $options);
     }
 }

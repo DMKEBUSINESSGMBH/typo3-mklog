@@ -142,6 +142,8 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             return;
         }
 
+        defined('LF') ?: define('LF', chr(10));
+
         $content = '';
         $content .= 'This is an automatic email from TYPO3. Don\'t answer!'.LF.LF;
         $content .= '== Developer Log summary'.LF.LF;
@@ -199,19 +201,19 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     ): bool {
         $subject = sprintf(
             $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename']
+            Factory::getConfigUtility()->getSiteName()
         );
-        $from = Address::create(Factory::getConfigUtility()->getGlobalMailFrom());
-        $to = Address::create($this->getOptions()->getCredentials());
+        $mailFrom = Address::create(Factory::getConfigUtility()->getGlobalMailFrom());
+        $mailTo = Address::create($this->getOptions()->getCredentials());
 
         if (!VersionUtility::isTypo3Version10OrHigher()) {
-            return $this->sendMailLegacy($content, $subject, $from, $to);
+            return $this->sendMailLegacy($content, $subject, $mailFrom, $mailTo);
         }
 
         $mail = Factory::makeInstance(MailMessage::class);
         $mail
-            ->from($from)
-            ->to($to)
+            ->from($mailFrom)
+            ->to($mailTo)
             ->subject($subject)
             ->text($content)
         ;
@@ -224,19 +226,19 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      *
      * @param string $content
      * @param string $subject
-     * @param Address $from
-     * @param Address $to
+     * @param Address $mailFrom
+     * @param Address $mailTo
      */
     protected function sendMailLegacy(
         string $content,
         string $subject,
-        Address $from,
-        Address $to
+        Address $mailFrom,
+        Address $mailTo
     ): bool {
         $mail = Factory::makeInstance(MailMessage::class);
         $mail
-            ->setFrom($from->getAddress())
-            ->setTo($to->getAddress())
+            ->setFrom($mailFrom->getAddress())
+            ->setTo($mailTo->getAddress())
             ->setSubject($subject)
             ->setBody($content)
         ;

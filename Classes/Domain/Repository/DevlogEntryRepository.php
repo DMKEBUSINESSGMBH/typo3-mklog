@@ -123,8 +123,8 @@ class DevlogEntryRepository
         // there are log entries to delete
         if ($numRows > $maxRows) {
             // fetch the execution date from the latest log entry
-            $qb = $this->createQueryBuilder();
-            $query = $qb
+            $queryBuilder = $this->createQueryBuilder();
+            $query = $queryBuilder
                 ->select('run_id')
                 ->from($this->getTableName())
                 ->orderBy('run_id', 'DESC')
@@ -139,8 +139,8 @@ class DevlogEntryRepository
             }
 
             // delete all entries, older than the last exeution date!
-            $qb = $this->createQueryBuilder();
-            $query = $qb->delete($this->getTableName())->where('run_id < '.$lastExec);
+            $queryBuilder = $this->createQueryBuilder();
+            $query = $queryBuilder->delete($this->getTableName())->where('run_id < '.$lastExec);
             $query->execute();
         }
     }
@@ -209,8 +209,8 @@ class DevlogEntryRepository
      */
     public function deletyByPid(int $pid): void
     {
-        $qb = $this->createQueryBuilder();
-        $query = $qb->delete($this->getTableName())->where('pid = '.$pid);
+        $queryBuilder = $this->createQueryBuilder();
+        $query = $queryBuilder->delete($this->getTableName())->where('pid = '.$pid);
         $query->execute();
     }
 
@@ -227,11 +227,13 @@ class DevlogEntryRepository
             )
         );
 
-        if ($model->getUid() > 0) {
-            $this->persistUpdate($model);
-        } else {
+        if (0 === $model->getUid()) {
             $this->persistNew($model);
+
+            return;
         }
+
+        $this->persistUpdate($model);
     }
 
     /**

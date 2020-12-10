@@ -25,6 +25,9 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Gelf\Transport\AbstractTransport;
+use Gelf\Transport\UdpTransport;
+
 /**
  * MK Log watchdog gelf transporter.
  *
@@ -36,24 +39,24 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class UdpGelf extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
+class UdpGelf extends AbstractGelf
 {
     /**
      * Creates the Transport.
      *
-     * @return \Gelf\Transport\AbstractTransport
+     * @return AbstractTransport
      */
     protected function getTransport()
     {
-        list($host, $port) = explode(
+        [$host, $port] = explode(
             ':',
             $this->getOptions()->getCredentials()
         );
 
-        return new \Gelf\Transport\UdpTransport(
+        return new UdpTransport(
             trim($host),
             trim($port),
-            \Gelf\Transport\UdpTransport::CHUNK_SIZE_LAN
+            UdpTransport::CHUNK_SIZE_LAN
         );
     }
 }

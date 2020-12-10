@@ -42,6 +42,8 @@ final class Typo3Utility
      * Get the current frontend user.
      *
      * @return TypoScriptFrontendController
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getTsFe(): ?TypoScriptFrontendController
     {
@@ -76,6 +78,8 @@ final class Typo3Utility
      * Get the current backend user if available.
      *
      * @return BackendUserAuthentication
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getBeUser(): ?BackendUserAuthentication
     {

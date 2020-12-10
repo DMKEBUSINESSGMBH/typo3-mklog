@@ -25,7 +25,7 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = 'Tx_Mklog_Hooks_DataHandler';
 
         // is the devlog enabled?
-        if ($config->getEnableDevLog()) {
+        if ($config->isEnableDevLog()) {
             // the old devlog hook to log into tx_mklog_devlog_entry
             $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['devLog']['mklog'] = \DMK\Mklog\Logger\DevlogLogger::class.'->devLogHook';
             // register logger writer
@@ -36,7 +36,7 @@ call_user_func(
             $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$loglevel][\DMK\Mklog\Logger\DevlogLogger::class] = [];
         }
         // is the gelf enabled?
-        if ($config->getGelfEnable()) {
+        if ($config->isGelfEnable()) {
             // add system log hook, to log some critical logs directly
             $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['systemLog']['MklogGelfLoggerSysLogHook'] = \DMK\Mklog\Logger\GelfLogger::class.'->sysLogHook';
             // register logger writer

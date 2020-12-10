@@ -67,6 +67,8 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      * @param string $key
      *
      * @return int|string|null
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function getExtConf($key, $default = null)
     {
@@ -118,11 +120,21 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function getSiteName(): string
+    {
+        return $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
+    }
+
+    /**
      * Is the devlog enabled?
      *
      * @return bool
      */
-    public function getEnableDevLog()
+    public function isEnableDevLog(): bool
     {
         return (bool) $this->getExtConf('enable_devlog');
     }
@@ -191,7 +203,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @return bool
      */
-    public function getGelfEnable()
+    public function isGelfEnable(): bool
     {
         return (bool) $this->getExtConf('gelf_enable');
     }
@@ -201,7 +213,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @return int
      */
-    public function getGelfMinLogLevel()
+    public function getGelfMinLogLevel(): int
     {
         return (int) $this->getExtConf('gelf_min_log_level');
     }
@@ -209,9 +221,9 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Transport for gelf loging.
      *
-     * @return int
+     * @return string
      */
-    public function getGelfTransport()
+    public function getGelfTransport(): string
     {
         return $this->getExtConf('gelf_transport') ?: 'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf';
     }
@@ -219,9 +231,9 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Credentials for gelf loging.
      *
-     * @return int
+     * @return string
      */
-    public function getGelfCredentials()
+    public function getGelfCredentials(): string
     {
         return $this->getExtConf('gelf_credentials');
     }
@@ -230,8 +242,10 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      * The global from mail address.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function getGlobalMailFrom()
+    public function getGlobalMailFrom(): string
     {
         $mail = $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress']);
 

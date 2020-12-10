@@ -25,6 +25,9 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Gelf\Transport\AbstractTransport;
+use Gelf\Transport\HttpTransport;
+
 /**
  * MK Log watchdog gelf transporter.
  *
@@ -36,16 +39,16 @@ namespace DMK\Mklog\WatchDog\Transport\Gelf;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class HttpGelf extends \DMK\Mklog\WatchDog\Transport\Gelf\AbstractGelf
+class HttpGelf extends AbstractGelf
 {
     /**
      * Creates the Transport.
      *
-     * @return \Gelf\Transport\AbstractTransport
+     * @return AbstractTransport
      */
     protected function getTransport()
     {
-        $transport = \Gelf\Transport\HttpTransport::fromUrl(
+        $transport = HttpTransport::fromUrl(
             $this->getOptions()->getCredentials()
         );
 
