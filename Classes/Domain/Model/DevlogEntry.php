@@ -139,7 +139,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setUid($uid): self
     {
-        $this->uid = $uid;
+        $this->uid = (int) $uid;
 
         return $this;
     }
@@ -163,7 +163,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setPid($pid): self
     {
-        $this->pid = $pid;
+        $this->pid = (int) $pid;
 
         return $this;
     }
@@ -201,7 +201,7 @@ class DevlogEntry implements InterfaceMessage
      *
      * @return self
      */
-    public function setRunId($runId)
+    public function setRunId(string $runId)
     {
         $this->runId = $runId;
 
@@ -241,7 +241,7 @@ class DevlogEntry implements InterfaceMessage
      *
      * @return self
      */
-    public function setExtKey($extKey)
+    public function setExtKey(string $extKey)
     {
         $this->extKey = $extKey;
 
@@ -261,7 +261,7 @@ class DevlogEntry implements InterfaceMessage
      *
      * @return self
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
 
@@ -310,7 +310,7 @@ class DevlogEntry implements InterfaceMessage
      * @return self
      */
     public function setTransportIdsRaw(
-        $transportIds
+        string $transportIds
     ): self {
         $this->transportIds = $transportIds;
 
@@ -325,7 +325,7 @@ class DevlogEntry implements InterfaceMessage
      * @return self
      */
     public function addTransportId(
-        $transportId
+        string $transportId
     ): self {
         $ids = $this->getTransportIds();
         $ids[] = $transportId;
