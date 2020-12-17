@@ -1,42 +1,70 @@
 name: PHP Checks
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
-    php-cs-fixer:
-        name: PHP-CS-Fixer
+    phplint:
+        name: PHPLINT
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@master
-            - name: Setup PHP
-              uses: shivammathur/setup-php@master
-              with:
-                  php-version: 7.4
-            - run: composer require friendsofphp/php-cs-fixer
-            - run: .Build/bin/php-cs-fixer fix --dry-run --diff
+            -
+                uses: actions/checkout@master
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: 7.4
+            -
+                run: composer require php-parallel-lint/php-parallel-lint
+            -
+                run: .Build/bin/parallel-lint ./Classes
+
+    phpcs:
+        name: PHPCS
+        runs-on: ubuntu-latest
+        steps:
+            -
+                uses: actions/checkout@master
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: 7.4
+            -
+                run: composer require friendsofphp/php-cs-fixer
+            -
+                run: .Build/bin/php-cs-fixer fix --dry-run --diff
 
     phpmd:
-        name: PHPmd
+        name: PHPMD
         runs-on: ubuntu-latest
         continue-on-error: true
         steps:
-            - uses: actions/checkout@master
-            - name: Setup PHP
-              uses: shivammathur/setup-php@master
-              with:
-                  php-version: 7.4
-            - run: composer require phpmd/phpmd
-            - run: .Build/bin/phpmd ./Classes/ text phpmd.xml
+            -
+                uses: actions/checkout@master
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: 7.4
+            -
+                run: composer require phpmd/phpmd
+            -
+                run: .Build/bin/phpmd ./Classes/ text phpmd.xml
 
     phpstan:
-        name: PHPStan
+        name: PHPSTAN
         runs-on: ubuntu-latest
         continue-on-error: true
         steps:
-            - uses: actions/checkout@master
-            - name: Setup PHP
-              uses: shivammathur/setup-php@master
-              with:
-                  php-version: 7.4
-            - run: composer require phpstan/phpstan phpstan/extension-installer saschaegerer/phpstan-typo3
-            - run: .Build/bin/phpstan analyse -c phpstan.neon
+            -
+                uses: actions/checkout@master
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@master
+                with:
+                    php-version: 7.4
+            -
+                run: composer require phpstan/phpstan phpstan/extension-installer saschaegerer/phpstan-typo3
+            -
+                run: .Build/bin/phpstan analyse -c phpstan.neon
