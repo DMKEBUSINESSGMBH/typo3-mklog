@@ -79,22 +79,32 @@ class DevlogEntryMapper
     /**
      * @param array $record
      *
-     * @return array
+     * @return DevlogEntryMapper
      */
     public static function fromRecord(array $record): DevlogEntryMapper
     {
         $entry = Factory::makeInstance(DevlogEntry::class)
             ->setUid($record['uid'])
-            ->setPid($record['pid'])
+            ->setPid($record['pid'] ?: 0)
             ->setRunId($record['run_id'])
-            ->setExtKey($record['ext_key'])
-            ->setHost($record['host'])
-            ->setMessage($record['message'])
-            ->setExtraDataEncoded($record['extra_data'])
+            ->setExtKey($record['ext_key'] ?: '')
+            ->setHost($record['host'] ?: '')
+            ->setMessage($record['message'] ?: '')
+            ->setExtraDataEncoded($record['extra_data'] ?: '')
             ->setCrdate($record['crdate'])
-            ->setCruserId($record['cruser_id'])
-            ->setTransportIdsRaw($record['transport_ids']);
+            ->setCruserId($record['cruser_id'] ?: 0)
+            ->setTransportIdsRaw($record['transport_ids'] ?: '');
 
+        return Factory::makeInstance(DevlogEntryMapper::class, $entry);
+    }
+
+    /**
+     * @param DevlogEntry $entry
+     *
+     * @return DevlogEntryMapper
+     */
+    public static function fromEntry(DevlogEntry $entry): DevlogEntryMapper
+    {
         return Factory::makeInstance(DevlogEntryMapper::class, $entry);
     }
 }
