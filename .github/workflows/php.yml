@@ -1,70 +1,179 @@
-name: PHP Checks
+name: "PHP Checks"
 
-on: [ push, pull_request ]
+on:
+    push:
+    pull_request:
+    schedule:
+        - cron: "30 6 * * 1"
+
+env:
+    PHP_EXTENSIONS: "intl, mbstring, json, zip, curl"
 
 jobs:
-    phplint:
-        name: PHPLINT
-        runs-on: ubuntu-latest
-        steps:
-            -
-                uses: actions/checkout@master
-            -
-                name: Setup PHP
-                uses: shivammathur/setup-php@master
-                with:
-                    php-version: 7.4
-            -
-                run: composer require php-parallel-lint/php-parallel-lint
-            -
-                run: .Build/bin/parallel-lint ./Classes
 
-    phpcs:
-        name: PHPCS
-        runs-on: ubuntu-latest
-        steps:
-            -
-                uses: actions/checkout@master
-            -
-                name: Setup PHP
-                uses: shivammathur/setup-php@master
-                with:
-                    php-version: 7.4
-            -
-                run: composer require friendsofphp/php-cs-fixer
-            -
-                run: .Build/bin/php-cs-fixer fix --dry-run --diff
+    php-lint:
+        name: "PHP Lint"
 
-    phpmd:
-        name: PHPMD
-        runs-on: ubuntu-latest
-        continue-on-error: true
-        steps:
-            -
-                uses: actions/checkout@master
-            -
-                name: Setup PHP
-                uses: shivammathur/setup-php@master
-                with:
-                    php-version: 7.4
-            -
-                run: composer require phpmd/phpmd
-            -
-                run: .Build/bin/phpmd ./Classes/ text phpmd.xml
+        runs-on: "ubuntu-latest"
 
-    phpstan:
-        name: PHPSTAN
-        runs-on: ubuntu-latest
-        continue-on-error: true
+        strategy:
+            matrix:
+                php-version:
+                    - "7.1"
+                    - "7.2"
+                    - "7.3"
+                    - "7.4"
+
         steps:
             -
-                uses: actions/checkout@master
+                name: "Checkout"
+                uses: "actions/checkout@v2"
             -
-                name: Setup PHP
-                uses: shivammathur/setup-php@master
+                name: "Setup PHP"
+                uses: "shivammathur/setup-php@v2"
                 with:
-                    php-version: 7.4
+                    php-version: "${{ matrix.php-version }}"
+                    extensions: "${{ env.PHP_EXTENSIONS }}"
             -
-                run: composer require phpstan/phpstan phpstan/extension-installer saschaegerer/phpstan-typo3
+                name: "Validate composer.json and composer.lock"
+                run: "composer validate --strict"
             -
-                run: .Build/bin/phpstan analyse -c phpstan.neon
+                name: "Determine composer cache directory"
+                id: "determine-composer-cache-directory"
+                run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+            -
+                name: "Cache dependencies installed with composer"
+                uses: "actions/cache@v2.0.0"
+                with:
+                    path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+                    key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
+                    restore-keys: "php-${{ matrix.php-version }}-composer-"
+            -
+                name: "Install composer dependencies"
+                run: "composer install --no-interaction --no-progress --no-suggest"
+            -
+                name: "Run Linter"
+                run: "composer lint:php"
+
+    php-qs:
+        name: "PHP QS"
+
+        runs-on: "ubuntu-latest"
+        
+        needs: "php-lint"
+
+        strategy:
+            matrix:
+                command:
+                    - "test:phpcs"
+                    - "test:phpmd"
+                    - "test:phpstan"
+                php-version:
+                    - "7.4"
+
+        steps:
+            -
+                name: "Checkout"
+                uses: "actions/checkout@v2"
+            -
+                name: "Setup PHP"
+                uses: "shivammathur/setup-php@v2"
+                with:
+                    php-version: "${{ matrix.php-version }}"
+                    extensions: "${{ env.PHP_EXTENSIONS }}"
+            -
+                name: "Validate composer.json and composer.lock"
+                run: "composer validate --strict"
+            -
+                name: "Determine composer cache directory"
+                id: "determine-composer-cache-directory"
+                run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+            -
+                name: "Cache dependencies installed with composer"
+                uses: "actions/cache@v2.0.0"
+                with:
+                    path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+                    key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
+                    restore-keys: "php-${{ matrix.php-version }}-composer-"
+            -
+                name: "Install composer dependencies"
+                run: "composer install --no-interaction --no-progress --no-suggest"
+            -
+                name: "Run command"
+                run: "composer ${{ matrix.command }}"
+
+
+    php-unit:
+        name: "PHP Unit"
+
+        runs-on: "ubuntu-latest"
+
+        needs: ["php-lint", "php-qs"]
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -
+                        typo3-version: "^8.7"
+                        php-version: "7.1"
+                    -
+                        typo3-version: "^8.7"
+                        php-version: "7.2"
+                    -
+                        typo3-version: "^8.7"
+                        php-version: "7.3"
+                    -
+                        typo3-version: "^8.7"
+                        php-version: "7.4"
+                    -
+                        typo3-version: "^9.5"
+                        php-version: "7.2"
+                    -
+                        typo3-version: "^9.5"
+                        php-version: "7.3"
+                    -
+                        typo3-version: "^9.5"
+                        php-version: "7.4"
+                    -
+                        typo3-version: "^10.4"
+                        php-version: "7.2"
+                    -
+                        typo3-version: "^10.4"
+                        php-version: "7.3"
+                    -
+                        typo3-version: "^10.4"
+                        php-version: "7.4"
+
+        steps:
+            -
+                name: "Checkout"
+                uses: "actions/checkout@v2"
+            -
+                name: "Setup PHP"
+                uses: "shivammathur/setup-php@v2"
+                with:
+                    php-version: "${{ matrix.php-version }}"
+                    extensions: "${{ env.PHP_EXTENSIONS }}"
+            -
+                name: "Validate composer.json and composer.lock"
+                run: "composer validate --strict"
+            -
+                name: "Determine composer cache directory"
+                id: "determine-composer-cache-directory"
+                run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+            -
+                name: "Cache dependencies installed with composer"
+                uses: "actions/cache@v2.0.0"
+                with:
+                    path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+                    key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
+                    restore-keys: "php-${{ matrix.php-version }}-composer-"
+            -
+                name: "Install composer dependencies"
+                run: |
+                    composer remove --no-update typo3/cms typo3/cms-core
+                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
+            -
+                name: "Run PHP unit tests"
+                run: "composer test:phpunit"
