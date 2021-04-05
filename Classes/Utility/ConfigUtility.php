@@ -235,7 +235,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getGelfCredentials(): string
     {
-        return $this->getExtConf('gelf_credentials');
+        return $this->getExtConf('gelf_credentials', '');
     }
 
     /**
