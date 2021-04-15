@@ -1,6 +1,6 @@
 parameters:
     level: 1
-    autoload_files:
+    bootstrapFiles:
         - "%currentWorkingDirectory%/.Build/vendor/autoload.php"
         - "%currentWorkingDirectory%/Resources/Private/PHP/Composer/autoload.php"
     paths:
@@ -8,6 +8,9 @@ parameters:
         - %currentWorkingDirectory%/ext_localconf.php
         - %currentWorkingDirectory%/ext_tables.php
         - %currentWorkingDirectory%/ext_emconf.php
+    excludes_analyse:
+        # exclude the backend devlogentry repository, dependency to doctrine collection cant be resolved
+        -  %currentWorkingDirectory%/Classes/Backend/Repository/DevlogEntryRepository.php
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Constant TYPO3_MODE not found#'
