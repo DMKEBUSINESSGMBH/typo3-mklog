@@ -26,7 +26,6 @@ namespace DMK\Mklog\WatchDog;
  ***************************************************************/
 
 use DMK\Mklog\Factory;
-use DMK\Mklog\Utility\VersionUtility;
 use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
