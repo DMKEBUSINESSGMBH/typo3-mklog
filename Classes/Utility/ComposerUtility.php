@@ -63,11 +63,6 @@ final class ComposerUtility
      */
     public static function isComposerMode(): bool
     {
-        // typo3 8 has not a Environment class, so we ask the bootstrap
-        if (!VersionUtility::isTypo3Version9OrHigher()) {
-            return \TYPO3\CMS\Core\Core\Bootstrap::usesComposerClassLoading();
-        }
-
         return \TYPO3\CMS\Core\Core\Environment::isComposerMode();
     }
 }

@@ -82,14 +82,12 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
                 );
             }
 
-            if (VersionUtility::isTypo3Version9OrHigher()) {
-                $storage->setExtConf(
-                    Factory::makeInstance(ExtensionConfiguration::class)->get(
-                        'mklog',
-                        ''
-                    )
-                );
-            }
+            $storage->setExtConf(
+                Factory::makeInstance(ExtensionConfiguration::class)->get(
+                    'mklog',
+                    ''
+                )
+            );
         }
 
         $extConf = $storage->getExtConf();

@@ -63,8 +63,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
         // Initialize extra field value
         if (empty($taskInfo['mklog_watchdog_transport'])) {
-            $action = VersionUtility::isTypo3Version9OrHigher() ?
-                $schedulerModule->getCurrentAction() : $schedulerModule->CMD;
+            $action = $schedulerModule->getCurrentAction();
 
             // initialuze an empty value, as it will not be used anyway
             $taskInfo['mklog_watchdog_transport'] = '';
