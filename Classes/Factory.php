@@ -30,11 +30,9 @@ use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use DMK\Mklog\Utility\ConfigUtility;
 use DMK\Mklog\Utility\DataConverterUtility;
 use DMK\Mklog\Utility\EntryDataParserUtility;
-use DMK\Mklog\Utility\VersionUtility;
 use DMK\Mklog\WatchDog\Transport\InterfaceTransport;
 use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * MK Log Factory.
@@ -75,22 +73,6 @@ final class Factory
             [GeneralUtility::class, 'makeInstance'],
             func_get_args()
         );
-    }
-
-    /**
-     * @return ObjectManager
-     */
-    public static function getObjectManager()
-    {
-        // On some early state the object manager wasn't build with di/serviceprovider yet.
-        // Then the constructor arguments has to be passed to create the object manager.
-        // Or we call the service provider directly
-        // @TODO: old di is deprecated, refactor if typo3 9 support will be dropped.
-        if (VersionUtility::isTypo3Version10OrHigher()) {
-            return \TYPO3\CMS\Extbase\ServiceProvider::getObjectManager(GeneralUtility::getContainer());
-        }
-
-        return self::makeInstance(ObjectManager::class);
     }
 
     /**
@@ -146,8 +128,7 @@ final class Factory
      */
     public static function getDevlogEntryRepository()
     {
-        // @TODO: old di is deprecated, refactor if typo3 9 support will be dropped.
-        return self::getObjectManager()->get(DevlogEntryRepository::class);
+        return self::makeInstance(DevlogEntryRepository::class);
     }
 
     /**
