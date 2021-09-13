@@ -3,10 +3,12 @@
 $finder = PhpCsFixer\Finder::create()
     ->exclude('Resources')
     ->exclude('Documentation')
-    ->in(__DIR__)
-;
+    ->in(__DIR__);
 
-return PhpCsFixer\Config::create()
+$config = new \PhpCsFixer\Config();
+
+return $config
+    ->setCacheFile('.Build/.php_cs.cache')
     ->setFinder($finder)
     ->setRules([
         '@PSR2' => true,
@@ -14,5 +16,4 @@ return PhpCsFixer\Config::create()
         'phpdoc_align' => false,
         'no_superfluous_phpdoc_tags' => false,
     ])
-    ->setLineEnding("\n")
-;
+    ->setLineEnding("\n");
