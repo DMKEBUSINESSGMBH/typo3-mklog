@@ -50,7 +50,7 @@ class GenericArrayObject
     }
 
     /**
-     * @param array |GenericArrayObject $data
+     * @param array|GenericArrayObject $data
      *
      * @return GenericArrayObject
      */

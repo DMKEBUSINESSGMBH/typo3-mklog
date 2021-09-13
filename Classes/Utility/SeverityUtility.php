@@ -157,6 +157,7 @@ final class SeverityUtility
             case self::INFO:
                 return \Psr\Log\LogLevel::INFO;
             case self::DEBUG:
+            default:
                 return \Psr\Log\LogLevel::DEBUG;
         }
     }
