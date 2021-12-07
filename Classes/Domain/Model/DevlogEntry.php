@@ -1,12 +1,12 @@
 <?php
 
-namespace DMK\Mklog\Domain\Model;
-
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2021 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mklog" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@ namespace DMK\Mklog\Domain\Model;
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +23,9 @@ namespace DMK\Mklog\Domain\Model;
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
+
+namespace DMK\Mklog\Domain\Model;
 
 use DateTime;
 use DateTimeZone;
@@ -33,7 +35,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Devlog entry Model.
  *
- * @author Michael Wagner
+ * @author  Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  *
@@ -92,9 +94,6 @@ class DevlogEntry implements InterfaceMessage
      */
     protected $transportIds;
 
-    /**
-     * @return array
-     */
     public function getRecord(): array
     {
         $values = [];
@@ -112,8 +111,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Liefert den aktuellen Tabellenname.
-     *
-     * @return string
      */
     public function getTableName(): string
     {
@@ -134,8 +131,6 @@ class DevlogEntry implements InterfaceMessage
      * Setter for the uid.
      *
      * @param int $uid
-     *
-     * @return self
      */
     public function setUid($uid): self
     {
@@ -158,8 +153,6 @@ class DevlogEntry implements InterfaceMessage
      * Setter for the pid.
      *
      * @param int $pid
-     *
-     * @return self
      */
     public function setPid($pid): self
     {
@@ -168,9 +161,6 @@ class DevlogEntry implements InterfaceMessage
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCrdate(): int
     {
         return (int) $this->crdate;
@@ -188,17 +178,12 @@ class DevlogEntry implements InterfaceMessage
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getRunId(): string
     {
         return $this->runId;
     }
 
     /**
-     * @param string $runId
-     *
      * @return self
      */
     public function setRunId(string $runId)
@@ -208,9 +193,6 @@ class DevlogEntry implements InterfaceMessage
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSeverity(): int
     {
         return (int) $this->severity;
@@ -228,17 +210,12 @@ class DevlogEntry implements InterfaceMessage
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getExtKey(): string
     {
         return $this->extKey;
     }
 
     /**
-     * @param string $extKey
-     *
      * @return self
      */
     public function setExtKey(string $extKey)
@@ -248,17 +225,12 @@ class DevlogEntry implements InterfaceMessage
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
-     * @param string $message
-     *
      * @return self
      */
     public function setMessage(string $message)
@@ -268,9 +240,6 @@ class DevlogEntry implements InterfaceMessage
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCruserId(): int
     {
         return (int) $this->cruserId;
@@ -290,8 +259,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * A list of scheduler task uids which has already transferred this message.
-     *
-     * @return array
      */
     public function getTransportIds(): array
     {
@@ -306,8 +273,6 @@ class DevlogEntry implements InterfaceMessage
      * Adds a scheduler to the transport id list.
      *
      * @param string $transportId
-     *
-     * @return self
      */
     public function setTransportIdsRaw(
         string $transportIds
@@ -319,10 +284,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Adds a scheduler to the transport id list.
-     *
-     * @param string $transportId
-     *
-     * @return self
      */
     public function addTransportId(
         string $transportId
@@ -337,8 +298,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * The raw extra data.
-     *
-     * @return string
      */
     public function getExtraDataRaw(): string
     {
@@ -347,8 +306,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the extra data.
-     *
-     * @return array
      */
     private function getExtraData(): array
     {
@@ -359,8 +316,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Setter for extra data.
-     *
-     * @return self
      */
     public function setExtraData(
         array $data
@@ -372,8 +327,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Setter for extra data.
-     *
-     * @return self
      */
     public function setExtraDataEncoded(
         string $data
@@ -385,8 +338,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the public values of extra data.
-     *
-     * @return array
      */
     public function getExternalExtraData(): array
     {
@@ -404,8 +355,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the protected values of extra data.
-     *
-     * @return array
      */
     public function getInternalExtraData(): array
     {
@@ -427,8 +376,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the short text of the message.
-     *
-     * @return string
      */
     public function getShortMessage(): string
     {
@@ -439,8 +386,6 @@ class DevlogEntry implements InterfaceMessage
      * Returns the full text of the message for the WatchDog-Transport.
      *
      * The Message is shortened if bigger as configured max_extra_data_size.
-     *
-     * @return string
      */
     public function getFullMessage(): string
     {
@@ -451,8 +396,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the timestamp of the message.
-     *
-     * @return DateTime
      */
     public function getTimestamp(): DateTime
     {
@@ -466,8 +409,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the log level of the message as a Psr\Log\Level-constant.
-     *
-     * @return string
      */
     public function getLevel(): string
     {
@@ -478,8 +419,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the facility of the message.
-     *
-     * @return string
      */
     public function getFacility(): string
     {
@@ -488,8 +427,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Returns the host of the message.
-     *
-     * @return string
      */
     public function getHost(): string
     {
@@ -518,8 +455,6 @@ class DevlogEntry implements InterfaceMessage
      * Set the host.
      *
      * @param $host
-     *
-     * @return self
      */
     public function setHost($host): self
     {
@@ -532,8 +467,6 @@ class DevlogEntry implements InterfaceMessage
      * Returns the value of the additional field of the message for the WatchDog-Transport.
      *
      * The Message is shortened if bigger as configured max_extra_data_size.
-     *
-     * @return array
      */
     public function getAdditionalData(): array
     {

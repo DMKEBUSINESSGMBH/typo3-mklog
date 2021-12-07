@@ -1,12 +1,12 @@
 <?php
 
-namespace DMK\Mklog\WatchDog;
-
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2021 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mklog" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@ namespace DMK\Mklog\WatchDog;
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +23,9 @@ namespace DMK\Mklog\WatchDog;
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
+
+namespace DMK\Mklog\WatchDog;
 
 use DMK\Mklog\Factory;
 use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
@@ -33,7 +35,7 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 /**
  * MK Log watchdog scheduler fields.
  *
- * @author Michael Wagner
+ * @author  Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
@@ -272,8 +274,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * This method is used to save any additional input into the current task object
      * if the task class matches.
      *
-     * @param array $submittedData Array containing the data submitted by the user
-     * @param AbstractTask $task Reference to the current task object
+     * @param array        $submittedData Array containing the data submitted by the user
+     * @param AbstractTask $task          Reference to the current task object
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function saveAdditionalFields(array $submittedData, AbstractTask $task)

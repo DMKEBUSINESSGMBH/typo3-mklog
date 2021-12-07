@@ -1,12 +1,12 @@
 <?php
 
-namespace DMK\Mklog\Domain\Repository;
-
-/***************************************************************
+/*
  * Copyright notice
  *
- * (c) 2020 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2021 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
+ *
+ * This file is part of the "mklog" Extension for TYPO3 CMS.
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
  * free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@ namespace DMK\Mklog\Domain\Repository;
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
+ * GNU Lesser General Public License can be found at
+ * www.gnu.org/licenses/lgpl.html
  *
  * This script is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -23,7 +23,9 @@ namespace DMK\Mklog\Domain\Repository;
  * GNU General Public License for more details.
  *
  * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+ */
+
+namespace DMK\Mklog\Domain\Repository;
 
 use DMK\Mklog\Domain\Mapper\DevlogEntryMapper;
 use DMK\Mklog\Domain\Model\DevlogEntry;
@@ -43,9 +45,6 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  */
 class DevlogEntryRepository
 {
-    /**
-     * @return string
-     */
     public function getTableName(): string
     {
         return DevlogEntry::TABLENAME;
@@ -53,41 +52,27 @@ class DevlogEntryRepository
 
     /**
      * Creates an new model instance.
-     *
-     * @return DevlogEntry
      */
     public function createNewModel(): DevlogEntry
     {
         return Factory::makeInstance(DevlogEntry::class);
     }
 
-    /**
-     * @return Connection
-     */
     protected function getConnection(): Connection
     {
         return Factory::makeInstance(ConnectionPool::class)->getConnectionForTable($this->getTableName());
     }
 
-    /**
-     * @return QueryBuilder
-     */
     protected function createQueryBuilder(): QueryBuilder
     {
         return $this->getConnection()->createQueryBuilder();
     }
 
-    /**
-     * @return QueryBuilder
-     */
     public function createSearchQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder()->select('*')->from($this->getTableName());
     }
 
-    /**
-     * @return int
-     */
     public function countAll(): int
     {
         return $this->createQueryBuilder()
@@ -146,8 +131,6 @@ class DevlogEntryRepository
     }
 
     /**
-     * @param DevlogEntryDemand $demand
-     *
      * @return array<DevlogEntry>
      */
     public function findByDemand(DevlogEntryDemand $demand): array
@@ -204,9 +187,6 @@ class DevlogEntryRepository
         );
     }
 
-    /**
-     * @param int $pid
-     */
     public function deletyByPid(int $pid): void
     {
         $queryBuilder = $this->createQueryBuilder();
@@ -236,9 +216,6 @@ class DevlogEntryRepository
         $this->persistUpdate($model);
     }
 
-    /**
-     * @param DevlogEntry $model
-     */
     private function persistUpdate(DevlogEntry $model): void
     {
         $connection = $this->getConnection();
@@ -253,9 +230,6 @@ class DevlogEntryRepository
         $queryBuilder->execute();
     }
 
-    /**
-     * @param DevlogEntry $model
-     */
     private function persistNew(DevlogEntry $model): void
     {
         $connection = $this->getConnection();
