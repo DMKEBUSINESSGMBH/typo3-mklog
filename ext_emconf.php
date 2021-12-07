@@ -51,7 +51,7 @@ $EM_CONF['mklog'] = [
         ],
         'conflicts' => [],
         'suggests' => [
-            'rn_base' => '1.12.4-',
+            'rn_base' => '1.15.0-',
         ],
     ],
     'suggests' => [],
