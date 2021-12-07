@@ -45,7 +45,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const EMERGENCY = 0;
+    public const EMERGENCY = 0;
     /**
      * Alert: action must be taken immediately.
      *
@@ -53,7 +53,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const ALERT = 1;
+    public const ALERT = 1;
     /**
      * Critical: critical conditions.
      *
@@ -61,7 +61,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const CRITICAL = 2;
+    public const CRITICAL = 2;
     /**
      * Error: error conditions.
      *
@@ -69,7 +69,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const ERROR = 3;
+    public const ERROR = 3;
     /**
      * Warning: warning conditions.
      *
@@ -78,7 +78,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const WARNING = 4;
+    public const WARNING = 4;
     /**
      * Notice: normal but significant condition.
      *
@@ -86,7 +86,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const NOTICE = 5;
+    public const NOTICE = 5;
     /**
      * Informational: informational messages.
      *
@@ -94,7 +94,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const INFO = 6;
+    public const INFO = 6;
     /**
      * Debug: debug-level messages.
      *
@@ -102,7 +102,7 @@ final class SeverityUtility
      *
      * @var int
      */
-    const DEBUG = 7;
+    public const DEBUG = 7;
 
     /**
      * Reverse look up of log level to level name.

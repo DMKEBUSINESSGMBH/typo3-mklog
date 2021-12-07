@@ -38,9 +38,9 @@ use DMK\Mklog\Utility\EntryDataParserUtility;
  */
 class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-    const FIXTURE_EXTRA_DATA_JSON = '{"foo":"bar","bar":"baz","baz":"foo"}';
-    const FIXTURE_EXTRA_DATA_INT_JSON = '{"__foo":"bar","__bar":"baz","__baz":"foo"}';
-    const FIXTURE_EXTRA_DATA_JSON_ARRAY = ['foo' => 'bar', 'bar' => 'baz', 'baz' => 'foo'];
+    public const FIXTURE_EXTRA_DATA_JSON = '{"foo":"bar","bar":"baz","baz":"foo"}';
+    public const FIXTURE_EXTRA_DATA_INT_JSON = '{"__foo":"bar","__bar":"baz","__baz":"foo"}';
+    public const FIXTURE_EXTRA_DATA_JSON_ARRAY = ['foo' => 'bar', 'bar' => 'baz', 'baz' => 'foo'];
 
     /**
      * Test the getShortenedRaw method.
