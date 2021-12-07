@@ -82,6 +82,17 @@
             "typo3/cms": "source"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-10.4": "10.4.x-dev"
+        },
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "mklog",
+            "web-dir": ".Build/Web",
+            "app-dir": ".Build"
+        }
+    },
     "scripts": {
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
@@ -124,13 +135,5 @@
         "fix": [
             "@fix:phpcs"
         ]
-    },
-    "extra": {
-        "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "extension-key": "mklog",
-            "web-dir": ".Build/Web",
-            "app-dir": ".Build"
-        }
     }
 }
