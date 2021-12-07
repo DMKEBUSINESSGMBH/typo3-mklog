@@ -34,7 +34,7 @@ use DMK\Mklog\Factory;
  *
  * @author Michael Wagner
  */
-class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
+class DevlogEntryLister extends \Sys25\RnBase\Backend\Lister\AbstractLister
 {
     /**
      * The devlog entry repository.
@@ -116,7 +116,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         $filter = $this->getFilter();
 
         $data['runid'] = [
-            'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
+            'field' => \Sys25\RnBase\Backend\Utility\BackendUtility::getFuncMenu(
                 $this->getOptions()->getPid(),
                 'SET['.$this->getListerId().'Runid]',
                 $filter->getRunid(),
@@ -126,7 +126,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         ];
 
         $data['severity'] = [
-            'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
+            'field' => \Sys25\RnBase\Backend\Utility\BackendUtility::getFuncMenu(
                 $this->getOptions()->getPid(),
                 'SET['.$this->getListerId().'Severity]',
                 $filter->getSeverity(),
@@ -136,7 +136,7 @@ class DevlogEntryLister extends \Tx_Rnbase_Backend_Lister_AbstractLister
         ];
 
         $data['extkeys'] = [
-            'field' => \Tx_Rnbase_Backend_Utility::getFuncMenu(
+            'field' => \Sys25\RnBase\Backend\Utility\BackendUtility::getFuncMenu(
                 $this->getOptions()->getPid(),
                 'SET['.$this->getListerId().'ExtKey]',
                 $filter->getExtKey(),

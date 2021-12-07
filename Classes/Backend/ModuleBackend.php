@@ -33,7 +33,7 @@ namespace DMK\Mklog\Backend;
  *
  * @author Michael Wagner
  */
-class ModuleBackend extends \tx_rnbase_mod_BaseModule
+class ModuleBackend extends \Sys25\RnBase\Backend\Module\BaseModule
 {
     /**
      * Initializes the backend module by setting internal variables, initializing the menu.

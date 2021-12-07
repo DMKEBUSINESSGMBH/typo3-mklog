@@ -36,7 +36,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntry extends \DMK\Mklog\Domain\Model\DevlogEntry implements \Tx_Rnbase_Domain_Model_RecordInterface
+class DevlogEntry extends \DMK\Mklog\Domain\Model\DevlogEntry implements \Sys25\RnBase\Domain\Model\RecordInterface
 {
     /**
      * DevlogEntry constructor.

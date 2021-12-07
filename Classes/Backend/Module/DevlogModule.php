@@ -30,7 +30,7 @@ namespace DMK\Mklog\Backend\Module;
  *
  * @author Michael Wagner
  */
-class DevlogModule extends \tx_rnbase_mod_ExtendedModFunc
+class DevlogModule extends \Sys25\RnBase\Backend\Module\ExtendedModFunc
 {
     /**
      * Method getFuncId.

@@ -155,12 +155,12 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     ) {
         if (ExtensionManagementUtility::isLoaded('rn_base')) {
             // try to send mail
-            $address = \tx_rnbase_configurations::getExtensionCfgValue(
+            $address = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'rn_base',
                 'sendEmailOnException'
             );
             if ($address) {
-                \tx_rnbase_util_Misc::sendErrorMail(
+                \Sys25\RnBase\Utility\Misc::sendErrorMail(
                     $address,
                     'Mklog\DevlogLogger',
                     $exception

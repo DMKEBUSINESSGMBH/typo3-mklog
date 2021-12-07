@@ -53,11 +53,11 @@ class DevlogEntryDecorator
     /**
      * Constructor.
      *
-     * @param \tx_rnbase_mod_BaseModule          $mod
-     * @param array|GenericArrayObject $options
+     * @param \Sys25\RnBase\Backend\Module\BaseModule $mod
+     * @param array|GenericArrayObject                $options
      */
     public function __construct(
-        \tx_rnbase_mod_BaseModule $mod,
+        \Sys25\RnBase\Backend\Module\BaseModule $mod,
         $options = []
     ) {
         $this->mod = $mod;
@@ -85,7 +85,7 @@ class DevlogEntryDecorator
     ) {
         $return = $columnValue;
 
-        $method = \Tx_Rnbase_Utility_Strings::underscoredToLowerCamelCase($columnName);
+        $method = \Sys25\RnBase\Utility\Strings::underscoredToLowerCamelCase($columnName);
         $method = 'format'.ucfirst($method).'Column';
 
         if (method_exists($this, $method)) {
@@ -153,7 +153,7 @@ class DevlogEntryDecorator
         $icon = $this->getSeverityIconClass($severityId);
 
         if (!empty($icon)) {
-            $icon = \tx_rnbase_mod_Util::getSpriteIcon($icon);
+            $icon = \Sys25\RnBase\Backend\Utility\Icons::getSpriteIcon($icon);
         }
 
         return sprintf(

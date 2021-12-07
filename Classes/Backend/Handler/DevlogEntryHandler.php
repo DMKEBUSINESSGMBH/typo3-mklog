@@ -32,7 +32,7 @@ use DMK\Mklog\Backend\Repository\DevlogEntryRepository;
  *
  * @author Michael Wagner
  */
-class DevlogEntryHandler extends \Tx_Rnbase_Backend_Handler_SearchHandler
+class DevlogEntryHandler extends \Sys25\RnBase\Backend\Handler\SearchHandler
 {
     /**
      * Returns a unique ID for this handler.

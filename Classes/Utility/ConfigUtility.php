@@ -249,7 +249,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
 
         // fallback to old variant if installed
         if (empty($mail) && ExtensionManagementUtility::isLoaded('rn_base')) {
-            $mail = \tx_rnbase_configurations::getExtensionCfgValue(
+            $mail = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
                 'rn_base',
                 'fromEmail'
             );

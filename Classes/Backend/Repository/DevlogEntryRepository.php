@@ -34,7 +34,7 @@ use DMK\Mklog\Domain\Model\DevlogEntry;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepository
+class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceRepository
 {
     /**
      * @return string
@@ -158,8 +158,7 @@ class DevlogEntryRepository extends \Tx_Rnbase_Domain_Repository_PersistenceRepo
         }
 
         $model = $this->getEmptyModel();
-        \tx_rnbase::load('tx_rnbase_util_Arrays');
-        $options['searchdef'] = \tx_rnbase_util_Arrays::mergeRecursiveWithOverrule(
+        $options['searchdef'] = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
         // default searcher config
             [
                 'usealias' => 1,

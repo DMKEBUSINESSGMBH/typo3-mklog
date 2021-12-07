@@ -171,7 +171,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 
                         $that->assertArrayHasKey('collection', $options);
                         $that->assertEquals(
-                            'Tx_Rnbase_Domain_Collection_Base',
+                            \Sys25\RnBase\Domain\Collection\BaseCollection::class,
                             $options['collection']
                         );
 
