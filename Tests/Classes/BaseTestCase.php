@@ -82,17 +82,20 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
 
         \DMK\Mklog\Factory::getStorage()->unsLoggingActive();
         $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
-        // just call to create the initial config
-        $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getExtConf'], ['enable_devlog']);
         $configStorage->setExtConf(
-            array_merge(
-                $configStorage->getExtConf(),
-                [
-                    'min_log_level' => 7,
-                    'exclude_ext_keys' => '',
-                    'from_mail' => 'John Dohe<john@dohe.org>',
-                ]
-            )
+            [
+                'enable_devlog' => 1,
+                'host' => '',
+                'from_mail' => 'John Dohe<john@dohe.org>',
+                'min_log_level' => 7,
+                'exclude_ext_keys' => '',
+                'max_logs' => 10000,
+                'max_transport_extra_data_size' > 8388608,
+                'gelf_enable' => 1,
+                'gelf_transport' => '',
+                'gelf_credentials' => '',
+                'gelf_min_log_level' => 1,
+            ]
         );
     }
 

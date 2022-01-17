@@ -78,12 +78,6 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
         if (!$storage->hasExtConf()) {
             $storage->setExtConf([]);
 
-            if (!empty($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog'])) {
-                $storage->setExtConf(
-                    unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mklog'])
-                );
-            }
-
             $storage->setExtConf(
                 Factory::makeInstance(ExtensionConfiguration::class)->get(
                     'mklog',
