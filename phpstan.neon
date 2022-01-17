@@ -8,7 +8,7 @@ parameters:
         - %currentWorkingDirectory%/ext_localconf.php
         - %currentWorkingDirectory%/ext_tables.php
         - %currentWorkingDirectory%/ext_emconf.php
-    excludes_analyse:
+    excludePaths:
         # exclude the backend devlogentry repository, dependency to doctrine collection cant be resolved
         -  %currentWorkingDirectory%/Classes/Backend/Repository/DevlogEntryRepository.php
     reportUnmatchedIgnoredErrors: false
