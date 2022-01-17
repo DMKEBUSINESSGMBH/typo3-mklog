@@ -129,7 +129,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         foreach ($trace as $key => $path) {
             $ignore = false;
             foreach ($ignoreClasses as $ignoreClass) {
-                $ignore = GeneralUtility::isFirstPartOfStr($path, $ignoreClass);
+                $ignore = (0 === strpos($path, $ignoreClass, 0));
                 if ($ignore) {
                     break;
                 }
