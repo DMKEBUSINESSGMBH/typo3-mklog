@@ -66,7 +66,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class MailTransportTest extends BaseTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

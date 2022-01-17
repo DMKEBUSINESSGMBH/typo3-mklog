@@ -62,7 +62,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
+abstract class BaseTestCase extends \Sys25\RnBase\Testing\BaseTestCase
 {
     /**
      * Property to store backups for set up and tear down.
@@ -75,7 +75,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
@@ -103,7 +103,7 @@ abstract class BaseTestCase extends \tx_rnbase_tests_BaseTestCase
      * Tears down the fixture, for example, close a network connection.
      * This method is called after a test is executed.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // reset extconf cache
         $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
