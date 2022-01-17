@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * Copyright notice
  *
- * (c) 2011-2021 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
