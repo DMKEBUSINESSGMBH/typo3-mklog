@@ -46,7 +46,7 @@ $EM_CONF['mklog'] = [
     'version' => '11.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.24-10.4.99',
+            'typo3' => '10.4.0-11.5.99',
             'scheduler' => '',
         ],
         'conflicts' => [],
