@@ -118,7 +118,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getSiteName(): string
     {
-        return $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
+        return $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'] ?? '';
     }
 
     /**
@@ -227,7 +227,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getGlobalMailFrom(): string
     {
-        $mail = $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress']);
+        $mail = $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
 
         // fallback to old variant if installed
         if (empty($mail) && ExtensionManagementUtility::isLoaded('rn_base')) {

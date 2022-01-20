@@ -71,16 +71,16 @@ class DevlogEntryMapper
     public static function fromRecord(array $record): DevlogEntryMapper
     {
         $entry = Factory::makeInstance(DevlogEntry::class)
-            ->setUid($record['uid'])
-            ->setPid($record['pid'] ?: 0)
-            ->setRunId($record['run_id'])
-            ->setExtKey($record['ext_key'] ?: '')
-            ->setHost($record['host'] ?: '')
-            ->setMessage($record['message'] ?: '')
-            ->setExtraDataEncoded($record['extra_data'] ?: '')
-            ->setCrdate($record['crdate'])
-            ->setCruserId($record['cruser_id'] ?: 0)
-            ->setTransportIdsRaw($record['transport_ids'] ?: '');
+            ->setUid($record['uid'] ?? 0)
+            ->setPid($record['pid'] ?? 0)
+            ->setRunId($record['run_id'] ?? 0)
+            ->setExtKey($record['ext_key'] ?? '')
+            ->setHost($record['host'] ?? '')
+            ->setMessage($record['message'] ?? '')
+            ->setExtraDataEncoded($record['extra_data'] ?? '')
+            ->setCrdate($record['crdate'] ?? 0)
+            ->setCruserId($record['cruser_id'] ?? 0)
+            ->setTransportIdsRaw($record['transport_ids'] ?? '');
 
         return Factory::makeInstance(DevlogEntryMapper::class, $entry);
     }

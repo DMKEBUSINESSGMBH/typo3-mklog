@@ -84,7 +84,7 @@ class GelfLogger extends AbstractLogger
          * SYSLOG_SEVERITY_FATAL = 4;
          */
         // map the old log levels to the new one
-        switch ((int) $params['severity']) {
+        switch ((int) ($params['severity'] ?? 0)) {
             case 4:
                 $params['severity'] = SeverityUtility::ALERT;
                 break;

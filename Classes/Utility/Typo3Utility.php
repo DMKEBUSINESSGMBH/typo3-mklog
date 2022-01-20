@@ -49,7 +49,7 @@ final class Typo3Utility
      */
     public static function getTsFe(): ?TypoScriptFrontendController
     {
-        return is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : null;
+        return isset($GLOBALS['TSFE']) && is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : null;
     }
 
     /**
@@ -71,7 +71,11 @@ final class Typo3Utility
     {
         $feuser = self::getFeUser();
 
-        return null === $feuser ? 0 : (int) $feuser->user['uid'];
+        if (null === $feuser) {
+            return 0;
+        }
+
+        return (int) ($feuser->user['uid'] ?? 0);
     }
 
     /**
@@ -83,7 +87,7 @@ final class Typo3Utility
      */
     public static function getBeUser(): ?BackendUserAuthentication
     {
-        return is_object($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER'] : null;
+        return isset($GLOBALS['TSFE']) && is_object($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER'] : null;
     }
 
     /**
@@ -93,6 +97,10 @@ final class Typo3Utility
     {
         $beuser = self::getBeUser();
 
-        return null === $beuser ? 0 : (int) $beuser->user['uid'];
+        if (null === $beuser) {
+            return 0;
+        }
+
+        return (int) ($beuser->user['uid'] ?? 0);
     }
 }

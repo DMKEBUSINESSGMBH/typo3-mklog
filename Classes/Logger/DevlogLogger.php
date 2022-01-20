@@ -177,8 +177,8 @@ class DevlogLogger extends AbstractLogger
 
         // skip if logging is disabled
         if ((
-            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] ||
-            $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog']
+            !empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog']) ||
+            !empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'])
         )) {
             return false;
         }
