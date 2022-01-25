@@ -30,13 +30,12 @@ defined('TYPO3_MODE') || exit('Access denied.');
 // register be module if rn_base is installed
 if (TYPO3_MODE == 'BE' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rn_base')) {
     // add be module ts
-    tx_rnbase_util_Extensions::addPageTSConfig(
+    \Sys25\RnBase\Utility\Extensions::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/TypoScript/Backend/pageTSconfig.txt">'
     );
 
     // register web_MklogBackend
-    tx_rnbase::load('DMK\\Mklog\\Backend\\ModuleBackend');
-    tx_rnbase_util_Extensions::registerModule(
+    \Sys25\RnBase\Utility\Extensions::registerModule(
         'mklog',
         'web',
         'backend',
@@ -51,8 +50,7 @@ if (TYPO3_MODE == 'BE' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::is
     );
 
     // register devlog be module
-    tx_rnbase::load('DMK\\Mklog\\Backend\\Module\\DevlogModule');
-    tx_rnbase_util_Extensions::insertModuleFunction(
+    \Sys25\RnBase\Utility\Extensions::insertModuleFunction(
         'web_MklogBackend',
         'DMK\\Mklog\\Backend\\Module\\DevlogModule',
         null,
