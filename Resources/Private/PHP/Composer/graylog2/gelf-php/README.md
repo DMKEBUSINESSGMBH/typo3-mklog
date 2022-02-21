@@ -32,6 +32,16 @@ If you have a project based on the deprecated library but no time to upgrade to 
 
 After running an additional `composer update` everything should work as expected.
 
+A note on PHP versions before 5.6
+---------------------------------
+
+I tried to keep backwards compatibility alive as long as possible, but it 2021 it's not feasible anymore to deal with the
+pain of dependency management for PHP 5.3.3 - 5.5.latest. They are EOL for many years anyway.
+
+**If you are somehow stuck on <5.6, you can use gelf-php up to version 1.6.5**.
+
+I decided against a semver-compliant increase from 1.x to 2.x on purpose. 
+
 Usage
 -----
 
@@ -61,7 +71,7 @@ How this applies in practice can be seen in the [advanced-example](https://githu
 
 If you use gelf-php in conjunction with monolog/symfony, the following snippet should help you with properly setting up your logging backend.
 
-Assumung you have a typical monolog config:
+Assuming you have a typical monolog config:
 
 ```yml
 monolog:
