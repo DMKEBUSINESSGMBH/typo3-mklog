@@ -37,7 +37,7 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "typo3/cms-core": "^10.4.19 || 11.5.5",
+        "typo3/cms-core": "^10.4.25 || ^11.5.7",
         "typo3/cms-scheduler": "^10.4 || ^11.5",
         "graylog2/gelf-php": "~1",
         "symfony/mime": "^5.2",
