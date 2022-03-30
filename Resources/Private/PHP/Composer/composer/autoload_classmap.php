@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Doctrine\\Common\\Lexer\\AbstractLexer' => $vendorDir . '/doctrine/lexer/lib/Doctrine/Common/Lexer/AbstractLexer.php',
     'Egulias\\EmailValidator\\EmailLexer' => $vendorDir . '/egulias/email-validator/src/EmailLexer.php',
     'Egulias\\EmailValidator\\EmailParser' => $vendorDir . '/egulias/email-validator/src/EmailParser.php',
@@ -87,6 +89,8 @@ return array(
     'Gelf\\Transport\\AmqpTransport' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/AmqpTransport.php',
     'Gelf\\Transport\\HttpTransport' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/HttpTransport.php',
     'Gelf\\Transport\\IgnoreErrorTransportWrapper' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/IgnoreErrorTransportWrapper.php',
+    'Gelf\\Transport\\KeepAliveRetryTransportWrapper' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/KeepAliveRetryTransportWrapper.php',
+    'Gelf\\Transport\\RetryTransportWrapper' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/RetryTransportWrapper.php',
     'Gelf\\Transport\\SslOptions' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/SslOptions.php',
     'Gelf\\Transport\\StreamSocketClient' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/StreamSocketClient.php',
     'Gelf\\Transport\\TcpTransport' => $vendorDir . '/graylog2/gelf-php/src/Gelf/Transport/TcpTransport.php',
@@ -104,6 +108,7 @@ return array(
     'ParagonIE\\ConstantTime\\Encoding' => $vendorDir . '/paragonie/constant_time_encoding/src/Encoding.php',
     'ParagonIE\\ConstantTime\\Hex' => $vendorDir . '/paragonie/constant_time_encoding/src/Hex.php',
     'ParagonIE\\ConstantTime\\RFC4648' => $vendorDir . '/paragonie/constant_time_encoding/src/RFC4648.php',
+    'PhpToken' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
     'Psr\\Log\\AbstractLogger' => $vendorDir . '/psr/log/Psr/Log/AbstractLogger.php',
     'Psr\\Log\\InvalidArgumentException' => $vendorDir . '/psr/log/Psr/Log/InvalidArgumentException.php',
     'Psr\\Log\\LogLevel' => $vendorDir . '/psr/log/Psr/Log/LogLevel.php',
@@ -115,9 +120,12 @@ return array(
     'Psr\\Log\\Test\\DummyTest' => $vendorDir . '/psr/log/Psr/Log/Test/DummyTest.php',
     'Psr\\Log\\Test\\LoggerInterfaceTest' => $vendorDir . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
     'Psr\\Log\\Test\\TestLogger' => $vendorDir . '/psr/log/Psr/Log/Test/TestLogger.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
     'Symfony\\Component\\Mime\\Address' => $vendorDir . '/symfony/mime/Address.php',
     'Symfony\\Component\\Mime\\BodyRendererInterface' => $vendorDir . '/symfony/mime/BodyRendererInterface.php',
     'Symfony\\Component\\Mime\\CharacterStream' => $vendorDir . '/symfony/mime/CharacterStream.php',
+    'Symfony\\Component\\Mime\\Crypto\\DkimOptions' => $vendorDir . '/symfony/mime/Crypto/DkimOptions.php',
+    'Symfony\\Component\\Mime\\Crypto\\DkimSigner' => $vendorDir . '/symfony/mime/Crypto/DkimSigner.php',
     'Symfony\\Component\\Mime\\Crypto\\SMime' => $vendorDir . '/symfony/mime/Crypto/SMime.php',
     'Symfony\\Component\\Mime\\Crypto\\SMimeEncrypter' => $vendorDir . '/symfony/mime/Crypto/SMimeEncrypter.php',
     'Symfony\\Component\\Mime\\Crypto\\SMimeSigner' => $vendorDir . '/symfony/mime/Crypto/SMimeSigner.php',
@@ -184,4 +192,8 @@ return array(
     'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Normalizer.php',
     'Symfony\\Polyfill\\Mbstring\\Mbstring' => $vendorDir . '/symfony/polyfill-mbstring/Mbstring.php',
     'Symfony\\Polyfill\\Php72\\Php72' => $vendorDir . '/symfony/polyfill-php72/Php72.php',
+    'Symfony\\Polyfill\\Php80\\Php80' => $vendorDir . '/symfony/polyfill-php80/Php80.php',
+    'Symfony\\Polyfill\\Php80\\PhpToken' => $vendorDir . '/symfony/polyfill-php80/PhpToken.php',
+    'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+    'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );
