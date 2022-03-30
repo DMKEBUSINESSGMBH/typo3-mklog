@@ -40,7 +40,7 @@ call_user_func(
             'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog',
         ];
 
-        //cleanup task
+        // cleanup task
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Task\\CleanupLogTableTask'] = [
             'extension' => 'mklog',
             'title' => 'LLL:EXT:'.'mklog'.'/locallang_db.xml:scheduler_cleanup_log_table_name',
