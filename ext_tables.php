@@ -45,7 +45,7 @@ if (TYPO3_MODE == 'BE' && \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::is
         [
             'access' => 'user,group',
             'routeTarget' => 'DMK\\Mklog\\Backend\\ModuleBackend',
-            'icon' => 'EXT:mklog/Resources/Public/Images/Extension.png',
+            'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
             'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
         ]
     );
