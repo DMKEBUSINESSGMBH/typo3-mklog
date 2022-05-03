@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file source-language="en" datatype="plaintext" original="messages" date="2022-05-03T08:34:56Z" product-name="mklog">
+		<header/>
+		<body>
+			<trans-unit id="scheduler_watchdog_name" resname="scheduler_watchdog_name" >
+				<source>tx_devlog Watchdog</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_description" resname="scheduler_watchdog_description" >
+				<source>Informs you by email about important errors in developer log</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_field_mklog_email" resname="scheduler_watchdog_field_mklog_email" >
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_field_mklog_force" resname="scheduler_watchdog_field_mklog_force" >
+				<source>Force a summary mail</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_field_mklog_severity" resname="scheduler_watchdog_field_mklog_severity" >
+				<source>Minimum error level to trigger email.</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_field_mklog_datavar" resname="scheduler_watchdog_field_mklog_datavar" >
+				<source>Include data_var/extra_data.</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_taskinfo" resname="scheduler_watchdog_taskinfo" >
+				<source>Send notify emails to %s.</source>
+			</trans-unit>
+			<trans-unit id="scheduler_watchdog_field_mklog_group_entries" resname="scheduler_watchdog_field_mklog_group_entries" >
+				<source>Group messages (so every message is only present once)</source>
+			</trans-unit>
+			<trans-unit id="scheduler_cleanup_log_table_name" resname="scheduler_cleanup_log_table_name" >
+				<source>Cleanup mklog entries</source>
+			</trans-unit>
+			<trans-unit id="scheduler_cleanup_log_table_description" resname="scheduler_cleanup_log_table_description" >
+				<source>Cleanup mklog log table and deletes all entries over configured value (max_logs).</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
