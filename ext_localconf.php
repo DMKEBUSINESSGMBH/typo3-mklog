@@ -25,7 +25,7 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     exit('Access denied.');
 }
 

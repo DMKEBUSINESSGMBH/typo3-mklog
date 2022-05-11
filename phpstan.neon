@@ -13,7 +13,6 @@ parameters:
         -  %currentWorkingDirectory%/Classes/Backend/Repository/DevlogEntryRepository.php
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-        - '#Constant TYPO3_MODE not found#'
         - '#Undefined variable: \$_EXTKEY#'
         -
             message: '/Call to an undefined static method/'
