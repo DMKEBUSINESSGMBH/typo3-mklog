@@ -123,8 +123,8 @@ class SchedulerWatchDog extends AbstractTask
         }
 
         if (ExtensionManagementUtility::isLoaded(
-                'rn_base'
-            ) && $this->schedulerOptions instanceof \Sys25\RnBase\Domain\Model\DataModel) {
+            'rn_base'
+        ) && $this->schedulerOptions instanceof \Sys25\RnBase\Domain\Model\DataModel) {
             $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->toArray());
         }
 

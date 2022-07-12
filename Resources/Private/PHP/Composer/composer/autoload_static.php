@@ -152,6 +152,8 @@ class ComposerStaticInit1ed2965a279a24327a01a381e2cb8f61
         'Egulias\\EmailValidator\\Result\\SpoofEmail' => __DIR__ . '/..' . '/egulias/email-validator/src/Result/SpoofEmail.php',
         'Egulias\\EmailValidator\\Result\\ValidEmail' => __DIR__ . '/..' . '/egulias/email-validator/src/Result/ValidEmail.php',
         'Egulias\\EmailValidator\\Validation\\DNSCheckValidation' => __DIR__ . '/..' . '/egulias/email-validator/src/Validation/DNSCheckValidation.php',
+        'Egulias\\EmailValidator\\Validation\\DNSGetRecordWrapper' => __DIR__ . '/..' . '/egulias/email-validator/src/Validation/DNSGetRecordWrapper.php',
+        'Egulias\\EmailValidator\\Validation\\DNSRecords' => __DIR__ . '/..' . '/egulias/email-validator/src/Validation/DNSRecords.php',
         'Egulias\\EmailValidator\\Validation\\EmailValidation' => __DIR__ . '/..' . '/egulias/email-validator/src/Validation/EmailValidation.php',
         'Egulias\\EmailValidator\\Validation\\Exception\\EmptyValidationList' => __DIR__ . '/..' . '/egulias/email-validator/src/Validation/Exception/EmptyValidationList.php',
         'Egulias\\EmailValidator\\Validation\\Extra\\SpoofCheckValidation' => __DIR__ . '/..' . '/egulias/email-validator/src/Validation/Extra/SpoofCheckValidation.php',

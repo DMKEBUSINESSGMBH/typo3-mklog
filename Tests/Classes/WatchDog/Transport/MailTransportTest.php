@@ -120,7 +120,7 @@ class MailTransportTest extends BaseTestCase
                     'credentials' => 'John Dohe<john@dohe.org>',
                     'mail_subject' => 'test subject on %s',
                     ]
-                )
+            )
         );
 
         $this->callInaccessibleMethod($mailTransport, 'sendMail', 'mail content');

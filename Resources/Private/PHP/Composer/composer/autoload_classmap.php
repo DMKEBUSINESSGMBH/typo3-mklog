@@ -66,6 +66,8 @@ return array(
     'Egulias\\EmailValidator\\Result\\SpoofEmail' => $vendorDir . '/egulias/email-validator/src/Result/SpoofEmail.php',
     'Egulias\\EmailValidator\\Result\\ValidEmail' => $vendorDir . '/egulias/email-validator/src/Result/ValidEmail.php',
     'Egulias\\EmailValidator\\Validation\\DNSCheckValidation' => $vendorDir . '/egulias/email-validator/src/Validation/DNSCheckValidation.php',
+    'Egulias\\EmailValidator\\Validation\\DNSGetRecordWrapper' => $vendorDir . '/egulias/email-validator/src/Validation/DNSGetRecordWrapper.php',
+    'Egulias\\EmailValidator\\Validation\\DNSRecords' => $vendorDir . '/egulias/email-validator/src/Validation/DNSRecords.php',
     'Egulias\\EmailValidator\\Validation\\EmailValidation' => $vendorDir . '/egulias/email-validator/src/Validation/EmailValidation.php',
     'Egulias\\EmailValidator\\Validation\\Exception\\EmptyValidationList' => $vendorDir . '/egulias/email-validator/src/Validation/Exception/EmptyValidationList.php',
     'Egulias\\EmailValidator\\Validation\\Extra\\SpoofCheckValidation' => $vendorDir . '/egulias/email-validator/src/Validation/Extra/SpoofCheckValidation.php',

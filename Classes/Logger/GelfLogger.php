@@ -133,11 +133,11 @@ class GelfLogger extends AbstractLogger
         }
 
         // check min log level
-        if ((
+        if (
             !$config->isGelfEnable() ||
             !$config->getGelfCredentials() ||
             $severity > $config->getGelfMinLogLevel()
-        )) {
+        ) {
             return;
         }
 

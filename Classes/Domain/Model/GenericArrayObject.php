@@ -163,7 +163,7 @@ class GenericArrayObject
             case 'has':
                 return $this->hasProperty($property);
             default:
-        }
+            }
 
         throw new Exception('Sorry, Invalid method "'.get_class($this).'::'.$method.'"', 1607447254);
     }

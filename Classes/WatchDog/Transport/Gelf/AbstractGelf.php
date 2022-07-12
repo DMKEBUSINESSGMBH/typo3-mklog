@@ -35,7 +35,9 @@ use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 use Gelf\Message;
 use Gelf\Publisher;
 use Gelf\PublisherInterface;
+
 use function is_scalar;
+
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**

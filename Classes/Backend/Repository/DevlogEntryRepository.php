@@ -161,7 +161,7 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
 
         $model = $this->getEmptyModel();
         $options['searchdef'] = \Sys25\RnBase\Utility\Arrays::mergeRecursiveWithOverrule(
-        // default searcher config
+            // default searcher config
             [
                 'usealias' => 1,
                 'basetable' => $model->getTableName(),
