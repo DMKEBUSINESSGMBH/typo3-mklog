@@ -344,7 +344,7 @@ class DevlogEntry implements InterfaceMessage
         $data = [];
 
         foreach ($this->getExtraData() as $key => $value) {
-            if ('_' === $key[0] && '_' === $key[1]) {
+            if (is_string($key) && '_' === $key[0] && '_' === $key[1]) {
                 continue;
             }
             $data[$key] = $value;
