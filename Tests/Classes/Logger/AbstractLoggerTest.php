@@ -27,6 +27,8 @@
 
 namespace DMK\Mklog\Logger;
 
+use PHPUnit\Util\Test;
+
 /***************************************************************
  * Copyright notice
  *
@@ -60,14 +62,26 @@ namespace DMK\Mklog\Logger;
 class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
-     * Test the createDevlogEntry method.
-     *
      * @group unit
      *
      * @test
      */
     public function testCreateDevlogEntry()
     {
-        $this->markTestIncomplete();
+        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
+
+        $logEntry = $this->callInaccessibleMethod(
+            $abstractLogger,
+            'createDevlogEntry',
+            'This is a {placeholder_one} {placeholder_two}',
+            'mklog',
+            0,
+            [
+                'placeholder_one' => 'test',
+                'placeholder_two' => 'message',
+            ]
+        );
+
+        self::assertSame('This is a test message', $logEntry->getMessage());
     }
 }

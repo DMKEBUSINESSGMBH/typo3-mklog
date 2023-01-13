@@ -57,12 +57,14 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
 
         $repo = $this->getDevlogEntryRepository();
 
+        $extraData = $this->progressExtraData($extraData);
+
         /* @var $entry \DMK\Mklog\Domain\Model\DevlogEntry */
         $entry = $repo->createNewModel();
         $entry->setCrdate(time());
         $entry->setRunId($config->getCurrentRunId());
         $entry->setHost($entry->getHost());
-        $entry->setMessage((string) $message);
+        $entry->setMessage($this->replaceMessagePlaceholders((string) $message, $extraData));
         $entry->setExtKey((string) $extension);
         $entry->setSeverity((int) $severity);
         $entry->setPid(0);
@@ -76,6 +78,23 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $entry->setExtraData($this->progressExtraData($extraData));
 
         return $entry;
+    }
+
+    /**
+     * @see TYPO3\CMS\Core\Log\Writer\AbstractWriter::interpolate()
+     */
+    protected function replaceMessagePlaceholders(string $message, array $extraData = []): string
+    {
+        // Build a replacement array with braces around the context keys.
+        $replace = [];
+        foreach ($extraData as $key => $value) {
+            if (!is_array($value) && !is_null($value) && (!is_object($value) || method_exists($value, '__toString'))) {
+                $replace['{'.$key.'}'] = $value;
+            }
+        }
+
+        // Interpolate replacement values into the message and return.
+        return strtr($message, $replace);
     }
 
     /**
