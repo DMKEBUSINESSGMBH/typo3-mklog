@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -63,6 +63,7 @@ class DevlogEntryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getTableName method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetTableName()
@@ -77,6 +78,7 @@ class DevlogEntryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getTransportIds method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetAndAddTransportIds()
@@ -101,6 +103,7 @@ class DevlogEntryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getFullMessage method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetFullMessage()
@@ -123,6 +126,7 @@ class DevlogEntryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getAdditionalData method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetAdditionalData()

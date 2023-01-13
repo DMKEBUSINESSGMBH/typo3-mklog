@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -78,6 +78,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getSearchClass method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetSearchClassShouldBeGeneric()
@@ -95,6 +96,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getEmptyModel method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetEmptyModelShouldBeBaseModelWithRightTable()
@@ -117,6 +119,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the prepareGenericSearcher method.
      *
      * @group unit
+     *
      * @test
      */
     public function testPrepareGenericSearcherShouldBeTheRightSearchdefConfig()
@@ -173,6 +176,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the prepareGenericSearcher method.
      *
      * @group unit
+     *
      * @test
      */
     public function testPrepareGenericSearcherShouldUseCollection()
@@ -213,6 +217,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getLatestRunIds method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetLatestRunIds()
@@ -289,6 +294,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getLoggedExtensions method.
      *
      * @group unit
+     *
      * @test
      */
     public function testGetLoggedExtensions()
@@ -364,6 +370,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the optimize method.
      *
      * @group unit
+     *
      * @test
      */
     public function testOptimize()

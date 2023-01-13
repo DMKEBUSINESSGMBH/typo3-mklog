@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -33,7 +33,6 @@ use DMK\Mklog\Utility\ConfigUtility;
 use DMK\Mklog\Utility\DataConverterUtility;
 use DMK\Mklog\Utility\EntryDataParserUtility;
 use DMK\Mklog\WatchDog\Transport\InterfaceTransport;
-use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -143,7 +142,7 @@ final class Factory
         $transport = self::makeInstance($class);
 
         if (!$transport instanceof InterfaceTransport) {
-            throw new Exception(sprintf('The Transport "%1$s" '.'has to implement the "%2$s"', get_class($transport), InterfaceTransport::class));
+            throw new \Exception(sprintf('The Transport "%1$s" has to implement the "%2$s"', get_class($transport), InterfaceTransport::class));
         }
 
         return $transport;

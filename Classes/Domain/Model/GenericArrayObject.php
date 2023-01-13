@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -28,7 +28,6 @@
 namespace DMK\Mklog\Domain\Model;
 
 use DMK\Mklog\Factory;
-use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -163,9 +162,9 @@ class GenericArrayObject
             case 'has':
                 return $this->hasProperty($property);
             default:
-            }
+        }
 
-        throw new Exception('Sorry, Invalid method "'.get_class($this).'::'.$method.'"', 1607447254);
+        throw new \Exception('Sorry, Invalid method "'.get_class($this).'::'.$method.'"', 1607447254);
     }
 
     /**

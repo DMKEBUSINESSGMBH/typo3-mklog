@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -27,8 +27,6 @@
 
 namespace DMK\Mklog\Domain\Model;
 
-use DateTime;
-use DateTimeZone;
 use DMK\Mklog\WatchDog\Message\InterfaceMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -397,12 +395,12 @@ class DevlogEntry implements InterfaceMessage
     /**
      * Returns the timestamp of the message.
      */
-    public function getTimestamp(): DateTime
+    public function getTimestamp(): \DateTime
     {
-        $dateTime = DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
+        $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
         // createFromFormat bzw. UNIX Timestamps haben per default GMT als Zeitzone.
         // Daher müssen wir zusätzlich die aktuelle Zeitzone setzen.
-        $dateTime->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
         return $dateTime;
     }
@@ -453,8 +451,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Set the host.
-     *
-     * @param $host
      */
     public function setHost($host): self
     {

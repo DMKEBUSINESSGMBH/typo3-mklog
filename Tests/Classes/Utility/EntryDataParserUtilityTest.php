@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -71,6 +71,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedRaw method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedRawReturnsCompleteData()
@@ -85,6 +86,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedRaw method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedRawReturnsShortData()
@@ -99,6 +101,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedRaw method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedRawReturnsEmptyData()
@@ -113,6 +116,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedExternalExtraData method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedInternalExtraDataReturnsCompleteData()
@@ -127,6 +131,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedExternalExtraData method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedInternalExtraDataReturnsShortData()
@@ -141,6 +146,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedExternalExtraData method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedInternalExtraDataReturnsEmptyData()
@@ -155,6 +161,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedExternalExtraData method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedExternalExtraDataReturnsCompleteData()
@@ -169,6 +176,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedExternalExtraData method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedExternalExtraDataReturnsShortData()
@@ -183,6 +191,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getShortenedExternalExtraData method.
      *
      * @group unit
+     *
      * @test
      */
     public function getShortenedExternalExtraDataReturnsEmptyData()

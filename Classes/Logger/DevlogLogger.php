@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -30,7 +30,6 @@ namespace DMK\Mklog\Logger;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\SeverityUtility;
 use DMK\Mklog\Utility\VersionUtility;
-use Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogLevel;
 
@@ -63,7 +62,7 @@ class DevlogLogger extends AbstractLogger
         try {
             //  prevent nesting write loops
             if ($this->whileWriting) {
-                throw new Exception('Nesting log writer calls prevented', 1513856342);
+                throw new \Exception('Nesting log writer calls prevented', 1513856342);
             }
             $this->whileWriting = true;
 

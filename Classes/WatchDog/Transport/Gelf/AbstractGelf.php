@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -35,9 +35,6 @@ use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 use Gelf\Message;
 use Gelf\Publisher;
 use Gelf\PublisherInterface;
-
-use function is_scalar;
-
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -112,7 +109,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
         $converter = Factory::getDataConverterUtility();
         foreach ($additionalData as $key => $value) {
             // the value shoult be an string, so we convert objects and arrays!
-            if (!is_scalar($value)) {
+            if (!\is_scalar($value)) {
                 $value = $converter->encode($value);
             }
             $gelfMsg->setAdditional(

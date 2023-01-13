@@ -22,7 +22,11 @@
     <!-- StaticAccess can be disabled in typo3 context. too many static utilities to kill it all -->
     <!--rule ref="rulesets/cleancode.xml/StaticAccess" /-->
     <rule ref="rulesets/cleancode.xml/DuplicatedArrayKey" />
-    <rule ref="rulesets/cleancode.xml/MissingImport" />
+    <rule ref="rulesets/cleancode.xml/MissingImport">
+        <properties>
+            <property name="ignore-global" value="true" />
+        </properties>
+    </rule>
 
     <!--
 

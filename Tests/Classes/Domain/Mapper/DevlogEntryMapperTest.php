@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -65,6 +65,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the getEntry and fromEntry method.
      *
      * @group unit
+     *
      * @test
      */
     public function getEntryReturnsCorrectEntry()
@@ -78,6 +79,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the fromRecord method.
      *
      * @group unit
+     *
      * @test
      */
     public function fromRecordReturnsCorrectEntry()
@@ -111,6 +113,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      * Test the fromResults method.
      *
      * @group unit
+     *
      * @test
      */
     public function fromResultsReturnsCorrectEntries()

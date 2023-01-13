@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -43,8 +43,8 @@ call_user_func(
         // cleanup task
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Task\\CleanupLogTableTask'] = [
             'extension' => 'mklog',
-            'title' => 'LLL:EXT:'.'mklog'.'/locallang_db.xlf:scheduler_cleanup_log_table_name',
-            'description' => 'LLL:EXT:'.'mklog'.'/locallang_db.xlf:scheduler_cleanup_log_table_description',
+            'title' => 'LLL:EXT:mklog/locallang_db.xlf:scheduler_cleanup_log_table_name',
+            'description' => 'LLL:EXT:mklog/locallang_db.xlf:scheduler_cleanup_log_table_description',
         ];
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = \DMK\Mklog\Hooks\DataHandler::class;
