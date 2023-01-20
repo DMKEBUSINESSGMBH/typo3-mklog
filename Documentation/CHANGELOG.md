@@ -1,6 +1,51 @@
 ChangeLog
 =========
 
+11.0.1 - 11.0.8
+------
+* bugfixes
+
+11.0.0
+------
+* support for TYPO3 10 and 11
+
+10.1.0
+------
+* require rn_base at least in version 1.15.0
+
+10.0.3
+------
+* Add doctrine dbal 2.13 support
+
+10.0.2
+------
+
+  * cleaned up and streamlined code
+  * drop support for TYPO3 8.7 
+  * drop support for PHP 7.1 and 7.2
+  * require doctrine/dbal at least in version ~2.11.2
+  * bugfixes
+
+10.0.1
+------
+
+  * fix none-composer installations
+  * bugfixes
+
+
+10.0.0
+------
+
+  * compatibility to TYPO3 10.4
+  * cleaned up and streamlined code
+  * drop TYPO3 7 support
+  * remove some dependencies to rn_base 
+
+9.6.0
+------
+
+  * extract cleanup step to new scheduler task
+
 9.5.11
 ------
 
