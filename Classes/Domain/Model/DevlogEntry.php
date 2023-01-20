@@ -342,13 +342,18 @@ class DevlogEntry implements InterfaceMessage
         $data = [];
 
         foreach ($this->getExtraData() as $key => $value) {
-            if (is_string($key) && '_' === $key[0] && '_' === $key[1]) {
+            if ($this->isInternalProperty($key)) {
                 continue;
             }
             $data[$key] = $value;
         }
 
         return $data;
+    }
+
+    protected function isInternalProperty($property): bool
+    {
+        return is_string($property) && '__' === substr($property, 0, 2);
     }
 
     /**
@@ -359,7 +364,7 @@ class DevlogEntry implements InterfaceMessage
         $data = [];
 
         foreach ($this->getExtraData() as $key => $value) {
-            if (!is_string($key) || !('_' === $key[0] && '_' === $key[1])) {
+            if (!$this->isInternalProperty($key)) {
                 continue;
             }
             $data[substr($key, 2)] = $value;
