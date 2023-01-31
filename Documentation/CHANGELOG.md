@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+11.0.9
+------
+* require rn_base at least 1.16.0
+
 11.0.1 - 11.0.8
 ------
 * bugfixes
