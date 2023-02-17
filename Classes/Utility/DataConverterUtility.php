@@ -65,7 +65,7 @@ class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // @TODO: what todo with non json data?
-        if ('{' !== $data[0]) {
+        if ('{' !== ($data[0] ?? '')) {
             return ['data' => $data];
         }
 
