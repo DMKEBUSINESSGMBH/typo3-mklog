@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -281,7 +281,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
     public function saveAdditionalFields(array $submittedData, AbstractTask $task)
     {
         // @codingStandardsIgnoreEnd
-        ($task->getOptions()
+        $task->getOptions()
             ->setTransport($submittedData['mklog_watchdog_transport'])
             ->setCredentials($submittedData['mklog_watchdog_credentials'])
             ->setSeverity((int) $submittedData['mklog_watchdog_severity'])
@@ -289,6 +289,6 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
             ->setExtensionWhitelist($submittedData['mklog_watchdog_extension_whitelist'])
             ->setExtensionBlacklist($submittedData['mklog_watchdog_extension_blacklist'])
             ->setMailSubject($submittedData['mklog_watchdog_mail_subject'])
-        );
+        ;
     }
 }

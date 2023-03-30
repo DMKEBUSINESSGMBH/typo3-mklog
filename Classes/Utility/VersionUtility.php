@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -46,8 +46,8 @@ final class VersionUtility
     public static function isTypo3Version10OrHigher()
     {
         return VersionNumberUtility::convertVersionNumberToInteger(
-                VersionNumberUtility::getNumericTypo3Version()
-            ) >= 10000000
+            VersionNumberUtility::getNumericTypo3Version()
+        ) >= 10000000
         ;
     }
 
@@ -59,8 +59,8 @@ final class VersionUtility
     public static function isTypo3Version9OrHigher()
     {
         return VersionNumberUtility::convertVersionNumberToInteger(
-                VersionNumberUtility::getNumericTypo3Version()
-            ) >= 9000000
+            VersionNumberUtility::getNumericTypo3Version()
+        ) >= 9000000
         ;
     }
 }

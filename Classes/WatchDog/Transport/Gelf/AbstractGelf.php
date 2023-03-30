@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2022 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -35,7 +35,9 @@ use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 use Gelf\Message;
 use Gelf\Publisher;
 use Gelf\PublisherInterface;
+
 use function is_scalar;
+
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
