@@ -1,6 +1,18 @@
 ChangeLog
 =========
 
+11.0.12
+------
+* bugfix for BE module since rn_base 1.16.7
+
+11.0.11
+------
+* remove obsolete database field
+
+11.0.10
+------
+* fix uninitialized string offset
+
 11.0.9
 ------
 * require rn_base at least 1.16.0
