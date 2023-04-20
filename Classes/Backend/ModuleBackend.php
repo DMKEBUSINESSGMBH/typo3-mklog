@@ -42,7 +42,12 @@ class ModuleBackend extends \Sys25\RnBase\Backend\Module\BaseModule
      */
     public function init()
     {
-        $GLOBALS['LANG']->includeLLFile('EXT:mklog/Resources/Private/Language/Backend.xlf');
+        $this->MCONF = [
+            'name' => 'web_MklogBackend',
+        ];
+
+        $this->getLanguageService()->includeLLFile('EXT:mklog/Resources/Private/Language/Backend.xlf');
+        $this->getBackendUser()->modAccess($this->MCONF, 1);
         parent::init();
     }
 
