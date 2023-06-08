@@ -26,7 +26,7 @@
  */
 
 $EM_CONF['mklog'] = [
-    'title' => 'MK Logging',
+    'title' => 'MK Log',
     'description' => 'Keep track of developer logs. Provides automatic email notification about important errors.',
     'category' => 'be',
     'author' => 'René Nitzsche, Michael Wagner, Hannes Bochmann',

@@ -183,7 +183,7 @@ class SchedulerWatchDog extends AbstractTask
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 $msg,
-                'MK LOGGER WatchDog',
+                'MK Log WatchDog',
                 $success ? 0 : 2,
                 false
             );

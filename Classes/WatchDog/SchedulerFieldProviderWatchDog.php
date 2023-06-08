@@ -257,7 +257,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 'The credentials for the transport are required!',
-                'MK LOGGER WatchDog',
+                'MK Log WatchDog',
                 \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
             );
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
