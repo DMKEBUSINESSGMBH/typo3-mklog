@@ -28,8 +28,10 @@
 namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Utility\Typo3Utility;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\DebugUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -170,24 +172,47 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      *     so the gelf logger can log the exception
      *     and only a recursion of logging will prevented.
      * )
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function handleExceptionDuringLogging(
-        \Exception $exception
-    ) {
-        if (ExtensionManagementUtility::isLoaded('rn_base')) {
-            // try to send mail
-            $address = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
-                'rn_base',
-                'sendEmailOnException'
-            );
-            if ($address) {
-                \Sys25\RnBase\Utility\Misc::sendErrorMail(
-                    $address,
-                    'Mklog\DevlogLogger',
-                    $exception
-                );
-            }
+    protected function handleExceptionDuringLogging(\Exception $exception): void
+    {
+        $address = $GLOBALS['TYPO3_CONF_VARS']['BE']['warning_email_addr'] ?? '';
+        if ($address && $this->canMailBeSend()) {
+            $mailContent = 'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
+            $mailContent .= 'URL: '.GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL')."\n";
+            $mailContent .= 'Message: '.$exception->getMessage()."\n\n";
+            $mailContent .= "Stacktrace:\n".$exception->__toString()."\n";
+            GeneralUtility::makeInstance(MailMessage::class)
+                ->to(new Address($address))
+                ->subject('Exception during logging on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'])
+                ->text($mailContent)
+                ->html(nl2br($mailContent))
+                ->send();
         }
+    }
+
+    /**
+     * Send mail only once every minute.
+     */
+    protected function canMailBeSend(): bool
+    {
+        $lastSendTime = 0;
+        $mailCanBeSend = false;
+        $lockDir = Environment::getVarPath().'/lock';
+        $lockFile = $lockDir.'/mklog_exception_during_logging.lock';
+        if (file_exists($lockFile)) {
+            $lastSendTime = file_get_contents($lockFile);
+        }
+
+        $timeOneMinuteAgo = time() - 60;
+        if ($lastSendTime < $timeOneMinuteAgo) {
+            GeneralUtility::mkdir($lockDir);
+            file_put_contents($lockFile, time());
+            $mailCanBeSend = true;
+        }
+
+        return $mailCanBeSend;
     }
 
     /**

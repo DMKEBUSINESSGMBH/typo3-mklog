@@ -28,6 +28,7 @@
 namespace DMK\Mklog\Logger;
 
 use PHPUnit\Util\Test;
+use TYPO3\CMS\Core\Core\Environment;
 
 /***************************************************************
  * Copyright notice
@@ -62,6 +63,23 @@ use PHPUnit\Util\Test;
 class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
+     * @var string
+     */
+    protected $lockFile;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->lockFile = Environment::getVarPath().'/lock/mklog_exception_during_logging.lock';
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        @unlink($this->lockFile);
+    }
+
+    /**
      * @group unit
      *
      * @test
@@ -83,5 +101,35 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         );
 
         self::assertSame('This is a test message', $logEntry->getMessage());
+    }
+
+    /**
+     * @group unit
+     *
+     * @test
+     *
+     * @dataProvider canMailBeSendDataProvider
+     */
+    public function canMailBeSend(?int $lockFileContent, bool $canMailBeSend)
+    {
+        if (!is_null($lockFileContent)) {
+            file_put_contents($this->lockFile, $lockFileContent);
+        }
+        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
+
+        self::assertSame($canMailBeSend, $this->callInaccessibleMethod($abstractLogger, 'canMailBeSend'));
+    }
+
+    public function canMailBeSendDataProvider(): array
+    {
+        return [
+            [null, true],
+            [1, true],
+            [time(), false],
+            [time() - 50, false],
+            [time() - 59, false],
+            [time() - 60, false],
+            [time() - 61, true],
+        ];
     }
 }
