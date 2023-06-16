@@ -1,0 +1,64 @@
+.severity {
+    display: block;
+    text-align: center;
+    padding: 0 2px;
+    min-width: 100px;
+    margin: 0 auto;
+}
+.severity .t3-icon {
+    float: left;
+    margin: 0 5px;
+}
+.severity.severity-debug {
+    background: #eff5ea;;
+}
+.severity.severity-info {
+    background: #eff5ea;;
+}
+.severity.severity-notice {
+    background: #e6e6e6;;
+}
+.severity.severity-warning {
+    background: #e6e6e6;
+    font-weight: bold;
+}
+.severity.severity-error,
+.severity.severity-critical,
+.severity.severity-alert,
+.severity.severity-emergency {
+    background: #faebe7;
+    font-weight: bold;
+}
+.severity.severity-error {
+    font-weight: normal;
+}
+.severity-debug {
+    color: #3d6611;
+}
+.severity-info {
+    color: #387cc0;
+}
+.severity-notice {
+    color: #333333;
+}
+.severity-warning {
+    color: #926c20;
+}
+.severity-error,
+.severity-critical,
+.severity-alert,
+.severity-emergency {
+    color: #df280a;
+}
+pre.json-parsed {
+    outline: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px;
+    color: black;
+    scroll: auto;
+}
+.json-string { color: green; }
+.json-number { color: red; }
+.json-boolean { color: blue; }
+.json-null { color: magenta; }
+.json-key { color: darkgreen; }

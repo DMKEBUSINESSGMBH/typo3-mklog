@@ -32,9 +32,11 @@ use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Factory;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Result;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 
 /**
  * Devlog Entry Repository.
@@ -135,6 +137,11 @@ class DevlogEntryRepository
      */
     public function findByDemand(DevlogEntryDemand $demand): array
     {
+        return DevlogEntryMapper::fromResults($this->findByDemandRaw($demand)->fetchAllAssociative());
+    }
+
+    public function findByDemandRaw(DevlogEntryDemand $demand): Result
+    {
         $queryBuilder = $this->createSearchQueryBuilder();
 
         if ($demand->hasTransportId()) {
@@ -174,6 +181,22 @@ class DevlogEntryRepository
             );
         }
 
+        if ($demand->getRunId()) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('run_id', intval($demand->getRunId())));
+        }
+
+        if ($demand->getTerm()) {
+            $fields = ['message', 'extra_data', 'host', 'ext_key'];
+            $termExpressions = [];
+            foreach ($fields as $field) {
+                $termExpressions[] = $queryBuilder->expr()->like(
+                    $field,
+                    $queryBuilder->quote('%'.$demand->getTerm().'%')
+                );
+            }
+            $queryBuilder->andWhere($queryBuilder->expr()->orX(...$termExpressions));
+        }
+
         if ($demand->hasMaxResults()) {
             $queryBuilder->setMaxResults($demand->getMaxResults());
         }
@@ -182,9 +205,11 @@ class DevlogEntryRepository
             $queryBuilder->orderBy($demand->getOrderByField(), $demand->getOrderByDirection());
         }
 
-        return DevlogEntryMapper::fromResults(
-            $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE)
-        );
+        if ($demand->doCount()) {
+            $queryBuilder->count('*');
+        }
+
+        return $queryBuilder->execute();
     }
 
     public function deletyByPid(int $pid): void
@@ -252,5 +277,73 @@ class DevlogEntryRepository
             },
             $list
         );
+    }
+
+    /**
+     * Returns the latest log runs.
+     *
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getLatestRunIds(
+        $limit = 50
+    ) {
+        $items = $this->createQueryBuilder()
+            ->select('run_id')
+            ->from($this->getTableName())
+            ->groupBy('run_id')
+            ->orderBy('run_id', 'DESC')
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAllAssociative();
+
+        return $this->convertSingleSelectToFlatArray($items, 'run_id');
+    }
+
+    /**
+     * Returns all extension keys who has logged into devlog.
+     *
+     * @return array
+     */
+    public function getLoggedExtensions()
+    {
+        $items = $this->createQueryBuilder()
+            ->select('ext_key')
+            ->from($this->getTableName())
+            ->groupBy('ext_key')
+            ->orderBy('ext_key', 'DESC')
+            ->execute()
+            ->fetchAllAssociative();
+
+        return $this->convertSingleSelectToFlatArray($items, 'ext_key');
+    }
+
+    /**
+     * Flattens an single select array.
+     *
+     * @param string $field
+     *
+     * @return array
+     */
+    private function convertSingleSelectToFlatArray(
+        array $items,
+              $field
+    ) {
+        if (empty($items)) {
+            return [];
+        }
+
+        $items = call_user_func_array('array_merge_recursive', $items);
+
+        if (empty($items)) {
+            return [];
+        }
+
+        if (!is_array($items[$field])) {
+            $items[$field] = [$items[$field]];
+        }
+
+        return $items[$field];
     }
 }

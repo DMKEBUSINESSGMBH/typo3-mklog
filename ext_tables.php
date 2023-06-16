@@ -27,33 +27,21 @@
 
 defined('TYPO3') || exit('Access denied.');
 
-// register be module if rn_base is installed
-if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('rn_base')) {
-    // add be module ts
-    tx_rnbase_util_Extensions::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/TypoScript/Backend/pageTSconfig.txt">'
-    );
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/TypoScript/Backend/pageTSconfig.txt">'
+);
 
-    // register web_MklogBackend
-    tx_rnbase_util_Extensions::registerModule(
-        'mklog',
-        'web',
-        'backend',
-        'bottom',
-        [],
-        [
-            'access' => 'user,group',
-            'routeTarget' => 'DMK\\Mklog\\Backend\\ModuleBackend',
-            'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
-            'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
-        ]
-    );
-
-    // register devlog be module
-    tx_rnbase_util_Extensions::insertModuleFunction(
-        'web_MklogBackend',
-        'DMK\\Mklog\\Backend\\Module\\DevlogModule',
-        null,
-        'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_func_devlog'
-    );
-}
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
+    'web',
+    'MklogBackend',
+    'bottom',
+    null,
+    [
+        'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
+        'routeTarget' => \DMK\Mklog\Controller\BackendModuleController::class.'::handleRequest',
+        'access' => 'user,group',
+        'name' => 'web_MklogBackend',
+        'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
+        'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf'
+    ]
+);

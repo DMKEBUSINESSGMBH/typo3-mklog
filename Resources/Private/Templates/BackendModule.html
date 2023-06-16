@@ -1,0 +1,82 @@
+{namespace mk=DMK\Mklog\ViewHelper}
+
+<f:layout name="Default" />
+
+<f:section name="content">
+    <h1 class="t3js-title-inlineedit"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:title" /></h1>
+    <f:render section="form" arguments="{_all}" />
+    <f:render section="results" arguments="{_all}" />
+</f:section>
+
+
+<f:section name="form">
+    <div class="form-section">
+        <h2 class="bgColor2 t3-row-header"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_search_form" /></h2>
+        <f:form name="search">
+            <div>
+                <label for="term"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_search" /></label>
+                <f:form.textfield id="term" name="term" value="{formData.term}" class="form-control"/>
+            </div>
+            <div>
+                <label for="runId"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_runid" /></label>
+                <f:form.select
+                        name="runId"
+                        class="form-control"
+                        id="runId"
+                        options="{latestRunsSelectOptions}"
+                        value="{formData.runId}"
+                />
+            </div>
+            <div>
+                <label for="severity"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_severity" /></label>
+                <f:form.select
+                        name="severity"
+                        class="form-control"
+                        id="severity"
+                        options="{severitySelectOptions}"
+                        value="{formData.severity}"
+                />
+            </div>
+            <div>
+                <label for="extension"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_extkeys" /></label>
+                <f:form.select
+                        name="extension"
+                        class="form-control"
+                        id="extension"
+                        options="{extensionsSelectOptions}"
+                        value="{formData.extension}"
+                />
+            </div>
+            <div class="col">
+                <f:form.submit value="abschicken" class="btn btn-default form-control"/>
+            </div>
+        </f:form>
+    </div>
+</f:section>
+
+<f:section name="results">
+    <h2 class="bgColor2 t3-row-header"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_results" arguments="{0: resultsCount}" /></h2>
+
+    <table class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_crdate" /></td>
+                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_severity" /></td>
+                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_ext_key" /></td>
+                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_message" /></td>
+                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_extra_data" /></td>
+            </tr>
+        </thead>
+        <tbody>
+            <f:for each="{results}" as="result">
+                <tr>
+                    <td><f:format.date format="d.m.Y H:i:s">{result.crdate}</f:format.date></td>
+                    <td><f:format.raw><mk:severityIcon logEntry="{result}" /></f:format.raw></td>
+                    <td>{result.extKey}</td>
+                    <td>{result.message}</td>
+                    <td><f:format.raw><mk:extraData logEntry="{result}" /></f:format.raw></td>
+                </tr>
+            </f:for>
+        </tbody>
+        </table>
+</f:section>

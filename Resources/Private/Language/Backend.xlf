@@ -50,11 +50,8 @@
             <trans-unit id="label_pager" xml:space="preserve">
                 <source>Navigation</source>
             </trans-unit>
-            <trans-unit id="label_list" xml:space="preserve">
-                <source>Results</source>
-            </trans-unit>
-            <trans-unit id="label_list_size" xml:space="preserve">
-                <source>Entries found:</source>
+            <trans-unit id="label_results" xml:space="preserve">
+                <source>Ergebnisse (gefunden: %s)</source>
             </trans-unit>
 
             <trans-unit id="label_filter_runid" xml:space="preserve">
@@ -65,6 +62,9 @@
             </trans-unit>
             <trans-unit id="label_filter_extkeys" xml:space="preserve">
                 <source>Extensions:</source>
+            </trans-unit>
+            <trans-unit id="label_search" resname="label_search"  approved="yes">
+                <source>Suchbegriff:</source>
             </trans-unit>
         </body>
     </file>

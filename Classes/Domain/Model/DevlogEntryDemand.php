@@ -68,6 +68,21 @@ class DevlogEntryDemand
      */
     private $maxResults;
 
+    /**
+     * @var bool
+     */
+    private $doCount = false;
+
+    /**
+     * @var int
+     */
+    private $runId = 0;
+
+    /**
+     * @var string
+     */
+    private $term = '';
+
     public function hasOrderBy(): bool
     {
         return !empty($this->orderByField);
@@ -162,5 +177,35 @@ class DevlogEntryDemand
     public function setMaxResults(int $maxResults): void
     {
         $this->maxResults = $maxResults;
+    }
+
+    public function doCount(): bool
+    {
+        return $this->doCount;
+    }
+
+    public function setDoCount(bool $doCount): void
+    {
+        $this->doCount = $doCount;
+    }
+
+    public function getRunId(): int
+    {
+        return $this->runId;
+    }
+
+    public function setRunId(int $runId): void
+    {
+        $this->runId = $runId;
+    }
+
+    public function getTerm(): string
+    {
+        return $this->term;
+    }
+
+    public function setTerm(string $term): void
+    {
+        $this->term = $term;
     }
 }
