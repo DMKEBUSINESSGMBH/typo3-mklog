@@ -37,12 +37,12 @@
     },
     "require": {
         "php": "^7.4 || ^8.0",
-        "typo3/cms-core": "^10.4.25 || ^11.5.7",
-        "typo3/cms-scheduler": "^10.4 || ^11.5",
+        "typo3/cms-core": "^10.4.25 || ^11.5.7 || ^v12.4.2",
+        "typo3/cms-scheduler": "^10.4 || ^11.5 || ^v12.4",
         "graylog2/gelf-php": "~1",
-        "symfony/mime": "^5.2",
-        "egulias/email-validator": "^2.1 || ^3.1",
-        "doctrine/dbal": "~2.13.1"
+        "symfony/mime": "^5.2 || ^6.1",
+        "egulias/email-validator": "^2.1 || ^3.1 || ^4.0",
+        "doctrine/dbal": "~2.13.1 || ~3.6.3"
     },
     "require-dev": {
         "digedag/rn-base": "^1.16",
@@ -89,7 +89,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-11.5": "11.0.x-dev"
+            "dev-11.5": "11.0.x-dev",
+            "dev-12.4": "12.4.x-dev"
         },
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
