@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -32,10 +32,7 @@ use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -87,6 +84,7 @@ class BackendModuleController
         $this->assignResults($request);
 
         $this->moduleTemplate->setContent($this->view->render());
+
         return new HtmlResponse($this->moduleTemplate->renderContent());
     }
 
