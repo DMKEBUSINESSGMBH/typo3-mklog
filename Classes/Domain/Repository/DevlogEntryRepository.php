@@ -142,6 +142,25 @@ class DevlogEntryRepository
     {
         $queryBuilder = $this->createSearchQueryBuilder();
 
+        $this->handleWhereConditionsForDemand($demand, $queryBuilder);
+
+        if ($demand->hasMaxResults()) {
+            $queryBuilder->setMaxResults($demand->getMaxResults());
+        }
+
+        if ($demand->hasOrderBy()) {
+            $queryBuilder->orderBy($demand->getOrderByField(), $demand->getOrderByDirection());
+        }
+
+        if ($demand->doCount()) {
+            $queryBuilder->count('*');
+        }
+
+        return $queryBuilder->execute();
+    }
+
+    protected function handleWhereConditionsForDemand(DevlogEntryDemand $demand, QueryBuilder $queryBuilder): void
+    {
         if ($demand->hasTransportId()) {
             $queryBuilder->where(
                 sprintf(
@@ -194,20 +213,6 @@ class DevlogEntryRepository
             }
             $queryBuilder->andWhere($queryBuilder->expr()->orX(...$termExpressions));
         }
-
-        if ($demand->hasMaxResults()) {
-            $queryBuilder->setMaxResults($demand->getMaxResults());
-        }
-
-        if ($demand->hasOrderBy()) {
-            $queryBuilder->orderBy($demand->getOrderByField(), $demand->getOrderByDirection());
-        }
-
-        if ($demand->doCount()) {
-            $queryBuilder->count('*');
-        }
-
-        return $queryBuilder->execute();
     }
 
     public function deletyByPid(int $pid): void

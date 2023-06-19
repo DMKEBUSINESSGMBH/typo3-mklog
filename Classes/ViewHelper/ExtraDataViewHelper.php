@@ -54,11 +54,14 @@ class ExtraDataViewHelper extends AbstractViewHelper
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
+    ): string {
         $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($arguments['logEntry']);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);
 

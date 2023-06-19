@@ -58,11 +58,14 @@ class SeverityIconViewHelper extends AbstractViewHelper
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ) {
+    ): string {
         $severityId = $arguments['logEntry']->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
         $icon = self::getSeverityIconClass($severityId);
