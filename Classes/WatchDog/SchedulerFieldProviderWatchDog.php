@@ -112,6 +112,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         $fieldCode = '<select '.
             'name="tx_scheduler[mklog_watchdog_transport]" '.
             'id="field_mklog_watchdog_transport" '.
+            'class="form-select" '.
         '>';
 
         foreach ([
@@ -162,6 +163,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
             'name="tx_scheduler[mklog_watchdog_'.$fieldName.']" '.
             'id="field_mklog_watchdog_'.$fieldName.'" '.
             'value="'.$taskInfo['mklog_watchdog_'.$fieldName].'" '.
+            'class="form-control" '.
             'size="50" />';
 
         return [
@@ -182,6 +184,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         $fieldCode = '<select '.
             'name="tx_scheduler[mklog_watchdog_severity]" '.
             'id="field_mklog_watchdog_severity" '.
+            'class="form-select" '.
         '>';
 
         $levels = \DMK\Mklog\Utility\SeverityUtility::getItems();
