@@ -33,7 +33,7 @@ $EM_CONF['mklog'] = [
     'author_company' => 'DMK E-BUSINESS',
     'author_email' => 'dev@dmk-ebusiness.de',
     'shy' => '',
-    'dependencies' => 'rn_base,devlog,scheduler',
+    'dependencies' => 'devlog,scheduler',
     'conflicts' => '',
     'priority' => '',
     'module' => '',
@@ -46,13 +46,11 @@ $EM_CONF['mklog'] = [
     'version' => '11.0.12',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.4.0-12.4.99',
+            'typo3' => '11.5.0-12.4.99',
             'scheduler' => '',
         ],
         'conflicts' => [],
-        'suggests' => [
-            'rn_base' => '1.15.0-',
-        ],
+        'suggests' => [],
     ],
     'suggests' => [],
     'autoload' => [
