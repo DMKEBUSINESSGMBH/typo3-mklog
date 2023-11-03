@@ -21,11 +21,9 @@
         });
     }
     DMK.DevLog.toggleData = function(id) {
-        var link = d.getElementById("log-togggle-" + id + "-link"),
-            data = d.getElementById("log-togggle-" + id + "-data");
-        data.style.display = data.style.display === "block" ? "none" : "block";
-        link.innerHTML = data.style.display === "block" ? "- hide data" : "+ show data";
-        if (data.style.display === "block" && data.className.search("json-parsed") < 0) {
+        var data = d.getElementById("log-toggle-" + id + "-data");
+
+        if (data.className.search("json-parsed") < 0) {
             data.innerHTML = DMK.JSON.highlight(
                 JSON.stringify(
                     JSON.parse(data.innerHTML),

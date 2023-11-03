@@ -28,17 +28,16 @@
 namespace DMK\Mklog\ViewHelper;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
-use DMK\Mklog\Utility\SeverityUtility;
-use TYPO3\CMS\Core\Imaging\Icon;
-use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Class ExtraDataViewHelper.
+ *
+ * Usage to toggle:
+ * <a id="log-toggle-%1$s-link" href="#log-toggle-%1$s-data"
+ * onclick="DMK.DevLog.toggleData(%1$s);">+</a>
  *
  * @author  Hannes Bochmann
  * @license http://www.gnu.org/licenses/lgpl.html
@@ -72,11 +71,7 @@ class ExtraDataViewHelper extends AbstractViewHelper
         }
 
         return sprintf(
-            '<a id="log-togggle-%1$s-link" '.
-            'href="#log-togggle-%1$s-data" '.
-            'onclick="DMK.DevLog.toggleData(%1$s);"'.
-            '>+ show data</a>'.
-            '<pre id="log-togggle-%1$s-data" style="display:none;">%2$s</pre>',
+            '<pre id="log-toggle-%1$s-data">%2$s</pre>',
             $arguments['logEntry']->getUid(),
             htmlspecialchars($extraData)
         );

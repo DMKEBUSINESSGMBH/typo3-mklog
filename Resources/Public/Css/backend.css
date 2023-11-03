@@ -62,3 +62,29 @@ pre.json-parsed {
 .json-boolean { color: blue; }
 .json-null { color: magenta; }
 .json-key { color: darkgreen; }
+
+.table .log-hidden {
+    display: none;
+}
+.table .log-toggle-link {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.table .log-toggle-link::before {
+    content: '+';
+}
+
+.table :checked + .log-toggle-link::before {
+    content: '–';
+}
+
+.table tr:has(input:checked) + tr {
+    display: table-row;
+}
+
+.table td+td {
+    text-wrap: nowrap;
+}

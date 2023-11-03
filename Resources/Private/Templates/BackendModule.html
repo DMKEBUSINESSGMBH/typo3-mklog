@@ -1,82 +1,90 @@
 {namespace mk=DMK\Mklog\ViewHelper}
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
-<f:section name="content">
-    <h1 class="t3js-title-inlineedit"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:title" /></h1>
-    <f:render section="form" arguments="{_all}" />
-    <f:render section="results" arguments="{_all}" />
+<f:section name="Before">
+    <f:asset.css identifier="mklogCss" href="EXT:mklog/Resources/Public/Css/backend.css" />
+    <f:be.pageRenderer
+        includeJavaScriptModules="{
+            0: '@dmk/mklog/backend.js',
+        }"
+    />
 </f:section>
 
+<f:section name="Content">
+    <h1><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:title" /></h1>
+    <f:render section="Form" arguments="{_all}" />
+    <f:render section="Results" arguments="{_all}" />
+</f:section>
 
-<f:section name="form">
-    <div class="form-section">
-        <h2 class="bgColor2 t3-row-header"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_search_form" /></h2>
-        <f:form name="search">
-            <div>
-                <label for="term"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_search" /></label>
-                <f:form.textfield id="term" name="term" value="{formData.term}" class="form-control"/>
+<f:section name="Form">
+    <div class="">
+        <form action="{f:be.uri(route: 'dmk_mklog_list', parameters: '{id: pageUid}')}" method="post" id="BackendModuleController" name="search">
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label class="form-label" for="severity"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_severity" /></label>
+                    <div class="input-group">
+                        <f:render partial="DropdownMenu" arguments="{name: 'severity', id: 'severity', options: severitySelectOptions, currentValue: formData.severity}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="extension"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_extkeys" /></label>
+                    <div>
+                        <f:render partial="DropdownMenu" arguments="{name: 'extension', id: 'extension', options: extensionsSelectOptions, currentValue: formData.extension}"/>
+                    </div>
+                </div>
+                <div class="form-group align-self-end">
+                    <div class="input-group">
+                        <input
+                            class="form-control form-control-clearable"
+                            type="text"
+                            id="term"
+                            name="term"
+                            value="{formData.term}"
+                            placeholder="{f:translate(key: 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_search')}"
+                        />
+                        <button type="submit" class="btn btn-default"><core:icon identifier="actions-search" /></button>
+                        <f:form.button type="reset" class="btn btn-default"><core:icon identifier="actions-input-clear" /></f:form.button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <label for="runId"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_runid" /></label>
-                <f:form.select
-                        name="runId"
-                        class="form-control"
-                        id="runId"
-                        options="{latestRunsSelectOptions}"
-                        value="{formData.runId}"
-                />
-            </div>
-            <div>
-                <label for="severity"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_severity" /></label>
-                <f:form.select
-                        name="severity"
-                        class="form-control"
-                        id="severity"
-                        options="{severitySelectOptions}"
-                        value="{formData.severity}"
-                />
-            </div>
-            <div>
-                <label for="extension"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_extkeys" /></label>
-                <f:form.select
-                        name="extension"
-                        class="form-control"
-                        id="extension"
-                        options="{extensionsSelectOptions}"
-                        value="{formData.extension}"
-                />
-            </div>
-            <div class="col">
-                <f:form.submit value="abschicken" class="btn btn-default form-control"/>
-            </div>
-        </f:form>
+        </form>
     </div>
 </f:section>
 
-<f:section name="results">
-    <h2 class="bgColor2 t3-row-header"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_results" arguments="{0: resultsCount}" /></h2>
+<f:section name="Results">
+    <h2><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_results" arguments="{0: resultsCount}" /></h2>
 
     <table class="table table-striped table-hover table-condensed">
         <thead>
             <tr>
+                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_extra_data" /></td>
                 <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_crdate" /></td>
                 <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_severity" /></td>
                 <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_ext_key" /></td>
                 <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_message" /></td>
-                <td><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_tableheader_extra_data" /></td>
             </tr>
         </thead>
         <tbody>
             <f:for each="{results}" as="result">
-                <tr>
-                    <td><f:format.date format="d.m.Y H:i:s">{result.crdate}</f:format.date></td>
+                    <td>
+                        <input type="checkbox" id="log-toggle-{result.uid}-link" style="display: none;">
+                        <label for="log-toggle-{result.uid}-link" class="log-toggle-link" onclick="DMK.DevLog.toggleData({result.uid});"></label>
+                    </td>
+                    <td>
+                        <f:be.link route="dmk_mklog_list" parameters="{runId: result.runId}">
+                            <f:format.date format="d.m.Y H:i:s">{result.crdate}</f:format.date>
+                        </f:be.link>
+                    </td>
                     <td><f:format.raw><mk:severityIcon logEntry="{result}" /></f:format.raw></td>
                     <td>{result.extKey}</td>
                     <td>{result.message}</td>
-                    <td><f:format.raw><mk:extraData logEntry="{result}" /></f:format.raw></td>
+                </tr>
+                <tr class="log-hidden">
+                    <td colspan="5"><f:format.raw><mk:extraData logEntry="{result}" /></f:format.raw></td>
                 </tr>
             </f:for>
         </tbody>
-        </table>
+    </table>
 </f:section>
