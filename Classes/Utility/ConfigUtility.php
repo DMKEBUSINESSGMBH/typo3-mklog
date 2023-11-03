@@ -229,14 +229,6 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     {
         $mail = $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
 
-        // fallback to old variant if installed
-        if (empty($mail) && ExtensionManagementUtility::isLoaded('rn_base')) {
-            $mail = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(
-                'rn_base',
-                'fromEmail'
-            );
-        }
-
         return $mail;
     }
 }
