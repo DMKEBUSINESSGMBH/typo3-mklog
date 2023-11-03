@@ -49,7 +49,6 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      * @param string $message
      * @param string $extension
      * @param int    $severity
-     * @param mixed  $extraData
      *
      * @return \DMK\Mklog\Domain\Model\DevlogEntry
      */
@@ -101,8 +100,6 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
 
     /**
      * Progresses the extra data and adds some aditional informations.
-     *
-     * @param mixed $extraData
      *
      * @return array
      */

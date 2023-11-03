@@ -74,7 +74,6 @@ class GenericArrayObject
 
     /**
      * @param string|array $property
-     * @param mixed        $value
      *
      * @return $this
      */
@@ -95,7 +94,6 @@ class GenericArrayObject
 
     /**
      * @param string|mixed $property
-     * @param mixed        $default
      *
      * @return string|array
      */
@@ -146,8 +144,6 @@ class GenericArrayObject
      * Set/Get attribute wrapper.
      *
      * @param string $method
-     *
-     * @return mixed
      */
     public function __call($method, array $args)
     {

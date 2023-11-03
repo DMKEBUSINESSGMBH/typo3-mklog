@@ -87,7 +87,6 @@ class DevlogLogger extends AbstractLogger
      * @param string $message
      * @param string $extension
      * @param int    $severity
-     * @param mixed  $extraData
      */
     protected function storeLog($message, $extension, $severity, $extraData)
     {
@@ -176,8 +175,8 @@ class DevlogLogger extends AbstractLogger
 
         // skip if logging is disabled
         if (
-            !empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog']) ||
-            !empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'])
+            !empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'])
+            || !empty($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'])
         ) {
             return false;
         }

@@ -121,7 +121,6 @@ class GelfLogger extends AbstractLogger
      * @param string $message
      * @param string $extension
      * @param int    $severity
-     * @param mixed  $extraData
      */
     protected function storeLog($message, $extension, $severity, $extraData)
     {
@@ -134,9 +133,9 @@ class GelfLogger extends AbstractLogger
 
         // check min log level
         if (
-            !$config->isGelfEnable() ||
-            !$config->getGelfCredentials() ||
-            $severity > $config->getGelfMinLogLevel()
+            !$config->isGelfEnable()
+            || !$config->getGelfCredentials()
+            || $severity > $config->getGelfMinLogLevel()
         ) {
             return;
         }

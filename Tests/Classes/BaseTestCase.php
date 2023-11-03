@@ -62,7 +62,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class BaseTestCase extends \Sys25\RnBase\Testing\BaseTestCase
+abstract class BaseTestCase
 {
     /**
      * Property to store backups for set up and tear down.

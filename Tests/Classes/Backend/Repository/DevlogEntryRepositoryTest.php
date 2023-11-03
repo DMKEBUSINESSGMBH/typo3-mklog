@@ -50,8 +50,6 @@ namespace DMK\Mklog\Backend\Repository;
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
 /**
  * Devlog entry repository test.
  *
@@ -61,37 +59,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  */
 class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
 {
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp(): void
-    {
-        if (!ExtensionManagementUtility::isLoaded('rn_base')) {
-            $this->markTestSkipped('Skipped because rn_base is missing');
-        }
-
-        parent::setUp();
-    }
-
-    /**
-     * Test the getSearchClass method.
-     *
-     * @group unit
-     *
-     * @test
-     */
-    public function testGetSearchClassShouldBeGeneric()
-    {
-        self::assertEquals(
-            'tx_rnbase_util_SearchGeneric',
-            $this->callInaccessibleMethod(
-                $this->getDevlogEntryRepository(),
-                'getSearchClass'
-            )
-        );
-    }
-
     /**
      * Test the getEmptyModel method.
      *

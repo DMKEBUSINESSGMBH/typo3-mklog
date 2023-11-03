@@ -43,14 +43,14 @@ class DevlogEntryDecorator
      *
      * @var \tx_rnbase_mod_BaseModule
      */
-    private $mod = null;
+    private $mod;
 
     /**
      * The internal options object.
      *
      * @var GenericArrayObject
      */
-    private $options = null;
+    private $options;
 
     /**
      * Constructor.

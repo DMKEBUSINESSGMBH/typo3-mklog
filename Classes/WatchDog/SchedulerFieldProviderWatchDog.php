@@ -58,7 +58,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      *               ['cshLabel'] => The code of the CSH label
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
-    public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule)
+    public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule): array
     {
         // @codingStandardsIgnoreEnd
 
@@ -103,12 +103,10 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     /**
      * Creates the transport drop down.
-     *
-     * @return array
      */
     protected function getTransportField(
         array &$taskInfo
-    ) {
+    ): array {
         $fieldCode = '<select '.
             'name="tx_scheduler[mklog_watchdog_transport]" '.
             'id="field_mklog_watchdog_transport" '.
@@ -145,18 +143,13 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     /**
      * Creates the credentials input field.
-     *
-     * @return array
      */
-    protected function getCredentialsField(array &$taskInfo)
+    protected function getCredentialsField(array &$taskInfo): array
     {
         return $this->getInputField('credentials', 'Credentials', $taskInfo);
     }
 
-    /**
-     * @return array
-     */
-    protected function getInputField(string $fieldName, string $label, array &$taskInfo)
+    protected function getInputField(string $fieldName, string $label, array &$taskInfo): array
     {
         $fieldCode = '<input '.
             'type="text" '.
@@ -174,12 +167,10 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     /**
      * Creates the severity drop down.
-     *
-     * @return array
      */
     protected function getSeverityField(
         array &$taskInfo
-    ) {
+    ): array {
         // Transport
         $fieldCode = '<select '.
             'name="tx_scheduler[mklog_watchdog_severity]" '.
@@ -207,34 +198,23 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     /**
      * Creates the transport drop down.
-     *
-     * @return array
      */
-    protected function getMessageLimitField(array &$taskInfo)
+    protected function getMessageLimitField(array &$taskInfo): array
     {
         return $this->getInputField('messagelimit', 'Message limit per run', $taskInfo);
     }
 
-    /**
-     * @return array
-     */
-    protected function getExtensionWhitelistField(array &$taskInfo)
+    protected function getExtensionWhitelistField(array &$taskInfo): array
     {
         return $this->getInputField('extension_whitelist', 'Extension whitelist', $taskInfo);
     }
 
-    /**
-     * @return array
-     */
-    protected function getExtensionBlacklistField(array &$taskInfo)
+    protected function getExtensionBlacklistField(array &$taskInfo): array
     {
         return $this->getInputField('extension_blacklist', 'Extension blacklist', $taskInfo);
     }
 
-    /**
-     * @return array
-     */
-    protected function getMailSubjectField(array &$taskInfo)
+    protected function getMailSubjectField(array &$taskInfo): array
     {
         return $this->getInputField('mail_subject', 'Custom mail subject', $taskInfo);
     }
@@ -243,15 +223,14 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * This method checks any additional data that is relevant to the specific task
      * If the task class is not relevant, the method is expected to return true.
      *
-     * @param array               $submittedData Reference to the array containing the data submitted by the user
-     * @param tx_scheduler_Module $scheduler     Module Reference to the calling object
+     * @param array $submittedData Reference to the array containing the data submitted by the user
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
-    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule)
+    public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule): bool
     {
         // @codingStandardsIgnoreEnd
         $credentials = &$submittedData['mklog_watchdog_credentials'];

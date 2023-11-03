@@ -269,8 +269,6 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * Adds a scheduler to the transport id list.
-     *
-     * @param string $transportId
      */
     public function setTransportIdsRaw(
         string $transportIds
