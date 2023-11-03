@@ -73,7 +73,7 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
             'getEmptyModel'
         );
         self::assertInstanceOf(
-            'DMK\\Mklog\\Domain\\Model\\DevlogEntry',
+            \DMK\Mklog\Domain\Model\DevlogEntry::class,
             $model
         );
         self::assertSame(
@@ -359,14 +359,14 @@ class DevlogEntryRepositoryTest extends \DMK\Mklog\Tests\BaseTestCase
         );
 
         $repo = $this->getMock(
-            'DMK\\Mklog\\Backend\\Repository\\DevlogEntryRepository',
+            \DMK\Mklog\Backend\Repository\DevlogEntryRepository::class,
             ['getSearcher', 'getConnection', 'getEmptyModel']
         );
 
         $repo
             ->expects(self::any())
             ->method('getEmptyModel')
-            ->will(self::returnValue($this->getModel(null, 'DMK\\Mklog\\Backend\\Model\\DevlogEntry')));
+            ->will(self::returnValue($this->getModel(null, \DMK\Mklog\Backend\Model\DevlogEntry::class)));
         $repo
             ->expects(self::any())
             ->method('getSearcher')

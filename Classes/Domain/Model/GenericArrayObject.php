@@ -152,7 +152,7 @@ class GenericArrayObject
             case 'get':
                 return $this->getProperty($property);
             case 'set':
-                return $this->setProperty($property, isset($args[0]) ? $args[0] : null);
+                return $this->setProperty($property, $args[0] ?? null);
             case 'uns':
                 return $this->unsProperty($property);
             case 'has':

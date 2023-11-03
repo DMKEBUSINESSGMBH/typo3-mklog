@@ -136,7 +136,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             // ignore internal loger calls
             'DMK\\Mklog\\Logger\\',
             // ignore core devlog and logerr calls
-            'Psr\\Log\\AbstractLogger',
+            \Psr\Log\AbstractLogger::class,
             'TYPO3\\CMS\\Core\\Log\\',
             'TYPO3\\CMS\\Core\\Utility\\GeneralUtility::devLog',
             // ignore rnbase loggers
@@ -166,7 +166,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function handleExceptionDuringLogging(\Exception $exception): void
+    protected function handleExceptionDuringLogging(\Throwable $exception): void
     {
         $address = $GLOBALS['TYPO3_CONF_VARS']['BE']['warning_email_addr'] ?? '';
         if ($address && $this->canMailBeSend()) {

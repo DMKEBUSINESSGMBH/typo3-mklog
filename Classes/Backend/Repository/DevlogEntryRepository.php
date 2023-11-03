@@ -63,7 +63,7 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      */
     protected function getWrapperClass()
     {
-        return 'DMK\\Mklog\\Backend\\Model\\DevlogEntry';
+        return \DMK\Mklog\Backend\Model\DevlogEntry::class;
     }
 
     /**

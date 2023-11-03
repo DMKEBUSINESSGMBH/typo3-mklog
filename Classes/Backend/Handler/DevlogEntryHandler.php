@@ -64,7 +64,7 @@ class DevlogEntryHandler extends \Sys25\RnBase\Backend\Handler\SearchHandler
      */
     protected function getListerClass()
     {
-        return 'DMK\\Mklog\\Backend\\Lister\\DevlogEntryLister';
+        return \DMK\Mklog\Backend\Lister\DevlogEntryLister::class;
     }
 
     /**

@@ -66,10 +66,6 @@ class DevlogEntry extends \DMK\Mklog\Domain\Model\DevlogEntry implements \Sys25\
     {
         $properties = $this->getRecord();
 
-        if (isset($properties[$property])) {
-            return $properties[$property];
-        }
-
-        return null;
+        return $properties[$property] ?? null;
     }
 }

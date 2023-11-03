@@ -81,7 +81,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     protected function getGelfLoggerMock()
     {
         $logger = $this->getMock(
-            'DMK\\Mklog\\Logger\\GelfLogger',
+            \DMK\Mklog\Logger\GelfLogger::class,
             ['getDevlogEntryRepository']
         );
 

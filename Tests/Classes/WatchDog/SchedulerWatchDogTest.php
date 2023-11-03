@@ -72,7 +72,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
     public function testExecuteWithoutMessages()
     {
         $transport = $this->getMock(
-            'DMK\Mklog\WatchDog\Transport\InterfaceTransport'
+            \DMK\Mklog\WatchDog\Transport\InterfaceTransport::class
         );
 
         $transport

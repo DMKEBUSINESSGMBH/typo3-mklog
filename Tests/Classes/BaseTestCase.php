@@ -154,7 +154,7 @@ abstract class BaseTestCase
             ->disableOriginalConstructor();
 
         $repo = $this->getMock(
-            'DMK\\Mklog\\Domain\\Repository\\DevlogEntryRepository',
+            \DMK\Mklog\Domain\Repository\DevlogEntryRepository::class,
             ['countAll', 'persist', 'createQueryBuilder', 'getConnection', 'createNewModel']
         );
 

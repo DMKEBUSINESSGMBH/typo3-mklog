@@ -209,7 +209,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getGelfTransport(): string
     {
-        return $this->getExtConf('gelf_transport') ?: 'DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf';
+        return $this->getExtConf('gelf_transport') ?: \DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf::class;
     }
 
     /**

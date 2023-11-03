@@ -53,7 +53,7 @@ class DevlogModule extends \Sys25\RnBase\Backend\Module\ExtendedModFunc
     {
         return [
             \tx_rnbase::makeInstance(
-                'DMK\\Mklog\\Backend\\Handler\\DevlogEntryHandler'
+                \DMK\Mklog\Backend\Handler\DevlogEntryHandler::class
             ),
         ];
     }
