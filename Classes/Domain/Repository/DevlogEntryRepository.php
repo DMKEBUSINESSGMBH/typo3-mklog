@@ -31,12 +31,10 @@ use DMK\Mklog\Domain\Mapper\DevlogEntryMapper;
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Factory;
-use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Result;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 
 /**
  * Devlog Entry Repository.
@@ -80,8 +78,8 @@ class DevlogEntryRepository
         return $this->createQueryBuilder()
             ->count('uid')
             ->from($this->getTableName())
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
     }
 
     /**
@@ -118,7 +116,7 @@ class DevlogEntryRepository
                 ->setFirstResult($maxRows)
                 ->setMaxResults(1);
 
-            $lastExec = $query->execute()->fetchOne();
+            $lastExec = $query->executeQuery()->fetchOne();
 
             // nothing found to delete!?
             if (empty($lastExec)) {
@@ -128,7 +126,7 @@ class DevlogEntryRepository
             // delete all entries, older than the last exeution date!
             $queryBuilder = $this->createQueryBuilder();
             $query = $queryBuilder->delete($this->getTableName())->where('run_id < '.$lastExec);
-            $query->execute();
+            $query->executeStatement();
         }
     }
 
@@ -209,14 +207,14 @@ class DevlogEntryRepository
             $queryBuilder->count('*');
         }
 
-        return $queryBuilder->execute();
+        return $queryBuilder->executeQuery();
     }
 
     public function deletyByPid(int $pid): void
     {
         $queryBuilder = $this->createQueryBuilder();
         $query = $queryBuilder->delete($this->getTableName())->where('pid = '.$pid);
-        $query->execute();
+        $query->executeStatement();
     }
 
     /**
@@ -252,14 +250,14 @@ class DevlogEntryRepository
         foreach ($model->getRecord() as $property => $value) {
             $queryBuilder->set($property, $value);
         }
-        $queryBuilder->execute();
+        $queryBuilder->executeStatement();
     }
 
     private function persistNew(DevlogEntry $model): void
     {
         $connection = $this->getConnection();
         $query = $connection->createQueryBuilder()->insert($this->getTableName())->values($model->getRecord());
-        if ($query->execute()) {
+        if ($query->executeStatement()) {
             $model->setUid($connection->lastInsertId($this->getTableName()));
         }
     }
@@ -295,7 +293,7 @@ class DevlogEntryRepository
             ->groupBy('run_id')
             ->orderBy('run_id', 'DESC')
             ->setMaxResults($limit)
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
 
         return $this->convertSingleSelectToFlatArray($items, 'run_id');
@@ -313,7 +311,7 @@ class DevlogEntryRepository
             ->from($this->getTableName())
             ->groupBy('ext_key')
             ->orderBy('ext_key', 'DESC')
-            ->execute()
+            ->executeQuery()
             ->fetchAllAssociative();
 
         return $this->convertSingleSelectToFlatArray($items, 'ext_key');
@@ -328,7 +326,7 @@ class DevlogEntryRepository
      */
     private function convertSingleSelectToFlatArray(
         array $items,
-              $field
+        $field
     ) {
         if (empty($items)) {
             return [];

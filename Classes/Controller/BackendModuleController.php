@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -31,12 +31,10 @@ use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use Psr\Log\LoggerInterface;
+use TYPO3\CMS\Backend\Attribute\Controller;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\Http\HtmlResponse;
-use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 /**
  * Class BackendModuleController.
@@ -45,76 +43,48 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
+#[Controller]
 class BackendModuleController
 {
-    /**
-     * @var ModuleTemplate
-     */
-    protected $moduleTemplate;
-
-    /**
-     * @var DevlogEntryRepository
-     */
-    protected $devlogEntryRepository;
-
-    /**
-     * @var StandaloneView
-     */
-    protected $view;
+    protected ViewInterface $view;
+    protected DevlogEntryRepository $devlogEntryRepository;
+    protected ModuleTemplateFactory $moduleTemplateFactory;
 
     public function __construct(
         DevlogEntryRepository $devlogEntryRepository,
-        ModuleTemplate $moduleTemplate,
-        StandaloneView $view
+        ModuleTemplateFactory $moduleTemplateFactory,
     ) {
-        $this->moduleTemplate = $moduleTemplate;
         $this->devlogEntryRepository = $devlogEntryRepository;
-        $this->view = $view;
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
     public function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $this->view->setTemplateRootPaths(['EXT:mklog/Resources/Private/Templates/']);
-        $this->view->setPartialRootPaths(['EXT:mklog/Resources/Private/Partials/']);
-        $this->view->setLayoutRootPaths(['EXT:mklog/Resources/Private/Layouts/']);
-        $this->view->setTemplate('BackendModule');
-
+        $pageId = (int) ($request->getQueryParams()['id'] ?? $request->getParsedBody()['id'] ?? 0);
+        $this->view = $this->moduleTemplateFactory->create($request);
         $this->view->assign('formData', $request->getParsedBody());
 
-        $this->assignLatestRunsSelectOptions();
         $this->assignSeverityLevels();
         $this->assignLoggedExtensions();
         $this->assignResults($request);
+        $this->view->assignMultiple([
+            'pageUid' => $pageId,
+        ]);
 
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+        return $this->view->renderResponse('BackendModule');
     }
 
-    public function assignLatestRunsSelectOptions(): void
+    protected function assignSeverityLevels(): void
     {
-        $latestRuns = $this->devlogEntryRepository->getLatestRunIds();
-
         $items = ['' => ''];
-
-        foreach ($latestRuns as $id) {
-            $items[$id] = strftime('%d.%m.%y %H:%M:%S', substr($id, 0, 10));
-        }
-
-        $this->view->assign('latestRunsSelectOptions', $items);
-    }
-
-    public function assignSeverityLevels(): void
-    {
-        $items = [];
-        $items[''] = '';
         foreach (\DMK\Mklog\Utility\SeverityUtility::getItems() as $id => $name) {
-            $items[$id] = $id.' - '.ucfirst(strtolower($name));
+            $items[(string) $id] = $id.' - '.ucfirst(strtolower($name));
         }
 
         $this->view->assign('severitySelectOptions', $items);
     }
 
-    public function assignLoggedExtensions(): void
+    protected function assignLoggedExtensions(): void
     {
         $extKeys = $this->devlogEntryRepository->getLoggedExtensions();
 
@@ -128,28 +98,31 @@ class BackendModuleController
         $this->view->assign('extensionsSelectOptions', $items);
     }
 
-    public function assignResults(ServerRequestInterface $request): void
+    protected function assignResults(ServerRequestInterface $request): void
     {
+        $parsedBody = $request->getParsedBody();
+        $queryParams = $request->getQueryParams();
+
         $demand = new DevlogEntryDemand();
         $demand->setMaxResults(50);
         $demand->setOrderBy('crdate', 'DESC');
 
-        $severity = $request->getParsedBody()['severity'] ?? null;
+        $severity = $parsedBody['severity'] ?? $queryParams['severity'] ?? null;
         if ($severity) {
             $demand->setSeverity($severity);
         }
 
-        $extension = $request->getParsedBody()['extension'] ?? null;
+        $extension = $parsedBody['extension'] ?? $queryParams['extension'] ?? null;
         if ($extension) {
             $demand->setExtensionWhitelist([$extension]);
         }
 
-        $runId = $request->getParsedBody()['runId'] ?? null;
+        $runId = $parsedBody['runId'] ?? $queryParams['runId'] ?? null;
         if ($runId) {
             $demand->setRunId($runId);
         }
 
-        $term = $request->getParsedBody()['term'] ?? null;
+        $term = $parsedBody['term'] ?? $queryParams['term'] ?? null;
         if ($term) {
             $demand->setTerm($term);
         }
