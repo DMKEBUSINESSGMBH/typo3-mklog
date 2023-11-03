@@ -49,27 +49,17 @@ call_user_func(
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = \DMK\Mklog\Hooks\DataHandler::class;
 
-        // is the devlog enabled?
         if ($config->isEnableDevLog()) {
-            // the old devlog hook to log into tx_mklog_devlog_entry
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['devLog']['mklog'] = \DMK\Mklog\Logger\DevlogLogger::class.'->devLogHook';
             // register logger writer
             $loglevel = ($config->getMinLogLevel() ?: \DMK\Mklog\Utility\SeverityUtility::DEBUG);
-            if (\DMK\Mklog\Utility\VersionUtility::isTypo3Version10OrHigher()) {
-                $loglevel = \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant($loglevel);
-            }
+            $loglevel = \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant($loglevel);
             $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$loglevel][\DMK\Mklog\Logger\DevlogLogger::class] = [];
         }
-        // is the gelf enabled?
         if ($config->isGelfEnable()) {
-            // add system log hook, to log some critical logs directly
-            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_div.php']['systemLog']['MklogGelfLoggerSysLogHook'] = \DMK\Mklog\Logger\GelfLogger::class.'->sysLogHook';
             // register logger writer
             $loglevel = ($config->getGelfMinLogLevel() ?: \DMK\Mklog\Utility\SeverityUtility::ALERT);
-            if (\DMK\Mklog\Utility\VersionUtility::isTypo3Version10OrHigher()) {
-                $loglevel = \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant($loglevel);
-            }
-            $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$loglevel][\DMK\Mklog\Logger\DevlogLogger::class] = [];
+            $loglevel = \DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant($loglevel);
+            $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$loglevel][\DMK\Mklog\Logger\GelfLogger::class] = [];
         }
     }
 );
