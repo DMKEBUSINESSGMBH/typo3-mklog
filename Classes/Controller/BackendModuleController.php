@@ -31,9 +31,9 @@ use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 use TYPO3\CMS\Backend\Attribute\Controller;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\View\ViewInterface;
 
 /**
@@ -108,7 +108,7 @@ class BackendModuleController
         $demand->setOrderBy('crdate', 'DESC');
 
         $severity = $parsedBody['severity'] ?? $queryParams['severity'] ?? null;
-        if ($severity) {
+        if (MathUtility::canBeInterpretedAsInteger($severity)) {
             $demand->setSeverity($severity);
         }
 
