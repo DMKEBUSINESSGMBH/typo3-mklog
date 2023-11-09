@@ -55,7 +55,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      *
      * @var PublisherInterface
      */
-    private $publisher = null;
+    private $publisher;
 
     /**
      * An unique identifier for the transport.

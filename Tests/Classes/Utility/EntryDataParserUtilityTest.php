@@ -205,8 +205,6 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Creates an parser instance.
      *
-     * @param DevlogEntry|null $devLogEntry
-     *
      * @return EntryDataParserUtility
      */
     protected function getEntryDataParserUtility($devLogEntryOrExtraData = null)

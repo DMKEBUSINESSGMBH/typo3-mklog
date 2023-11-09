@@ -47,7 +47,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @var ConfigObject
      */
-    private $storage = null;
+    private $storage;
 
     /**
      * Returns a storage.

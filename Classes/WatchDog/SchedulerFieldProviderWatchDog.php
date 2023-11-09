@@ -240,8 +240,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * This method checks any additional data that is relevant to the specific task
      * If the task class is not relevant, the method is expected to return true.
      *
-     * @param array               $submittedData Reference to the array containing the data submitted by the user
-     * @param tx_scheduler_Module $scheduler     Module Reference to the calling object
+     * @param array $submittedData Reference to the array containing the data submitted by the user
      *
      * @return bool True if validation was ok (or selected class is not relevant), false otherwise
      *

@@ -53,14 +53,14 @@ class SchedulerWatchDog extends AbstractTask
      *
      * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
      */
-    private $options = null;
+    private $options;
 
     /**
      * Internal options storage.
      *
      * @var GenericArrayObject
      */
-    protected $schedulerOptions = null;
+    protected $schedulerOptions;
 
     /**
      * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
@@ -70,14 +70,14 @@ class SchedulerWatchDog extends AbstractTask
      *
      * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
      */
-    private $transport = null;
+    private $transport;
 
     /**
      * The current configured transport.
      *
      * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
-    protected $messageTransport = null;
+    protected $messageTransport;
 
     /**
      * After the update to TYPO3 9 the private $options variable can't be serialized and therefore not saved in the

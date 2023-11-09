@@ -42,8 +42,6 @@ class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Converts data into a string.
      *
-     * @param mixed $data
-     *
      * @return string
      */
     public function encode($data)

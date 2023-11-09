@@ -43,7 +43,7 @@ abstract class AbstractTransport implements InterfaceTransport
      *
      * @var GenericArrayObject
      */
-    private $options = null;
+    private $options;
 
     /**
      * Returns a storage.
