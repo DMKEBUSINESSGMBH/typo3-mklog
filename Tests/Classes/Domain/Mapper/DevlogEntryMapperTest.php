@@ -88,6 +88,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
             'uid' => 5,
             'pid' => 7,
             'run_id' => '0123456789',
+            'severity' => '4',
             'ext_key' => 'mklog',
             'host' => 'test.localhost.net',
             'message' => 'Just a test.',
@@ -101,6 +102,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
         $this->assertSame(5, $entry->getUid());
         $this->assertSame(7, $entry->getPid());
         $this->assertSame('0123456789', $entry->getRunId());
+        $this->assertSame(4, $entry->getSeverity());
         $this->assertSame('mklog', $entry->getExtKey());
         $this->assertSame('test.localhost.net', $entry->getHost());
         $this->assertSame('Just a test.', $entry->getMessage());
