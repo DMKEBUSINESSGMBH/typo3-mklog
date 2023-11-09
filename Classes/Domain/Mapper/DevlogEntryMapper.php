@@ -74,6 +74,7 @@ class DevlogEntryMapper
             ->setUid($record['uid'])
             ->setPid($record['pid'] ?: 0)
             ->setRunId($record['run_id'])
+            ->setSeverity($record['severity'] ?? 0)
             ->setExtKey($record['ext_key'] ?: '')
             ->setHost($record['host'] ?: '')
             ->setMessage($record['message'] ?: '')
