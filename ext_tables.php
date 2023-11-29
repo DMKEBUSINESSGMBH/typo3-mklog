@@ -42,6 +42,6 @@ defined('TYPO3') || exit('Access denied.');
         'access' => 'user,group',
         'name' => 'web_MklogBackend',
         'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
-        'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf'
+        'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
     ]
 );

@@ -30,7 +30,6 @@ namespace DMK\Mklog\Utility;
 use DMK\Mklog\Domain\Model\GenericArrayObject as ConfigObject;
 use DMK\Mklog\Factory;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
