@@ -1,0 +1,15 @@
+<select
+    name="currentPage"
+    id="currentPage"
+    data-global-event="change"
+    data-action-navigate="$data=~s/$value/"
+    data-action-submit="$form"
+    class="form-select"
+    data-menu-identifier="{id}"
+>
+    <f:for each="{pagination.allPageNumbers}" as="page">
+        <option value="{page}" {f:if(condition: '{currentPage}=={page}', then:'selected="selected"')}>
+           {page}
+        </option>
+    </f:for>
+</select>

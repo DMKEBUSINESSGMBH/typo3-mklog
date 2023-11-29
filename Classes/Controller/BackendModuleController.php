@@ -33,6 +33,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Attribute\Controller;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Pagination\ArrayPaginator;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Core\View\ViewInterface;
 
@@ -104,7 +106,7 @@ class BackendModuleController
         $queryParams = $request->getQueryParams();
 
         $demand = new DevlogEntryDemand();
-        $demand->setMaxResults(50);
+        $demand->setMaxResults(10000);
         $demand->setOrderBy('crdate', 'DESC');
 
         $severity = $parsedBody['severity'] ?? $queryParams['severity'] ?? null;
@@ -127,9 +129,51 @@ class BackendModuleController
             $demand->setTerm($term);
         }
 
-        $this->view->assign('results', $this->devlogEntryRepository->findByDemand($demand));
+        $results = $this->devlogEntryRepository->findByDemand($demand);
+        $this->view->assign('results', $results);
+
+        $currentPage = $parsedBody['currentPage'] ?? $queryParams['currentPage'] ?? 1;
+        $itemsPerPage = $parsedBody['itemsPerPage'] ?? $queryParams['itemsPerPage'] ?? 10;
+        $this->assignItemPageOptions();
+        $this->assignPagination($results, $currentPage, $itemsPerPage);
 
         $demand->setDoCount(true);
-        $this->view->assign('resultsCount', $this->devlogEntryRepository->findByDemandRaw($demand)->fetchOne());
+
+        $this->view->assignMultiple([
+            'resultsCount' => $this->devlogEntryRepository->findByDemandRaw($demand)->fetchOne(),
+        ]);
+    }
+
+    protected function assignPagination(array $results, int $currentPage = 1, $itemsPerPage = 10): void
+    {
+        $paginator = new ArrayPaginator(
+            $results,
+            $currentPage,
+            $itemsPerPage
+        );
+        $pagination = new SimplePagination(
+            $paginator
+        );
+
+        $this->view->assignMultiple([
+            'pagination' => $pagination,
+            'paginator' => $paginator,
+            'currentPage' => $currentPage,
+            'itemsPerPage' => $itemsPerPage,
+        ]);
+    }
+
+    protected function assignItemPageOptions(): void
+    {
+        $items = [
+            10 => 10,
+            25 => 25,
+            50 => 50,
+            100 => 100,
+        ];
+
+        $this->view->assignMultiple([
+            'itemPageOptions' => $items,
+        ]);
     }
 }

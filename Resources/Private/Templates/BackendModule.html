@@ -45,8 +45,19 @@
                             placeholder="{f:translate(key: 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_search')}"
                         />
                         <button type="submit" class="btn btn-default"><core:icon identifier="actions-search" /></button>
-                        <f:form.button type="reset" class="btn btn-default"><core:icon identifier="actions-input-clear" /></f:form.button>
                     </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="itemsPerPage"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_itemsperpage" /></label>
+                    <div class="input-group">
+                        <f:render partial="DropdownMenu" arguments="{name: 'itemsPerPage', id: 'itemsPerPage', options: itemPageOptions, currentValue: formData.itemsPerPage}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="itemsPerPage"><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:label_filter_page" /></label>
+                    <f:render partial="DropDownPagination" arguments="{paginator:paginator, pagination:pagination, currentPage:currentPage, pageUid:pageUid}" />
                 </div>
             </div>
         </form>
@@ -67,7 +78,8 @@
             </tr>
         </thead>
         <tbody>
-            <f:for each="{results}" as="result">
+            <f:for each="{paginator.paginatedItems}" as="result">
+                <tr>
                     <td>
                         <input type="checkbox" id="log-toggle-{result.uid}-link" style="display: none;">
                         <label for="log-toggle-{result.uid}-link" class="log-toggle-link" onclick="DMK.DevLog.toggleData({result.uid});"></label>

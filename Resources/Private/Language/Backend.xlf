@@ -64,7 +64,13 @@
                 <source>Extensions:</source>
             </trans-unit>
             <trans-unit id="label_search" resname="label_search"  approved="yes">
-                <source>Suchbegriff:</source>
+                <source>Suchbegriff</source>
+            </trans-unit>
+            <trans-unit id="label_filter_page" xml:space="preserve">
+                <source>Seite:</source>
+            </trans-unit>
+            <trans-unit id="label_filter_itemsperpage" xml:space="preserve">
+                <source>Einträge/Seite:</source>
             </trans-unit>
         </body>
     </file>
