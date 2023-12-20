@@ -187,8 +187,6 @@ abstract class BaseTestCase extends UnitTestCase
      *
      * @param object|array $object The object to be invoked or an a array with object and $name
      * @param string|array $name   the name of the method to call or the arguments array
-     *
-     * @return mixed
      */
     protected function callInaccessibleMethod($object, $name)
     {
@@ -219,7 +217,6 @@ abstract class BaseTestCase extends UnitTestCase
      *
      * @param string $originalClassName
      * @param array  $methods
-     * @param array  $arguments
      * @param string $mockClassName
      * @param bool   $callOriginalConstructor
      * @param bool   $callOriginalClone

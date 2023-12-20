@@ -98,6 +98,8 @@ class DataHandler
      * auch nicht für Admins.
      *
      * @param TYPO3\CMS\Core\DataHandling\DataHandler
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler)
     {
