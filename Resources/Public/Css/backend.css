@@ -81,10 +81,6 @@ pre.json-parsed {
     content: '–';
 }
 
-.table tr:has(input:checked) + tr {
-    display: table-row;
-}
-
 .table td+td {
     text-wrap: nowrap;
 }

@@ -33,6 +33,13 @@
             );
             data.className = "json-parsed";
         }
+
+        var dataRow = data.closest('tr');
+        if (dataRow.className.search("log-hidden") < 0) {
+            dataRow.className = "log-hidden";
+        } else {
+            dataRow.className = "";
+        }
     };
     w.DMK = DMK;
 })(window, document);
