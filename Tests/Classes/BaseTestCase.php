@@ -54,6 +54,7 @@ use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * Basis Testcase.
@@ -62,7 +63,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-abstract class BaseTestCase
+abstract class BaseTestCase extends UnitTestCase
 {
     /**
      * Property to store backups for set up and tear down.
@@ -172,5 +173,98 @@ abstract class BaseTestCase
             ->will(self::returnValue($connection->getMock()));
 
         return $repo;
+    }
+
+    /**
+     * Helper function to call protected methods.
+     * This method is taken from TYPO3 BaseTestCase initialy.
+     *
+     * The classic way:
+     *   ->callInaccessibleMethod($object, $methodname, $arg1, $arg2)
+     *
+     * The new way, with support for arguments as reference:
+     *   ->callInaccessibleMethod(array($object, $methodname), array($arg1, $arg2))
+     *
+     * @param object|array $object The object to be invoked or an a array with object and $name
+     * @param string|array $name   the name of the method to call or the arguments array
+     *
+     * @return mixed
+     */
+    protected function callInaccessibleMethod($object, $name)
+    {
+        if (is_array($object)) {
+            // the new way (supports arguments as references)
+            // $object is a array (with object and name) and $name a arguments array!
+            $arguments = $name;
+            list($object, $name) = $object;
+        } else {
+            // the classic way to read the arguments
+            // Remove first two arguments ($object and $name)
+            // phpcs:disable -- $object and $name never changes
+            $arguments = func_get_args();
+            array_splice($arguments, 0, 2);
+        }
+
+        $reflectionObject = new \ReflectionObject($object);
+        $reflectionMethod = $reflectionObject->getMethod($name);
+        $reflectionMethod->setAccessible(true);
+
+        return $reflectionMethod->invokeArgs($object, $arguments);
+    }
+
+    /**
+     * Wrapper for deprecated getMock method.
+     *
+     * Taken From nimut/testing-framework
+     *
+     * @param string $originalClassName
+     * @param array  $methods
+     * @param array  $arguments
+     * @param string $mockClassName
+     * @param bool   $callOriginalConstructor
+     * @param bool   $callOriginalClone
+     * @param bool   $callAutoload
+     * @param bool   $cloneArguments
+     * @param bool   $callOriginalMethods
+     * @param null   $proxyTarget
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
+    public function getMock(
+        $originalClassName,
+        $methods = [],
+        array $arguments = [],
+        $mockClassName = '',
+        $callOriginalConstructor = true,
+        $callOriginalClone = true,
+        $callAutoload = true,
+        $cloneArguments = false,
+        $callOriginalMethods = false,
+        $proxyTarget = null
+    ) {
+        $mockBuilder = $this->getMockBuilder($originalClassName)
+            ->setMethods($methods)
+            ->setConstructorArgs($arguments)
+            ->setMockClassName($mockClassName);
+        if (!$callOriginalConstructor) {
+            $mockBuilder->disableOriginalConstructor();
+        }
+        if (!$callOriginalClone) {
+            $mockBuilder->disableOriginalClone();
+        }
+        if (!$callAutoload) {
+            $mockBuilder->disableAutoload();
+        }
+        if ($cloneArguments) {
+            $mockBuilder->enableArgumentCloning();
+        }
+        if ($callOriginalMethods) {
+            $mockBuilder->enableProxyingToOriginalMethods();
+        }
+        if ($proxyTarget) {
+            $mockBuilder->setProxyTarget($proxyTarget);
+        }
+
+        return $mockBuilder->getMock();
     }
 }

@@ -58,6 +58,9 @@ class SeverityIconViewHelper extends AbstractViewHelper
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,

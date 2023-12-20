@@ -57,7 +57,7 @@ namespace DMK\Mklog\Domain\Model;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-class DevlogEntryTest extends \DMK\Mklog\Tests\BaseTestCase
+class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     /**
      * Test the getTableName method.

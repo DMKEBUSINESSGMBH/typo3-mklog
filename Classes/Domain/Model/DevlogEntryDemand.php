@@ -31,6 +31,8 @@ namespace DMK\Mklog\Domain\Model;
  * Basic data model with geter's and seter's.
  *
  * @author Michael Wagner
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class DevlogEntryDemand
 {

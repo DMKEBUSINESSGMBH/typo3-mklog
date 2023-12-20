@@ -101,7 +101,7 @@ class DataHandler
      */
     protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler)
     {
-        $tablesThatCanBeCopied = array_flip($dataHandler->compileAdminTables());
+        $tablesThatCanBeCopied = array_flip(array_keys($GLOBALS['TCA']));
 
         if (isset($tablesThatCanBeCopied[$this->getTableName()])) {
             unset($tablesThatCanBeCopied[$this->getTableName()]);

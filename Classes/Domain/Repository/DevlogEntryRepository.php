@@ -42,6 +42,9 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
+ *
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class DevlogEntryRepository
 {

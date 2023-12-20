@@ -129,24 +129,17 @@ class DataHandlerTest extends BaseTestCase
 
         $dataHandlerParent = $this->getMock(
             \TYPO3\CMS\Core\DataHandling\DataHandler::class,
-            ['compileAdminTables'],
+            [],
             [],
             '',
             false
         );
-        $dataHandlerParent
-            ->expects(self::once())
-            ->method('compileAdminTables')
-            ->will(
-                self::returnValue(
-                    [
-                        'pages',
-                        'tt_content',
-                        'sys_template',
-                        $mklogTable,
-                    ]
-                )
-            );
+        $GLOBALS['TCA'] = [
+            'pages' => [],
+            'tt_content' => [],
+            'sys_template' => [],
+            $mklogTable => [],
+        ];
 
         $this->callInaccessibleMethod($dataHandler, 'removeLogTablesFromTablesThatCanBeCopied', $dataHandlerParent);
 

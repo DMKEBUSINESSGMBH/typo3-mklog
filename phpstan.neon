@@ -2,7 +2,6 @@ parameters:
     level: 1
     bootstrapFiles:
         - "%currentWorkingDirectory%/.Build/vendor/autoload.php"
-        - "%currentWorkingDirectory%/Resources/Private/PHP/Composer/autoload.php"
     paths:
         - %currentWorkingDirectory%/Classes
         - %currentWorkingDirectory%/ext_localconf.php
