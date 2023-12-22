@@ -85,6 +85,8 @@ class DevlogEntryDemand
      */
     private $term = '';
 
+    private int $pid = 0;
+
     public function hasOrderBy(): bool
     {
         return !empty($this->orderByField);
@@ -209,5 +211,22 @@ class DevlogEntryDemand
     public function setTerm(string $term): void
     {
         $this->term = $term;
+    }
+
+    public function getPid(): int
+    {
+        return $this->pid;
+    }
+
+    /**
+     * @param int $pid
+     *
+     * @return $this
+     */
+    public function setPid($pid)
+    {
+        $this->pid = $pid;
+
+        return $this;
     }
 }

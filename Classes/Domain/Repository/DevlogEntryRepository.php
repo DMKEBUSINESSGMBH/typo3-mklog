@@ -198,6 +198,10 @@ class DevlogEntryRepository
             $queryBuilder->andWhere($queryBuilder->expr()->orX(...$termExpressions));
         }
 
+        if ($demand->getPid()) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('pid', intval($demand->getPid())));
+        }
+
         if ($demand->hasMaxResults()) {
             $queryBuilder->setMaxResults($demand->getMaxResults());
         }

@@ -107,6 +107,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
         $this->assertSame('testdata', $entry->getExtraDataRaw());
         $this->assertSame(987654321, $entry->getCrdate());
         $this->assertSame([], $entry->getTransportIds());
+        $this->assertSame(7, $entry->getPid());
     }
 
     /**

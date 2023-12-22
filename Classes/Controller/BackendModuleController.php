@@ -129,6 +129,11 @@ class BackendModuleController
             $demand->setTerm($term);
         }
 
+        $pageId = $parsedBody['id'] ?? $queryParams['id'] ?? 0;
+        if ($pageId) {
+            $demand->setPid((int) $pageId);
+        }
+
         $results = $this->devlogEntryRepository->findByDemand($demand);
         $this->view->assign('results', $results);
 
