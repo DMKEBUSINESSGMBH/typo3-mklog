@@ -31,7 +31,6 @@ use DMK\Mklog\Domain\Mapper\DevlogEntryMapper;
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Factory;
-use Doctrine\DBAL\Result;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
