@@ -32,11 +32,11 @@ use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Attribute\Controller;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Core\View\ViewInterface;
 
 /**
  * Class BackendModuleController.
@@ -48,7 +48,7 @@ use TYPO3\CMS\Core\View\ViewInterface;
 #[Controller]
 class BackendModuleController
 {
-    protected ViewInterface $view;
+    protected ModuleTemplate $view;
     protected DevlogEntryRepository $devlogEntryRepository;
     protected ModuleTemplateFactory $moduleTemplateFactory;
 
