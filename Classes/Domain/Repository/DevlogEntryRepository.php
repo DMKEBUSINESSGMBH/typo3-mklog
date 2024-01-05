@@ -138,11 +138,6 @@ class DevlogEntryRepository
      */
     public function findByDemand(DevlogEntryDemand $demand): array
     {
-        return DevlogEntryMapper::fromResults($this->findByDemandRaw($demand)->fetchAllAssociative());
-    }
-
-    public function findByDemandRaw(DevlogEntryDemand $demand): Result
-    {
         $queryBuilder = $this->createSearchQueryBuilder();
 
         if ($demand->hasTransportId()) {
@@ -210,7 +205,9 @@ class DevlogEntryRepository
             $queryBuilder->orderBy($demand->getOrderByField(), $demand->getOrderByDirection());
         }
 
-        return $queryBuilder->executeQuery();
+        return DevlogEntryMapper::fromResults(
+            $queryBuilder->executeQuery()->fetchAllAssociative()
+        );
     }
 
     public function deletyByPid(int $pid): void
