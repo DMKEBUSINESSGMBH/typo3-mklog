@@ -142,10 +142,8 @@ class BackendModuleController
         $this->assignItemPageOptions();
         $this->assignPagination($results, $currentPage, $itemsPerPage);
 
-        $demand->setDoCount(true);
-
         $this->view->assignMultiple([
-            'resultsCount' => $this->devlogEntryRepository->findByDemandRaw($demand)->fetchOne(),
+            'resultsCount' => count($results),
         ]);
     }
 

@@ -71,11 +71,6 @@ class DevlogEntryDemand
     private $maxResults;
 
     /**
-     * @var bool
-     */
-    private $doCount = false;
-
-    /**
      * @var int
      */
     private $runId = 0;
@@ -181,16 +176,6 @@ class DevlogEntryDemand
     public function setMaxResults(int $maxResults): void
     {
         $this->maxResults = $maxResults;
-    }
-
-    public function doCount(): bool
-    {
-        return $this->doCount;
-    }
-
-    public function setDoCount(bool $doCount): void
-    {
-        $this->doCount = $doCount;
     }
 
     public function getRunId(): int

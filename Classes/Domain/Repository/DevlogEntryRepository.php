@@ -210,10 +210,6 @@ class DevlogEntryRepository
             $queryBuilder->orderBy($demand->getOrderByField(), $demand->getOrderByDirection());
         }
 
-        if ($demand->doCount()) {
-            $queryBuilder->count('*');
-        }
-
         return $queryBuilder->executeQuery();
     }
 
