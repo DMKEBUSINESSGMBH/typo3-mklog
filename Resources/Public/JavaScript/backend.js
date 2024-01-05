@@ -41,5 +41,14 @@
             dataRow.className = "";
         }
     };
+
+    let toggleElements = d.getElementsByClassName('log-toggle-link');
+    Array.from(toggleElements).forEach(function(element) {
+        element.addEventListener('click', function(event) {
+            let resultUid = event.target.getAttribute("data-resultUid");
+            DMK.DevLog.toggleData(resultUid);
+        })
+    })
+
     w.DMK = DMK;
 })(window, document);

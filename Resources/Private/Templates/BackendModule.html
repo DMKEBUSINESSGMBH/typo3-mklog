@@ -82,7 +82,7 @@
                 <tr>
                     <td>
                         <input type="checkbox" id="log-toggle-{result.uid}-link" style="display: none;">
-                        <label for="log-toggle-{result.uid}-link" class="log-toggle-link" onclick="DMK.DevLog.toggleData({result.uid});"></label>
+                        <label for="log-toggle-{result.uid}-link" class="log-toggle-link" data-resultUid="{result.uid}"></label>
                     </td>
                     <td>
                         <f:be.link route="dmk_mklog_list" parameters="{runId: result.runId}">
