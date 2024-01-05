@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.

@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -166,7 +166,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     public function getMaxTransportExtraDataSize()
     {
         $maxSize = (int) $this->getExtConf('max_transport_extra_data_size');
-        $maxSize = $maxSize ?: \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB;
+        $maxSize = $maxSize ?: EntryDataParserUtility::SIZE_8MB;
 
         return $maxSize;
     }

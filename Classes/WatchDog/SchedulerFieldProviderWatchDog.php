@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -115,11 +115,11 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
         foreach ([
             'Mail' => [
-                \DMK\Mklog\WatchDog\Transport\MailTransport::class => 'Mail Message',
+                Transport\MailTransport::class => 'Mail Message',
             ],
             'Gelf (GrayLog)' => [
-                \DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf::class => 'Gelf HTTP',
-                \DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf::class => 'Gelf UDP',
+                Transport\Gelf\HttpGelf::class => 'Gelf HTTP',
+                Transport\Gelf\UdpGelf::class => 'Gelf UDP',
             ],
         ] as $group => $subs) {
             $fieldCode .= '<optgroup label="'.$group.'">';

@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -98,7 +98,7 @@ class DevlogEntryRepository
         }
         $optimized = true;
 
-        $maxRows = \DMK\Mklog\Factory::getConfigUtility()->getMaxLogs();
+        $maxRows = Factory::getConfigUtility()->getMaxLogs();
 
         // no cleanup
         if (empty($maxRows)) {
@@ -228,7 +228,7 @@ class DevlogEntryRepository
     ): void {
         // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
         $model->setExtraDataEncoded(
-            \DMK\Mklog\Factory::getEntryDataParserUtility($model)->getShortenedRaw(
+            Factory::getEntryDataParserUtility($model)->getShortenedRaw(
                 \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB * 2
             )
         );
