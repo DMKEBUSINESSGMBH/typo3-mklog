@@ -30,7 +30,6 @@ namespace DMK\Mklog\WatchDog\Transport;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\ComposerUtility;
 use DMK\Mklog\Utility\SeverityUtility;
-use DMK\Mklog\Utility\VersionUtility;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\MailMessage;
 

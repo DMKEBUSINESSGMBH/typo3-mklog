@@ -53,7 +53,6 @@ namespace DMK\Mklog\WatchDog\Transport;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Tests\BaseTestCase;
-use DMK\Mklog\Utility\VersionUtility;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 

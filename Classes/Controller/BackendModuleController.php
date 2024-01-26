@@ -54,6 +54,7 @@ class BackendModuleController
 {
     /**
      * @var ModuleTemplate|StandaloneView
+     *
      * @todo use real type hinting when support for TYPO3 11 is dropped
      */
     protected $view;

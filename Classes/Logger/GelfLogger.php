@@ -29,7 +29,6 @@ namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Utility\SeverityUtility;
-use DMK\Mklog\Utility\VersionUtility;
 use TYPO3\CMS\Core\Log\LogLevel;
 
 /**
