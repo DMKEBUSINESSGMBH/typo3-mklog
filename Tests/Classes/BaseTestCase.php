@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -80,8 +80,8 @@ abstract class BaseTestCase extends \Sys25\RnBase\Testing\BaseTestCase
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = true;
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['devlog']['nolog'] = true;
 
-        \DMK\Mklog\Factory::getStorage()->unsLoggingActive();
-        $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
+        Factory::getStorage()->unsLoggingActive();
+        $configStorage = $this->callInaccessibleMethod([Factory::getConfigUtility(), 'getStorage'], []);
         $configStorage->setExtConf(
             [
                 'enable_devlog' => 1,
@@ -106,7 +106,7 @@ abstract class BaseTestCase extends \Sys25\RnBase\Testing\BaseTestCase
     protected function tearDown(): void
     {
         // reset extconf cache
-        $configStorage = $this->callInaccessibleMethod([\DMK\Mklog\Factory::getConfigUtility(), 'getStorage'], []);
+        $configStorage = $this->callInaccessibleMethod([Factory::getConfigUtility(), 'getStorage'], []);
         $configStorage->unsExtConf();
     }
 

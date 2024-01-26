@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -79,7 +79,7 @@ final class Factory
     /**
      * Returns the config.
      *
-     * @return \DMK\Mklog\Utility\ConfigUtility
+     * @return ConfigUtility
      */
     public static function getConfigUtility()
     {
@@ -96,7 +96,7 @@ final class Factory
     /**
      * Returns the data converter.
      *
-     * @return \DMK\Mklog\Utility\DataConverterUtility
+     * @return DataConverterUtility
      */
     public static function getDataConverterUtility()
     {
@@ -113,7 +113,7 @@ final class Factory
     /**
      * Creates a devlog entry extra data parser instance.
      *
-     * @return \DMK\Mklog\Utility\EntryDataParserUtility
+     * @return EntryDataParserUtility
      */
     public static function getEntryDataParserUtility(Domain\Model\DevlogEntry $devlogEntry)
     {
@@ -123,7 +123,7 @@ final class Factory
     /**
      * Returns the devlog entry repository.
      *
-     * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
+     * @return DevlogEntryRepository
      */
     public static function getDevlogEntryRepository()
     {
@@ -135,7 +135,7 @@ final class Factory
      *
      * @param string $class
      *
-     * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     * @return InterfaceTransport
      */
     public static function getTransport($class)
     {

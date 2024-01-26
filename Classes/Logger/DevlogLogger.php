@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -94,7 +94,7 @@ class DevlogLogger extends AbstractLogger
             return;
         }
 
-        $config = \DMK\Mklog\Factory::getConfigUtility();
+        $config = Factory::getConfigUtility();
 
         // since typo3 10 psr-3 is used, we has to convert the loglevel to int
         if (VersionUtility::isTypo3Version10OrHigher()) {
@@ -182,13 +182,13 @@ class DevlogLogger extends AbstractLogger
         }
 
         // now check some cachable options
-        $storage = \DMK\Mklog\Factory::getStorage();
+        $storage = Factory::getStorage();
 
         if ($storage->hasLoggingActive()) {
             return $storage->getLoggingActive();
         }
 
-        $config = \DMK\Mklog\Factory::getConfigUtility();
+        $config = Factory::getConfigUtility();
 
         $storage->setLoggingActive(true);
 

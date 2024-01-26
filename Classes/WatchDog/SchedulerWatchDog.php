@@ -3,7 +3,7 @@
 /*
  * Copyright notice
  *
- * (c) 2011-2023 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
+ * (c) 2011-2024 DMK E-BUSINESS GmbH <dev@dmk-ebusiness.de>
  * All rights reserved
  *
  * This file is part of the "mklog" Extension for TYPO3 CMS.
@@ -66,7 +66,7 @@ class SchedulerWatchDog extends AbstractTask
      * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
      * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
      *
-     * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     * @var Transport\InterfaceTransport
      *
      * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
      */
@@ -75,7 +75,7 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * The current configured transport.
      *
-     * @var \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     * @var Transport\InterfaceTransport
      */
     protected $messageTransport;
 
@@ -248,7 +248,7 @@ class SchedulerWatchDog extends AbstractTask
     protected function markAsTransported(
         \DMK\Mklog\Domain\Model\DevlogEntry $message
     ) {
-        $repo = \DMK\Mklog\Factory::getDevlogEntryRepository();
+        $repo = Factory::getDevlogEntryRepository();
         $repo->persist(
             $message->addTransportId(
                 $this->getTransportId()
@@ -259,12 +259,12 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * Creates the transport.
      *
-     * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     * @return Transport\InterfaceTransport
      */
     protected function getTransport()
     {
         if (null === $this->messageTransport) {
-            $this->messageTransport = \DMK\Mklog\Factory::getTransport(
+            $this->messageTransport = Factory::getTransport(
                 $this->getOptions()->getTransport()
             );
         }
@@ -275,7 +275,7 @@ class SchedulerWatchDog extends AbstractTask
     /**
      * Creates the transport id.
      *
-     * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
+     * @return Transport\InterfaceTransport
      */
     protected function getTransportId()
     {
