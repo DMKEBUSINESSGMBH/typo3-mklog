@@ -26,7 +26,7 @@
  */
 
 return [
-    'dmk_mklog_list' => [
+    'web_MklogBackend' => [
         'parent' => 'web',
         'position' => ['bottom' => '*'],
         'access' => 'user',

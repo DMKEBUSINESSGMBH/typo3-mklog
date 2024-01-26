@@ -1,15 +1,6 @@
 {namespace mk=DMK\Mklog\ViewHelper}
 
-<f:layout name="Module" />
-
-<f:section name="Before">
-    <f:asset.css identifier="mklogCss" href="EXT:mklog/Resources/Public/Css/backend.css" />
-    <f:be.pageRenderer
-        includeJavaScriptModules="{
-            0: '@dmk/mklog/backend.js',
-        }"
-    />
-</f:section>
+<f:layout name="Default" />
 
 <f:section name="Content">
     <h1><f:translate key="LLL:EXT:mklog/Resources/Private/Language/Backend.xlf:title" /></h1>

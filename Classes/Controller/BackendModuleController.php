@@ -29,14 +29,18 @@ namespace DMK\Mklog\Controller;
 
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
+use DMK\Mklog\Utility\VersionUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Attribute\Controller;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class BackendModuleController.
@@ -48,7 +52,7 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 #[Controller]
 class BackendModuleController
 {
-    protected ModuleTemplate $view;
+    protected ModuleTemplate|StandaloneView $view;
     protected DevlogEntryRepository $devlogEntryRepository;
     protected ModuleTemplateFactory $moduleTemplateFactory;
 
@@ -63,7 +67,8 @@ class BackendModuleController
     public function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
         $pageId = (int) ($request->getQueryParams()['id'] ?? $request->getParsedBody()['id'] ?? 0);
-        $this->view = $this->moduleTemplateFactory->create($request);
+        $this->view = $this->getView($request);
+
         $this->view->assign('formData', $request->getParsedBody());
 
         $this->assignSeverityLevels();
@@ -73,7 +78,28 @@ class BackendModuleController
             'pageUid' => $pageId,
         ]);
 
-        return $this->view->renderResponse('BackendModule');
+        if (VersionUtility::isTypo3Version12OrHigher()) {
+            return $this->view->renderResponse('BackendModule');
+        }
+
+        $moduleTemplate = $this->moduleTemplateFactory->create($request);
+        $moduleTemplate->setContent($this->view->render());
+        return new HtmlResponse($moduleTemplate->renderContent());
+    }
+
+    protected function getView(ServerRequestInterface $request)
+    {
+        if (VersionUtility::isTypo3Version12OrHigher()) {
+            return $this->moduleTemplateFactory->create($request);
+        }
+
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setTemplateRootPaths(['EXT:mklog/Resources/Private/Templates/']);
+        $view->setPartialRootPaths(['EXT:mklog/Resources/Private/Partials/']);
+        $view->setLayoutRootPaths(['EXT:mklog/Resources/Private/Layouts/']);
+        $view->setTemplate('BackendModule_11');
+
+        return $view;
     }
 
     protected function assignSeverityLevels(): void

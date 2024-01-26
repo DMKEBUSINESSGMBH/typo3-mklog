@@ -38,6 +38,14 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
  */
 final class VersionUtility
 {
+    public static function isTypo3Version12OrHigher()
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(
+                VersionNumberUtility::getNumericTypo3Version()
+            ) >= 12000000
+            ;
+    }
+
     /**
      * Returns a storage.
      *
@@ -48,19 +56,6 @@ final class VersionUtility
         return VersionNumberUtility::convertVersionNumberToInteger(
             VersionNumberUtility::getNumericTypo3Version()
         ) >= 10000000
-        ;
-    }
-
-    /**
-     * Returns a storage.
-     *
-     * @return bool
-     */
-    public static function isTypo3Version9OrHigher()
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        ) >= 9000000
         ;
     }
 }
