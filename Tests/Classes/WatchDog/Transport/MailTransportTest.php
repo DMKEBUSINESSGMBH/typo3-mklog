@@ -80,7 +80,7 @@ class MailTransportTest extends BaseTestCase
      */
     public function testSendMailWithDefaultSubject()
     {
-        $subjectMethod = VersionUtility::isTypo3Version10OrHigher() ? 'subject' : 'setSubject';
+        $subjectMethod = 'subject';
         $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod, 'send']);
         $mailUtility->expects(self::once())
             ->method($subjectMethod)
@@ -106,7 +106,7 @@ class MailTransportTest extends BaseTestCase
      */
     public function testSendMailWithSubjectFromOptions()
     {
-        $subjectMethod = VersionUtility::isTypo3Version10OrHigher() ? 'subject' : 'setSubject';
+        $subjectMethod = 'subject';
         $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod, 'send']);
         $mailUtility->expects(self::once())
             ->method($subjectMethod)

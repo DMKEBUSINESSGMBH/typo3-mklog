@@ -52,7 +52,11 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 #[Controller]
 class BackendModuleController
 {
-    protected ModuleTemplate|StandaloneView $view;
+    /**
+     * @var ModuleTemplate|StandaloneView
+     * @todo use real type hinting when support for TYPO3 11 is dropped
+     */
+    protected $view;
     protected DevlogEntryRepository $devlogEntryRepository;
     protected ModuleTemplateFactory $moduleTemplateFactory;
 

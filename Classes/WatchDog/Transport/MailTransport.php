@@ -211,10 +211,6 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
         $mailFrom = Address::create(Factory::getConfigUtility()->getGlobalMailFrom());
         $mailTo = Address::create($this->getOptions()->getCredentials());
 
-        if (!VersionUtility::isTypo3Version10OrHigher()) {
-            return $this->sendMailLegacy($content, $subject, $mailFrom, $mailTo);
-        }
-
         $mail = Factory::makeInstance(MailMessage::class);
         $mail
             ->from($mailFrom)
@@ -224,25 +220,5 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
         ;
 
         return $mail->send();
-    }
-
-    /**
-     * Sends the devlog content per mail for typo3 9 or earlier.
-     */
-    protected function sendMailLegacy(
-        string $content,
-        string $subject,
-        Address $mailFrom,
-        Address $mailTo
-    ): bool {
-        $mail = Factory::makeInstance(MailMessage::class);
-        $mail
-            ->setFrom($mailFrom->getAddress())
-            ->setTo($mailTo->getAddress())
-            ->setSubject($subject)
-            ->setBody($content)
-        ;
-
-        return $mail->send() > 0;
     }
 }

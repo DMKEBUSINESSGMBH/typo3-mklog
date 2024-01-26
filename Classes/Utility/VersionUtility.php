@@ -45,17 +45,4 @@ final class VersionUtility
         ) >= 12000000
         ;
     }
-
-    /**
-     * Returns a storage.
-     *
-     * @return bool
-     */
-    public static function isTypo3Version10OrHigher()
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        ) >= 10000000
-        ;
-    }
 }

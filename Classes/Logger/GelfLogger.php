@@ -126,10 +126,7 @@ class GelfLogger extends AbstractLogger
     {
         $config = \DMK\Mklog\Factory::getConfigUtility();
 
-        // since typo3 10 psr-3 is used, we has to convert the loglevel to int
-        if (VersionUtility::isTypo3Version10OrHigher()) {
-            $severity = LogLevel::normalizeLevel($severity);
-        }
+        $severity = LogLevel::normalizeLevel($severity);
 
         // check min log level
         if (
