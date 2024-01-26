@@ -41,9 +41,9 @@ final class VersionUtility
     public static function isTypo3Version12OrHigher()
     {
         return VersionNumberUtility::convertVersionNumberToInteger(
-                VersionNumberUtility::getNumericTypo3Version()
-            ) >= 12000000
-            ;
+            VersionNumberUtility::getNumericTypo3Version()
+        ) >= 12000000
+        ;
     }
 
     /**

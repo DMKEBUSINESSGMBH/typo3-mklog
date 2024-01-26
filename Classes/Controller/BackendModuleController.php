@@ -84,6 +84,7 @@ class BackendModuleController
 
         $moduleTemplate = $this->moduleTemplateFactory->create($request);
         $moduleTemplate->setContent($this->view->render());
+
         return new HtmlResponse($moduleTemplate->renderContent());
     }
 
