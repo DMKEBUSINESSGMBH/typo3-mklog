@@ -19,7 +19,7 @@
 
 <f:section name="Form">
     <div class="">
-        <form action="{f:be.uri(route: 'web_MklogBackend', parameters: '{id: pageUid}')}" method="post" id="BackendModuleController" name="search">
+        <form action="{f:be.uri(route: 'dmk_mklog_list', parameters: '{id: pageUid}')}" method="post" id="BackendModuleController" name="search">
             <div class="form-row">
 
                 <div class="form-group">
@@ -85,7 +85,7 @@
                         <label for="log-toggle-{result.uid}-link" class="log-toggle-link" data-resultUid="{result.uid}"></label>
                     </td>
                     <td>
-                        <f:be.link route="web_MklogBackend" parameters="{runId: result.runId}">
+                        <f:be.link route="dmk_mklog_list" parameters="{runId: result.runId}">
                             <f:format.date format="d.m.Y H:i:s">{result.crdate}</f:format.date>
                         </f:be.link>
                     </td>
