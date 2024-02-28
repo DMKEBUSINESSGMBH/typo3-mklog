@@ -129,7 +129,7 @@ abstract class BaseTestCase extends UnitTestCase
     /**
      * Returns a devlog entry model mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Domain\Model\DevlogEntry
+     * @return \PHPUnit_Framework_MockObject_MockObject|DevlogEntry
      */
     protected function getDevlogEntry()
     {

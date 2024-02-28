@@ -76,7 +76,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Returns the logger mock.
      *
-     * @return PHPUnit_Framework_MockObject_MockObject|\DMK\Mklog\Logger\GelfLogger
+     * @return PHPUnit_Framework_MockObject_MockObject|GelfLogger
      */
     protected function getGelfLoggerMock()
     {
