@@ -45,7 +45,7 @@ class DevlogEntry extends \DMK\Mklog\Domain\Model\DevlogEntry implements \Sys25\
      *
      * @TODO: legacy rn_base make instance model support, remove if rn_base isn't used anymore
      */
-    public function __construct(array $record = null)
+    public function __construct(?array $record = null)
     {
         if (null !== $record && is_array($record)) {
             foreach ($record as $columnName => $value) {
