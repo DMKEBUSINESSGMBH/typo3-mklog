@@ -29,6 +29,7 @@ namespace DMK\Mklog\Logger;
 
 use PHPUnit\Util\Test;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  * Copyright notice
@@ -70,13 +71,15 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->lockFile = Environment::getVarPath().'/lock/mklog_exception_during_logging.lock';
+        $lockFilesFolder = Environment::getVarPath().'/lock/';
+        GeneralUtility::mkdir_deep($lockFilesFolder);
+        $this->lockFile = $lockFilesFolder.'mklog_exception_during_logging.lock';
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        @unlink($this->lockFile);
+        GeneralUtility::rmdir(Environment::getVarPath().'/lock/');
     }
 
     /**
