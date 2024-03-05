@@ -43,7 +43,7 @@ $EM_CONF['mklog'] = [
     'modify_tables' => '',
     'clearCacheOnLoad' => 0,
     'lockType' => '',
-    'version' => '10.1.3',
+    'version' => '10.1.4',
     'constraints' => [
         'depends' => [
             'typo3' => '9.5.24-10.4.99',
@@ -51,7 +51,7 @@ $EM_CONF['mklog'] = [
         ],
         'conflicts' => [],
         'suggests' => [
-            'rn_base' => '1.15.0-',
+            'rn_base' => '1.15.0-1.16.99',
         ],
     ],
     'suggests' => [],
