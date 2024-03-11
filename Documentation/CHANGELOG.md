@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+12.0.0
+------
+* TYPO3 12.4 compatibility
+
+
 11.0.12
 ------
 * bugfix for BE module since rn_base 1.16.7
