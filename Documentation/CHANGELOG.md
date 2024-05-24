@@ -1,10 +1,17 @@
 ChangeLog
 =========
 
+12.0.3
+------
+* Remove stack trace arguments from error mail when an exception during logging occured.
+
+12.0.2
+------
+* Minor bugfixes
+
 12.0.0
 ------
 * TYPO3 12.4 compatibility
-
 
 11.0.12
 ------
