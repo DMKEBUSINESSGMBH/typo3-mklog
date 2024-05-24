@@ -79,7 +79,7 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        GeneralUtility::rmdir(Environment::getVarPath().'/lock/');
+        GeneralUtility::rmdir(Environment::getVarPath().'/lock/', true);
     }
 
     /**
@@ -134,5 +134,23 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             [time() - 60, false],
             [time() - 61, true],
         ];
+    }
+
+    /**
+     * @group unit
+     *
+     * @test
+     */
+    public function getExceptionTraceWithoutArguments()
+    {
+        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
+        try {
+            throw new \Exception('An error occured');
+        } catch (\Exception $exception) {
+            self::assertStringNotContainsString(
+                'Object(DMK\Mklog\Logger\AbstractLoggerTest)',
+                $this->callInaccessibleMethod($abstractLogger, 'getExceptionTraceWithoutArguments', $exception)
+            );
+        }
     }
 }

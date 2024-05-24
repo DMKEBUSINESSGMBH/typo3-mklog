@@ -173,7 +173,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             $mailContent = 'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
             $mailContent .= 'URL: '.GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL')."\n";
             $mailContent .= 'Message: '.$exception->getMessage()."\n\n";
-            $mailContent .= "Stacktrace:\n".$exception->__toString()."\n";
+            $mailContent .= "Stacktrace:\n".$this->getExceptionTraceWithoutArguments($exception)."\n";
             GeneralUtility::makeInstance(MailMessage::class)
                 ->to(new Address($address))
                 ->subject('Exception during logging on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'])
@@ -204,6 +204,22 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         }
 
         return $mailCanBeSend;
+    }
+
+    protected function getExceptionTraceWithoutArguments(\Throwable $exception): string
+    {
+        $traceAsString = '';
+        foreach ($exception->getTrace() as $key => $trace) {
+            $traceAsString .= '#'.$key;
+            $traceAsString .= ' '.$trace['file'];
+            $traceAsString .= '('.$trace['line'].'): ';
+            $traceAsString .= $trace['class'] ?? '';
+            $traceAsString .= $trace['type'] ?? '';
+            $traceAsString .= $trace['function'] ?? '';
+            $traceAsString .= "\n";
+        }
+
+        return $traceAsString;
     }
 
     /**
