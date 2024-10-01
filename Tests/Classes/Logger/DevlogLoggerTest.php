@@ -190,7 +190,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      * @return PHPUnit_Framework_MockObject_MockObject|DevlogLogger
      */
     protected function getDevlogLoggerMock(
-        array $methods = []
+        array $methods = [],
     ) {
         $logger = $this->getMock(
             DevlogLogger::class,

@@ -70,7 +70,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      * Initializes the Transport.
      */
     public function initialize(
-        \DMK\Mklog\Domain\Model\GenericArrayObject $options
+        \DMK\Mklog\Domain\Model\GenericArrayObject $options,
     ) {
         parent::initialize($options);
 
@@ -92,7 +92,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      * Publishes a message by the provider.
      */
     public function publish(
-        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message,
     ) {
         $this->addMessage($message);
     }
@@ -101,7 +101,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      * Adds a Message to send.
      */
     protected function addMessage(
-        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message
+        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message,
     ) {
         $level = $message->getLevel();
 
@@ -201,7 +201,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      * @param string $content
      */
     protected function sendMail(
-        $content
+        $content,
     ): bool {
         $subject = sprintf(
             $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',

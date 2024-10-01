@@ -50,14 +50,14 @@ interface InterfaceTransport
      * Initializes the Transport.
      */
     public function initialize(
-        GenericArrayObject $options
+        GenericArrayObject $options,
     );
 
     /**
      * Publishes a message by the provider.
      */
     public function publish(
-        InterfaceMessage $message
+        InterfaceMessage $message,
     );
 
     /**

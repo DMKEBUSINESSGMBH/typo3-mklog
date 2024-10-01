@@ -59,7 +59,7 @@ abstract class AbstractTransport implements InterfaceTransport
      * Initializes the Transport.
      */
     public function initialize(
-        GenericArrayObject $options
+        GenericArrayObject $options,
     ) {
         $this->options = GenericArrayObject::getInstance($options);
     }
