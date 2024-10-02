@@ -6,8 +6,3 @@ services:
 
     DMK\Mklog\:
         resource: '../Classes/*'
-
-    DMK\Mklog\Controller\BackendModuleController:
-      tags: [ 'backend.controller' ]
-
-
