@@ -25,27 +25,11 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-use DMK\Mklog\Utility\VersionUtility;
-
 defined('TYPO3') || exit('Access denied.');
 
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/TypoScript/Backend/pageTSconfig.txt">'
-);
-
-if (!VersionUtility::isTypo3Version12OrHigher()) {
-    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
-        'web',
-        'MklogBackend',
-        'bottom',
-        null,
-        [
-            'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
-            'routeTarget' => DMK\Mklog\Controller\BackendModuleController::class.'::handleRequest',
-            'access' => 'user,group',
-            'name' => 'web_MklogBackend',
-            'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
-            'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
-        ]
+// Automatically include in TYPO3 13 and higher
+if (DMK\Mklog\Utility\VersionUtility::isTypo3Version12OrLower()) {
+    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/page.tsconfig">'
     );
 }
