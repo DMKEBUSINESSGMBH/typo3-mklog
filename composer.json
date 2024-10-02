@@ -36,8 +36,8 @@
         "typo3-ter/mklog": "self.version"
     },
     "require": {
-        "typo3/cms-core": "^11.5.7 || ^v12.4.2 || ^13.2",
-        "typo3/cms-scheduler": "^11.5 || ^v12.4 || ^13.2",
+        "typo3/cms-core": "^v12.4.2 || ^13.2",
+        "typo3/cms-scheduler": "^v12.4 || ^13.2",
         "graylog2/gelf-php": "~1 || ^2.0",
         "egulias/email-validator": "^2.1 || ^3.1 || ^4.0",
         "doctrine/dbal": "~2.13.1 || ^3.6 || ~4.0.2"
@@ -52,10 +52,8 @@
         "phpstan/phpstan": "^1.1",
         "phpstan/extension-installer": "^1.1",
         "saschaegerer/phpstan-typo3": "^1.0",
-        "typo3/testing-framework": "^7.0"
-    },
-    "suggest": {
-        "digedag/rn-base": "Needed for the backend module, so you can view the logs directly in the TYPO3 backend"
+        "typo3/testing-framework": "^7.0",
+        "ssch/typo3-rector": "^2.8"
     },
     "autoload": {
         "classmap": [
@@ -85,7 +83,6 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-11.5": "11.0.x-dev",
             "dev-12.4": "12.4.x-dev",
             "dev-13.2": "13.2.x-dev"
         },
@@ -119,16 +116,11 @@
             ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
         ],
         "test:phpcompatibility": [
-            "@test:phpcompatibility:7.4",
-            "@test:phpcompatibility:8.0"
+            "@test:phpcompatibility:8"
         ],
-        "test:phpcompatibility:7.4": [
+        "test:phpcompatibility:8": [
             "[ -e .Build/bin/phpcs ] || composer update",
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Private/PHP/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 7.4"
-        ],
-        "test:phpcompatibility:8.0": [
-            "[ -e .Build/bin/phpcs ] || composer update",
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Private/PHP/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.0"
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Private/PHP/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1-8.3"
         ],
         "test:phpmd": [
             "[ -e .Build/bin/phpmd ] || composer update --ansi",
@@ -142,8 +134,13 @@
             "[ -e .Build/bin/phpunit ] || composer update --ansi",
             "export TYPO3_PATH_WEB=$PWD/.Build/Web && .Build/bin/phpunit --colors=always"
         ],
+        "test:rector": [
+            "[ -e .Build/bin/rector ] || composer update --ansi",
+            ".Build/bin/rector process --ansi --dry-run"
+        ],
         "test": [
             "@test:phpcs",
+            "@test:rector",
             "@test:phpcompatibility",
             "@test:phpmd",
             "@test:phpstan",
@@ -152,6 +149,10 @@
         "fix:phpcs": [
             "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
             ".Build/bin/php-cs-fixer fix -v"
+        ],
+        "fix:rector": [
+            "[ -e .Build/bin/rector ] || composer update --ansi",
+            ".Build/bin/rector process --ansi"
         ],
         "fix": [
             "@fix:phpcs"
