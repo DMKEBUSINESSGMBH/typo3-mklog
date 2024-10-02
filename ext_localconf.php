@@ -30,18 +30,18 @@ if (!defined('TYPO3')) {
 }
 
 call_user_func(
-    function () {
+    function (): void {
         $config = DMK\Mklog\Factory::getConfigUtility();
 
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\WatchDog\\SchedulerWatchDog'] = [
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][DMK\Mklog\WatchDog\SchedulerWatchDog::class] = [
             'extension' => 'mklog',
             'title' => 'Watchdog',
             'description' => '',
-            'additionalFields' => 'DMK\\Mklog\\WatchDog\\SchedulerFieldProviderWatchDog',
+            'additionalFields' => DMK\Mklog\WatchDog\SchedulerFieldProviderWatchDog::class,
         ];
 
         // cleanup task
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['DMK\\Mklog\\Task\\CleanupLogTableTask'] = [
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][DMK\Mklog\Task\CleanupLogTableTask::class] = [
             'extension' => 'mklog',
             'title' => 'LLL:EXT:mklog/locallang_db.xlf:scheduler_cleanup_log_table_name',
             'description' => 'LLL:EXT:mklog/locallang_db.xlf:scheduler_cleanup_log_table_description',
@@ -55,6 +55,7 @@ call_user_func(
             $loglevel = DMK\Mklog\Utility\SeverityUtility::getPsrLevelConstant($loglevel);
             $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'][$loglevel][DMK\Mklog\Logger\DevlogLogger::class] = [];
         }
+
         if ($config->isGelfEnable()) {
             // register logger writer
             $loglevel = ($config->getGelfMinLogLevel() ?: DMK\Mklog\Utility\SeverityUtility::ALERT);

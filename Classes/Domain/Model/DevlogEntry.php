@@ -63,30 +63,37 @@ class DevlogEntry implements InterfaceMessage
      * @var string As varchar(50)
      */
     protected $runId;
+
     /**
      * @var int
      */
     protected $severity;
+
     /**
      * @var string As varchar(255)
      */
     protected $extKey;
+
     /**
      * @var string As varchar(255)
      */
     protected $host;
+
     /**
      * @var string As text
      */
     protected $message;
+
     /**
      * @var string As mediumblob
      */
     protected $extraData;
+
     /**
      * @var int
      */
     protected $cruserId;
+
     /**
      * @var string As varchar(60)
      */
@@ -97,9 +104,14 @@ class DevlogEntry implements InterfaceMessage
         $values = [];
 
         foreach (get_object_vars($this) as $propertyName => $value) {
-            if (null === $value || '_' === $propertyName[0]) {
+            if (null === $value) {
                 continue;
             }
+
+            if ('_' === $propertyName[0]) {
+                continue;
+            }
+
             $column = GeneralUtility::camelCaseToLowerCaseUnderscored($propertyName);
             $values[$column] = $value;
         }
@@ -166,10 +178,8 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * @param int $crdate
-     *
-     * @return self
      */
-    public function setCrdate($crdate)
+    public function setCrdate($crdate): static
     {
         $this->crdate = (int) $crdate;
 
@@ -181,10 +191,7 @@ class DevlogEntry implements InterfaceMessage
         return $this->runId;
     }
 
-    /**
-     * @return self
-     */
-    public function setRunId(string $runId)
+    public function setRunId(string $runId): static
     {
         $this->runId = $runId;
 
@@ -198,10 +205,8 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * @param int $severity
-     *
-     * @return self
      */
-    public function setSeverity($severity)
+    public function setSeverity($severity): static
     {
         $this->severity = (int) $severity;
 
@@ -213,10 +218,7 @@ class DevlogEntry implements InterfaceMessage
         return $this->extKey;
     }
 
-    /**
-     * @return self
-     */
-    public function setExtKey(string $extKey)
+    public function setExtKey(string $extKey): static
     {
         $this->extKey = $extKey;
 
@@ -228,10 +230,7 @@ class DevlogEntry implements InterfaceMessage
         return $this->message;
     }
 
-    /**
-     * @return self
-     */
-    public function setMessage(string $message)
+    public function setMessage(string $message): static
     {
         $this->message = $message;
 
@@ -245,10 +244,8 @@ class DevlogEntry implements InterfaceMessage
 
     /**
      * @param int $cruserId
-     *
-     * @return self
      */
-    public function setCruserId($cruserId)
+    public function setCruserId($cruserId): static
     {
         $this->cruserId = (int) $cruserId;
 
@@ -343,6 +340,7 @@ class DevlogEntry implements InterfaceMessage
             if ($this->isInternalProperty($key)) {
                 continue;
             }
+
             $data[$key] = $value;
         }
 
@@ -351,7 +349,7 @@ class DevlogEntry implements InterfaceMessage
 
     protected function isInternalProperty($property): bool
     {
-        return is_string($property) && '__' === substr($property, 0, 2);
+        return is_string($property) && str_starts_with($property, '__');
     }
 
     /**
@@ -365,6 +363,7 @@ class DevlogEntry implements InterfaceMessage
             if (!$this->isInternalProperty($key)) {
                 continue;
             }
+
             $data[substr($key, 2)] = $value;
         }
 
@@ -446,7 +445,7 @@ class DevlogEntry implements InterfaceMessage
 
         // as fallback use the server hostname
         if (empty($host)) {
-            $host = gethostname();
+            return gethostname();
         }
 
         return $host;

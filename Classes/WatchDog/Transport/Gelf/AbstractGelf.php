@@ -52,10 +52,8 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
 {
     /**
      * The gelf publisher.
-     *
-     * @var PublisherInterface
      */
-    private $publisher;
+    private ?Publisher $publisher = null;
 
     /**
      * An unique identifier for the transport.
@@ -79,7 +77,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      */
     public function initialize(
         GenericArrayObject $options,
-    ) {
+    ): void {
         parent::initialize($options);
 
         ComposerUtility::autoload();
@@ -90,7 +88,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      */
     public function publish(
         InterfaceMessage $message,
-    ) {
+    ): void {
         $gelfMsg = new Message();
         $gelfMsg
             ->setVersion('1.1')
@@ -112,6 +110,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
             if (!\is_scalar($value)) {
                 $value = $converter->encode($value);
             }
+
             $gelfMsg->setAdditional(
                 $key,
                 $value
@@ -128,7 +127,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      */
     protected function getPublisher()
     {
-        if (null === $this->publisher) {
+        if (!$this->publisher instanceof Publisher) {
             $this->publisher = new Publisher(
                 $this->getTransport()
             );

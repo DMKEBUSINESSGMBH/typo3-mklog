@@ -140,35 +140,28 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * Minimum log level to log.
-     *
-     * @return int
      */
-    public function getMinLogLevel()
+    public function getMinLogLevel(): int
     {
         return (int) $this->getExtConf('min_log_level');
     }
 
     /**
      * Max rows to keep after cleanup.
-     *
-     * @return int
      */
-    public function getMaxLogs()
+    public function getMaxLogs(): int
     {
         return (int) $this->getExtConf('max_logs');
     }
 
     /**
      * Max size of extra_data in byte.
-     *
-     * @return int
      */
-    public function getMaxTransportExtraDataSize()
+    public function getMaxTransportExtraDataSize(): int
     {
         $maxSize = (int) $this->getExtConf('max_transport_extra_data_size');
-        $maxSize = $maxSize ?: EntryDataParserUtility::SIZE_8MB;
 
-        return $maxSize;
+        return 0 !== $maxSize ? $maxSize : EntryDataParserUtility::SIZE_8MB;
     }
 
     /**
@@ -181,7 +174,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
         $extKeys = $this->getExtConf('exclude_ext_keys', []);
 
         if (!is_array($extKeys)) {
-            $extKeys = GeneralUtility::trimExplode(',', $extKeys);
+            return GeneralUtility::trimExplode(',', $extKeys);
         }
 
         return $extKeys;
@@ -226,8 +219,6 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getGlobalMailFrom(): string
     {
-        $mail = $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
-
-        return $mail;
+        return $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
     }
 }

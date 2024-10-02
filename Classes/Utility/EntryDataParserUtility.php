@@ -40,22 +40,18 @@ use DMK\Mklog\Factory;
 class EntryDataParserUtility
 {
     public const SIZE_512KB = 524288;
-    public const SIZE_1MB = 1048576;
-    public const SIZE_8MB = 8388608;
 
-    /**
-     * @var DevlogEntry
-     */
-    protected $devlogEntry;
+    public const SIZE_1MB = 1048576;
+
+    public const SIZE_8MB = 8388608;
 
     /**
      * @var DataConverterUtility
      */
     protected $converter;
 
-    public function __construct(DevlogEntry $devlogEntry)
+    public function __construct(protected DevlogEntry $devlogEntry)
     {
-        $this->devlogEntry = $devlogEntry;
         $this->converter = Factory::getDataConverterUtility();
     }
 
@@ -82,10 +78,8 @@ class EntryDataParserUtility
      * Returns the shortened external data as json sting.
      *
      * @param int $maxLen
-     *
-     * @return array
      */
-    public function getShortenedInternalExtraData($maxLen = null)
+    public function getShortenedInternalExtraData($maxLen = null): array
     {
         return $this->stripJson(
             $this->devlogEntry->getInternalExtraData(),
@@ -97,10 +91,8 @@ class EntryDataParserUtility
      * Returns the shortened external data as json sting.
      *
      * @param int $maxLen
-     *
-     * @return array
      */
-    public function getShortenedExternalExtraData($maxLen = null)
+    public function getShortenedExternalExtraData($maxLen = null): array
     {
         return $this->stripJson(
             $this->devlogEntry->getExternalExtraData(),
@@ -114,10 +106,8 @@ class EntryDataParserUtility
      * Data entries will be removed from the end while the max len matches.
      *
      * @param int $maxLen
-     *
-     * @return array
      */
-    protected function stripJson(array $jsonData, $maxLen = null)
+    protected function stripJson(array $jsonData, $maxLen = null): array
     {
         $striped = 0;
         // reduce max len by 30 char length stripped comment
@@ -129,6 +119,7 @@ class EntryDataParserUtility
             if ($this->getStringSize($jsonString) <= $maxLen) {
                 break;
             }
+
             array_pop($jsonData);
             ++$striped;
         }
@@ -144,10 +135,8 @@ class EntryDataParserUtility
      * Calculates the String size in byte.
      *
      * @param string $data
-     *
-     * @return int
      */
-    protected function getStringSize($data)
+    protected function getStringSize($data): int
     {
         return strlen($data);
     }

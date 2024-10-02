@@ -32,9 +32,7 @@ use DMK\Mklog\Utility\SeverityUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Class SeverityIconViewHelper.
@@ -45,9 +43,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class SeverityIconViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument(
@@ -61,16 +57,12 @@ class SeverityIconViewHelper extends AbstractViewHelper
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ) {
-        $severityId = $arguments['logEntry']->getSeverity();
+    public function render(): string
+    {
+        $severityId = $this->arguments['logEntry']->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
-        $icon = self::getSeverityIconClass($severityId);
-
-        if (!empty($icon)) {
+        $icon = $this->getSeverityIconClass($severityId);
+        if ('' !== $icon && '0' !== $icon) {
             $icon = GeneralUtility::makeInstance(IconFactory::class)->getIcon($icon, Icon::SIZE_SMALL);
         }
 
@@ -82,30 +74,17 @@ class SeverityIconViewHelper extends AbstractViewHelper
         );
     }
 
-    private static function getSeverityIconClass(int $severityId): string
+    private function getSeverityIconClass(int $severityId): string
     {
         $icon = '';
-        switch ($severityId) {
-            case SeverityUtility::DEBUG:
-                $icon = 'status-dialog-ok';
-                break;
-            case SeverityUtility::INFO:
-                $icon = 'status-dialog-information';
-                break;
-            case SeverityUtility::NOTICE:
-                $icon = 'status-dialog-notification';
-                break;
-            case SeverityUtility::WARNING:
-                $icon = 'status-dialog-warning';
-                break;
-            case SeverityUtility::ERROR:
-            case SeverityUtility::CRITICAL:
-            case SeverityUtility::ALERT:
-            case SeverityUtility::EMERGENCY:
-                $icon = 'status-dialog-error';
-                break;
-        }
 
-        return $icon;
+        return match ($severityId) {
+            SeverityUtility::DEBUG => 'status-dialog-ok',
+            SeverityUtility::INFO => 'status-dialog-information',
+            SeverityUtility::NOTICE => 'status-dialog-notification',
+            SeverityUtility::WARNING => 'status-dialog-warning',
+            SeverityUtility::ERROR, SeverityUtility::CRITICAL, SeverityUtility::ALERT, SeverityUtility::EMERGENCY => 'status-dialog-error',
+            default => $icon,
+        };
     }
 }

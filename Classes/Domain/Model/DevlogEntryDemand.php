@@ -36,55 +36,29 @@ namespace DMK\Mklog\Domain\Model;
  */
 class DevlogEntryDemand
 {
-    /**
-     * @var string
-     */
-    private $orderByField = '';
+    private string $orderByField = '';
 
-    /**
-     * @var string
-     */
-    private $orderByDirection = 'ASC';
+    private string $orderByDirection = 'ASC';
 
-    /**
-     * @var string
-     */
-    private $transportId;
+    private string $transportId;
 
-    /**
-     * @var int
-     */
-    private $severity;
+    private ?int $severity = null;
 
-    /**
-     * @var array
-     */
-    private $extensionWhitelist;
-    /**
-     * @var array
-     */
-    private $extensionBlacklist;
+    private array $extensionWhitelist = [];
 
-    /**
-     * @var int
-     */
-    private $maxResults;
+    private array $extensionBlacklist = [];
 
-    /**
-     * @var int
-     */
-    private $runId = 0;
+    private int $maxResults;
 
-    /**
-     * @var string
-     */
-    private $term = '';
+    private int $runId = 0;
+
+    private string $term = '';
 
     private int $pid = 0;
 
     public function hasOrderBy(): bool
     {
-        return !empty($this->orderByField);
+        return '' !== $this->orderByField && '0' !== $this->orderByField;
     }
 
     public function getOrderByField(): string
@@ -105,7 +79,7 @@ class DevlogEntryDemand
 
     public function hasTransportId(): bool
     {
-        return !empty($this->transportId);
+        return isset($this->transportId) && ('' !== $this->transportId && '0' !== $this->transportId);
     }
 
     public function getTransportId(): string
@@ -135,7 +109,7 @@ class DevlogEntryDemand
 
     public function hasExtensionWhitelist(): bool
     {
-        return !empty($this->extensionWhitelist);
+        return [] !== $this->extensionWhitelist;
     }
 
     public function getExtensionWhitelist(): array
@@ -150,7 +124,7 @@ class DevlogEntryDemand
 
     public function hasExtensionBlacklist(): bool
     {
-        return !empty($this->extensionBlacklist);
+        return [] !== $this->extensionBlacklist;
     }
 
     public function getExtensionBlacklist(): array
@@ -204,11 +178,9 @@ class DevlogEntryDemand
     }
 
     /**
-     * @param int $pid
-     *
      * @return $this
      */
-    public function setPid($pid)
+    public function setPid(int $pid): static
     {
         $this->pid = $pid;
 

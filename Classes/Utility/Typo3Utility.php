@@ -57,7 +57,7 @@ final class Typo3Utility
     {
         $tsfe = self::getTsFe();
 
-        return null !== $tsfe && is_object($tsfe->fe_user) ? $tsfe->fe_user : null;
+        return $tsfe instanceof TypoScriptFrontendController && is_object($tsfe->fe_user) ? $tsfe->fe_user : null;
     }
 
     /**
@@ -67,7 +67,7 @@ final class Typo3Utility
     {
         $feuser = self::getFeUser();
 
-        if (null === $feuser) {
+        if (!$feuser instanceof FrontendUserAuthentication) {
             return 0;
         }
 
@@ -91,7 +91,7 @@ final class Typo3Utility
     {
         $beuser = self::getBeUser();
 
-        if (null === $beuser) {
+        if (!$beuser instanceof BackendUserAuthentication) {
             return 0;
         }
 

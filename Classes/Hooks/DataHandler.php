@@ -41,10 +41,7 @@ use DMK\Mklog\Domain\Model\DevlogEntry;
  */
 class DataHandler
 {
-    /**
-     * @return string
-     */
-    protected function getTableName()
+    protected function getTableName(): string
     {
         return DevlogEntry::TABLENAME;
     }
@@ -65,13 +62,12 @@ class DataHandler
      *
      * @param string $command
      * @param string $table
-     * @param int    $pageId
      * @param array  $value
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function processCmdmap_preProcess($command, $table, $pageId, $value, $dataHandler)
+    public function processCmdmap_preProcess($command, $table, int $pageId, $value, $dataHandler): void
     {
         if ('pages' == $table) {
             switch ($command) {
@@ -85,10 +81,7 @@ class DataHandler
         }
     }
 
-    /**
-     * @param int $pageId
-     */
-    protected function deleteLogEntriesByPageId($pageId)
+    protected function deleteLogEntriesByPageId(int $pageId)
     {
         \DMK\Mklog\Factory::getDevlogEntryRepository()->deletyByPid($pageId);
     }

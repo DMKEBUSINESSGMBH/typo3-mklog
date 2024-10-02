@@ -38,11 +38,19 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
  */
 final class VersionUtility
 {
-    public static function isTypo3Version12OrHigher()
+    public static function isTypo3Version12OrHigher(): bool
     {
         return VersionNumberUtility::convertVersionNumberToInteger(
             VersionNumberUtility::getNumericTypo3Version()
         ) >= 12000000
+        ;
+    }
+
+    public static function isTypo3Version12OrLower(): bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(
+            VersionNumberUtility::getNumericTypo3Version()
+        ) <= 12000000
         ;
     }
 }

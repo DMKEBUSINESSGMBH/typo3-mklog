@@ -53,10 +53,8 @@ class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
      * Decodes an extra data string into an array.
      *
      * @param string $data
-     *
-     * @return array
      */
-    public function decode($data)
+    public function decode($data): array
     {
         if (is_array($data)) {
             return $data;

@@ -39,7 +39,7 @@ final class ComposerUtility
     /**
      * Preloads the composer with the build in dependencies.
      */
-    public static function autoload()
+    public static function autoload(): void
     {
         static $hasToLoad = true;
 
@@ -47,7 +47,7 @@ final class ComposerUtility
             return;
         }
 
-        if (static::isComposerMode()) {
+        if (self::isComposerMode()) {
             $hasToLoad = false;
 
             return;

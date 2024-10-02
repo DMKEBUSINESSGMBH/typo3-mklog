@@ -95,6 +95,7 @@ class DevlogEntryRepository
         if ($optimized) {
             return;
         }
+
         $optimized = true;
 
         $maxRows = Factory::getConfigUtility()->getMaxLogs();
@@ -176,11 +177,11 @@ class DevlogEntryRepository
             );
         }
 
-        if ($demand->getRunId()) {
+        if (0 !== $demand->getRunId()) {
             $queryBuilder->andWhere($queryBuilder->expr()->eq('run_id', intval($demand->getRunId())));
         }
 
-        if ($demand->getTerm()) {
+        if ('' !== $demand->getTerm() && '0' !== $demand->getTerm()) {
             $fields = ['message', 'extra_data', 'host', 'ext_key'];
             $termExpressions = [];
             foreach ($fields as $field) {
@@ -189,10 +190,11 @@ class DevlogEntryRepository
                     $queryBuilder->quote('%'.$demand->getTerm().'%')
                 );
             }
-            $queryBuilder->andWhere($queryBuilder->expr()->orX(...$termExpressions));
+
+            $queryBuilder->andWhere($queryBuilder->expr()->or(...$termExpressions));
         }
 
-        if ($demand->getPid()) {
+        if (0 !== $demand->getPid()) {
             $queryBuilder->andWhere($queryBuilder->expr()->eq('pid', intval($demand->getPid())));
         }
 
@@ -249,6 +251,7 @@ class DevlogEntryRepository
         foreach ($model->getRecord() as $property => $value) {
             $queryBuilder->set($property, $value);
         }
+
         $queryBuilder->executeStatement();
     }
 
@@ -256,8 +259,8 @@ class DevlogEntryRepository
     {
         $connection = $this->getConnection();
         $query = $connection->createQueryBuilder()->insert($this->getTableName())->values($model->getRecord());
-        if ($query->executeStatement()) {
-            $model->setUid($connection->lastInsertId($this->getTableName()));
+        if (0 !== $query->executeStatement()) {
+            $model->setUid($connection->lastInsertId());
         }
     }
 
@@ -269,23 +272,17 @@ class DevlogEntryRepository
     private function quoteInArray(array $list): array
     {
         return array_map(
-            function ($entry) {
-                return '\''.(string) $entry.'\'';
-            },
+            fn ($entry): string => '\''.$entry.'\'',
             $list
         );
     }
 
     /**
      * Returns the latest log runs.
-     *
-     * @param int $limit
-     *
-     * @return array
      */
     public function getLatestRunIds(
-        $limit = 50,
-    ) {
+        int $limit = 50,
+    ): array {
         $items = $this->createQueryBuilder()
             ->select('run_id')
             ->from($this->getTableName())
@@ -300,10 +297,8 @@ class DevlogEntryRepository
 
     /**
      * Returns all extension keys who has logged into devlog.
-     *
-     * @return array
      */
-    public function getLoggedExtensions()
+    public function getLoggedExtensions(): array
     {
         $items = $this->createQueryBuilder()
             ->select('ext_key')
@@ -318,22 +313,18 @@ class DevlogEntryRepository
 
     /**
      * Flattens an single select array.
-     *
-     * @param string $field
-     *
-     * @return array
      */
     private function convertSingleSelectToFlatArray(
         array $items,
-        $field,
-    ) {
-        if (empty($items)) {
+        string $field,
+    ): array {
+        if ([] === $items) {
             return [];
         }
 
-        $items = call_user_func_array('array_merge_recursive', $items);
+        $items = array_merge_recursive(...$items);
 
-        if (empty($items)) {
+        if ([] === $items) {
             return [];
         }
 

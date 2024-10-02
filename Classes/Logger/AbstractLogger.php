@@ -70,8 +70,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $entry->setSeverity((int) $severity);
         $entry->setPid(0);
 
-        if (null !== Typo3Utility::getTsFe()) {
-            $entry->setPid((int) Typo3Utility::getTsFe()->id);
+        if (Typo3Utility::getTsFe() instanceof \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController) {
+            $entry->setPid(Typo3Utility::getTsFe()->id);
         }
 
         $entry->setCruserId(Typo3Utility::getBeUserId());
@@ -109,6 +109,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         if (!is_array($extraData)) {
             $extraData = ['extra' => $extraData];
         }
+
         // add userdata
         $extraData['__feuser'] = Typo3Utility::getFeUserId();
         $extraData['__beuser'] = Typo3Utility::getBeUserId();
@@ -122,10 +123,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
 
     /**
      * Returns the Backtrase excluding the log calls.
-     *
-     * @return array
      */
-    private function getBacktrace()
+    private function getBacktrace(): array
     {
         $trace = array_reverse(
             explode(' // ', DebugUtility::debugTrail())
@@ -138,7 +137,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             // ignore core devlog and logerr calls
             \Psr\Log\AbstractLogger::class,
             'TYPO3\\CMS\\Core\\Log\\',
-            'TYPO3\\CMS\\Core\\Utility\\GeneralUtility::devLog',
+            GeneralUtility::class.'::devLog',
             // ignore rnbase loggers
             'Tx_Rnbase_Utility_Logger',
             'tx_rnbase_util_Logger',
@@ -147,11 +146,12 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         foreach ($trace as $key => $path) {
             $ignore = false;
             foreach ($ignoreClasses as $ignoreClass) {
-                $ignore = (0 === strpos($path, $ignoreClass, 0));
+                $ignore = str_starts_with($path, $ignoreClass);
                 if ($ignore) {
                     break;
                 }
             }
+
             // break if ther is no more ignore
             if ($ignore) {
                 $lastIgnoreKey = $key;

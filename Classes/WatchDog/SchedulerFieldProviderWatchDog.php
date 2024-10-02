@@ -107,9 +107,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
     protected function getTransportField(
         array &$taskInfo,
     ): array {
-        $fieldCode = '<select '.
-            'name="tx_scheduler[mklog_watchdog_transport]" '.
-            'id="field_mklog_watchdog_transport" '.
+        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_transport]" id="field_mklog_watchdog_transport" '.
             'class="form-select" '.
         '>';
 
@@ -131,8 +129,10 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
                     $taskInfo['mklog_watchdog_transport'] == $key ? 'selected="selected"' : ''
                 );
             }
+
             $fieldCode .= '</optgroup>';
         }
+
         $fieldCode .= '</select>';
 
         return [
@@ -151,9 +151,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     protected function getInputField(string $fieldName, string $label, array &$taskInfo): array
     {
-        $fieldCode = '<input '.
-            'type="text" '.
-            'name="tx_scheduler[mklog_watchdog_'.$fieldName.']" '.
+        $fieldCode = '<input type="text" name="tx_scheduler[mklog_watchdog_'.$fieldName.']" '.
             'id="field_mklog_watchdog_'.$fieldName.'" '.
             'value="'.$taskInfo['mklog_watchdog_'.$fieldName].'" '.
             'class="form-control" '.
@@ -172,9 +170,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         array &$taskInfo,
     ): array {
         // Transport
-        $fieldCode = '<select '.
-            'name="tx_scheduler[mklog_watchdog_severity]" '.
-            'id="field_mklog_watchdog_severity" '.
+        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_severity]" id="field_mklog_watchdog_severity" '.
             'class="form-select" '.
         '>';
 
@@ -188,6 +184,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
                 $taskInfo['mklog_watchdog_severity'] == $key ? 'selected="selected"' : ''
             );
         }
+
         $fieldCode .= '</select>';
 
         return [
@@ -235,12 +232,12 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         // @codingStandardsIgnoreEnd
         $credentials = &$submittedData['mklog_watchdog_credentials'];
         $credentials = trim($credentials);
-        if (empty($credentials)) {
+        if ('' === $credentials || '0' === $credentials) {
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 'The credentials for the transport are required!',
                 'MK Log WatchDog',
-                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR
+                \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR
             );
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
             $flashMessageService = Factory::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
@@ -260,7 +257,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * @param AbstractTask $task          Reference to the current task object
      */
     // @codingStandardsIgnoreStart (interface/abstract mistake)
-    public function saveAdditionalFields(array $submittedData, AbstractTask $task)
+    public function saveAdditionalFields(array $submittedData, AbstractTask $task): void
     {
         // @codingStandardsIgnoreEnd
         $task->getOptions()

@@ -63,6 +63,7 @@ class DevlogLogger extends AbstractLogger
             if ($this->whileWriting) {
                 throw new \Exception('Nesting log writer calls prevented', 1513856342);
             }
+
             $this->whileWriting = true;
 
             $this->storeLog(
@@ -71,8 +72,8 @@ class DevlogLogger extends AbstractLogger
                 $record->getLevel(),
                 $record->getData()
             );
-        } catch (\Exception $e) {
-            $this->handleExceptionDuringLogging($e);
+        } catch (\Exception $exception) {
+            $this->handleExceptionDuringLogging($exception);
         }
 
         $this->whileWriting = false;
@@ -122,7 +123,7 @@ class DevlogLogger extends AbstractLogger
     /**
      * Old devlog Hook from the old TYPO3 API.
      */
-    public function devLogHook(array $params)
+    public function devLogHook(array $params): void
     {
         // map the old log levels to the new one
         switch ((int) $params['severity']) {
@@ -150,8 +151,8 @@ class DevlogLogger extends AbstractLogger
                 $params['severity'],
                 $params['dataVar']
             );
-        } catch (\Exception $e) {
-            $this->handleExceptionDuringLogging($e);
+        } catch (\Exception $exception) {
+            $this->handleExceptionDuringLogging($exception);
         }
     }
 

@@ -57,8 +57,8 @@ class GelfLogger extends AbstractLogger
                 $record->getLevel(),
                 $record->getData()
             );
-        } catch (\Exception $e) {
-            $this->handleExceptionDuringLogging($e);
+        } catch (\Exception $exception) {
+            $this->handleExceptionDuringLogging($exception);
         }
 
         return $this;
@@ -67,7 +67,7 @@ class GelfLogger extends AbstractLogger
     /**
      * Old devlog Hook from the old TYPO3 API.
      */
-    public function sysLogHook(array $params)
+    public function sysLogHook(array $params): void
     {
         // do nothing on syslog init
         if (isset($params['initLog']) && $params['initLog']) {
@@ -83,24 +83,13 @@ class GelfLogger extends AbstractLogger
          * SYSLOG_SEVERITY_FATAL = 4;
          */
         // map the old log levels to the new one
-        switch ((int) ($params['severity'] ?? 0)) {
-            case 4:
-                $params['severity'] = SeverityUtility::ALERT;
-                break;
-            case 3:
-                $params['severity'] = SeverityUtility::CRITICAL;
-                break;
-            case 2:
-                $params['severity'] = SeverityUtility::WARNING;
-                break;
-            case 1:
-                $params['severity'] = SeverityUtility::NOTICE;
-                break;
-            case 0:
-            default:
-                $params['severity'] = SeverityUtility::INFO;
-                break;
-        }
+        $params['severity'] = match ((int) ($params['severity'] ?? 0)) {
+            4 => SeverityUtility::ALERT,
+            3 => SeverityUtility::CRITICAL,
+            2 => SeverityUtility::WARNING,
+            1 => SeverityUtility::NOTICE,
+            default => SeverityUtility::INFO,
+        };
 
         try {
             $this->storeLog(
@@ -109,8 +98,8 @@ class GelfLogger extends AbstractLogger
                 $params['severity'],
                 ['__trace' => $params['backTrace']]
             );
-        } catch (\Exception $e) {
-            $this->handleExceptionDuringLogging($e);
+        } catch (\Exception $exception) {
+            $this->handleExceptionDuringLogging($exception);
         }
     }
 
@@ -121,7 +110,7 @@ class GelfLogger extends AbstractLogger
      * @param string $extension
      * @param int    $severity
      */
-    protected function storeLog($message, $extension, $severity, $extraData)
+    protected function storeLog($message, $extension, $severity, $extraData): ?self
     {
         $config = \DMK\Mklog\Factory::getConfigUtility();
 
@@ -133,7 +122,7 @@ class GelfLogger extends AbstractLogger
             || !$config->getGelfCredentials()
             || $severity > $config->getGelfMinLogLevel()
         ) {
-            return;
+            return null;
         }
 
         $options = GenericArrayObject::getInstance([
@@ -153,13 +142,15 @@ class GelfLogger extends AbstractLogger
 
         try {
             $transport->publish($gelfMsg);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // what todo on transport exception?
             // usualy we have a emergency and a other logger (file or mail) shold take over
             return $this;
         }
 
         $transport->shutdown();
+
+        return null;
     }
 
     /**

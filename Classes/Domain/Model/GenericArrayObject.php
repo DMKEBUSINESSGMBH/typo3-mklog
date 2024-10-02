@@ -37,14 +37,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class GenericArrayObject
 {
-    /**
-     * @var array
-     */
-    private $data = [];
-
-    public function __construct(array $data = [])
+    public function __construct(private array $data = [])
     {
-        $this->data = $data;
     }
 
     /**
@@ -57,6 +51,7 @@ class GenericArrayObject
         if ($data instanceof self) {
             return $data;
         }
+
         if (!is_array($data)) {
             $data = [];
         }
@@ -77,7 +72,7 @@ class GenericArrayObject
      *
      * @return $this
      */
-    public function setProperty($property, $value = null)
+    public function setProperty($property, $value = null): static
     {
         if (is_array($property)) {
             // wir Überschreiben den kompletten record
@@ -102,10 +97,7 @@ class GenericArrayObject
         return $this->hasProperty($property) ? $this->data[$property] : $default;
     }
 
-    /**
-     * @return array
-     */
-    public function getProperties()
+    public function getProperties(): array
     {
         return $this->data;
     }
@@ -115,7 +107,7 @@ class GenericArrayObject
      *
      * @return $this
      */
-    public function unsProperty($property)
+    public function unsProperty($property): static
     {
         unset($this->data[$property]);
 
@@ -132,41 +124,28 @@ class GenericArrayObject
         return isset($this->data[$property]);
     }
 
-    /**
-     * @return bool
-     */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return empty($this->data);
+        return [] === $this->data;
     }
 
     /**
      * Set/Get attribute wrapper.
-     *
-     * @param string $method
      */
-    public function __call($method, array $args)
+    public function __call(string $method, array $args)
     {
         $property = GeneralUtility::camelCaseToLowerCaseUnderscored(substr($method, 3));
-        switch (substr($method, 0, 3)) {
-            case 'get':
-                return $this->getProperty($property);
-            case 'set':
-                return $this->setProperty($property, $args[0] ?? null);
-            case 'uns':
-                return $this->unsProperty($property);
-            case 'has':
-                return $this->hasProperty($property);
-            default:
-        }
 
-        throw new \Exception('Sorry, Invalid method "'.get_class($this).'::'.$method.'"', 1607447254);
+        return match (substr($method, 0, 3)) {
+            'get' => $this->getProperty($property),
+            'set' => $this->setProperty($property, $args[0] ?? null),
+            'uns' => $this->unsProperty($property),
+            'has' => $this->hasProperty($property),
+            default => throw new \Exception('Sorry, Invalid method "'.static::class.'::'.$method.'"', 1607447254),
+        };
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $array = $this->getProperties();
         foreach ($array as $key => $value) {

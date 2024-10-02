@@ -40,16 +40,10 @@ use DMK\Mklog\Factory;
 class DevlogEntryMapper
 {
     /**
-     * @var DevlogEntry
-     */
-    protected $entry;
-
-    /**
      * DevlogEntryMapper constructor.
      */
-    public function __construct(DevlogEntry $entry)
+    public function __construct(protected DevlogEntry $entry)
     {
-        $this->entry = $entry;
     }
 
     public function getEntry(): DevlogEntry

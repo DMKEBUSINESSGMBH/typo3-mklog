@@ -28,9 +28,7 @@
 namespace DMK\Mklog\ViewHelper;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Class ExtraDataViewHelper.
@@ -45,9 +43,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class ExtraDataViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument(
@@ -61,21 +57,17 @@ class ExtraDataViewHelper extends AbstractViewHelper
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext,
-    ) {
-        $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($arguments['logEntry']);
+    public function render(): string
+    {
+        $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($this->arguments['logEntry']);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);
-
         if (empty($extraData)) {
             return '';
         }
 
         return sprintf(
             '<pre id="log-toggle-%1$s-data">%2$s</pre>',
-            $arguments['logEntry']->getUid(),
+            $this->arguments['logEntry']->getUid(),
             htmlspecialchars($extraData)
         );
     }

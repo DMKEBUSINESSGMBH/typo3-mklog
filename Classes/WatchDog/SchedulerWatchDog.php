@@ -131,8 +131,8 @@ class SchedulerWatchDog extends AbstractTask
      */
     public function execute()
     {
-        $failures = $successes = [];
-
+        $failures = [];
+        $successes = [];
         $transport = $this->getTransport();
 
         // initialize the transport
@@ -153,7 +153,7 @@ class SchedulerWatchDog extends AbstractTask
         // shutdown the transport
         $transport->shutdown();
 
-        $success = empty($failures);
+        $success = [] === $failures;
         $msg = sprintf(
             'WatchDog %1$s has %2$d messages send and %3$d failures.',
             $this->getTransportId(),
@@ -172,7 +172,7 @@ class SchedulerWatchDog extends AbstractTask
         );
 
         // create a flash message for the beuser
-        if (Typo3Utility::getBeUserId()) {
+        if (0 !== Typo3Utility::getBeUserId()) {
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 $msg,
@@ -214,6 +214,7 @@ class SchedulerWatchDog extends AbstractTask
                 GeneralUtility::trimExplode(',', $options->getExtensionWhitelist(), true)
             );
         }
+
         if ($options->getExtensionBlacklist()) {
             $demand->setExtensionBlacklist(
                 GeneralUtility::trimExplode(',', $options->getExtensionBlacklist(), true)
@@ -225,6 +226,7 @@ class SchedulerWatchDog extends AbstractTask
         if (null === $limit) {
             $limit = 100;
         }
+
         $limit = (int) $limit;
         if ($limit > 0) {
             $demand->setMaxResults($limit);
@@ -270,7 +272,7 @@ class SchedulerWatchDog extends AbstractTask
      *
      * @return Transport\InterfaceTransport
      */
-    protected function getTransportId()
+    protected function getTransportId(): string
     {
         return $this->getTransport()->getIdentifier().':'.$this->getTaskUid();
     }
@@ -292,6 +294,7 @@ class SchedulerWatchDog extends AbstractTask
             if (empty($value)) {
                 continue;
             }
+
             $key = GeneralUtility::underscoredToLowerCamelCase($key);
             $options[] = '  '.ucfirst($key).': '.$value;
         }

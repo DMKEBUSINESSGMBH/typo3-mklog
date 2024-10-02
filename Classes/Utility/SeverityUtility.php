@@ -48,6 +48,7 @@ final class SeverityUtility
      * @var int
      */
     public const EMERGENCY = 0;
+
     /**
      * Alert: action must be taken immediately.
      *
@@ -56,6 +57,7 @@ final class SeverityUtility
      * @var int
      */
     public const ALERT = 1;
+
     /**
      * Critical: critical conditions.
      *
@@ -64,6 +66,7 @@ final class SeverityUtility
      * @var int
      */
     public const CRITICAL = 2;
+
     /**
      * Error: error conditions.
      *
@@ -72,6 +75,7 @@ final class SeverityUtility
      * @var int
      */
     public const ERROR = 3;
+
     /**
      * Warning: warning conditions.
      *
@@ -81,6 +85,7 @@ final class SeverityUtility
      * @var int
      */
     public const WARNING = 4;
+
     /**
      * Notice: normal but significant condition.
      *
@@ -89,6 +94,7 @@ final class SeverityUtility
      * @var int
      */
     public const NOTICE = 5;
+
     /**
      * Informational: informational messages.
      *
@@ -97,6 +103,7 @@ final class SeverityUtility
      * @var int
      */
     public const INFO = 6;
+
     /**
      * Debug: debug-level messages.
      *
@@ -108,10 +115,8 @@ final class SeverityUtility
 
     /**
      * Reverse look up of log level to level name.
-     *
-     * @var array
      */
-    private static $levels = [
+    private static array $levels = [
         self::EMERGENCY => 'EMERGENCY',
         self::ALERT => 'ALERT',
         self::CRITICAL => 'CRITICAL',
@@ -141,45 +146,32 @@ final class SeverityUtility
      *
      * @return string log level name
      */
-    public static function getPsrLevelConstant($level)
+    public static function getPsrLevelConstant($level): string
     {
-        switch ($level) {
-            case self::EMERGENCY:
-                return \Psr\Log\LogLevel::EMERGENCY;
-            case self::ALERT:
-                return \Psr\Log\LogLevel::ALERT;
-            case self::CRITICAL:
-                return \Psr\Log\LogLevel::CRITICAL;
-            case self::ERROR:
-                return \Psr\Log\LogLevel::ERROR;
-            case self::WARNING:
-                return \Psr\Log\LogLevel::WARNING;
-            case self::NOTICE:
-                return \Psr\Log\LogLevel::NOTICE;
-            case self::INFO:
-                return \Psr\Log\LogLevel::INFO;
-            case self::DEBUG:
-            default:
-                return \Psr\Log\LogLevel::DEBUG;
-        }
+        return match ($level) {
+            self::EMERGENCY => \Psr\Log\LogLevel::EMERGENCY,
+            self::ALERT => \Psr\Log\LogLevel::ALERT,
+            self::CRITICAL => \Psr\Log\LogLevel::CRITICAL,
+            self::ERROR => \Psr\Log\LogLevel::ERROR,
+            self::WARNING => \Psr\Log\LogLevel::WARNING,
+            self::NOTICE => \Psr\Log\LogLevel::NOTICE,
+            self::INFO => \Psr\Log\LogLevel::INFO,
+            default => \Psr\Log\LogLevel::DEBUG,
+        };
     }
 
     /**
      * Returns all levels as array.
-     *
-     * @return array
      */
-    public static function getItems()
+    public static function getItems(): array
     {
         return self::$levels;
     }
 
     /**
      * Returns all levels as array.
-     *
-     * @return array
      */
-    public static function getTcaItems()
+    public static function getTcaItems(): array
     {
         $levels = [];
         $levels[] = ['', ''];

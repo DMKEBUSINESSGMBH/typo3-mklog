@@ -44,24 +44,18 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
 {
     /**
      * Messages to send.
-     *
-     * @var array
      */
-    private $messages = [];
+    private array $messages = [];
 
     /**
      * Unique message counts.
-     *
-     * @var array
      */
-    private $uniqs = [];
+    private array $uniqs = [];
 
     /**
      * An unique identifier for the transport.
-     *
-     * @return string
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return 'mkLogMail';
     }
@@ -71,7 +65,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      */
     public function initialize(
         \DMK\Mklog\Domain\Model\GenericArrayObject $options,
-    ) {
+    ): void {
         parent::initialize($options);
 
         ComposerUtility::autoload();
@@ -81,6 +75,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             if ($this->getOptions()->getSeverity() < $level) {
                 continue;
             }
+
             $psrLevel = SeverityUtility::getPsrLevelConstant($level);
             $this->uniqs[$psrLevel] = [];
             $this->uniqs[$psrLevel]['summary'] = 0;
@@ -93,7 +88,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      */
     public function publish(
         \DMK\Mklog\WatchDog\Message\InterfaceMessage $message,
-    ) {
+    ): void {
         $this->addMessage($message);
     }
 
@@ -114,6 +109,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
         if (!isset($this->uniqs[$level][$key])) {
             $this->uniqs[$level][$key] = 0;
         }
+
         ++$this->uniqs[$level][$key];
 
         // store the unique message
@@ -125,7 +121,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      *
      * @return int
      */
-    protected function getMailCount()
+    protected function getMailCount(): int|float
     {
         $count = 0;
         foreach ($this->uniqs as $messages) {
@@ -139,7 +135,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      * Deinitializes the Transport.
      * For this transport we send the Mail.
      */
-    public function shutdown()
+    public function shutdown(): void
     {
         // no messages? nothing todo!
         if (0 === $this->getMailCount()) {
@@ -170,6 +166,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             if (empty($messages)) {
                 continue;
             }
+
             $content .= sprintf(
                 LF.'=== Level %s (%d):',
                 $level,

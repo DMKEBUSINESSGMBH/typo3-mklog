@@ -48,7 +48,7 @@ class UdpGelf extends AbstractGelf
      *
      * @return AbstractTransport
      */
-    protected function getTransport()
+    protected function getTransport(): UdpTransport
     {
         [$host, $port] = explode(
             ':',

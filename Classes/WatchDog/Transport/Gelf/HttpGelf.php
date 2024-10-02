@@ -48,12 +48,10 @@ class HttpGelf extends AbstractGelf
      *
      * @return AbstractTransport
      */
-    protected function getTransport()
+    protected function getTransport(): HttpTransport
     {
-        $transport = HttpTransport::fromUrl(
+        return HttpTransport::fromUrl(
             $this->getOptions()->getCredentials()
         );
-
-        return $transport;
     }
 }

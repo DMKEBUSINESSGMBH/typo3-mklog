@@ -46,10 +46,8 @@ final class Factory
 {
     /**
      * Returns a storage.
-     *
-     * @return StorageObject
      */
-    public static function getStorage()
+    public static function getStorage(): StorageObject
     {
         static $storage = null;
 
@@ -61,14 +59,13 @@ final class Factory
     }
 
     /**
-     * @param string            $className
      * @param array<int, mixed> $constructorArguments
      *
      * @return object the created instance
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public static function makeInstance($className, ...$constructorArguments)
+    public static function makeInstance(string $className, ...$constructorArguments): mixed
     {
         return call_user_func_array(
             [GeneralUtility::class, 'makeInstance'],
@@ -115,7 +112,7 @@ final class Factory
      *
      * @return EntryDataParserUtility
      */
-    public static function getEntryDataParserUtility(Domain\Model\DevlogEntry $devlogEntry)
+    public static function getEntryDataParserUtility(Domain\Model\DevlogEntry $devlogEntry): mixed
     {
         return self::makeInstance(EntryDataParserUtility::class, $devlogEntry);
     }
@@ -125,24 +122,20 @@ final class Factory
      *
      * @return DevlogEntryRepository
      */
-    public static function getDevlogEntryRepository()
+    public static function getDevlogEntryRepository(): mixed
     {
         return self::makeInstance(DevlogEntryRepository::class);
     }
 
     /**
-     * Creates a transport based on the classname.
-     *
-     * @param string $class
-     *
-     * @return InterfaceTransport
+     * Creates transport based on the classname.
      */
-    public static function getTransport($class)
+    public static function getTransport(string $class): InterfaceTransport
     {
         $transport = self::makeInstance($class);
 
         if (!$transport instanceof InterfaceTransport) {
-            throw new \Exception(sprintf('The Transport "%1$s" has to implement the "%2$s"', get_class($transport), InterfaceTransport::class));
+            throw new \Exception(sprintf('The Transport "%1$s" has to implement the "%2$s"', $transport::class, InterfaceTransport::class));
         }
 
         return $transport;
