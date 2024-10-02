@@ -32,7 +32,7 @@ use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use DMK\Mklog\Utility\VersionUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Backend\Attribute\Controller;
+use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Http\HtmlResponse;
@@ -49,24 +49,15 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
  */
-#[Controller]
+#[AsController]
 class BackendModuleController
 {
-    /**
-     * @var ModuleTemplate|StandaloneView
-     *
-     * @todo use real type hinting when support for TYPO3 11 is dropped
-     */
-    protected $view;
-    protected DevlogEntryRepository $devlogEntryRepository;
-    protected ModuleTemplateFactory $moduleTemplateFactory;
+    protected ModuleTemplate|StandaloneView $view;
 
     public function __construct(
-        DevlogEntryRepository $devlogEntryRepository,
-        ModuleTemplateFactory $moduleTemplateFactory
+        protected DevlogEntryRepository $devlogEntryRepository,
+        protected ModuleTemplateFactory $moduleTemplateFactory,
     ) {
-        $this->devlogEntryRepository = $devlogEntryRepository;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
     public function handleRequest(ServerRequestInterface $request): ResponseInterface
