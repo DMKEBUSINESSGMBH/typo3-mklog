@@ -32,27 +32,16 @@ $EM_CONF['mklog'] = [
     'author' => 'René Nitzsche, Michael Wagner, Hannes Bochmann',
     'author_company' => 'DMK E-BUSINESS',
     'author_email' => 'dev@dmk-ebusiness.de',
-    'shy' => '',
-    'dependencies' => 'devlog,scheduler',
-    'conflicts' => '',
-    'priority' => '',
-    'module' => '',
     'state' => 'stable',
-    'internal' => '',
-    'uploadfolder' => 0,
-    'modify_tables' => '',
-    'clearCacheOnLoad' => 0,
-    'lockType' => '',
     'version' => '12.0.3',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-13.2.99',
+            'typo3' => '12.5.0-13.2.99',
             'scheduler' => '',
         ],
         'conflicts' => [],
         'suggests' => [],
     ],
-    'suggests' => [],
     'autoload' => [
         'classmap' => [
             'Classes/',
