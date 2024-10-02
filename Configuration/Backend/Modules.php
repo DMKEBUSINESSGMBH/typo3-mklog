@@ -33,8 +33,8 @@ return [
         'path' => '/module/web/MklogList',
         'iconIdentifier' => 'extension-mklog',
         'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
-        'navigationComponent' => '@typo3/backend/page-tree/page-tree-element',
         'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
+        'extensionName' => 'mklog',
         'aliases' => ['web_MklogBackend'],
         'routes' => [
             '_default' => [
