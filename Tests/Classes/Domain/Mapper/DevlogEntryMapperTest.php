@@ -68,7 +68,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getEntryReturnsCorrectEntry()
+    public function getEntryReturnsCorrectEntry(): void
     {
         $model = new DevlogEntry();
         $mapper = DevlogEntryMapper::fromEntry($model);
@@ -82,7 +82,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function fromRecordReturnsCorrectEntry()
+    public function fromRecordReturnsCorrectEntry(): void
     {
         $record = [
             'uid' => 5,
@@ -117,7 +117,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function fromResultsReturnsCorrectEntries()
+    public function fromResultsReturnsCorrectEntries(): void
     {
         $record0 = ['uid' => 5, 'run_id' => '6', 'crdate' => time()];
         $record1 = ['uid' => 7, 'run_id' => '8', 'crdate' => time()];

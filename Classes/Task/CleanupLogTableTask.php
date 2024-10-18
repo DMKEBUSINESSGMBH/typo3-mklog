@@ -57,7 +57,7 @@ class CleanupLogTableTask extends AbstractTask
      *
      * @return \DMK\Mklog\Domain\Repository\DevlogEntryRepository
      */
-    protected function getDevlogEntryRepository()
+    protected function getDevlogEntryRepository(): mixed
     {
         return \DMK\Mklog\Factory::getDevlogEntryRepository();
     }

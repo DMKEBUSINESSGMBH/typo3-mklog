@@ -64,7 +64,9 @@ use DMK\Mklog\Utility\EntryDataParserUtility;
 class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
 {
     public const FIXTURE_EXTRA_DATA_JSON = '{"foo":"bar","bar":"baz","baz":"foo"}';
+
     public const FIXTURE_EXTRA_DATA_INT_JSON = '{"__foo":"bar","__bar":"baz","__baz":"foo"}';
+
     public const FIXTURE_EXTRA_DATA_JSON_ARRAY = ['foo' => 'bar', 'bar' => 'baz', 'baz' => 'foo'];
 
     /**
@@ -74,7 +76,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedRawReturnsCompleteData()
+    public function getShortenedRawReturnsCompleteData(): void
     {
         $this->assertEquals(
             self::FIXTURE_EXTRA_DATA_JSON,
@@ -89,7 +91,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedRawReturnsShortData()
+    public function getShortenedRawReturnsShortData(): void
     {
         $this->assertEquals(
             '{"foo":"bar","bar":"baz","...":"Striped by 1 elements."}',
@@ -104,7 +106,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedRawReturnsEmptyData()
+    public function getShortenedRawReturnsEmptyData(): void
     {
         $this->assertEquals(
             '{"...":"Striped by 3 elements."}',
@@ -119,7 +121,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedInternalExtraDataReturnsCompleteData()
+    public function getShortenedInternalExtraDataReturnsCompleteData(): void
     {
         $this->assertEquals(
             self::FIXTURE_EXTRA_DATA_JSON_ARRAY,
@@ -134,7 +136,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedInternalExtraDataReturnsShortData()
+    public function getShortenedInternalExtraDataReturnsShortData(): void
     {
         $this->assertEquals(
             ['foo' => 'bar', '...' => 'Striped by 2 elements.'],
@@ -149,7 +151,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedInternalExtraDataReturnsEmptyData()
+    public function getShortenedInternalExtraDataReturnsEmptyData(): void
     {
         $this->assertEquals(
             ['...' => 'Striped by 3 elements.'],
@@ -164,7 +166,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedExternalExtraDataReturnsCompleteData()
+    public function getShortenedExternalExtraDataReturnsCompleteData(): void
     {
         $this->assertEquals(
             self::FIXTURE_EXTRA_DATA_JSON_ARRAY,
@@ -179,7 +181,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedExternalExtraDataReturnsShortData()
+    public function getShortenedExternalExtraDataReturnsShortData(): void
     {
         $this->assertEquals(
             ['foo' => 'bar', '...' => 'Striped by 2 elements.'],
@@ -194,7 +196,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getShortenedExternalExtraDataReturnsEmptyData()
+    public function getShortenedExternalExtraDataReturnsEmptyData(): void
     {
         $this->assertEquals(
             ['...' => 'Striped by 3 elements.'],
@@ -207,11 +209,12 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @return EntryDataParserUtility
      */
-    protected function getEntryDataParserUtility($devLogEntryOrExtraData = null)
+    protected function getEntryDataParserUtility($devLogEntryOrExtraData = null): mixed
     {
         if (null === $devLogEntryOrExtraData) {
             $devLogEntryOrExtraData = self::FIXTURE_EXTRA_DATA_JSON;
         }
+
         if (is_string($devLogEntryOrExtraData)) {
             $devLogEntryOrExtraData = Factory::makeInstance(DevlogEntry::class)
                 ->setExtraDataEncoded($devLogEntryOrExtraData);

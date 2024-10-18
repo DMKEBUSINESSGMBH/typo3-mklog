@@ -67,7 +67,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandCopyButTableNotPages()
+    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandCopyButTableNotPages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
@@ -80,7 +80,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyButTablePages()
+    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyButTablePages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
@@ -93,7 +93,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyAndTableNotPages()
+    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyAndTableNotPages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
@@ -106,7 +106,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedWhenCommandCopyAndTablePages()
+    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedWhenCommandCopyAndTablePages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
 
@@ -121,7 +121,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testRemoveLogTablesFromTablesThatCanBeCopied()
+    public function testRemoveLogTablesFromTablesThatCanBeCopied(): void
     {
         $mklogTable = 'tx_mklog_devlog_entry';
 
@@ -160,7 +160,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandDeleteButTableNotPages()
+    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandDeleteButTableNotPages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
@@ -173,7 +173,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandNotDeleteButTablePages()
+    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandNotDeleteButTablePages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
@@ -186,7 +186,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandNotDeleteAndTableNotPages()
+    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdNotWhenCommandNotDeleteAndTableNotPages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
@@ -199,7 +199,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdWhenCommandDeleteAndTablePages()
+    public function testProcessCmdmapPreProcessCallsdeleteLogEntriesByPageIdWhenCommandDeleteAndTablePages(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 
@@ -213,7 +213,7 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testdeleteLogEntriesByPageId()
+    public function testdeleteLogEntriesByPageId(): void
     {
         $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
 

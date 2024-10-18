@@ -69,7 +69,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testExecuteWithoutMessages()
+    public function testExecuteWithoutMessages(): void
     {
         $transport = $this->getMock(
             Transport\InterfaceTransport::class
@@ -91,11 +91,11 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         $task
             ->expects(self::once())
             ->method('findMessages')
-            ->will(self::returnValue([]));
+            ->willReturn([]);
         $task
             ->expects(self::any())
             ->method('getTransport')
-            ->will(self::returnValue($transport));
+            ->willReturn($transport);
 
         $task->execute();
     }
@@ -107,7 +107,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testExecuteWithMessages()
+    public function testExecuteWithMessages(): void
     {
         self::markTestIncomplete();
     }
@@ -117,14 +117,14 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testGetDemandRespects()
+    public function testGetDemandRespects(): void
     {
         $task = $this->getSchedulerMock(['getTransportId']);
 
         $task
             ->expects(self::once())
             ->method('getTransportId')
-            ->will(self::returnValue('identifier:uid'));
+            ->willReturn('identifier:uid');
 
         $task->getOptions()->setSeverity(5);
         $task->getOptions()->setMessageLimit(10);
@@ -153,15 +153,15 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger = $this->getMock(
             \TYPO3\CMS\Core\Log\Logger::class,
             [],
-            [],
+            ['MK Log WatchDog'],
             '',
-            false,
+            true,
             false
         );
         $task = $this->getMock(
             SchedulerWatchDog::class,
             array_merge(
-                ['getDevlogEntryRepository', 'getLogger'],
+                [ 'getLogger'],
                 $methods
             ),
             [],
@@ -172,13 +172,8 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
 
         $task
             ->expects(self::any())
-            ->method('getDevlogEntryRepository')
-            ->will(self::returnValue($this->getDevlogEntryRepository()));
-
-        $task
-            ->expects(self::any())
             ->method('getLogger')
-            ->will(self::returnValue($logger));
+            ->willReturn($logger);
 
         return $task;
     }

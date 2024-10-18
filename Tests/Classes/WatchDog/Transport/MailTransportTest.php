@@ -77,7 +77,7 @@ class MailTransportTest extends BaseTestCase
      *
      * @test
      */
-    public function testSendMailWithDefaultSubject()
+    public function testSendMailWithDefaultSubject(): void
     {
         $subjectMethod = 'subject';
         $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod, 'send']);
@@ -103,7 +103,7 @@ class MailTransportTest extends BaseTestCase
      *
      * @test
      */
-    public function testSendMailWithSubjectFromOptions()
+    public function testSendMailWithSubjectFromOptions(): void
     {
         $subjectMethod = 'subject';
         $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod, 'send']);

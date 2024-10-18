@@ -66,7 +66,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testGetTableName()
+    public function testGetTableName(): void
     {
         self::assertSame(
             'tx_mklog_devlog_entry',
@@ -81,7 +81,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testGetAndAddTransportIds()
+    public function testGetAndAddTransportIds(): void
     {
         $model = $this->getDevlogEntry();
 
@@ -106,7 +106,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testGetFullMessage()
+    public function testGetFullMessage(): void
     {
         $model = $this->getDevlogEntry();
         $model->setExtraData(
@@ -129,7 +129,7 @@ class DevlogEntryModelTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testGetAdditionalData()
+    public function testGetAdditionalData(): void
     {
         $model = $this->getDevlogEntry();
         $model->setExtraData(

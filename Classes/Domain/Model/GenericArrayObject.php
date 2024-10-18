@@ -116,10 +116,8 @@ class GenericArrayObject
 
     /**
      * @param string $property
-     *
-     * @return bool
      */
-    public function hasProperty($property)
+    public function hasProperty($property): bool
     {
         return isset($this->data[$property]);
     }

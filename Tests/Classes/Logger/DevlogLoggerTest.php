@@ -68,7 +68,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testIsLoggingEnabledWithoutDbShouldBeFalse()
+    public function testIsLoggingEnabledWithoutDbShouldBeFalse(): void
     {
         // activate logging
         \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
@@ -88,7 +88,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testIsLoggingEnabledWithDisabledLogInGlobals()
+    public function testIsLoggingEnabledWithDisabledLogInGlobals(): void
     {
         // activate logging
         \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
@@ -114,7 +114,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testIsLoggingEnabledByConfig()
+    public function testIsLoggingEnabledByConfig(): void
     {
         self::markTestIncomplete();
     }
@@ -126,7 +126,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testStoreLog()
+    public function testStoreLog(): void
     {
         $msg = 'msg';
         $extKey = 'mklog';
@@ -147,7 +147,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->method('persist')
             ->with(
                 $this->callback(
-                    function (DevlogEntry $model) use ($that) {
+                    function (DevlogEntry $model) use ($that): bool {
                         $this->assertSame(0, $model->getPid());
                         $that->assertGreaterThan(time() - 60, $model->getCrdate());
                         $this->assertSame('msg', $model->getMessage());
@@ -159,6 +159,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                         $extradata = $model->getExternalExtraData();
                         $that->assertArrayHasKey('foo', $extradata);
                         $that->assertArrayHasKey('bar', $extradata);
+
                         $extradata = $model->getInternalExtraData();
                         $that->assertArrayHasKey('feuser', $extradata);
                         $that->assertArrayHasKey('beuser', $extradata);

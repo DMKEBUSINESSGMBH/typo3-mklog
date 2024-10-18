@@ -66,9 +66,9 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testWriteLog()
+    public function testWriteLog(): void
     {
-        $logger = $this->getGelfLoggerMock();
+        $this->getGelfLoggerMock();
 
         self::markTestIncomplete();
     }
