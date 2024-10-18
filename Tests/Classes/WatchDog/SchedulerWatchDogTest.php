@@ -161,7 +161,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         $task = $this->getMock(
             SchedulerWatchDog::class,
             array_merge(
-                [ 'getLogger'],
+                ['getLogger'],
                 $methods
             ),
             [],

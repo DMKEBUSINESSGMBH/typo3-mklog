@@ -91,7 +91,7 @@ abstract class BaseTestCase extends UnitTestCase
                 'min_log_level' => 7,
                 'exclude_ext_keys' => '',
                 'max_logs' => 10000,
-                'max_transport_extra_data_size' > 8388608,
+                'max_transport_extra_data_size' => 8388608,
                 'gelf_enable' => 1,
                 'gelf_transport' => '',
                 'gelf_credentials' => '',
