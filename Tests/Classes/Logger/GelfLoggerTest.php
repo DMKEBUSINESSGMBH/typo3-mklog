@@ -88,7 +88,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger
             ->expects(self::any())
             ->method('getDevlogEntryRepository')
-            ->will(self::returnValue($this->getDevlogEntryRepository()));
+            ->willReturn($this->getDevlogEntryRepository());
 
         return $logger;
     }

@@ -87,9 +87,9 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function testCreateDevlogEntry()
+    public function testCreateDevlogEntry(): void
     {
-        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
+        $abstractLogger = $this->getAccessibleMock(AbstractLogger::class);
 
         $logEntry = $this->callInaccessibleMethod(
             $abstractLogger,
@@ -113,17 +113,18 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @dataProvider canMailBeSendDataProvider
      */
-    public function canMailBeSend(?int $lockFileContent, bool $canMailBeSend)
+    public function canMailBeSend(?int $lockFileContent, bool $canMailBeSend): void
     {
         if (!is_null($lockFileContent)) {
             file_put_contents($this->lockFile, $lockFileContent);
         }
-        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
+
+        $abstractLogger = $this->getAccessibleMock(AbstractLogger::class);
 
         self::assertSame($canMailBeSend, $this->callInaccessibleMethod($abstractLogger, 'canMailBeSend'));
     }
 
-    public function canMailBeSendDataProvider(): array
+    public static function canMailBeSendDataProvider(): array
     {
         return [
             [null, true],
@@ -141,9 +142,9 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
-    public function getExceptionTraceWithoutArguments()
+    public function getExceptionTraceWithoutArguments(): void
     {
-        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
+        $abstractLogger = $this->getAccessibleMock(AbstractLogger::class);
         try {
             throw new \Exception('An error occured');
         } catch (\Exception $exception) {

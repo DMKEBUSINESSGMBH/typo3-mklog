@@ -103,7 +103,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mklog']['nolog'] = false;
         $logger->expects(self::once())
             ->method('isDatabaseConnected')
-            ->will(self::returnValue(true));
+            ->willReturn(true);
         self::assertTrue($this->callInaccessibleMethod($logger, 'isLoggingEnabled'));
     }
 
@@ -138,7 +138,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger
             ->expects(self::any())
             ->method('isLoggingEnabled')
-            ->will(self::returnValue(true));
+            ->willReturn(true);
 
         $that = $this; // workaround for php 5.3
         $repo = $this->callInaccessibleMethod($logger, 'getDevlogEntryRepository');
@@ -204,7 +204,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger
             ->expects(self::any())
             ->method('getDevlogEntryRepository')
-            ->will(self::returnValue($this->getDevlogEntryRepository()));
+            ->willReturn($this->getDevlogEntryRepository());
 
         return $logger;
     }

@@ -162,15 +162,15 @@ abstract class BaseTestCase extends UnitTestCase
         $repo
             ->expects(self::any())
             ->method('createNewModel')
-            ->will(self::returnValue(Factory::makeInstance(DevlogEntry::class)));
+            ->willReturn(Factory::makeInstance(DevlogEntry::class));
         $repo
             ->expects(self::any())
             ->method('createQueryBuilder')
-            ->will(self::returnValue($queryBuilder->getMock()));
+            ->willReturn($queryBuilder->getMock());
         $repo
             ->expects(self::any())
             ->method('getConnection')
-            ->will(self::returnValue($connection->getMock()));
+            ->willReturn($connection->getMock());
 
         return $repo;
     }
@@ -194,7 +194,7 @@ abstract class BaseTestCase extends UnitTestCase
             // the new way (supports arguments as references)
             // $object is a array (with object and name) and $name a arguments array!
             $arguments = $name;
-            list($object, $name) = $object;
+            [$object, $name] = $object;
         } else {
             // the classic way to read the arguments
             // Remove first two arguments ($object and $name)
@@ -215,23 +215,20 @@ abstract class BaseTestCase extends UnitTestCase
      *
      * Taken From nimut/testing-framework
      *
-     * @param string $originalClassName
-     * @param array  $methods
-     * @param string $mockClassName
-     * @param bool   $callOriginalConstructor
-     * @param bool   $callOriginalClone
-     * @param bool   $callAutoload
-     * @param bool   $cloneArguments
-     * @param bool   $callOriginalMethods
-     * @param null   $proxyTarget
+     * @param array $methods
+     * @param bool  $callOriginalConstructor
+     * @param bool  $callOriginalClone
+     * @param bool  $callAutoload
+     * @param bool  $cloneArguments
+     * @param bool  $callOriginalMethods
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getMock(
-        $originalClassName,
+        string $originalClassName,
         $methods = [],
         array $arguments = [],
-        $mockClassName = '',
+        string $mockClassName = '',
         $callOriginalConstructor = true,
         $callOriginalClone = true,
         $callAutoload = true,
@@ -240,24 +237,29 @@ abstract class BaseTestCase extends UnitTestCase
         $proxyTarget = null,
     ) {
         $mockBuilder = $this->getMockBuilder($originalClassName)
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->setConstructorArgs($arguments)
             ->setMockClassName($mockClassName);
         if (!$callOriginalConstructor) {
             $mockBuilder->disableOriginalConstructor();
         }
+
         if (!$callOriginalClone) {
             $mockBuilder->disableOriginalClone();
         }
+
         if (!$callAutoload) {
             $mockBuilder->disableAutoload();
         }
+
         if ($cloneArguments) {
             $mockBuilder->enableArgumentCloning();
         }
+
         if ($callOriginalMethods) {
             $mockBuilder->enableProxyingToOriginalMethods();
         }
+
         if ($proxyTarget) {
             $mockBuilder->setProxyTarget($proxyTarget);
         }
