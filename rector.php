@@ -42,6 +42,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
         __DIR__.'/Classes',
         __DIR__.'/Configuration',
+        __DIR__.'/Tests',
         __DIR__.'/ext_*.php',
     ]);
 
