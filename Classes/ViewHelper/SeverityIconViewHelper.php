@@ -29,8 +29,10 @@ namespace DMK\Mklog\ViewHelper;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Utility\VersionUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -63,7 +65,8 @@ class SeverityIconViewHelper extends AbstractViewHelper
         $severityName = SeverityUtility::getName($severityId);
         $icon = $this->getSeverityIconClass($severityId);
         if ('' !== $icon && '0' !== $icon) {
-            $icon = GeneralUtility::makeInstance(IconFactory::class)->getIcon($icon, Icon::SIZE_SMALL);
+            $iconSize = VersionUtility::isTypo3Version12OrLower() ? Icon::SIZE_SMALL : IconSize::SMALL;
+            $icon = GeneralUtility::makeInstance(IconFactory::class)->getIcon($icon, $iconSize);
         }
 
         return sprintf(
