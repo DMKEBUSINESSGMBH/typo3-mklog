@@ -65,6 +65,7 @@ class SeverityIconViewHelper extends AbstractViewHelper
         $severityName = SeverityUtility::getName($severityId);
         $icon = $this->getSeverityIconClass($severityId);
         if ('' !== $icon && '0' !== $icon) {
+            // @phpstan-ignore class.notFound
             $iconSize = VersionUtility::isTypo3Version12OrLower() ? Icon::SIZE_SMALL : IconSize::SMALL;
             $icon = GeneralUtility::makeInstance(IconFactory::class)->getIcon($icon, $iconSize);
         }
