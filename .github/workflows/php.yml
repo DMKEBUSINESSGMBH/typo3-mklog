@@ -38,13 +38,14 @@ jobs:
                 run: "composer validate --strict"
             -
                 name: "Determine composer cache directory"
-                id: "determine-composer-cache-directory"
-                run: "echo \"name=directory::$(composer config cache-dir)\" >> $GITHUB_OUTPUT"
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
             -
                 name: "Cache dependencies installed with composer"
                 uses: "actions/cache@v4"
                 with:
-                    path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+                    path: ${{ steps.composer-cache.outputs.dir }}
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
@@ -88,13 +89,14 @@ jobs:
                 run: "composer validate --strict"
             -
                 name: "Determine composer cache directory"
-                id: "determine-composer-cache-directory"
-                run: "echo \"name=directory::$(composer config cache-dir)\" >> $GITHUB_OUTPUT"
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
             -
                 name: "Cache dependencies installed with composer"
                 uses: "actions/cache@v4"
                 with:
-                    path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+                    path: ${{ steps.composer-cache.outputs.dir }}
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
@@ -147,13 +149,14 @@ jobs:
                 run: "composer validate --strict"
             -
                 name: "Determine composer cache directory"
-                id: "determine-composer-cache-directory"
-                run: "echo \"name=directory::$(composer config cache-dir)\" >> $GITHUB_OUTPUT"
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
             -
                 name: "Cache dependencies installed with composer"
                 uses: "actions/cache@v4"
                 with:
-                    path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+                    path: ${{ steps.composer-cache.outputs.dir }}
                     key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('composer.lock') }}"
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
