@@ -168,9 +168,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      *     and only a recursion of logging will prevented.
      * )
      */
-    protected function handleExceptionDuringLogging(
-        \Exception $exception,
-    ) {
+    protected function handleExceptionDuringLogging(\Exception $exception)
+    {
         if (ExtensionManagementUtility::isLoaded('rn_base')) {
             // try to send mail
             $address = \Sys25\RnBase\Configuration\Processor::getExtensionCfgValue(

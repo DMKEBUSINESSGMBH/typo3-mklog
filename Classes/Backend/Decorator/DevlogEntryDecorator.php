@@ -57,10 +57,8 @@ class DevlogEntryDecorator
      *
      * @param array|GenericArrayObject $options
      */
-    public function __construct(
-        \Sys25\RnBase\Backend\Module\BaseModule $mod,
-        $options = [],
-    ) {
+    public function __construct(\Sys25\RnBase\Backend\Module\BaseModule $mod, $options = [])
+    {
         $this->mod = $mod;
 
         $this->options = GenericArrayObject::getInstance($options);
@@ -76,12 +74,8 @@ class DevlogEntryDecorator
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function format(
-        $columnValue,
-        $columnName,
-        array $record,
-        DevlogEntry $entry,
-    ) {
+    public function format($columnValue, $columnName, array $record, DevlogEntry $entry)
+    {
         $return = $columnValue;
 
         $method = \Sys25\RnBase\Utility\Strings::underscoredToLowerCamelCase($columnName);
@@ -104,11 +98,8 @@ class DevlogEntryDecorator
      *
      * @return string
      */
-    protected function wrapValue(
-        $formatedValue,
-        DevlogEntry $entry,
-        $columnName,
-    ) {
+    protected function wrapValue($formatedValue, DevlogEntry $entry, $columnName)
+    {
         return sprintf(
             '<span class="column-%3$s severity-%2$s">%1$s</span>',
             $formatedValue,
@@ -122,9 +113,8 @@ class DevlogEntryDecorator
      *
      * @return string
      */
-    protected function formatCrdateColumn(
-        DevlogEntry $entry,
-    ) {
+    protected function formatCrdateColumn(DevlogEntry $entry)
+    {
         return sprintf(
             '<button '.
                 'type="submit" '.
@@ -143,9 +133,8 @@ class DevlogEntryDecorator
      *
      * @return string
      */
-    protected function formatSeverityColumn(
-        DevlogEntry $entry,
-    ) {
+    protected function formatSeverityColumn(DevlogEntry $entry)
+    {
         $severityId = $entry->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
         $icon = $this->getSeverityIconClass($severityId);
@@ -204,9 +193,8 @@ class DevlogEntryDecorator
      *
      * @return string
      */
-    protected function formatExtKeyColumn(
-        DevlogEntry $entry,
-    ) {
+    protected function formatExtKeyColumn(DevlogEntry $entry)
+    {
         return sprintf(
             '<button '.
                 'type="submit" '.
@@ -224,9 +212,8 @@ class DevlogEntryDecorator
      *
      * @return string
      */
-    protected function formatMessageColumn(
-        DevlogEntry $entry,
-    ) {
+    protected function formatMessageColumn(DevlogEntry $entry)
+    {
         $message = $entry->getMessage();
 
         return sprintf(
@@ -242,9 +229,8 @@ class DevlogEntryDecorator
      *
      * @return string
      */
-    protected function formatExtraDataColumn(
-        DevlogEntry $entry,
-    ) {
+    protected function formatExtraDataColumn(DevlogEntry $entry)
+    {
         $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($entry);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);
 

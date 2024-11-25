@@ -106,9 +106,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      *
      * @return array
      */
-    protected function getTransportField(
-        array &$taskInfo,
-    ) {
+    protected function getTransportField(array &$taskInfo)
+    {
         $fieldCode = '<select '.
             'name="tx_scheduler[mklog_watchdog_transport]" '.
             'id="field_mklog_watchdog_transport" '.
@@ -175,9 +174,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      *
      * @return array
      */
-    protected function getSeverityField(
-        array &$taskInfo,
-    ) {
+    protected function getSeverityField(array &$taskInfo)
+    {
         // Transport
         $fieldCode = '<select '.
             'name="tx_scheduler[mklog_watchdog_severity]" '.

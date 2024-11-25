@@ -197,9 +197,8 @@ class DevlogEntryRepository
     /**
      * Persists an model.
      */
-    public function persist(
-        DevlogEntry $model,
-    ): void {
+    public function persist(DevlogEntry $model): void
+    {
         // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
         $model->setExtraDataEncoded(
             Factory::getEntryDataParserUtility($model)->getShortenedRaw(

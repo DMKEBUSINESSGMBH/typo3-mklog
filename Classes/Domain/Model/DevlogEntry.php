@@ -270,9 +270,8 @@ class DevlogEntry implements InterfaceMessage
     /**
      * Adds a scheduler to the transport id list.
      */
-    public function setTransportIdsRaw(
-        string $transportIds,
-    ): self {
+    public function setTransportIdsRaw(string $transportIds): self
+    {
         $this->transportIds = $transportIds;
 
         return $this;
@@ -281,9 +280,8 @@ class DevlogEntry implements InterfaceMessage
     /**
      * Adds a scheduler to the transport id list.
      */
-    public function addTransportId(
-        string $transportId,
-    ): self {
+    public function addTransportId(string $transportId): self
+    {
         $ids = $this->getTransportIds();
         $ids[] = $transportId;
 
@@ -313,9 +311,8 @@ class DevlogEntry implements InterfaceMessage
     /**
      * Setter for extra data.
      */
-    public function setExtraData(
-        array $data,
-    ): self {
+    public function setExtraData(array $data): self
+    {
         $this->extraData = \DMK\Mklog\Factory::getDataConverterUtility()->encode($data);
 
         return $this;
@@ -324,9 +321,8 @@ class DevlogEntry implements InterfaceMessage
     /**
      * Setter for extra data.
      */
-    public function setExtraDataEncoded(
-        string $data,
-    ): self {
+    public function setExtraDataEncoded(string $data): self
+    {
         $this->extraData = $data;
 
         return $this;

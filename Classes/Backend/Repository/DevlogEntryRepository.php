@@ -73,9 +73,8 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      *
      * @return array
      */
-    public function getLatestRunIds(
-        $limit = 50,
-    ) {
+    public function getLatestRunIds($limit = 50)
+    {
         $fields = $options = [];
 
         $options['what'] = 'DEVLOGENTRY.run_id';
@@ -115,10 +114,8 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      *
      * @return array
      */
-    private function convertSingleSelectToFlatArray(
-        array $items,
-        $field,
-    ) {
+    private function convertSingleSelectToFlatArray(array $items, $field)
+    {
         if (empty($items)) {
             return [];
         }
@@ -139,10 +136,8 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
     /**
      * On default, return hidden and deleted fields in backend.
      */
-    protected function prepareFieldsAndOptions(
-        array &$fields,
-        array &$options,
-    ) {
+    protected function prepareFieldsAndOptions(array &$fields, array &$options)
+    {
         // there is no tca for the table!
         $options['enablefieldsoff'] = true;
         parent::prepareFieldsAndOptions($fields, $options);
@@ -152,9 +147,8 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
     /**
      * Prepares the simple generic searcher.
      */
-    protected function prepareGenericSearcher(
-        array &$options,
-    ) {
+    protected function prepareGenericSearcher(array &$options)
+    {
         if (empty($options['searchdef']) || !is_array($options['searchdef'])) {
             $options['searchdef'] = [];
         }

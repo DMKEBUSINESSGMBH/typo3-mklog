@@ -70,9 +70,8 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     /**
      * Initializes the Transport.
      */
-    public function initialize(
-        \DMK\Mklog\Domain\Model\GenericArrayObject $options,
-    ) {
+    public function initialize(\DMK\Mklog\Domain\Model\GenericArrayObject $options)
+    {
         parent::initialize($options);
 
         ComposerUtility::autoload();
@@ -92,18 +91,16 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     /**
      * Publishes a message by the provider.
      */
-    public function publish(
-        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message,
-    ) {
+    public function publish(\DMK\Mklog\WatchDog\Message\InterfaceMessage $message)
+    {
         $this->addMessage($message);
     }
 
     /**
      * Adds a Message to send.
      */
-    protected function addMessage(
-        \DMK\Mklog\WatchDog\Message\InterfaceMessage $message,
-    ) {
+    protected function addMessage(\DMK\Mklog\WatchDog\Message\InterfaceMessage $message)
+    {
         $level = $message->getLevel();
 
         // build message unique key
@@ -201,9 +198,8 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
      *
      * @param string $content
      */
-    protected function sendMail(
-        $content,
-    ): bool {
+    protected function sendMail($content): bool
+    {
         $subject = sprintf(
             $this->getOptions()->getMailSubject() ?: 'DevLog WatchDog on site %s',
             Factory::getConfigUtility()->getSiteName()
@@ -229,12 +225,8 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     /**
      * Sends the devlog content per mail for typo3 9 or earlier.
      */
-    protected function sendMailLegacy(
-        string $content,
-        string $subject,
-        Address $mailFrom,
-        Address $mailTo,
-    ): bool {
+    protected function sendMailLegacy(string $content, string $subject, Address $mailFrom, Address $mailTo): bool
+    {
         $mail = Factory::makeInstance(MailMessage::class);
         $mail
             ->setFrom($mailFrom->getAddress())

@@ -48,9 +48,8 @@ class GelfLogger extends AbstractLogger
      *
      * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
-    public function writeLog(
-        \TYPO3\CMS\Core\Log\LogRecord $record,
-    ) {
+    public function writeLog(\TYPO3\CMS\Core\Log\LogRecord $record)
+    {
         try {
             $this->storeLog(
                 $record->getMessage(),
@@ -171,9 +170,8 @@ class GelfLogger extends AbstractLogger
      *
      * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
-    protected function getTransport(
-        \DMK\Mklog\Utility\ConfigUtility $config,
-    ) {
+    protected function getTransport(\DMK\Mklog\Utility\ConfigUtility $config)
+    {
         return \DMK\Mklog\Factory::getTransport(
             $config->getGelfTransport()
         );

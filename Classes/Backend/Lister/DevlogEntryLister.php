@@ -210,10 +210,8 @@ class DevlogEntryLister extends \Sys25\RnBase\Backend\Lister\AbstractLister
     /**
      * Initializes the fields and options for the repository search.
      */
-    protected function prepareFieldsAndOptions(
-        array &$fields,
-        array &$options,
-    ) {
+    protected function prepareFieldsAndOptions(array &$fields, array &$options)
+    {
         parent::prepareFieldsAndOptions($fields, $options);
 
         $options['orderby']['DEVLOGENTRY.run_id'] = 'DESC';
@@ -263,9 +261,8 @@ class DevlogEntryLister extends \Sys25\RnBase\Backend\Lister\AbstractLister
      *
      * @return array
      */
-    protected function addDecoratorColumns(
-        array &$columns,
-    ) {
+    protected function addDecoratorColumns(array &$columns)
+    {
         $columns['crdate'] = [
             'title' => 'label_tableheader_crdate',
             'decorator' => $this->getDecorator(),

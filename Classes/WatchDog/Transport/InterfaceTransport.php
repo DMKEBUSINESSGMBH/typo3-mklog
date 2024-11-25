@@ -49,16 +49,12 @@ interface InterfaceTransport
     /**
      * Initializes the Transport.
      */
-    public function initialize(
-        GenericArrayObject $options,
-    );
+    public function initialize(GenericArrayObject $options);
 
     /**
      * Publishes a message by the provider.
      */
-    public function publish(
-        InterfaceMessage $message,
-    );
+    public function publish(InterfaceMessage $message);
 
     /**
      * Deinitializes the Transport.
