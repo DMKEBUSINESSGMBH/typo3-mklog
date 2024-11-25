@@ -147,9 +147,8 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @return PHPUnit_Framework_MockObject_MockObject|SchedulerWatchDog
      */
-    protected function getSchedulerMock(
-        array $methods = [],
-    ) {
+    protected function getSchedulerMock(array $methods = [])
+    {
         $logger = $this->getMock(
             \TYPO3\CMS\Core\Log\Logger::class,
             [],
