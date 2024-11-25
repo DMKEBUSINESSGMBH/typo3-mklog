@@ -165,9 +165,8 @@ class GelfLogger extends AbstractLogger
      *
      * @return \DMK\Mklog\WatchDog\Transport\InterfaceTransport
      */
-    protected function getTransport(
-        \DMK\Mklog\Utility\ConfigUtility $config,
-    ) {
+    protected function getTransport(\DMK\Mklog\Utility\ConfigUtility $config)
+    {
         return \DMK\Mklog\Factory::getTransport(
             $config->getGelfTransport()
         );
