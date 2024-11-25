@@ -74,7 +74,7 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      * @return array
      */
     public function getLatestRunIds(
-        $limit = 50
+        $limit = 50,
     ) {
         $fields = $options = [];
 
@@ -117,7 +117,7 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      */
     private function convertSingleSelectToFlatArray(
         array $items,
-        $field
+        $field,
     ) {
         if (empty($items)) {
             return [];
@@ -141,7 +141,7 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      */
     protected function prepareFieldsAndOptions(
         array &$fields,
-        array &$options
+        array &$options,
     ) {
         // there is no tca for the table!
         $options['enablefieldsoff'] = true;
@@ -153,7 +153,7 @@ class DevlogEntryRepository extends \Sys25\RnBase\Domain\Repository\PersistenceR
      * Prepares the simple generic searcher.
      */
     protected function prepareGenericSearcher(
-        array &$options
+        array &$options,
     ) {
         if (empty($options['searchdef']) || !is_array($options['searchdef'])) {
             $options['searchdef'] = [];

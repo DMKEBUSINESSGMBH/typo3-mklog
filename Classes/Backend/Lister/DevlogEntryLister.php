@@ -212,7 +212,7 @@ class DevlogEntryLister extends \Sys25\RnBase\Backend\Lister\AbstractLister
      */
     protected function prepareFieldsAndOptions(
         array &$fields,
-        array &$options
+        array &$options,
     ) {
         parent::prepareFieldsAndOptions($fields, $options);
 
@@ -264,7 +264,7 @@ class DevlogEntryLister extends \Sys25\RnBase\Backend\Lister\AbstractLister
      * @return array
      */
     protected function addDecoratorColumns(
-        array &$columns
+        array &$columns,
     ) {
         $columns['crdate'] = [
             'title' => 'label_tableheader_crdate',

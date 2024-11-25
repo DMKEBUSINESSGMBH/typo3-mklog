@@ -78,7 +78,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      * Initializes the Transport.
      */
     public function initialize(
-        GenericArrayObject $options
+        GenericArrayObject $options,
     ) {
         parent::initialize($options);
 
@@ -89,7 +89,7 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      * Publishes a message by the provider.
      */
     public function publish(
-        InterfaceMessage $message
+        InterfaceMessage $message,
     ) {
         $gelfMsg = new Message();
         $gelfMsg

@@ -169,7 +169,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      * )
      */
     protected function handleExceptionDuringLogging(
-        \Exception $exception
+        \Exception $exception,
     ) {
         if (ExtensionManagementUtility::isLoaded('rn_base')) {
             // try to send mail

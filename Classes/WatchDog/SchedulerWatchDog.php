@@ -246,7 +246,7 @@ class SchedulerWatchDog extends AbstractTask
      * Marks the message as transported.
      */
     protected function markAsTransported(
-        \DMK\Mklog\Domain\Model\DevlogEntry $message
+        \DMK\Mklog\Domain\Model\DevlogEntry $message,
     ) {
         $repo = Factory::getDevlogEntryRepository();
         $repo->persist(

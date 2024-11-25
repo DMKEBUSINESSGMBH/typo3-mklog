@@ -59,7 +59,7 @@ class DevlogEntryDecorator
      */
     public function __construct(
         \Sys25\RnBase\Backend\Module\BaseModule $mod,
-        $options = []
+        $options = [],
     ) {
         $this->mod = $mod;
 
@@ -80,7 +80,7 @@ class DevlogEntryDecorator
         $columnValue,
         $columnName,
         array $record,
-        DevlogEntry $entry
+        DevlogEntry $entry,
     ) {
         $return = $columnValue;
 
@@ -107,7 +107,7 @@ class DevlogEntryDecorator
     protected function wrapValue(
         $formatedValue,
         DevlogEntry $entry,
-        $columnName
+        $columnName,
     ) {
         return sprintf(
             '<span class="column-%3$s severity-%2$s">%1$s</span>',
@@ -123,7 +123,7 @@ class DevlogEntryDecorator
      * @return string
      */
     protected function formatCrdateColumn(
-        DevlogEntry $entry
+        DevlogEntry $entry,
     ) {
         return sprintf(
             '<button '.
@@ -144,7 +144,7 @@ class DevlogEntryDecorator
      * @return string
      */
     protected function formatSeverityColumn(
-        DevlogEntry $entry
+        DevlogEntry $entry,
     ) {
         $severityId = $entry->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
@@ -205,7 +205,7 @@ class DevlogEntryDecorator
      * @return string
      */
     protected function formatExtKeyColumn(
-        DevlogEntry $entry
+        DevlogEntry $entry,
     ) {
         return sprintf(
             '<button '.
@@ -225,7 +225,7 @@ class DevlogEntryDecorator
      * @return string
      */
     protected function formatMessageColumn(
-        DevlogEntry $entry
+        DevlogEntry $entry,
     ) {
         $message = $entry->getMessage();
 
@@ -243,7 +243,7 @@ class DevlogEntryDecorator
      * @return string
      */
     protected function formatExtraDataColumn(
-        DevlogEntry $entry
+        DevlogEntry $entry,
     ) {
         $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($entry);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);
