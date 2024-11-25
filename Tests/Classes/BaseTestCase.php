@@ -227,18 +227,8 @@ abstract class BaseTestCase extends UnitTestCase
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    public function getMock(
-        $originalClassName,
-        $methods = [],
-        array $arguments = [],
-        $mockClassName = '',
-        $callOriginalConstructor = true,
-        $callOriginalClone = true,
-        $callAutoload = true,
-        $cloneArguments = false,
-        $callOriginalMethods = false,
-        $proxyTarget = null,
-    ) {
+    public function getMock($originalClassName, $methods = [], array $arguments = [], $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false, $callOriginalMethods = false, $proxyTarget = null)
+    {
         $mockBuilder = $this->getMockBuilder($originalClassName)
             ->setMethods($methods)
             ->setConstructorArgs($arguments)
