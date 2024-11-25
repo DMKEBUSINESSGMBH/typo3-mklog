@@ -31,6 +31,7 @@ use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\SeverityUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogRecord;
 
 /**
  * Devlog logger.
@@ -51,13 +52,10 @@ class DevlogLogger extends AbstractLogger
     /**
      * Writes the log record.
      *
-     * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
-     *
      * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
-    public function writeLog(
-        \TYPO3\CMS\Core\Log\LogRecord $record,
-    ) {
+    public function writeLog(LogRecord $record)
+    {
         try {
             //  prevent nesting write loops
             if ($this->whileWriting) {

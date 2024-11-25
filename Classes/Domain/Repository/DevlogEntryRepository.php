@@ -219,9 +219,8 @@ class DevlogEntryRepository
     /**
      * Persists an model.
      */
-    public function persist(
-        DevlogEntry $model,
-    ): void {
+    public function persist(DevlogEntry $model): void
+    {
         // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
         $model->setExtraDataEncoded(
             Factory::getEntryDataParserUtility($model)->getShortenedRaw(
@@ -283,9 +282,8 @@ class DevlogEntryRepository
      *
      * @return array
      */
-    public function getLatestRunIds(
-        $limit = 50,
-    ) {
+    public function getLatestRunIds($limit = 50)
+    {
         $items = $this->createQueryBuilder()
             ->select('run_id')
             ->from($this->getTableName())
@@ -323,10 +321,8 @@ class DevlogEntryRepository
      *
      * @return array
      */
-    private function convertSingleSelectToFlatArray(
-        array $items,
-        $field,
-    ) {
+    private function convertSingleSelectToFlatArray(array $items, $field)
+    {
         if (empty($items)) {
             return [];
         }

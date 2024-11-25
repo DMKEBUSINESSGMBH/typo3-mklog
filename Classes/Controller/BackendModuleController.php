@@ -61,10 +61,8 @@ class BackendModuleController
     protected DevlogEntryRepository $devlogEntryRepository;
     protected ModuleTemplateFactory $moduleTemplateFactory;
 
-    public function __construct(
-        DevlogEntryRepository $devlogEntryRepository,
-        ModuleTemplateFactory $moduleTemplateFactory,
-    ) {
+    public function __construct(DevlogEntryRepository $devlogEntryRepository, ModuleTemplateFactory $moduleTemplateFactory)
+    {
         $this->devlogEntryRepository = $devlogEntryRepository;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
     }

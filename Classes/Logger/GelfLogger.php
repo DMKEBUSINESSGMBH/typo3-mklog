@@ -30,6 +30,7 @@ namespace DMK\Mklog\Logger;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Utility\SeverityUtility;
 use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogRecord;
 
 /**
  * Devlog logger.
@@ -43,13 +44,10 @@ class GelfLogger extends AbstractLogger
     /**
      * Writes the log record.
      *
-     * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
-     *
      * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
-    public function writeLog(
-        \TYPO3\CMS\Core\Log\LogRecord $record,
-    ) {
+    public function writeLog(LogRecord $record)
+    {
         try {
             $this->storeLog(
                 $record->getMessage(),
