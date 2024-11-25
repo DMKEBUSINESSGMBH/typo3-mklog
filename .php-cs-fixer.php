@@ -40,5 +40,14 @@ return $config
         '@PSR2' => true,
         '@Symfony' => true,
         'header_comment' => ['header' => $header],
+        'trailing_comma_in_multiline' => [
+            'after_heredoc' => true,
+            // no support for "arguments" and "parameters" as we need support for PHP 7.4
+            'elements' => [
+                'array_destructuring',
+                'arrays',
+                'match',
+            ],
+        ],
     ])
     ->setLineEnding("\n");
