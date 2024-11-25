@@ -23,6 +23,7 @@ jobs:
                     - "8.0"
                     - "8.1"
                     - "8.2"
+                    - "8.3"
 
         steps:
             -
@@ -74,6 +75,7 @@ jobs:
                     - "8.0"
                     - "8.1"
                     - "8.2"
+                    - "8.3"
 
         steps:
             -
@@ -125,11 +127,23 @@ jobs:
                         typo3-version: "^11.5"
                         php-version: "8.0"
                     -
+                        typo3-version: "^11.5"
+                        php-version: "8.1"
+                    -
+                        typo3-version: "^11.5"
+                        php-version: "8.2"
+                    -
+                        typo3-version: "^11.5"
+                        php-version: "8.3"
+                    -
                         typo3-version: "^12.4"
                         php-version: "8.1"
                     -
                         typo3-version: "^12.4"
                         php-version: "8.2"
+                    -
+                        typo3-version: "^12.4"
+                        php-version: "8.3"
 
         steps:
             -

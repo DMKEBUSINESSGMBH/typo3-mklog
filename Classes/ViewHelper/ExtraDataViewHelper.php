@@ -64,7 +64,7 @@ class ExtraDataViewHelper extends AbstractViewHelper
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
+        RenderingContextInterface $renderingContext,
     ) {
         $parser = \DMK\Mklog\Factory::getEntryDataParserUtility($arguments['logEntry']);
         $extraData = $parser->getShortenedRaw($parser::SIZE_512KB);

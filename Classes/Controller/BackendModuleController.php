@@ -63,7 +63,7 @@ class BackendModuleController
 
     public function __construct(
         DevlogEntryRepository $devlogEntryRepository,
-        ModuleTemplateFactory $moduleTemplateFactory
+        ModuleTemplateFactory $moduleTemplateFactory,
     ) {
         $this->devlogEntryRepository = $devlogEntryRepository;
         $this->moduleTemplateFactory = $moduleTemplateFactory;

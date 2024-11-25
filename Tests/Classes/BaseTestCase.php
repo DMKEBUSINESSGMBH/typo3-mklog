@@ -237,7 +237,7 @@ abstract class BaseTestCase extends UnitTestCase
         $callAutoload = true,
         $cloneArguments = false,
         $callOriginalMethods = false,
-        $proxyTarget = null
+        $proxyTarget = null,
     ) {
         $mockBuilder = $this->getMockBuilder($originalClassName)
             ->setMethods($methods)
