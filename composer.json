@@ -105,9 +105,9 @@
         "lint:php": [
             "[ -e .Build/bin/parallel-lint ] || composer update",
             "echo 'parallel-lint fails with a exception if executed inside the vendor/dmk/mklog folder'",
-            "[ -e ../../autoload.php ] && mv ../../autoload.php ../../autoload.php.bak",
+            "[ ! -e ../../autoload.php ] || mv ../../autoload.php ../../autoload.php.bak",
             ".Build/bin/parallel-lint ./Classes",
-            "[ -e ../../autoload.php.bak ] && mv ../../autoload.php.bak ../../autoload.php"
+            "[ ! -e ../../autoload.php.bak ] || mv ../../autoload.php.bak ../../autoload.php"
         ],
         "lint": [
             "@lint:php"
