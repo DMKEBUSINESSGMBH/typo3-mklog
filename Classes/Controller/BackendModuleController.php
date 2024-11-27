@@ -74,29 +74,12 @@ class BackendModuleController
             'pageUid' => $pageId,
         ]);
 
-        if (VersionUtility::isTypo3Version12OrHigher()) {
-            return $this->view->renderResponse('BackendModule');
-        }
-
-        $moduleTemplate = $this->moduleTemplateFactory->create($request);
-        $moduleTemplate->setContent($this->view->render());
-
-        return new HtmlResponse($moduleTemplate->renderContent());
+        return $this->view->renderResponse('BackendModule');
     }
 
     protected function getView(ServerRequestInterface $request)
     {
-        if (VersionUtility::isTypo3Version12OrHigher()) {
-            return $this->moduleTemplateFactory->create($request);
-        }
-
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateRootPaths(['EXT:mklog/Resources/Private/Templates/']);
-        $view->setPartialRootPaths(['EXT:mklog/Resources/Private/Partials/']);
-        $view->setLayoutRootPaths(['EXT:mklog/Resources/Private/Layouts/']);
-        $view->setTemplate('BackendModule_11');
-
-        return $view;
+        return $this->moduleTemplateFactory->create($request);
     }
 
     protected function assignSeverityLevels(): void
