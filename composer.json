@@ -52,7 +52,8 @@
         "phpstan/extension-installer": "^1.1",
         "saschaegerer/phpstan-typo3": "^1.0",
         "typo3/testing-framework": "^8.0 || ^9.0",
-        "ssch/typo3-rector": "^2.8"
+        "ssch/typo3-rector": "^2.8",
+        "captainhook/captainhook": "^5.10"
     },
     "autoload": {
         "classmap": [
@@ -93,6 +94,9 @@
         }
     },
     "scripts": {
+        "post-autoload-dump": [
+            "[ -e .Build/bin/captainhook ] && .Build/bin/captainhook install -f || echo 'CaptainHook missing, skip install.'"
+        ],
         "runqa": [
             "@fix",
             "@lint",
@@ -100,7 +104,10 @@
         ],
         "lint:php": [
             "[ -e .Build/bin/parallel-lint ] || composer update",
-            ".Build/bin/parallel-lint ./Classes"
+            "echo 'parallel-lint fails with a exception if executed inside the vendor/dmk/mklog folder'",
+            "[ -e ../../autoload.php ] && mv ../../autoload.php ../../autoload.php.bak",
+            ".Build/bin/parallel-lint ./Classes",
+            "[ -e ../../autoload.php.bak ] && mv ../../autoload.php.bak ../../autoload.php"
         ],
         "lint": [
             "@lint:php"
@@ -110,11 +117,11 @@
             ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
         ],
         "test:phpcompatibility": [
-            "@test:phpcompatibility:8"
+            "@test:phpcompatibility:8.x"
         ],
-        "test:phpcompatibility:8": [
+        "test:phpcompatibility:8.x": [
             "[ -e .Build/bin/phpcs ] || composer update",
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Private/PHP/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1-8.3"
+            ".Build/bin/phpcs --ignore=.Build/*,Resources/Private/PHP/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1-8.4"
         ],
         "test:phpmd": [
             "[ -e .Build/bin/phpmd ] || composer update --ansi",

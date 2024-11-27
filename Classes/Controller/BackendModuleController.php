@@ -29,16 +29,13 @@ namespace DMK\Mklog\Controller;
 
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
-use DMK\Mklog\Utility\VersionUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -77,7 +74,7 @@ class BackendModuleController
         return $this->view->renderResponse('BackendModule');
     }
 
-    protected function getView(ServerRequestInterface $request)
+    protected function getView(ServerRequestInterface $request): ModuleTemplate
     {
         return $this->moduleTemplateFactory->create($request);
     }
