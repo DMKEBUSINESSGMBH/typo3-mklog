@@ -39,17 +39,12 @@ use Ssch\TYPO3Rector\Configuration\Typo3Option;
 use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
-        __DIR__.'/Classes',
-        __DIR__.'/Configuration',
-        __DIR__.'/Tests',
-        __DIR__.'/ext_*.php',
-    ]);
+    $rectorConfig->paths([__DIR__]);
 
     $rectorConfig->phpVersion(PhpVersion::PHP_81);
 
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_81,
+        LevelSetList::UP_TO_PHP_84,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         SetList::DEAD_CODE,
@@ -73,14 +68,15 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         // @see https://github.com/sabbelasichon/typo3-rector/issues/2536
-        __DIR__.'/**/Configuration/ExtensionBuilder/*',
+        __DIR__.'/Configuration/ExtensionBuilder/*',
+        __DIR__.'/Resources/Private/PHP/*',
 
         // no namespace imports for these files:
         NameImportingPostRector::class => [
             'ext_localconf.php',
             'ext_tables.php',
-            __DIR__.'/**/Configuration/*.php',
-            __DIR__.'/**/Configuration/**/*.php',
+            __DIR__.'/Configuration/*.php',
+            __DIR__.'/Configuration/**/*.php',
         ],
 
         // makes double-quoted strings, we don't want this at the moment.

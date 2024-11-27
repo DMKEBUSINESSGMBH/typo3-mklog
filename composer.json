@@ -83,7 +83,7 @@
     "extra": {
         "branch-alias": {
             "dev-12.4": "12.4.x-dev",
-            "dev-13.2": "13.2.x-dev"
+            "dev-13.4": "13.4.x-dev"
         },
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
@@ -93,12 +93,7 @@
         }
     },
     "scripts": {
-        "post-autoload-dump": [
-            "mkdir -p .Build/Web/typo3conf/ext/",
-            "[ -L .Build/Web/typo3conf/ext/mklog ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/mklog",
-            "[ -f .Build/Web/typo3conf/LocalConfiguration.php ] || cp Tests/Fixtures/LocalConfiguration.php .Build/Web/typo3conf/LocalConfiguration.php"
-        ],
-        "runqs": [
+        "runqa": [
             "@fix",
             "@lint",
             "@test"
@@ -154,6 +149,7 @@
             ".Build/bin/rector process --ansi"
         ],
         "fix": [
+            "@fix:rector",
             "@fix:phpcs"
         ]
     }

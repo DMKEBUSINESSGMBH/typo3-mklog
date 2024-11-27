@@ -49,7 +49,7 @@ class GelfLogger extends AbstractLogger
      */
     public function writeLog(
         \TYPO3\CMS\Core\Log\LogRecord $record,
-    ) {
+    ): static {
         try {
             $this->storeLog(
                 $record->getMessage(),

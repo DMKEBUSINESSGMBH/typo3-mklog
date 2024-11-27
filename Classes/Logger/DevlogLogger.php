@@ -57,7 +57,7 @@ class DevlogLogger extends AbstractLogger
      */
     public function writeLog(
         \TYPO3\CMS\Core\Log\LogRecord $record,
-    ) {
+    ): static {
         try {
             //  prevent nesting write loops
             if ($this->whileWriting) {

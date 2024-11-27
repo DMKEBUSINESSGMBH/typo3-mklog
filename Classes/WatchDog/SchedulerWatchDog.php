@@ -282,7 +282,7 @@ class SchedulerWatchDog extends AbstractTask
      *
      * @return string Information to display
      */
-    public function getAdditionalInformation()
+    public function getAdditionalInformation(): string
     {
         if ($this->getOptions()->isEmpty()) {
             return '';

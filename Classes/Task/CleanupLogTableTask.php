@@ -42,10 +42,8 @@ class CleanupLogTableTask extends AbstractTask
 {
     /**
      * Cleanup devlog table and remove old entries.
-     *
-     * @return bool
      */
-    public function execute()
+    public function execute(): bool
     {
         $this->getDevlogEntryRepository()->optimize();
 
