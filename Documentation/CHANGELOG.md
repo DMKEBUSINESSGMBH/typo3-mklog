@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.0.1
+------
+* Fix dependencies
+
 13.0.0
 ------
 * TYPO3 13.4 and 12.4 compatibility only

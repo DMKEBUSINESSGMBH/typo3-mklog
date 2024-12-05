@@ -36,8 +36,8 @@
         "typo3-ter/mklog": "self.version"
     },
     "require": {
-        "typo3/cms-core": "^v12.4.2 || ^13.2",
-        "typo3/cms-scheduler": "^v12.4 || ^13.2",
+        "typo3/cms-core": "^v12.4.2 || ^13.4",
+        "typo3/cms-scheduler": "^v12.4 || ^13.4",
         "graylog2/gelf-php": "~1 || ^2.0",
         "egulias/email-validator": "^2.1 || ^3.1 || ^4.0",
         "doctrine/dbal": "~2.13.1 || ^3.6 || ^4.0"
