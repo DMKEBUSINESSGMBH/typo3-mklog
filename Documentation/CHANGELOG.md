@@ -1,6 +1,15 @@
 ChangeLog
 =========
 
+13.0.0
+------
+* TYPO3 13.4 and 12.4 compatibility only
+
+12.0.4
+------
+* Cleanup coding style
+* Update dependencies for none composer installations
+
 12.0.3
 ------
 * Remove stack trace arguments from error mail when an exception during logging occured.
