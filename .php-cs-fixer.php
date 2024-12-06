@@ -37,7 +37,7 @@ return $config
     ->setCacheFile('.Build/.php_cs.cache')
     ->setFinder($finder)
     ->setRules([
-        '@PSR2' => true,
+        '@PSR12' => true,
         '@Symfony' => true,
         'header_comment' => ['header' => $header],
     ])
