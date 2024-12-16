@@ -68,12 +68,16 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     protected $lockFile;
 
+    protected AbstractLogger $abstractLogger;
+
     protected function setUp(): void
     {
         parent::setUp();
         $lockFilesFolder = Environment::getVarPath().'/lock/';
         GeneralUtility::mkdir_deep($lockFilesFolder);
         $this->lockFile = $lockFilesFolder.'mklog_exception_during_logging.lock';
+
+        $this->abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
     }
 
     protected function tearDown(): void
@@ -89,10 +93,8 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function testCreateDevlogEntry()
     {
-        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
-
         $logEntry = $this->callInaccessibleMethod(
-            $abstractLogger,
+            $this->abstractLogger,
             'createDevlogEntry',
             'This is a {placeholder_one} {placeholder_two}',
             'mklog',
@@ -113,26 +115,28 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @dataProvider canMailBeSendDataProvider
      */
-    public function canMailBeSend(?int $lockFileContent, bool $canMailBeSend)
+    public function canMailBeSend(?int $timeOffset, bool $canMailBeSend)
     {
-        if (!is_null($lockFileContent)) {
-            file_put_contents($this->lockFile, $lockFileContent);
+        if (!is_null($timeOffset)) {
+            file_put_contents($this->lockFile, time() - $timeOffset);
         }
-        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
 
-        self::assertSame($canMailBeSend, $this->callInaccessibleMethod($abstractLogger, 'canMailBeSend'));
+        self::assertSame($canMailBeSend, $this->callInaccessibleMethod($this->abstractLogger, 'canMailBeSend'));
     }
 
     public function canMailBeSendDataProvider(): array
     {
         return [
             [null, true],
-            [1, true],
-            [time(), false],
-            [time() - 50, false],
-            [time() - 59, false],
-            [time() - 60, false],
-            [time() - 61, true],
+            [time(), true],
+            [time() + 1, true],
+            [time() + 100, true],
+            [0, false],
+            [50, false],
+            [59, false],
+            [60, false],
+            [61, true],
+            [610, true],
         ];
     }
 
@@ -143,13 +147,12 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function getExceptionTraceWithoutArguments()
     {
-        $abstractLogger = $this->getMockForAbstractClass(AbstractLogger::class);
         try {
             throw new \Exception('An error occured');
         } catch (\Exception $exception) {
             self::assertStringNotContainsString(
                 'Object(DMK\Mklog\Logger\AbstractLoggerTest)',
-                $this->callInaccessibleMethod($abstractLogger, 'getExceptionTraceWithoutArguments', $exception)
+                $this->callInaccessibleMethod($this->abstractLogger, 'getExceptionTraceWithoutArguments', $exception)
             );
         }
     }
