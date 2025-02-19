@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.0.2
+------
+* Fix graylog2/gelf-php 2.x usage
+
 13.0.1
 ------
 * Fix dependencies
