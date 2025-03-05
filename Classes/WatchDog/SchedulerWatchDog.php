@@ -117,6 +117,11 @@ class SchedulerWatchDog extends AbstractTask
      */
     public function getOptions()
     {
+        // backwards compatiblity for schedulers that were created when we still used rn_base.
+        if (null !== $this->schedulerOptions && $this->schedulerOptions::class === 'Sys25\RnBase\Domain\Model\DataModel') {
+            $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->getProperties());
+        }
+
         if (null === $this->schedulerOptions) {
             $this->schedulerOptions = GenericArrayObject::getInstance();
         }
