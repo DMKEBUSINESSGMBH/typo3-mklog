@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.0.3
+------
+* Add backwards compatiblity for schedulers that were created when we still used rn_base.
+
 13.0.2
 ------
 * Fix graylog2/gelf-php 2.x usage
