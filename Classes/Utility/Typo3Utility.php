@@ -81,7 +81,7 @@ final class Typo3Utility
      */
     public static function getBeUser(): ?BackendUserAuthentication
     {
-        return isset($GLOBALS['TSFE']) && is_object($GLOBALS['BE_USER']) ? $GLOBALS['BE_USER'] : null;
+        return isset($GLOBALS['TSFE']) && is_object($GLOBALS['BE_USER'] ?? null) ? $GLOBALS['BE_USER'] : null;
     }
 
     /**
