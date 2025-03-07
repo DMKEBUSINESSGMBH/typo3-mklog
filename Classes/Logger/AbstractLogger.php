@@ -31,8 +31,8 @@ use DMK\Mklog\Utility\Typo3Utility;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Mail\MailMessage;
-use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 
 /**
  * Devlog logger.
@@ -127,7 +127,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     private function getBacktrace(): array
     {
         $trace = array_reverse(
-            explode(' // ', DebugUtility::debugTrail())
+            explode(' // ', $this->getDebugTrail())
         );
 
         $lastIgnoreKey = 0;
@@ -159,6 +159,30 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         }
 
         return array_splice($trace, $lastIgnoreKey + 1);
+    }
+
+    /**
+     * Basically the same as TYPO3\CMS\Core\Utility\DebugUtility::debugTrail but with a bugfix. The core does not check
+     * if a file include is triggered with the native PHP functions or with a include method in a class for example.
+     * If it's not a native function we can't be sure how the signature looks.
+     */
+    private function getDebugTrail(): string
+    {
+        $trail = debug_backtrace(0);
+        $trail = array_reverse($trail);
+        array_pop($trail);
+        $path = [];
+        foreach ($trail as $dat) {
+            $pathFragment = ($dat['class'] ?? '').($dat['type'] ?? '').$dat['function'];
+            // add the path of the included file
+            if (in_array($dat['function'], ['require', 'include', 'require_once', 'include_once']) && !($dat['class'] ?? '')) {
+                $pathFragment .= '('.PathUtility::stripPathSitePrefix($dat['args'][0]).'),'.PathUtility::stripPathSitePrefix($dat['file']);
+            }
+
+            $path[] = array_key_exists('line', $dat) ? $pathFragment.'#'.$dat['line'] : $pathFragment;
+        }
+
+        return implode(' // ', $path);
     }
 
     /**
