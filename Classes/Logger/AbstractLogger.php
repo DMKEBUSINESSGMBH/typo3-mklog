@@ -211,8 +211,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $traceAsString = '';
         foreach ($exception->getTrace() as $key => $trace) {
             $traceAsString .= '#'.$key;
-            $traceAsString .= ' '.$trace['file'];
-            $traceAsString .= '('.$trace['line'].'): ';
+            $traceAsString .= ' '.($trace['file'] ?? '');
+            $traceAsString .= '('.($trace['line'] ?? '').'): ';
             $traceAsString .= $trace['class'] ?? '';
             $traceAsString .= $trace['type'] ?? '';
             $traceAsString .= $trace['function'] ?? '';
