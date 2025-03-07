@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+13.0.4
+------
+* Fix some undefined array keys
+* Don't rely on TYPO3 core to get debug trail
+* Fix possible error in eIDs
+
 13.0.3
 ------
 * Add backwards compatiblity for schedulers that were created when we still used rn_base.
