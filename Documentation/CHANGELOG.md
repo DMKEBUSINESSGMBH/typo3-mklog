@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.0.5
+------
+* Fix compatibility with newest gelf-php version
+
 13.0.4
 ------
 * Fix some undefined array keys
