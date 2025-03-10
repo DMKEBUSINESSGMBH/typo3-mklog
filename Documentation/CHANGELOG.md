@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-13.0.5
+13.0.6
 ------
 * Fix compatibility with newest gelf-php version
 
