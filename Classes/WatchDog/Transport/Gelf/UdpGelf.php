@@ -57,7 +57,7 @@ class UdpGelf extends AbstractGelf
 
         return new UdpTransport(
             trim($host),
-            trim($port),
+            (int) trim($port),
             UdpTransport::CHUNK_SIZE_LAN
         );
     }
