@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.0.7
+------
+* Fix Typo3Utility usage on CLI
+
 13.0.6
 ------
 * Fix compatibility with newest gelf-php version

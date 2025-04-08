@@ -47,17 +47,27 @@ final class Typo3Utility
      */
     public static function getTsFe(): ?TypoScriptFrontendController
     {
-        return isset($GLOBALS['TSFE']) && is_object($GLOBALS['TSFE']) ? $GLOBALS['TSFE'] : null;
+        $tsfe = null;
+        if ($GLOBALS['TYPO3_REQUEST'] ?? null) {
+            $tsfe = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller');
+        }
+
+        return is_object($tsfe) ? $tsfe : null;
     }
 
     /**
      * Get the current frontend user.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getFeUser(): ?FrontendUserAuthentication
     {
-        $tsfe = self::getTsFe();
+        $frontendUser = null;
+        if ($GLOBALS['TYPO3_REQUEST'] ?? null) {
+            $frontendUser = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.user');
+        }
 
-        return $tsfe instanceof TypoScriptFrontendController && is_object($tsfe->fe_user) ? $tsfe->fe_user : null;
+        return is_object($frontendUser) ? $frontendUser : null;
     }
 
     /**
@@ -81,7 +91,7 @@ final class Typo3Utility
      */
     public static function getBeUser(): ?BackendUserAuthentication
     {
-        return isset($GLOBALS['TSFE']) && is_object($GLOBALS['BE_USER'] ?? null) ? $GLOBALS['BE_USER'] : null;
+        return is_object($GLOBALS['BE_USER'] ?? null) ? $GLOBALS['BE_USER'] : null;
     }
 
     /**
