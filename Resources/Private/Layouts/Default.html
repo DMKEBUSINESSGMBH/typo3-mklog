@@ -5,13 +5,7 @@
         xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
         data-namespace-typo3-fluid="true">
 
-<f:be.pageRenderer
-    includeJsFiles="{
-        0: 'EXT:mklog/Resources/Public/JavaScript/backend.js',
-    }"
-    includeCssFiles="{
-        0: 'EXT:mklog/Resources/Public/Css/backend.css'
-    }"
-/>
+<f:asset.css identifier="mklogCss" href="{f:uri.resource(path:'EXT:mklog/Resources/Public/Css/backend.css', absolute: 1)}" />
+<f:asset.script identifier="mklogJs" src="{f:uri.resource(path:'EXT:mklog/Resources/Public/JavaScript/backend.js', absolute: 1)}" />
 <f:render section="Content" />
 </html>
