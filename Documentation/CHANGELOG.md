@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+12.0.5
+------
+* Fix possible open_basedir warning in BE module in TYPO3 11.5
+
 12.0.4
 ------
 * Cleanup coding style
