@@ -113,8 +113,8 @@
             "@lint:php"
         ],
         "test:phpcs": [
-            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
-            ".Build/bin/php-cs-fixer fix -v --dry-run --diff  --ansi"
+            "[ -e .Build/bin/php-cs-fixer ] || composer update",
+            "export PHP_CS_FIXER_IGNORE_ENV=1 && .Build/bin/php-cs-fixer fix -v --dry-run --diff"
         ],
         "test:phpcompatibility": [
             "@test:phpcompatibility:8.x"
@@ -148,8 +148,8 @@
             "@test:phpunit"
         ],
         "fix:phpcs": [
-            "[ -e .Build/bin/php-cs-fixer ] || composer update --ansi",
-            ".Build/bin/php-cs-fixer fix -v"
+            "[ -e .Build/bin/php-cs-fixer ] || composer update",
+            "export PHP_CS_FIXER_IGNORE_ENV=1 && .Build/bin/php-cs-fixer fix -v"
         ],
         "fix:rector": [
             "[ -e .Build/bin/rector ] || composer update --ansi",
