@@ -10,7 +10,7 @@ CREATE TABLE tx_mklog_devlog_entry (
     severity int(11) DEFAULT '0' NOT NULL,
     ext_key varchar(255) DEFAULT '' NOT NULL,
     host varchar(255) DEFAULT '' NOT NULL,
-    message text NOT NULL,
+    message text DEFAULT '' NOT NULL,
     extra_data mediumblob,
 
     crdate int(11) unsigned DEFAULT '0' NOT NULL,
