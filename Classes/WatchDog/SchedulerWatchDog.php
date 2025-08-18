@@ -182,7 +182,8 @@ class SchedulerWatchDog extends AbstractTask
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 $msg,
                 'MK Log WatchDog',
-                $success ? 0 : 2,
+                $success ? \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK
+                    : \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR,
                 false
             );
             /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
