@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+13.0.8
+------
+* Fix scheduler watch dog
+
+
 13.0.7
 ------
 * Fix Typo3Utility usage on CLI
