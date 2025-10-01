@@ -96,6 +96,7 @@ abstract class BaseTestCase extends UnitTestCase
                 'gelf_transport' => '',
                 'gelf_credentials' => '',
                 'gelf_min_log_level' => 1,
+                'excluded_log_message_regular_expressions' => ['/excluded-msg/'],
             ]
         );
     }
