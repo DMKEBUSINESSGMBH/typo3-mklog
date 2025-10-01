@@ -28,8 +28,9 @@
 namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Domain\Model\GenericArrayObject;
-use DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\Utility\LogMessageUtility;
 use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Devlog logger.
@@ -65,45 +66,6 @@ class GelfLogger extends AbstractLogger
     }
 
     /**
-     * Old devlog Hook from the old TYPO3 API.
-     */
-    public function sysLogHook(array $params): void
-    {
-        // do nothing on syslog init
-        if (isset($params['initLog']) && $params['initLog']) {
-            return;
-        }
-
-        /*
-         * \TYPO3\CMS\Core\Utility\GeneralUtility::SYSLOG_SEVERITY_*
-         * SYSLOG_SEVERITY_INFO = 0;
-         * SYSLOG_SEVERITY_NOTICE = 1;
-         * SYSLOG_SEVERITY_WARNING = 2;
-         * SYSLOG_SEVERITY_ERROR = 3;
-         * SYSLOG_SEVERITY_FATAL = 4;
-         */
-        // map the old log levels to the new one
-        $params['severity'] = match ((int) ($params['severity'] ?? 0)) {
-            4 => SeverityUtility::ALERT,
-            3 => SeverityUtility::CRITICAL,
-            2 => SeverityUtility::WARNING,
-            1 => SeverityUtility::NOTICE,
-            default => SeverityUtility::INFO,
-        };
-
-        try {
-            $this->storeLog(
-                $params['msg'],
-                $params['extKey'],
-                $params['severity'],
-                ['__trace' => $params['backTrace']]
-            );
-        } catch (\Exception $exception) {
-            $this->handleExceptionDuringLogging($exception);
-        }
-    }
-
-    /**
      * Stores a devlog entry.
      *
      * @param string $message
@@ -121,6 +83,8 @@ class GelfLogger extends AbstractLogger
             !$config->isGelfEnable()
             || !$config->getGelfCredentials()
             || $severity > $config->getGelfMinLogLevel()
+            || in_array($extension, $config->getExcludeExtKeys())
+            || GeneralUtility::makeInstance(LogMessageUtility::class)->isExcludedLogMessage($message)
         ) {
             return null;
         }

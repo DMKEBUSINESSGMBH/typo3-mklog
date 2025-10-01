@@ -31,3 +31,5 @@ gelf_credentials =
 # cat=gelf; type=options[0 - Emergency=0,1 - Alert=1,2 - Critical=2,3 - Error=3,4 - Warning=4,5 - Notice=5,6 - Info=6,7 - Debug=7]; label=Minimum log level: Minimum message level required to ransport the message. Usualy it is 1, all other logs should be written into devlog table and transported with a scheduler to gelf.
 gelf_min_log_level = 1
 
+# cat=base; type=string; label=Regular expressions for excluded log messages: A comma seperated list of regular expressions for log messages that should not be logged. This can be configured as an array in settings.php as well which is necessary if the regular expression contains a comma.
+excluded_log_message_regular_expressions =
