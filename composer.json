@@ -122,7 +122,7 @@
         ],
         "test:phpcompatibility:8.x": [
             "[ -e .Build/bin/phpcs ] || composer update",
-            ".Build/bin/phpcs --ignore=.Build/*,Resources/Private/PHP/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1-8.4"
+            ".Build/bin/phpcs --ignore=.Build/* -p . --standard=.Build/vendor/phpcompatibility/php-compatibility/PHPCompatibility --runtime-set testVersion 8.1-8.4"
         ],
         "test:phpmd": [
             "[ -e .Build/bin/phpmd ] || composer update --ansi",

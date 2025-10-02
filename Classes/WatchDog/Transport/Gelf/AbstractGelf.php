@@ -27,9 +27,7 @@
 
 namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
-use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Factory;
-use DMK\Mklog\Utility\ComposerUtility;
 use DMK\Mklog\WatchDog\Message\InterfaceMessage;
 use DMK\Mklog\WatchDog\Transport\AbstractTransport;
 use Gelf\Message;
@@ -71,17 +69,6 @@ abstract class AbstractGelf extends AbstractTransport implements SingletonInterf
      * @return \Gelf\Transport\AbstractTransport
      */
     abstract protected function getTransport();
-
-    /**
-     * Initializes the Transport.
-     */
-    public function initialize(
-        GenericArrayObject $options,
-    ): void {
-        parent::initialize($options);
-
-        ComposerUtility::autoload();
-    }
 
     /**
      * Publishes a message by the provider.
