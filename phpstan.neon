@@ -14,6 +14,3 @@ parameters:
     ignoreErrors:
         - '#Undefined variable: \$_EXTKEY#'
         - '#Attribute class TYPO3\\CMS\\Backend\\Attribute\\Controller does not exist#'
-        -
-            message: '/Call to an undefined static method/'
-            path: %currentWorkingDirectory%/Classes/Utility/ComposerUtility.php

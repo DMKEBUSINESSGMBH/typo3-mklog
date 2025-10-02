@@ -1,10 +1,14 @@
 ChangeLog
 =========
 
+13.1.0
+------
+* Add new extension configuration to exclude log messages by regular expressions
+* BREAKING: installation without composer is no longer possible.
+
 13.0.8
 ------
 * Fix scheduler watch dog
-
 
 13.0.7
 ------

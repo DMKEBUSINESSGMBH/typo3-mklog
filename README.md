@@ -19,7 +19,7 @@ Of course the devlog has to be used by the core and extensions.
 To have exceptions and errors logged to the devlog the error handling of mktools can be used.
 
 ### Installation
-Install TYPO3 via composer.
+Install TYPO3 via composer. Installation from TER is no longer supported.
 Maybe you can use our [TYPO3-Composer-Webroot Project](https://github.com/DMKEBUSINESSGMBH/typo3-composer-webroot)
 
 From project root you need to run

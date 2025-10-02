@@ -69,7 +69,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         // @see https://github.com/sabbelasichon/typo3-rector/issues/2536
         __DIR__.'/Configuration/ExtensionBuilder/*',
-        __DIR__.'/Resources/Private/PHP/*',
 
         // no namespace imports for these files:
         NameImportingPostRector::class => [
