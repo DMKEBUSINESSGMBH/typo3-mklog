@@ -28,9 +28,11 @@
 namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\LogMessageUtility;
 use DMK\Mklog\Utility\SeverityUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Devlog logger.
@@ -103,8 +105,10 @@ class DevlogLogger extends AbstractLogger
             return;
         }
 
-        // check exclude extension keys
-        if (in_array($extension, $config->getExcludeExtKeys())) {
+        if (
+            in_array($extension, $config->getExcludeExtKeys())
+            || GeneralUtility::makeInstance(LogMessageUtility::class)->isExcludedLogMessage($message)
+        ) {
             return;
         }
 

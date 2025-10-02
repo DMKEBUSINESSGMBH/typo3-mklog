@@ -221,4 +221,15 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     {
         return $this->getExtConf('from_mail', $GLOBALS['TYPO3_CONF_VARS']['MAIL']['defaultMailFromAddress'] ?? '');
     }
+
+    public function getExcludedLogMessageRegularExpressions(): array
+    {
+        $regularExpressions = $this->getExtConf('excluded_log_message_regular_expressions', []);
+
+        if (!is_array($regularExpressions)) {
+            return GeneralUtility::trimExplode(',', $regularExpressions);
+        }
+
+        return $regularExpressions;
+    }
 }

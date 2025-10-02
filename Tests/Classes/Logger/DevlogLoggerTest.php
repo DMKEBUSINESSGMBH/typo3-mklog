@@ -186,6 +186,38 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
+     * Test the storeLog method.
+     *
+     * @group unit
+     *
+     * @test
+     */
+    public function testStoreLogIfExcludedLogMessage(): void
+    {
+        $msg = 'excluded-msg';
+        $extKey = 'mklog';
+        $severity = 7;
+        $extraData = ['foo' => 1, 'bar' => ['baz']];
+
+        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled']);
+
+        $logger
+            ->expects(self::any())
+            ->method('isLoggingEnabled')
+            ->willReturn(true);
+
+        $repo = $this->callInaccessibleMethod($logger, 'getDevlogEntryRepository');
+        $repo
+            ->expects(self::never())
+            ->method('persist');
+
+        $this->callInaccessibleMethod(
+            [$logger, 'storeLog'],
+            [$msg, $extKey, $severity, $extraData]
+        );
+    }
+
+    /**
      * Returns the logger mock.
      *
      * @return PHPUnit_Framework_MockObject_MockObject|DevlogLogger
