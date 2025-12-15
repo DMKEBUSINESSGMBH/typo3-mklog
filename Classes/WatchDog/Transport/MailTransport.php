@@ -142,7 +142,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
         defined('LF') ?: define('LF', chr(10));
 
         $content = '';
-        $content .= 'This is an automatic email from TYPO3. Don\'t answer!'.LF.LF;
+        $content .= "This is an automatic email from TYPO3. Don't answer!".LF.LF;
         $content .= '== Developer Log summary'.LF.LF;
 
         // create summary

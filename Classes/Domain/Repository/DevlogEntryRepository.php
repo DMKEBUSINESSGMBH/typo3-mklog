@@ -143,7 +143,7 @@ class DevlogEntryRepository
         if ($demand->hasTransportId()) {
             $queryBuilder->where(
                 sprintf(
-                    'NOT FIND_IN_SET(\'%s\', `transport_ids`)',
+                    "NOT FIND_IN_SET('%s', `transport_ids`)",
                     $demand->getTransportId()
                 )
             );
@@ -272,7 +272,7 @@ class DevlogEntryRepository
     private function quoteInArray(array $list): array
     {
         return array_map(
-            fn ($entry): string => '\''.$entry.'\'',
+            fn ($entry): string => "'".$entry."'",
             $list
         );
     }

@@ -194,7 +194,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     {
         $address = $GLOBALS['TYPO3_CONF_VARS']['BE']['warning_email_addr'] ?? '';
         if ($address && $this->canMailBeSend()) {
-            $mailContent = 'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
+            $mailContent = "This is an automatic email from TYPO3. Don't answer!\n\n";
             $mailContent .= 'URL: '.GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL')."\n";
             $mailContent .= 'Message: '.$exception->getMessage()."\n\n";
             $mailContent .= "Stacktrace:\n".$this->getExceptionTraceWithoutArguments($exception)."\n";
