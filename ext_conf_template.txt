@@ -31,3 +31,20 @@ gelf_credentials =
 # cat=gelf; type=options[0 - Emergency=0,1 - Alert=1,2 - Critical=2,3 - Error=3,4 - Warning=4,5 - Notice=5,6 - Info=6,7 - Debug=7]; label=Minimum log level: Minimum message level required to ransport the message. Usualy it is 1, all other logs should be written into devlog table and transported with a scheduler to gelf.
 gelf_min_log_level = 1
 
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter policy for the per message rate limiter
+rate_limiter_per_message_policy = sliding_window
+
+# cat=rateLimiter; type=int; label=Symfony Rate Limiter limit for the per message rate limiter
+rate_limiter_per_message_limit = 60
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter intervall for the per message rate limiter
+rate_limiter_per_message_interval = 1 minutes
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter policy for the all messages rate limiter
+rate_limiter_all_messages_policy = sliding_window
+
+# cat=rateLimiter; type=int; label=Symfony Rate Limiter limit for the all messages rate limiter
+rate_limiter_all_messages_limit = 200
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter intervall for the all messages rate limiter
+rate_limiter_all_messages_interval = 1 minutes

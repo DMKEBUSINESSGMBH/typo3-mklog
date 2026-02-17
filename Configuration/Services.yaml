@@ -10,4 +10,81 @@ services:
     DMK\Mklog\Controller\BackendModuleController:
       tags: [ 'backend.controller' ]
 
+    extensionConfiguration.rateLimiterPerMessagePolicy:
+        class: 'string'
+        factory:
+            - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+            - 'get'
+        arguments:
+            - 'mklog'
+            - 'rate_limiter_per_message_policy'
+
+    # We can't use the normal way to retrieve a extension configuration because we need to make sure
+    # we have a integer
+    extensionConfiguration.rateLimiterPerMessageLimit:
+        class: 'integer'
+        factory:
+            - '@DMK\Mklog\Utility\ConfigUtility'
+            - 'getPerMessageRateLimiterLimit'
+
+    extensionConfiguration.rateLimiterPerMessageInterval:
+        class: 'string'
+        factory:
+            - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+            - 'get'
+        arguments:
+            - 'mklog'
+            - 'rate_limiter_per_message_interval'
+
+    loggingRateLimiterFactory.perMessage:
+        class: Symfony\Component\RateLimiter\RateLimiterFactory
+        arguments:
+            $config:
+                id: 'mklog-logging-per-message'
+                policy: '@extensionConfiguration.rateLimiterPerMessagePolicy'
+                limit: '@extensionConfiguration.rateLimiterPerMessageLimit'
+                interval: '@extensionConfiguration.rateLimiterPerMessageInterval'
+            $storage: '@TYPO3\CMS\Core\RateLimiter\Storage\CachingFrameworkStorage'
+
+    extensionConfiguration.rateLimiterAllMessagesPolicy:
+        class: 'string'
+        factory:
+            - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+            - 'get'
+        arguments:
+            - 'mklog'
+            - 'rate_limiter_all_messages_policy'
+
+    # We can't use the normal way to retrieve a extension configuration because we need to make sure
+    # we have a integer
+    extensionConfiguration.rateLimiterAllMessagesLimit:
+        class: 'integer'
+        factory:
+            - '@DMK\Mklog\Utility\ConfigUtility'
+            - 'getAllMessagesRateLimiterLimit'
+
+    extensionConfiguration.rateLimiterAllMessagesInterval:
+        class: 'string'
+        factory:
+            - '@TYPO3\CMS\Core\Configuration\ExtensionConfiguration'
+            - 'get'
+        arguments:
+            - 'mklog'
+            - 'rate_limiter_all_messages_interval'
+
+    loggingRateLimiterFactory.allMessages:
+        class: Symfony\Component\RateLimiter\RateLimiterFactory
+        arguments:
+            $config:
+                id: 'mklog-logging-all-messages'
+                policy: '@extensionConfiguration.rateLimiterAllMessagesPolicy'
+                limit: '@extensionConfiguration.rateLimiterAllMessagesLimit'
+                interval: '@extensionConfiguration.rateLimiterAllMessagesInterval'
+            $storage: '@TYPO3\CMS\Core\RateLimiter\Storage\CachingFrameworkStorage'
+
+    DMK\Mklog\Utility\RateLimiterUtility:
+        public: true
+        arguments:
+            $perMessageLimiterFactory: '@loggingRateLimiterFactory.perMessage'
+            $allMessagesLimiterFactory: '@loggingRateLimiterFactory.allMessages'
 

@@ -28,10 +28,12 @@
 namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\RateLimiterUtility;
 use DMK\Mklog\Utility\SeverityUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Devlog logger.
@@ -51,10 +53,8 @@ class DevlogLogger extends AbstractLogger
 
     /**
      * Writes the log record.
-     *
-     * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
-    public function writeLog(LogRecord $record)
+    public function writeLog(LogRecord $record): static
     {
         try {
             //  prevent nesting write loops
@@ -62,6 +62,10 @@ class DevlogLogger extends AbstractLogger
                 throw new \Exception('Nesting log writer calls prevented', 1513856342);
             }
             $this->whileWriting = true;
+
+            if (GeneralUtility::makeInstance(RateLimiterUtility::class)->isRateLimitExceeded($record)) {
+                return $this;
+            }
 
             $this->storeLog(
                 $record->getMessage(),
