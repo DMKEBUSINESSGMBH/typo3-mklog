@@ -29,6 +29,7 @@ namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Utility\LogMessageUtility;
+use DMK\Mklog\Utility\RateLimiterUtility;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -42,6 +43,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class GelfLogger extends AbstractLogger
 {
     /**
+     * @var object
+     */
+    public $rateLimiterUtility;
+
+    public function __construct()
+    {
+        $this->rateLimiterUtility = GeneralUtility::makeInstance(RateLimiterUtility::class);
+    }
+
+    /**
      * Writes the log record.
      *
      * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
@@ -52,6 +63,10 @@ class GelfLogger extends AbstractLogger
         \TYPO3\CMS\Core\Log\LogRecord $record,
     ): static {
         try {
+            if ($this->rateLimiterUtility->isRateLimitExceeded($record)) {
+                return $this;
+            }
+
             $this->storeLog(
                 $record->getMessage(),
                 $record->getComponent(),

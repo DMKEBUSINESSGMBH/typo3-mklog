@@ -38,6 +38,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
+ *
+ * @SuppressWarnings("ExcessivePublicCount")
  */
 class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
 {
@@ -231,5 +233,15 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         return $regularExpressions;
+    }
+
+    public function getPerMessageRateLimiterLimit(): int
+    {
+        return (int) $this->getExtConf('rate_limiter_per_message_limit', 30);
+    }
+
+    public function getAllMessagesRateLimiterLimit(): int
+    {
+        return (int) $this->getExtConf('rate_limiter_all_messages_limit', 200);
     }
 }

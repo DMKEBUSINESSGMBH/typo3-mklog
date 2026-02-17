@@ -174,3 +174,11 @@ This happens for all admins as well.
 When a page is deleted by a non admin TYPO3 checks if the user has permissions to delete all tables on that page.
 This is fine except for the devlog table as this can be safely deleted and users shouldn't have permissions for those.
 That's why this extensions hooks into the deletion process and deletes all devlog entries on a page before the page is deleted ignoring permissions.
+
+## Rate Limiter
+mklog uses symfony rate limiting so the log will no get flooded. There are several
+configuration options in the extension configuration. Basically you're configuring
+a symfony rate limiter for all messages (default is 200 messages per minute) and 
+per message (default is 60 messages with the same message, level and component per minute).
+Keep in mind that messages that exceed the rate limit will simply not get stored
+and therefore be lost.
