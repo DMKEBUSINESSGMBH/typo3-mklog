@@ -52,13 +52,6 @@ class DevlogLogger extends AbstractLogger
      */
     protected $whileWriting = false;
 
-    protected RateLimiterUtility $rateLimiterUtility;
-
-    public function __construct()
-    {
-        $this->rateLimiterUtility = GeneralUtility::makeInstance(RateLimiterUtility::class);
-    }
-
     /**
      * Writes the log record.
      */
@@ -72,7 +65,7 @@ class DevlogLogger extends AbstractLogger
 
             $this->whileWriting = true;
 
-            if ($this->rateLimiterUtility->isRateLimitExceeded($record)) {
+            if (GeneralUtility::makeInstance(RateLimiterUtility::class)->isRateLimitExceeded($record)) {
                 return $this;
             }
 

@@ -90,8 +90,6 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     protected function getGelfLoggerMock(array $methods = [])
     {
-        $this->populateRateLimiterUtility();
-
         $logger = $this->getMock(
             GelfLogger::class,
             array_merge(
@@ -106,39 +104,6 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->willReturn($this->getDevlogEntryRepository());
 
         return $logger;
-    }
-
-    protected function populateRateLimiterUtility(): void
-    {
-        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
-        $cacheManager = new CacheManager();
-        $cacheManager->registerCache($cache);
-
-        $rateLimiterStorage = new CachingFrameworkStorage($cacheManager);
-
-        $perMessageFactory = GeneralUtility::makeInstance(
-            RateLimiterFactory::class,
-            [
-                'id' => 'test-gelf-per-message',
-                'policy' => 'sliding_window',
-                'limit' => 3,
-                'interval' => '1 minutes',
-            ],
-            $rateLimiterStorage
-        );
-        $allMessagesFactory = GeneralUtility::makeInstance(
-            RateLimiterFactory::class,
-            [
-                'id' => 'test-gelf-all-messages',
-                'policy' => 'sliding_window',
-                'limit' => 6,
-                'interval' => '1 minutes',
-            ],
-            $rateLimiterStorage
-        );
-
-        $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
     }
 
     /**
@@ -177,20 +142,58 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                 $extraData
             );
 
+        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
+        $cacheManager = new CacheManager();
+        $cacheManager->registerCache($cache);
+
+        $rateLimiterStorage = new CachingFrameworkStorage($cacheManager);
+
+        $perMessageFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-gelf-per-message',
+                'policy' => 'sliding_window',
+                'limit' => 3,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+        $allMessagesFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-gelf-all-messages',
+                'policy' => 'sliding_window',
+                'limit' => 6,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+
+        $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
+
         $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
+
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         // Ignored
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
 
         $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
 
         $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         // Ignored
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
     }
 }
