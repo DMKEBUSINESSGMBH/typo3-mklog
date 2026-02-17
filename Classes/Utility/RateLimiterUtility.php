@@ -28,7 +28,7 @@
 namespace DMK\Mklog\Utility;
 
 use Symfony\Component\RateLimiter\LimiterInterface;
-use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use TYPO3\CMS\Core\Log\LogRecord;
 
 /**
@@ -41,8 +41,8 @@ use TYPO3\CMS\Core\Log\LogRecord;
 class RateLimiterUtility
 {
     public function __construct(
-        private RateLimiterFactoryInterface $perMessageLimiterFactory,
-        private RateLimiterFactoryInterface $allMessagesLimiterFactory,
+        private RateLimiterFactory $perMessageLimiterFactory,
+        private RateLimiterFactory $allMessagesLimiterFactory,
     ) {
     }
 
