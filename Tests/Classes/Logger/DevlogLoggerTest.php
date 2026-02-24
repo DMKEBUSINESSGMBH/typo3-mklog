@@ -238,15 +238,16 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->method('storeLog')
             ->with(
                 $this->callback(function (string $message) use ($matcher): bool {
+                    $expectedMessages = [
+                        1 => 'msg',
+                        2 => 'msg',
+                        3 => 'msg',
+                        4 => 'otherMsg',
+                        5 => 'otherMsg',
+                        6 => 'andAnotherMsg',
+                    ];
                     self::assertSame(
-                        match ($matcher->getInvocationCount()) {
-                            1 => 'msg',
-                            2 => 'msg',
-                            3 => 'msg',
-                            4 => 'otherMsg',
-                            5 => 'otherMsg',
-                            6 => 'andAnotherMsg',
-                        },
+                        $expectedMessages[$matcher->getInvocationCount()],
                         $message
                     );
 
