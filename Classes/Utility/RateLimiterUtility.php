@@ -45,7 +45,7 @@ class RateLimiterUtility
 
     public function __construct(
         RateLimiterFactory $perMessageLimiterFactory,
-        RateLimiterFactory $allMessagesLimiterFactory,
+        RateLimiterFactory $allMessagesLimiterFactory
     ) {
         $this->perMessageLimiterFactory = $perMessageLimiterFactory;
         $this->allMessagesLimiterFactory = $allMessagesLimiterFactory;
