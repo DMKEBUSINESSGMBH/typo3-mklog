@@ -237,7 +237,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
 
     public function getPerMessageRateLimiterLimit(): int
     {
-        return (int) $this->getExtConf('rate_limiter_per_message_limit', 30);
+        return (int) $this->getExtConf('rate_limiter_per_message_limit', 60);
     }
 
     public function getAllMessagesRateLimiterLimit(): int
