@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+12.1.1
+------
+* Fix rate limiter requirement for TYPO3 11.5 
+* Fix version number in ext_emconf.php
+
 12.1.0
 ------
 * Add rate limiting so the log will not get flooded. Have a look at the extension configuration defaults for the rate limiter configuration.
