@@ -54,7 +54,7 @@ class DevlogLogger extends AbstractLogger
     /**
      * Writes the log record.
      */
-    public function writeLog(LogRecord $record): static
+    public function writeLog(LogRecord $record)
     {
         try {
             //  prevent nesting write loops

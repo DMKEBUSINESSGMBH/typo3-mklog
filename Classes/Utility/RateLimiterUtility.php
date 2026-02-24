@@ -40,10 +40,15 @@ use TYPO3\CMS\Core\Log\LogRecord;
  */
 class RateLimiterUtility
 {
+    private RateLimiterFactory $perMessageLimiterFactory;
+    private RateLimiterFactory $allMessagesLimiterFactory;
+
     public function __construct(
-        private RateLimiterFactory $perMessageLimiterFactory,
-        private RateLimiterFactory $allMessagesLimiterFactory,
+        RateLimiterFactory $perMessageLimiterFactory,
+        RateLimiterFactory $allMessagesLimiterFactory,
     ) {
+        $this->perMessageLimiterFactory = $perMessageLimiterFactory;
+        $this->allMessagesLimiterFactory = $allMessagesLimiterFactory;
     }
 
     public function isRateLimitExceeded(LogRecord $record): bool
