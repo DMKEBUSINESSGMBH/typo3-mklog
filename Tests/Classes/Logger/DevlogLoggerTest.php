@@ -51,6 +51,15 @@ namespace DMK\Mklog\Logger;
  ***************************************************************/
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
+use DMK\Mklog\Utility\RateLimiterUtility;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use TYPO3\CMS\Core\Cache\Backend\TransientMemoryBackend;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogRecord;
+use TYPO3\CMS\Core\RateLimiter\Storage\CachingFrameworkStorage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Devlog Logger test.
@@ -239,5 +248,100 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->willReturn($this->getDevlogEntryRepository());
 
         return $logger;
+    }
+
+    /**
+     * @test
+     */
+    public function testWriteLogMindsRateLimiting(): void
+    {
+        $extKey = 'mklog';
+        $severity = LogLevel::DEBUG;
+        $extraData = ['foo' => 1, 'bar' => ['baz']];
+
+        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled', 'storeLog']);
+
+        $logger
+            ->expects(self::any())
+            ->method('isLoggingEnabled')
+            ->willReturn(true);
+
+        $matcher = self::exactly(6);
+        $logger
+            ->expects($matcher)
+            ->method('storeLog')
+            ->with(
+                $this->callback(function (string $message) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'msg',
+                            2 => 'msg',
+                            3 => 'msg',
+                            4 => 'otherMsg',
+                            5 => 'otherMsg',
+                            6 => 'andAnotherMsg',
+                        },
+                        $message
+                    );
+
+                    return true;
+                }),
+                $extKey,
+                $severity,
+                $extraData
+            );
+
+        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
+        $cacheManager = new CacheManager();
+        $cacheManager->registerCache($cache);
+
+        $rateLimiterStorage = new CachingFrameworkStorage($cacheManager);
+
+        $perMessageFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-per-message',
+                'policy' => 'sliding_window',
+                'limit' => 3,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+        $allMessagesFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-all-messages',
+                'policy' => 'sliding_window',
+                'limit' => 6,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+
+        $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
+
+        $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+        // Ignored
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+
+        $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+
+        $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+        // Ignored
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
     }
 }

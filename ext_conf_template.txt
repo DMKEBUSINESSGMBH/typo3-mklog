@@ -33,3 +33,21 @@ gelf_min_log_level = 1
 
 # cat=base; type=string; label=Regular expressions for excluded log messages: A comma seperated list of regular expressions for log messages that should not be logged. This can be configured as an array in settings.php as well which is necessary if the regular expression contains a comma.
 excluded_log_message_regular_expressions =
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter policy for the per message rate limiter
+rate_limiter_per_message_policy = sliding_window
+
+# cat=rateLimiter; type=int; label=Symfony Rate Limiter limit for the per message rate limiter
+rate_limiter_per_message_limit = 60
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter intervall for the per message rate limiter
+rate_limiter_per_message_interval = 1 minutes
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter policy for the all messages rate limiter
+rate_limiter_all_messages_policy = sliding_window
+
+# cat=rateLimiter; type=int; label=Symfony Rate Limiter limit for the all messages rate limiter
+rate_limiter_all_messages_limit = 200
+
+# cat=rateLimiter; type=string; label=Symfony Rate Limiter intervall for the all messages rate limiter
+rate_limiter_all_messages_interval = 1 minutes
