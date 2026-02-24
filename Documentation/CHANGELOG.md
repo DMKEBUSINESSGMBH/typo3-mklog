@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.2.0
+------
+* Add rate limiting so the log will not get flooded. Have a look at the extension configuration defaults for the rate limiter configuration.
+
 13.1.0
 ------
 * Add new extension configuration to exclude log messages by regular expressions
