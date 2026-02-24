@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+12.1.0
+------
+* Add rate limiting so the log will not get flooded. Have a look at the extension configuration defaults for the rate limiter configuration.
+
 12.0.6
 ------
 * Fix js integration in TYPO3 11.5 after last fix
