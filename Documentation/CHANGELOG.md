@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.2.1
+------
+* Prevent nesting log writer exceptions while rate limit is exceeded
+
 13.2.0
 ------
 * Add rate limiting so the log will not get flooded. Have a look at the extension configuration defaults for the rate limiter configuration.
