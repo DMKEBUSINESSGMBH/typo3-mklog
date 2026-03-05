@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+12.1.2
+------
+* Prevent nesting log writer exceptions while rate limit is exceeded
+
 12.1.1
 ------
 * Fix rate limiter requirement for TYPO3 11.5 
