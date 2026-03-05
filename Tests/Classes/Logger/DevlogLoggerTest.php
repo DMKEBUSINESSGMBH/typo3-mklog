@@ -52,6 +52,7 @@ namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Utility\RateLimiterUtility;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use TYPO3\CMS\Core\Cache\Backend\TransientMemoryBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -60,6 +61,7 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\RateLimiter\Storage\CachingFrameworkStorage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 
 /**
  * Devlog Logger test.
@@ -196,11 +198,11 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     /**
      * Returns the logger mock.
      *
-     * @return PHPUnit_Framework_MockObject_MockObject|DevlogLogger
+     * @return MockObject&AccessibleObjectInterface&DevlogLogger
      */
     protected function getDevlogLoggerMock(array $methods = [])
     {
-        $logger = $this->getMock(
+        $logger = $this->getAccessibleMock(
             DevlogLogger::class,
             array_merge(
                 ['getDevlogEntryRepository', 'isDatabaseConnected'],
@@ -290,25 +292,65 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
         // Ignored
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
 
         $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
 
         $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
         // Ignored
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
+    }
+
+    /**
+     * @test
+     */
+    public function testWriteLogHandlesExceptionWhileLogging(): void
+    {
+        $extKey = 'mklog';
+        $severity = LogLevel::DEBUG;
+        $extraData = ['foo' => 1, 'bar' => ['baz']];
+
+        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled', 'storeLog', 'handleExceptionDuringLogging']);
+
+        $logger
+            ->method('isLoggingEnabled')
+            ->willReturn(true);
+
+        $exception = new \RuntimeException('Some exception while logging');
+        $logger
+            ->method('storeLog')
+            ->willThrowException($exception);
+        $logger
+            ->expects(self::once())
+            ->method('handleExceptionDuringLogging')
+            ->with($exception);
+
+        $rateLimiterUtility = $this->createMock(RateLimiterUtility::class);
+
+        $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+        $logger->writeLog($logRecord);
+        self::assertFalse($logger->_get('whileWriting'));
     }
 }
