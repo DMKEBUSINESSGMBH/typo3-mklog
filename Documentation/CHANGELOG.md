@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.2.2
+------
+* fix rate limiting in install tool
+
 13.2.1
 ------
 * Prevent nesting log writer exceptions while rate limit is exceeded
