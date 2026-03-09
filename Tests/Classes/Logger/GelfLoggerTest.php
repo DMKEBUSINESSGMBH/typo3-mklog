@@ -170,30 +170,23 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         );
 
         $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
 
         $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
 
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         // Ignored
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
 
         $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
 
         $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         // Ignored
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
     }
 }

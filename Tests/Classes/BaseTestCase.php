@@ -52,6 +52,7 @@ namespace DMK\Mklog\Tests;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\RateLimiterUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -110,6 +111,9 @@ abstract class BaseTestCase extends UnitTestCase
         // reset extconf cache
         $configStorage = $this->callInaccessibleMethod([Factory::getConfigUtility(), 'getStorage'], []);
         $configStorage->unsExtConf();
+
+        $instance = new \ReflectionProperty(RateLimiterUtility::class, 'instance');
+        $instance->setValue(null, null);
     }
 
     /**

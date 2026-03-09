@@ -63,7 +63,7 @@ class DevlogLogger extends AbstractLogger
                 throw new \Exception('Nesting log writer calls prevented', 1513856342);
             }
 
-            if (GeneralUtility::makeInstance(RateLimiterUtility::class)->isRateLimitExceeded($record)) {
+            if (RateLimiterUtility::getInstance()->isRateLimitExceeded($record)) {
                 return $this;
             }
 

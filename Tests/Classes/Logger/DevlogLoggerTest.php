@@ -321,36 +321,29 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         );
 
         $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
 
         $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
         // Ignored
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
 
         $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
 
         $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
         // Ignored
-        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
         $logger->writeLog($logRecord);
         self::assertFalse($logger->_get('whileWriting'));
     }
