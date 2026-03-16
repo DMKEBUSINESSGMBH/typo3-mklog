@@ -55,15 +55,19 @@ class RateLimiterUtility
     }
 
     /**
-     * Following problem. It might happen that a log is written inside the install tool and the DI container is
-     * different at some times in contrast to normal BE or FE requests and so DI for this class does not work all
-     * the times. At all occasions it seems that the first instantiation works correct but only later ones fail.
-     * So we make sure there is always only one instance. Actually symfony does that but it seems like this is based
-     * on the DI container instance which differs in case of the install tool.
+     * As logging might be used at early or not so common stages it might happen that the DI container is not
+     * setup as in normal FE, BE and CLI requests. An example is the install tool or the database:export command.
+     * In those cases the injection of the rate limiter factories does not work.
      */
-    public static function getInstance(): static
+    public static function getInstance(): ?static
     {
-        if (is_null(self::$instance)) {
+        try {
+            $container = GeneralUtility::getContainer();
+        } catch (\LogicException) {
+            $container = null;
+        }
+
+        if (is_null(self::$instance) && ($container?->has(static::class) ?? false)) {
             self::$instance = GeneralUtility::makeInstance(static::class);
         }
 

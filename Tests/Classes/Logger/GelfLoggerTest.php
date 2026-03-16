@@ -28,6 +28,7 @@
 namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Utility\RateLimiterUtility;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use TYPO3\CMS\Core\Cache\Backend\TransientMemoryBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -172,6 +173,14 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
 
+        $diContainer = $this->createMock(ContainerInterface::class);
+        $diContainer
+            ->expects(self::once())
+            ->method('has')
+            ->with(RateLimiterUtility::class)
+            ->willReturn(true);
+        GeneralUtility::setContainer($diContainer);
+
         $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
 
         $logger->writeLog($logRecord);
@@ -187,6 +196,182 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
         $logger->writeLog($logRecord);
         // Ignored
+        $logger->writeLog($logRecord);
+    }
+
+    /**
+     * @test
+     */
+    public function testWriteLogIfDiContainerNotAvailable(): void
+    {
+        $extKey = 'mklog';
+        $severity = LogLevel::DEBUG;
+        $extraData = ['foo' => 1, 'bar' => ['baz']];
+
+        $logger = $this->getGelfLoggerMock(['storeLog']);
+
+        $matcher = self::exactly(8);
+        $logger
+            ->expects($matcher)
+            ->method('storeLog')
+            ->with(
+                $this->callback(function (string $message) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'msg',
+                            2 => 'msg',
+                            3 => 'msg',
+                            4 => 'msg',
+                            5 => 'otherMsg',
+                            6 => 'otherMsg',
+                            7 => 'andAnotherMsg',
+                            8 => 'andAnotherMsg',
+                        },
+                        $message
+                    );
+
+                    return true;
+                }),
+                $extKey,
+                $severity,
+                $extraData
+            );
+
+        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
+        $cacheManager = new CacheManager();
+        $cacheManager->registerCache($cache);
+
+        $rateLimiterStorage = new CachingFrameworkStorage($cacheManager);
+
+        $perMessageFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-gelf-per-message',
+                'policy' => 'sliding_window',
+                'limit' => 3,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+        $allMessagesFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-gelf-all-messages',
+                'policy' => 'sliding_window',
+                'limit' => 6,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+
+        $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+
+        $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
+
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+
+        $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+
+        $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+    }
+
+    /**
+     * @test
+     */
+    public function testWriteLogIfDiContainerHasNoRateLimiterUtilityClass(): void
+    {
+        $extKey = 'mklog';
+        $severity = LogLevel::DEBUG;
+        $extraData = ['foo' => 1, 'bar' => ['baz']];
+
+        $logger = $this->getGelfLoggerMock(['storeLog']);
+
+        $matcher = self::exactly(8);
+        $logger
+            ->expects($matcher)
+            ->method('storeLog')
+            ->with(
+                $this->callback(function (string $message) use ($matcher): bool {
+                    self::assertSame(
+                        match ($matcher->numberOfInvocations()) {
+                            1 => 'msg',
+                            2 => 'msg',
+                            3 => 'msg',
+                            4 => 'msg',
+                            5 => 'otherMsg',
+                            6 => 'otherMsg',
+                            7 => 'andAnotherMsg',
+                            8 => 'andAnotherMsg',
+                        },
+                        $message
+                    );
+
+                    return true;
+                }),
+                $extKey,
+                $severity,
+                $extraData
+            );
+
+        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
+        $cacheManager = new CacheManager();
+        $cacheManager->registerCache($cache);
+
+        $rateLimiterStorage = new CachingFrameworkStorage($cacheManager);
+
+        $perMessageFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-gelf-per-message',
+                'policy' => 'sliding_window',
+                'limit' => 3,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+        $allMessagesFactory = GeneralUtility::makeInstance(
+            RateLimiterFactory::class,
+            [
+                'id' => 'test-gelf-all-messages',
+                'policy' => 'sliding_window',
+                'limit' => 6,
+                'interval' => '1 minutes',
+            ],
+            $rateLimiterStorage
+        );
+
+        $rateLimiterUtility = new RateLimiterUtility($perMessageFactory, $allMessagesFactory);
+        GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);
+
+        $diContainer = $this->createMock(ContainerInterface::class);
+        $diContainer
+            ->expects(self::exactly(8))
+            ->method('has')
+            ->with(RateLimiterUtility::class)
+            ->willReturn(false);
+        GeneralUtility::setContainer($diContainer);
+
+        $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
+
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+
+        $logRecord = new LogRecord($extKey, $severity, 'otherMsg', $extraData);
+        $logger->writeLog($logRecord);
+        $logger->writeLog($logRecord);
+
+        $logRecord = new LogRecord($extKey, $severity, 'andAnotherMsg', $extraData);
+        $logger->writeLog($logRecord);
         $logger->writeLog($logRecord);
     }
 }

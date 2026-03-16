@@ -53,7 +53,7 @@ class GelfLogger extends AbstractLogger
         \TYPO3\CMS\Core\Log\LogRecord $record,
     ): static {
         try {
-            if (RateLimiterUtility::getInstance()->isRateLimitExceeded($record)) {
+            if (RateLimiterUtility::getInstance()?->isRateLimitExceeded($record) ?? false) {
                 return $this;
             }
 
