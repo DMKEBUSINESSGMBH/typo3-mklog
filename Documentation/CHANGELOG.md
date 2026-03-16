@@ -1,9 +1,14 @@
 ChangeLog
 =========
 
+13.2.3
+------
+* A more elegant approach when no rate limiter is available. In such cases,
+  we refrain from ignoring the logs.
+
 13.2.2
 ------
-* fix rate limiting in install tool
+* Fix rate limiting in install tool
 
 13.2.1
 ------
