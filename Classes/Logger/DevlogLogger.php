@@ -76,7 +76,7 @@ class DevlogLogger extends AbstractLogger
                 $record->getData()
             );
         } catch (\Exception $exception) {
-            $this->handleExceptionDuringLogging($exception);
+            $this->handleExceptionDuringLogging($exception, $record);
         }
 
         $this->whileWriting = false;
@@ -157,7 +157,13 @@ class DevlogLogger extends AbstractLogger
                 $params['dataVar']
             );
         } catch (\Exception $exception) {
-            $this->handleExceptionDuringLogging($exception);
+            $logRecord = new LogRecord(
+                $params['extKey'],
+                $params['severity'],
+                $params['msg'],
+                $params['dataVar']
+            );
+            $this->handleExceptionDuringLogging($exception, $logRecord);
         }
     }
 

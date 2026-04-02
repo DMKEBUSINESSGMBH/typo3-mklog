@@ -31,6 +31,7 @@ use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Utility\LogMessageUtility;
 use DMK\Mklog\Utility\RateLimiterUtility;
 use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -45,13 +46,12 @@ class GelfLogger extends AbstractLogger
     /**
      * Writes the log record.
      *
-     * @param \TYPO3\CMS\Core\Log\LogRecord $record Log record
+     * @param LogRecord $record Log record
      *
      * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
-    public function writeLog(
-        \TYPO3\CMS\Core\Log\LogRecord $record,
-    ): static {
+    public function writeLog(LogRecord $record): static
+    {
         try {
             if (RateLimiterUtility::getInstance()?->isRateLimitExceeded($record) ?? false) {
                 return $this;
@@ -64,7 +64,7 @@ class GelfLogger extends AbstractLogger
                 $record->getData()
             );
         } catch (\Exception $exception) {
-            $this->handleExceptionDuringLogging($exception);
+            $this->handleExceptionDuringLogging($exception, $record);
         }
 
         return $this;
