@@ -1,5 +1,8 @@
 ChangeLog
 =========
+12.1.3
+------
+* Add log record in exception during logging mails
 
 12.1.2
 ------
