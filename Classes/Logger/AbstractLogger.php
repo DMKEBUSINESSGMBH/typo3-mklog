@@ -30,6 +30,7 @@ namespace DMK\Mklog\Logger;
 use DMK\Mklog\Utility\Typo3Utility;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -166,17 +167,21 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function handleExceptionDuringLogging(\Throwable $exception): void
+    protected function handleExceptionDuringLogging(\Throwable $exception, LogRecord $record): void
     {
         $address = $GLOBALS['TYPO3_CONF_VARS']['BE']['warning_email_addr'] ?? '';
         if ($address && $this->canMailBeSend()) {
             $mailContent = 'This is an automatic email from TYPO3. Don\'t answer!'."\n\n";
             $mailContent .= 'URL: '.GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL')."\n";
-            $mailContent .= 'Message: '.$exception->getMessage()."\n\n";
+            $mailContent .= 'Exception Message: '.$exception->getMessage()."\n";
+            $mailContent .= 'Log Record Message: '.$record->getMessage()."\n";
+            $mailContent .= 'Log Record Component: '.$record->getComponent()."\n";
+            $mailContent .= 'Log Record Level: '.$record->getLevel()."\n";
+            $mailContent .= 'Log Record Data: '.print_r($record->getData(), true)."\n\n";
             $mailContent .= "Stacktrace:\n".$this->getExceptionTraceWithoutArguments($exception)."\n";
             GeneralUtility::makeInstance(MailMessage::class)
                 ->to(new Address($address))
-                ->subject('Exception during logging on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'])
+                ->subject('Exception during logging (EXT:mklog) on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'])
                 ->text($mailContent)
                 ->html(nl2br($mailContent))
                 ->send();

@@ -61,8 +61,8 @@ class GelfLogger extends AbstractLogger
                 $record->getLevel(),
                 $record->getData()
             );
-        } catch (\Exception $e) {
-            $this->handleExceptionDuringLogging($e);
+        } catch (\Exception $exception) {
+            $this->handleExceptionDuringLogging($exception, $record);
         }
 
         return $this;
@@ -114,7 +114,13 @@ class GelfLogger extends AbstractLogger
                 ['__trace' => $params['backTrace']]
             );
         } catch (\Exception $e) {
-            $this->handleExceptionDuringLogging($e);
+            $logRecord = new LogRecord(
+                $params['extKey'],
+                $params['severity'],
+                $params['msg'],
+                ['__trace' => $params['backTrace']]
+            );
+            $this->handleExceptionDuringLogging($e, $logRecord);
         }
     }
 
