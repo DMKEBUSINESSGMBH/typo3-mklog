@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+13.2.4
+------
+* Refactor rate limiting usage when rate limiting is not available
+
 13.2.3
 ------
 * A more elegant approach when no rate limiter is available. In such cases,

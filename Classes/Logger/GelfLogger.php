@@ -53,7 +53,7 @@ class GelfLogger extends AbstractLogger
     public function writeLog(LogRecord $record): static
     {
         try {
-            if (RateLimiterUtility::getInstance()?->isRateLimitExceeded($record) ?? false) {
+            if (GeneralUtility::makeInstance(RateLimiterUtility::class)->isRateLimitExceeded($record)) {
                 return $this;
             }
 

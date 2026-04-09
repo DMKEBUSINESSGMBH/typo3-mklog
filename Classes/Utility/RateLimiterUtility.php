@@ -30,7 +30,6 @@ namespace DMK\Mklog\Utility;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use TYPO3\CMS\Core\Log\LogRecord;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * RateLimiterUtility.
@@ -48,48 +47,33 @@ class RateLimiterUtility
      */
     protected static ?RateLimiterUtility $instance = null;
 
-    public function __construct(
-        private RateLimiterFactory $perMessageLimiterFactory,
-        private RateLimiterFactory $allMessagesLimiterFactory,
-    ) {
-    }
-
     /**
-     * As logging might be used at early or not so common stages it might happen that the DI container is not
-     * setup as in normal FE, BE and CLI requests. An example is the install tool or the database:export command.
-     * In those cases the injection of the rate limiter factories does not work.
+     * Following problem. It might happen that a log is written inside the install tool etc. where the DI container is
+     * different at some times in contrast to normal BE or FE requests and so DI for this class does not work all
+     * the times. So we support situations where DI and therefore rate limiting does not work.
      */
-    public static function getInstance(): ?static
-    {
-        try {
-            $container = GeneralUtility::getContainer();
-        } catch (\LogicException) {
-            $container = null;
-        }
-
-        if (is_null(self::$instance) && ($container?->has(static::class) ?? false)) {
-            self::$instance = GeneralUtility::makeInstance(static::class);
-        }
-
-        return self::$instance;
+    public function __construct(
+        private ?RateLimiterFactory $perMessageLimiterFactory = null,
+        private ?RateLimiterFactory $allMessagesLimiterFactory = null,
+    ) {
     }
 
     public function isRateLimitExceeded(LogRecord $record): bool
     {
-        if (!$this->getPerMessageRateLimiter($record)->consume()->isAccepted()) {
+        if (!($this->getPerMessageRateLimiter($record)?->consume()->isAccepted() ?? true)) {
             return true;
         }
 
-        return !$this->getGlobalRateLimiter()->consume()->isAccepted();
+        return !($this->getGlobalRateLimiter()?->consume()->isAccepted() ?? true);
     }
 
-    protected function getPerMessageRateLimiter(LogRecord $record): LimiterInterface
+    protected function getPerMessageRateLimiter(LogRecord $record): ?LimiterInterface
     {
-        return $this->perMessageLimiterFactory->create($record->getMessage().$record->getComponent().$record->getLevel());
+        return $this->perMessageLimiterFactory?->create($record->getMessage().$record->getComponent().$record->getLevel()) ?? null;
     }
 
-    protected function getGlobalRateLimiter(): LimiterInterface
+    protected function getGlobalRateLimiter(): ?LimiterInterface
     {
-        return $this->allMessagesLimiterFactory->create();
+        return $this->allMessagesLimiterFactory?->create() ?? null;
     }
 }
