@@ -153,7 +153,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
                 }
             }
 
-            // break if ther is no more ignore
+            // break if there is no more ignore
             if ($ignore) {
                 $lastIgnoreKey = $key;
             }
