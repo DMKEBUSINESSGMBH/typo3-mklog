@@ -39,11 +39,15 @@ use DMK\Mklog\Factory;
  */
 class EntryDataParserUtility
 {
+    public const SIZE_1KB = 1024;
+
     public const SIZE_512KB = 524288;
 
     public const SIZE_1MB = 1048576;
 
     public const SIZE_8MB = 8388608;
+
+    public const ARRAY_MAX_LENGTH = 10;
 
     /**
      * @var DataConverterUtility
@@ -101,6 +105,27 @@ class EntryDataParserUtility
     }
 
     /**
+     * TODO: reduce stracktrace and "big" nested objects to a minimum
+     */
+    public function reduceInternalExtraData(int $maxLen): self
+    {
+        $extraData = $this->devlogEntry->getInternalExtraData();
+
+        while ($this->arraySizeInBytes($extraData) > $maxLen) {
+            $lastKey = array_key_last($extraData);
+            $lastElem = array_pop($extraData);
+            $reducedElem = $this->cleanupArray((array)$lastElem, $maxLen, self::ARRAY_MAX_LENGTH);
+            if ($this->arraySizeInBytes($extraData + $reducedElem) <= $maxLen) {
+                $extraData[$lastKey] = $reducedElem;
+            }
+        }
+
+        //TODO: set internal extra data
+
+        return $this;
+    }
+
+    /**
      * Strip json data to fit in max len.
      *
      * Data entries will be removed from the end while the max len matches.
@@ -129,6 +154,38 @@ class EntryDataParserUtility
         }
 
         return $jsonData;
+    }
+
+    protected function cleanupArray(array $data, int $maxBytes, int $maxSize = 10): array
+    {
+        $data = $this->cleanupNestedArrays($data, $maxBytes);
+
+        return $this->reduceArraySize($data, $maxSize);
+    }
+
+    protected function cleanupNestedArrays(array $data, int $maxBytes): array
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = $this->cleanupArray($value, $maxBytes);
+            }
+
+            if (is_string($value) && strlen($value) > $maxBytes) {
+                $data[$key] = substr($value, 0, $maxBytes);
+            }
+        }
+
+        return $data;
+    }
+
+    protected function reduceArraySize(array $array, int $limit): array
+    {
+        return array_splice($array, 0, $limit, true);
+    }
+
+    protected function arraySizeInBytes($array): int
+    {
+        return $this->getStringSize(json_encode($array, JSON_UNESCAPED_UNICODE));
     }
 
     /**
