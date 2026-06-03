@@ -167,6 +167,16 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
+     * Max size of extra_data that should be persited (default: 1KB)
+     */
+    public function getMaxPersistExtraDataSize(): int
+    {
+        $maxSize = (int) $this->getExtConf('max_persist_extra_data_size');
+
+        return 0 !== $maxSize ? $maxSize : EntryDataParserUtility::SIZE_1KB;
+    }
+
+    /**
      * Th extension keys to exclude from logging.
      *
      * @return array
