@@ -45,16 +45,6 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 class SchedulerWatchDog extends AbstractTask
 {
     /**
-     * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
-     * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
-     *
-     * @var GenericArrayObject
-     *
-     * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
-     */
-    private $options;
-
-    /**
      * Internal options storage.
      *
      * @var GenericArrayObject
@@ -62,43 +52,11 @@ class SchedulerWatchDog extends AbstractTask
     protected $schedulerOptions;
 
     /**
-     * Was used as the scheduler options before making the extension compatible with TYPO3 9. But as private
-     * class variables can't be serialized anymore (@see __makeUp() method) this variable can't be used anymore.
-     *
-     * @var Transport\InterfaceTransport
-     *
-     * @deprecated can be removed including the __wakeup() method when support for TYPO3 8.7 and below is dropped.
-     */
-    private $transport;
-
-    /**
      * The current configured transport.
      *
      * @var Transport\InterfaceTransport
      */
     protected $messageTransport;
-
-    /**
-     * After the update to TYPO3 9 the private $options variable can't be serialized and therefore not saved in the
-     * database anymore as our parent implemented the __sleep() method to return the class variables which should be
-     * serialized/saved. So to keep the possibly saved $options we need to move them to $schedulerOptions if present.
-     * Otherwise the $options will be lost after the scheduler is executed/saved. Same for $transport.
-     */
-    public function __wakeup()
-    {
-        if (method_exists(parent::class, '__wakeup')) {
-            /* @phpstan-ignore-next-line */
-            parent::__wakeup();
-        }
-
-        if ($this->options && !$this->schedulerOptions) {
-            $this->schedulerOptions = $this->options;
-        }
-
-        if ($this->transport && !$this->messageTransport) {
-            $this->messageTransport = $this->transport;
-        }
-    }
 
     protected function getLogger(): \TYPO3\CMS\Core\Log\Logger
     {
