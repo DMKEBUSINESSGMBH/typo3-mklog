@@ -1,5 +1,10 @@
 ChangeLog
 =========
+
+12.1.4
+------
+* Fix conflict with newest TYPO3 versions
+
 12.1.3
 ------
 * Add log record in exception during logging mails
