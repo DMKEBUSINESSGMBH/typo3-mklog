@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+12.1.6
+------
+* Fix conflict with packagist
+
 12.1.5
 ------
 * Fix version number
