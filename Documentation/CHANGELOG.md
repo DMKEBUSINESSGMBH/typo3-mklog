@@ -1,6 +1,22 @@
 ChangeLog
 =========
 
+11.0.16
+------
+* Fix conflict with newest TYPO3 versions
+
+11.0.15
+------
+* Bugfixes and clean up
+
+11.0.14
+------
+* Bugfixes
+
+11.0.13
+------
+* new extension naming and icon
+
 11.0.12
 ------
 * bugfix for BE module since rn_base 1.16.7
