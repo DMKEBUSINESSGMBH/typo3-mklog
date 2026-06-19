@@ -228,7 +228,6 @@ class DevlogEntryRepository
         $maxSize = Factory::getConfigUtility()->getMaxPersistExtraDataSize();
         $model->setExtraDataEncoded(
             Factory::getEntryDataParserUtility($model)
-//                ->reduceInternalExtraData($maxSize)
                 ->getShortenedRaw($maxSize)
         );
 
