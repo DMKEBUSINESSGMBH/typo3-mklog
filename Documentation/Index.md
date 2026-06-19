@@ -60,6 +60,11 @@ It will delete all older entries above the **max_log** limit.
 
 It's recommended to execute this task regularly, to limit the growth of the log table. 
 
+##### Recommendation for MySQL like databases
+When using an SQL database, deleting entries will not remove them physically from the storage
+device and disk space will not get reduced. Therefor it's recommended to add the TYPO3 Scheduler
+Task "Optimize MySQL database tables" and select the `tx_mklog_devlog_entry` table.
+
 ## Gelf Logger
 
 This logger is designed to transport emergency messages
