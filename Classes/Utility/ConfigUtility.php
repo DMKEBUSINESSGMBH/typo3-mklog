@@ -173,7 +173,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     {
         $maxSize = (int) $this->getExtConf('max_persist_extra_data_size');
 
-        return 0 !== $maxSize ? $maxSize : EntryDataParserUtility::SIZE_1KB;
+        return 0 !== $maxSize ? $maxSize : EntryDataParserUtility::SIZE_128KB;
     }
 
     /**

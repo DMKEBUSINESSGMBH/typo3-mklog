@@ -39,7 +39,7 @@ use DMK\Mklog\Factory;
  */
 class EntryDataParserUtility
 {
-    public const SIZE_1KB = 1024;
+    public const SIZE_128KB = 131072;
 
     public const SIZE_512KB = 524288;
 
