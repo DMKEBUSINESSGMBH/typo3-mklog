@@ -224,11 +224,11 @@ class DevlogEntryRepository
     public function persist(
         DevlogEntry $model,
     ): void {
-        // reduce extra data to current maximum of the field in db (mediumblob: 16MB)
+        // reduce extra data to configured value in `max_persist_extra_data_size`
+        $maxSize = Factory::getConfigUtility()->getMaxPersistExtraDataSize();
         $model->setExtraDataEncoded(
-            Factory::getEntryDataParserUtility($model)->getShortenedRaw(
-                \DMK\Mklog\Utility\EntryDataParserUtility::SIZE_8MB * 2
-            )
+            Factory::getEntryDataParserUtility($model)
+                ->getShortenedRaw($maxSize)
         );
 
         if (0 === $model->getUid()) {
