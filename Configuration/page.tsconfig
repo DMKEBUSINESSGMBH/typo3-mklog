@@ -13,9 +13,7 @@ mod {
             #fallbackPid = 0
 
             funcmenu.useTabs = 1
-            funcmenu.allow := addToList(
-                DMK\\Mklog\\Backend\\Module\\DevlogModule
-            )
+            funcmenu.allow := addToList(DMK\\Mklog\\Backend\\Module\\DevlogModule)
         }
     }
 }
