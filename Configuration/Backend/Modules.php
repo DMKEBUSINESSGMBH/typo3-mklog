@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -38,7 +40,7 @@ return [
         'aliases' => ['web_MklogBackend'],
         'routes' => [
             '_default' => [
-                'target' => DMK\Mklog\Controller\BackendModuleController::class.'::handleRequest',
+                'target' => DMK\Mklog\Controller\BackendModuleController::class . '::handleRequest',
             ],
         ],
     ],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -37,9 +39,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class GenericArrayObject
 {
-    public function __construct(private array $data = [])
-    {
-    }
+    public function __construct(private array $data = []) {}
 
     /**
      * @param array|GenericArrayObject $data
@@ -124,7 +124,7 @@ class GenericArrayObject
 
     public function isEmpty(): bool
     {
-        return [] === $this->data;
+        return $this->data === [];
     }
 
     /**
@@ -139,7 +139,7 @@ class GenericArrayObject
             'set' => $this->setProperty($property, $args[0] ?? null),
             'uns' => $this->unsProperty($property),
             'has' => $this->hasProperty($property),
-            default => throw new \Exception('Sorry, Invalid method "'.static::class.'::'.$method.'"', 1607447254),
+            default => throw new \Exception('Sorry, Invalid method "' . static::class . '::' . $method . '"', 1607447254),
         };
     }
 

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
-    <file
-        source-language="en"
-        datatype="plaintext"
-        original="messages"
-        product-name="mklog"
-    >
+<xliff
+    xmlns:t3="http://typo3.org/schemas/xliff" version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" product-name="mklog">
         <header/>
         <body>
             <trans-unit id="title" xml:space="preserve">
@@ -15,16 +11,14 @@
                 <source>MK Log</source>
             </trans-unit>
             <trans-unit id="mlang_labels_tabdescr" xml:space="preserve">
-                <source></source>
+                <source/>
             </trans-unit>
             <trans-unit id="mlang_labels_tablabel" xml:space="preserve">
                 <source>MK Log</source>
             </trans-unit>
-
             <trans-unit id="label_func_devlog" xml:space="preserve">
                 <source>Devlog Entry</source>
             </trans-unit>
-
             <trans-unit id="label_tableheader_crdate" xml:space="preserve">
                 <source>Date</source>
             </trans-unit>
@@ -40,7 +34,6 @@
             <trans-unit id="label_tableheader_extra_data" xml:space="preserve">
                 <source>Details</source>
             </trans-unit>
-
             <trans-unit id="label_search_form" xml:space="preserve">
                 <source>Filter</source>
             </trans-unit>
@@ -53,7 +46,6 @@
             <trans-unit id="label_results" xml:space="preserve">
                 <source>Ergebnisse (gefunden: %s)</source>
             </trans-unit>
-
             <trans-unit id="label_filter_runid" xml:space="preserve">
                 <source>Log Run:</source>
             </trans-unit>
@@ -63,7 +55,7 @@
             <trans-unit id="label_filter_extkeys" xml:space="preserve">
                 <source>Extensions:</source>
             </trans-unit>
-            <trans-unit id="label_search" resname="label_search"  approved="yes">
+            <trans-unit id="label_search" resname="label_search" approved="yes">
                 <source>Suchbegriff</source>
             </trans-unit>
             <trans-unit id="label_filter_page" xml:space="preserve">

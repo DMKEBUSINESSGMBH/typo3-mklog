@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -26,10 +28,3 @@
  */
 
 defined('TYPO3') || exit('Access denied.');
-
-// Automatically include in TYPO3 13 and higher
-if (DMK\Mklog\Utility\VersionUtility::isTypo3Version12OrLower()) {
-    TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mklog/Configuration/page.tsconfig">'
-    );
-}

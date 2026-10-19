@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -62,6 +64,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     /**
      * Initializes the Transport.
      */
+    #[\Override]
     public function initialize(
         \DMK\Mklog\Domain\Model\GenericArrayObject $options,
     ): void {
@@ -98,7 +101,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
         $level = $message->getLevel();
 
         // build message unique key
-        $key = md5($message->getFacility().$message->getShortMessage());
+        $key = md5($message->getFacility() . $message->getShortMessage());
 
         // set the summary count
         ++$this->uniqs[$level]['summary'];
@@ -135,15 +138,15 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
     public function shutdown(): void
     {
         // no messages? nothing todo!
-        if (0 === $this->getMailCount()) {
+        if ($this->getMailCount() === 0) {
             return;
         }
 
         defined('LF') ?: define('LF', chr(10));
 
         $content = '';
-        $content .= "This is an automatic email from TYPO3. Don't answer!".LF.LF;
-        $content .= '== Developer Log summary'.LF.LF;
+        $content .= "This is an automatic email from TYPO3. Don't answer!" . LF . LF;
+        $content .= '== Developer Log summary' . LF . LF;
 
         // create summary
         foreach ($this->uniqs as $level => $messages) {
@@ -151,12 +154,12 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
                 '%3$sLevel %1$s : %2$d items found',
                 $level,
                 $messages['summary'],
-                0 === $messages['summary'] ? '  ' : '> '
+                $messages['summary'] === 0 ? '  ' : '> '
             );
             $content .= LF;
         }
 
-        $content .= LF.LF.'== Latest entries by log level'.LF;
+        $content .= LF . LF . '== Latest entries by log level' . LF;
 
         foreach ($this->messages as $level => $messages) {
             // skip if there are no messages for this level
@@ -165,11 +168,11 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             }
 
             $content .= sprintf(
-                LF.'=== Level %s (%d):',
+                LF . '=== Level %s (%d):',
                 $level,
                 $this->uniqs[$level]['summary']
             );
-            $content .= LF.LF;
+            $content .= LF . LF;
 
             /* @var $message \DMK\Mklog\WatchDog\Message\InterfaceMessage */
             foreach ($messages as $key => $message) {
@@ -181,7 +184,7 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
                     $message->getShortMessage(),
                     $this->uniqs[$level][$key]
                 );
-                $content .= LF.LF;
+                $content .= LF . LF;
             }
         }
 
@@ -212,6 +215,8 @@ class MailTransport extends AbstractTransport implements \TYPO3\CMS\Core\Singlet
             ->text($content)
         ;
 
-        return $mail->send();
+        Factory::makeInstance(\TYPO3\CMS\Core\Mail\Mailer::class)->send($mail);
+
+        return true;
     }
 }

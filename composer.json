@@ -36,11 +36,12 @@
         "typo3-ter/mklog": "self.version"
     },
     "require": {
-        "typo3/cms-core": "^v12.4.2 || ^13.4",
-        "typo3/cms-scheduler": "^v12.4 || ^13.4",
-        "graylog2/gelf-php": "~1 || ^2.0",
-        "egulias/email-validator": "^2.1 || ^3.1 || ^4.0",
-        "doctrine/dbal": "~2.13.1 || ^3.6 || ^4.0",
+        "php": ">=8.2",
+        "typo3/cms-core": "^13.4 || ^14.0",
+        "typo3/cms-scheduler": "^13.4 || ^14.0",
+        "graylog2/gelf-php": "^2.0",
+        "egulias/email-validator": "^3.1 || ^4.0",
+        "doctrine/dbal": "^3.6 || ^4.0",
         "symfony/rate-limiter": "^6.4 || ^7.0"
     },
     "require-dev": {
@@ -49,11 +50,11 @@
         "friendsofphp/php-cs-fixer": "^3.3",
         "phpcompatibility/php-compatibility": "^9.3.5",
         "phpmd/phpmd": "^2.11.1",
-        "phpstan/phpstan": "^1.1",
+        "phpstan/phpstan": "^2.0",
         "phpstan/extension-installer": "^1.1",
-        "saschaegerer/phpstan-typo3": "^1.0",
-        "typo3/testing-framework": "^8.0 || ^9.0",
-        "ssch/typo3-rector": "^2.8",
+        "saschaegerer/phpstan-typo3": "^2.0",
+        "typo3/testing-framework": "^9.0",
+        "ssch/typo3-rector": "^3.0",
         "captainhook/captainhook": "^5.10"
     },
     "autoload": {
@@ -70,11 +71,6 @@
         }
     },
     "config": {
-		"policy": {
-			"advisories": {
-				"block": false
-			}
-		},
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
         "preferred-install": {
@@ -90,8 +86,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-12.4": "12.4.x-dev",
-            "dev-13.4": "13.4.x-dev"
+            "dev-13.4": "13.4.x-dev",
+            "dev-14.0": "14.0.x-dev"
         },
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",

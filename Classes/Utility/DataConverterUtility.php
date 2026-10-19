@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -67,6 +69,6 @@ class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
 
         $data = json_decode($data);
 
-        return (array) $data;
+        return (array)$data;
     }
 }

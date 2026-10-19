@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -51,7 +53,7 @@ final class Factory
     {
         static $storage = null;
 
-        if (null === $storage) {
+        if ($storage === null) {
             $storage = StorageObject::getInstance();
         }
 
@@ -68,7 +70,7 @@ final class Factory
     public static function makeInstance(string $className, ...$constructorArguments): mixed
     {
         return call_user_func_array(
-            [GeneralUtility::class, 'makeInstance'],
+            GeneralUtility::makeInstance(...),
             func_get_args()
         );
     }

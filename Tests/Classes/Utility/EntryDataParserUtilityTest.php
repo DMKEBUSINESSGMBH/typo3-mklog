@@ -25,7 +25,7 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-namespace DMK\Mklog\WatchDog;
+namespace DMK\Mklog\Tests\Utility;
 
 /***************************************************************
  * Copyright notice
@@ -53,6 +53,7 @@ namespace DMK\Mklog\WatchDog;
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Utility\EntryDataParserUtility;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Scheduler WatchDog test.
@@ -76,9 +77,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedRawReturnsCompleteData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::FIXTURE_EXTRA_DATA_JSON,
             $this->getEntryDataParserUtility()->getShortenedRaw()
         );
@@ -91,9 +93,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedRawReturnsShortData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             '{"foo":"bar","bar":"baz","...":"Striped by 1 elements."}',
             $this->getEntryDataParserUtility()->getShortenedRaw(60)
         );
@@ -106,9 +109,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedRawReturnsEmptyData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             '{"...":"Striped by 3 elements."}',
             $this->getEntryDataParserUtility()->getShortenedRaw(40)
         );
@@ -121,9 +125,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedInternalExtraDataReturnsCompleteData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::FIXTURE_EXTRA_DATA_JSON_ARRAY,
             $this->getEntryDataParserUtility(self::FIXTURE_EXTRA_DATA_INT_JSON)->getShortenedInternalExtraData()
         );
@@ -136,9 +141,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedInternalExtraDataReturnsShortData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             ['foo' => 'bar', '...' => 'Striped by 2 elements.'],
             $this->getEntryDataParserUtility(self::FIXTURE_EXTRA_DATA_INT_JSON)->getShortenedInternalExtraData(50)
         );
@@ -151,9 +157,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedInternalExtraDataReturnsEmptyData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             ['...' => 'Striped by 3 elements.'],
             $this->getEntryDataParserUtility(self::FIXTURE_EXTRA_DATA_INT_JSON)->getShortenedInternalExtraData(40)
         );
@@ -166,9 +173,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedExternalExtraDataReturnsCompleteData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             self::FIXTURE_EXTRA_DATA_JSON_ARRAY,
             $this->getEntryDataParserUtility()->getShortenedExternalExtraData()
         );
@@ -181,9 +189,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedExternalExtraDataReturnsShortData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             ['foo' => 'bar', '...' => 'Striped by 2 elements.'],
             $this->getEntryDataParserUtility()->getShortenedExternalExtraData(50)
         );
@@ -196,9 +205,10 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getShortenedExternalExtraDataReturnsEmptyData(): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             ['...' => 'Striped by 3 elements.'],
             $this->getEntryDataParserUtility()->getShortenedExternalExtraData(40)
         );
@@ -211,7 +221,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     protected function getEntryDataParserUtility($devLogEntryOrExtraData = null): mixed
     {
-        if (null === $devLogEntryOrExtraData) {
+        if ($devLogEntryOrExtraData === null) {
             $devLogEntryOrExtraData = self::FIXTURE_EXTRA_DATA_JSON;
         }
 

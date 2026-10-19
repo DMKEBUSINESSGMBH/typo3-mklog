@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -39,15 +41,11 @@ use DMK\Mklog\Factory;
  */
 class EntryDataParserUtility
 {
-    public const SIZE_128KB = 131072;
-
     public const SIZE_512KB = 524288;
 
     public const SIZE_1MB = 1048576;
 
     public const SIZE_8MB = 8388608;
-
-    public const ARRAY_MAX_LENGTH = 10;
 
     /**
      * @var DataConverterUtility
@@ -129,7 +127,7 @@ class EntryDataParserUtility
         }
 
         if ($striped > 0) {
-            $jsonData['...'] = 'Striped by '.$striped.' elements.';
+            $jsonData['...'] = 'Striped by ' . $striped . ' elements.';
         }
 
         return $jsonData;

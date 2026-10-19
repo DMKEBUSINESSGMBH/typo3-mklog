@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -58,7 +60,7 @@ class DevlogEntryDemand
 
     public function hasOrderBy(): bool
     {
-        return '' !== $this->orderByField && '0' !== $this->orderByField;
+        return $this->orderByField !== '' && $this->orderByField !== '0';
     }
 
     public function getOrderByField(): string
@@ -79,7 +81,7 @@ class DevlogEntryDemand
 
     public function hasTransportId(): bool
     {
-        return isset($this->transportId) && ('' !== $this->transportId && '0' !== $this->transportId);
+        return isset($this->transportId) && ($this->transportId !== '' && $this->transportId !== '0');
     }
 
     public function getTransportId(): string
@@ -94,7 +96,7 @@ class DevlogEntryDemand
 
     public function hasSeverity(): bool
     {
-        return null !== $this->severity;
+        return $this->severity !== null;
     }
 
     public function getSeverity(): int
@@ -109,7 +111,7 @@ class DevlogEntryDemand
 
     public function hasExtensionWhitelist(): bool
     {
-        return [] !== $this->extensionWhitelist;
+        return $this->extensionWhitelist !== [];
     }
 
     public function getExtensionWhitelist(): array
@@ -124,7 +126,7 @@ class DevlogEntryDemand
 
     public function hasExtensionBlacklist(): bool
     {
-        return [] !== $this->extensionBlacklist;
+        return $this->extensionBlacklist !== [];
     }
 
     public function getExtensionBlacklist(): array
@@ -139,7 +141,7 @@ class DevlogEntryDemand
 
     public function hasMaxResults(): bool
     {
-        return null !== $this->maxResults;
+        return $this->maxResults !== null;
     }
 
     public function getMaxResults(): int

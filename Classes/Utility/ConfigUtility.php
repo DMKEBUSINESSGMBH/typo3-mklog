@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -57,7 +59,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getStorage()
     {
-        if (null === $this->storage) {
+        if ($this->storage === null) {
             $this->storage = ConfigObject::getInstance();
         }
 
@@ -105,10 +107,10 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
     {
         $storage = $this->getStorage();
         if (!$storage->hasDevLogCurrentRunId()) {
-            [$sec, $usec] = explode('.', (string) microtime(true)) + [0, 0];
+            [$sec, $usec] = explode('.', (string)microtime(true)) + [0, 0];
             // milliseconds has to be exactly 6 sings long. otherwise the resulting number is too small.
-            $usec .= str_repeat('0', 6 - strlen($usec));
-            $storage->setDevLogCurrentRunId($sec.$usec);
+            $usec .= str_repeat('0', 6 - strlen((string)$usec));
+            $storage->setDevLogCurrentRunId($sec . $usec);
         }
 
         return $storage->getDevLogCurrentRunId();
@@ -127,7 +129,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function isEnableDevLog(): bool
     {
-        return (bool) $this->getExtConf('enable_devlog');
+        return (bool)$this->getExtConf('enable_devlog');
     }
 
     /**
@@ -145,7 +147,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getMinLogLevel(): int
     {
-        return (int) $this->getExtConf('min_log_level');
+        return (int)$this->getExtConf('min_log_level');
     }
 
     /**
@@ -153,7 +155,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getMaxLogs(): int
     {
-        return (int) $this->getExtConf('max_logs');
+        return (int)$this->getExtConf('max_logs');
     }
 
     /**
@@ -161,27 +163,15 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getMaxTransportExtraDataSize(): int
     {
-        $maxSize = (int) $this->getExtConf('max_transport_extra_data_size');
+        $maxSize = (int)$this->getExtConf('max_transport_extra_data_size');
 
-        return 0 !== $maxSize ? $maxSize : EntryDataParserUtility::SIZE_8MB;
-    }
-
-    /**
-     * Max size of extra_data that should be persited (default: 1KB).
-     */
-    public function getMaxPersistExtraDataSize(): int
-    {
-        $maxSize = (int) $this->getExtConf('max_persist_extra_data_size');
-
-        return 0 !== $maxSize ? $maxSize : EntryDataParserUtility::SIZE_128KB;
+        return $maxSize !== 0 ? $maxSize : EntryDataParserUtility::SIZE_8MB;
     }
 
     /**
      * Th extension keys to exclude from logging.
-     *
-     * @return array
      */
-    public function getExcludeExtKeys()
+    public function getExcludeExtKeys(): array
     {
         $extKeys = $this->getExtConf('exclude_ext_keys', []);
 
@@ -197,7 +187,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function isGelfEnable(): bool
     {
-        return (bool) $this->getExtConf('gelf_enable');
+        return (bool)$this->getExtConf('gelf_enable');
     }
 
     /**
@@ -205,7 +195,7 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getGelfMinLogLevel(): int
     {
-        return (int) $this->getExtConf('gelf_min_log_level');
+        return (int)$this->getExtConf('gelf_min_log_level');
     }
 
     /**
@@ -247,11 +237,11 @@ class ConfigUtility implements \TYPO3\CMS\Core\SingletonInterface
 
     public function getPerMessageRateLimiterLimit(): int
     {
-        return (int) $this->getExtConf('rate_limiter_per_message_limit', 60);
+        return (int)$this->getExtConf('rate_limiter_per_message_limit', 60);
     }
 
     public function getAllMessagesRateLimiterLimit(): int
     {
-        return (int) $this->getExtConf('rate_limiter_all_messages_limit', 200);
+        return (int)$this->getExtConf('rate_limiter_all_messages_limit', 200);
     }
 }

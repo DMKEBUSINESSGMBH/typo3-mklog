@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -37,7 +39,6 @@ use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class BackendModuleController.
@@ -49,17 +50,16 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 #[AsController]
 class BackendModuleController
 {
-    protected ModuleTemplate|StandaloneView $view;
+    protected ModuleTemplate $view;
 
     public function __construct(
         protected DevlogEntryRepository $devlogEntryRepository,
         protected ModuleTemplateFactory $moduleTemplateFactory,
-    ) {
-    }
+    ) {}
 
     public function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $pageId = (int) ($request->getQueryParams()['id'] ?? $request->getParsedBody()['id'] ?? 0);
+        $pageId = (int)($request->getQueryParams()['id'] ?? $request->getParsedBody()['id'] ?? 0);
         $this->view = $this->getView($request);
 
         $this->view->assign('formData', $request->getParsedBody());
@@ -83,7 +83,7 @@ class BackendModuleController
     {
         $items = ['' => ''];
         foreach (\DMK\Mklog\Utility\SeverityUtility::getItems() as $id => $name) {
-            $items[(string) $id] = $id.' - '.ucfirst(strtolower($name));
+            $items[(string)$id] = $id . ' - ' . ucfirst(strtolower((string)$name));
         }
 
         $this->view->assign('severitySelectOptions', $items);
@@ -134,7 +134,7 @@ class BackendModuleController
 
         $pageId = $parsedBody['id'] ?? $queryParams['id'] ?? 0;
         if ($pageId) {
-            $demand->setPid((int) $pageId);
+            $demand->setPid((int)$pageId);
         }
 
         $results = $this->devlogEntryRepository->findByDemand($demand);

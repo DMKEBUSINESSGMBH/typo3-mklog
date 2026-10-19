@@ -3,7 +3,6 @@ name: "PHP Checks"
 on:
     push:
     pull_request:
-    workflow_dispatch:
     schedule:
         - cron: "30 6 * * 1"
 
@@ -13,25 +12,17 @@ env:
 jobs:
 
     php-lint:
-        name: "Linting"
+        name: "PHP Lint"
 
         runs-on: "ubuntu-latest"
 
         strategy:
             matrix:
-              include:
-                -
-                  typo3-version: "^12.4"
-                  php-version: "8.1"
-                -
-                  typo3-version: "^13.4"
-                  php-version: "8.2"
-                -
-                  typo3-version: "^13.4"
-                  php-version: "8.3"
-                -
-                  typo3-version: "^13.4"
-                  php-version: "8.4"
+                php-version:
+                    - "8.1"
+                    - "8.2"
+                    - "8.3"
+                    - "8.4"
 
         steps:
             -
@@ -60,9 +51,7 @@ jobs:
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
                 name: "Install composer dependencies"
-                run: |
-                  composer remove --no-update typo3/cms typo3/cms-core
-                  composer require typo3/minimal:"${{ matrix.typo3-version }}"
+                run: "composer install --no-interaction --no-progress --no-suggest"
             -
                 name: "Run Linter"
                 run: "composer lint"
@@ -76,19 +65,17 @@ jobs:
 
         strategy:
             matrix:
-                include:
-                  -
-                    typo3-version: "^12.4"
-                    php-version: "8.1"
-                  -
-                    typo3-version: "^13.4"
-                    php-version: "8.2"
-                  -
-                    typo3-version: "^13.4"
-                    php-version: "8.3"
-                  -
-                    typo3-version: "^13.4"
-                    php-version: "8.4"
+                command:
+                    - "test:phpcs"
+                    - "test:rector"
+                    - "test:phpcompatibility"
+                    - "test:phpmd"
+                    - "test:phpstan"
+                php-version:
+                    - "8.1"
+                    - "8.2"
+                    - "8.3"
+                    - "8.4"
 
         steps:
             -
@@ -117,24 +104,14 @@ jobs:
                     restore-keys: "php-${{ matrix.php-version }}-composer-"
             -
                 name: "Install composer dependencies"
-                run: |
-                    composer remove --no-update typo3/cms typo3/cms-core
-                    composer require typo3/minimal:"${{ matrix.typo3-version }}"
+                run: "composer install --no-interaction --no-progress --no-suggest"
             -
-              name: "Run phpcs"
-              run: "composer test:phpcs"
-            -
-              name: "Run rector"
-              run: "composer test:rector"
-            -
-              name: "Run phpcompatibility"
-              run: "composer test:phpcompatibility"
-            -
-              name: "Run phpmd"
-              run: "composer test:phpmd"
+                name: "Run command"
+                run: "composer ${{ matrix.command }}"
 
-    php-stan-unit:
-        name: "PHP-Stan-Unit"
+
+    php-unit:
+        name: "PHP Unit"
 
         runs-on: "ubuntu-latest"
 
@@ -196,9 +173,6 @@ jobs:
                 run: |
                     composer remove --no-update typo3/cms typo3/cms-core
                     composer require typo3/minimal:"${{ matrix.typo3-version }}"
-            -
-                name: "Run PHPStan"
-                run: "composer test:phpstan"
             -
                 name: "Run PHP unit tests"
                 run: "composer test:phpunit"

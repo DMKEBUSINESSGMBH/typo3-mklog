@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -27,7 +29,6 @@
 
 namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
-use Gelf\Transport\AbstractTransport;
 use Gelf\Transport\UdpTransport;
 
 /**
@@ -45,19 +46,17 @@ class UdpGelf extends AbstractGelf
 {
     /**
      * Creates the Transport.
-     *
-     * @return AbstractTransport
      */
     protected function getTransport(): UdpTransport
     {
         [$host, $port] = explode(
             ':',
-            $this->getOptions()->getCredentials()
+            (string)$this->getOptions()->getCredentials()
         );
 
         return new UdpTransport(
             trim($host),
-            (int) trim($port),
+            (int)trim($port),
             UdpTransport::CHUNK_SIZE_LAN
         );
     }

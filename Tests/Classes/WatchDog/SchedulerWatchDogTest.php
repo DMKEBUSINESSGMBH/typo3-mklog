@@ -133,13 +133,13 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         /* @var DevlogEntryDemand $demand */
         $demand = $this->callInaccessibleMethod($task, 'getDevlogEntryDemand');
 
-        $this->assertSame('identifier:uid', $demand->getTransportId());
-        $this->assertSame(5, $demand->getSeverity());
-        $this->assertSame(['mklog'], $demand->getExtensionWhitelist());
-        $this->assertSame(['rn_base'], $demand->getExtensionBlacklist());
-        $this->assertSame(10, $demand->getMaxResults());
-        $this->assertSame('crdate', $demand->getOrderByField());
-        $this->assertSame('ASC', $demand->getOrderByDirection());
+        self::assertSame('identifier:uid', $demand->getTransportId());
+        self::assertSame(5, $demand->getSeverity());
+        self::assertSame(['mklog'], $demand->getExtensionWhitelist());
+        self::assertSame(['rn_base'], $demand->getExtensionBlacklist());
+        self::assertSame(10, $demand->getMaxResults());
+        self::assertSame('crdate', $demand->getOrderByField());
+        self::assertSame('ASC', $demand->getOrderByDirection());
     }
 
     /**

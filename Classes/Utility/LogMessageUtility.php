@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -42,7 +44,7 @@ class LogMessageUtility
     {
         $config = Factory::getConfigUtility();
         foreach ($config->getExcludedLogMessageRegularExpressions() as $regex) {
-            if (preg_match($regex, $logMessage)) {
+            if (@preg_match($regex, $logMessage) === 1) {
                 return true;
             }
         }

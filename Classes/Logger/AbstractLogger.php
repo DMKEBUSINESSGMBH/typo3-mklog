@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -52,6 +54,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
      * @param int    $severity
      *
      * @return \DMK\Mklog\Domain\Model\DevlogEntry
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function createDevlogEntry($message, $extension, $severity, $extraData)
     {
@@ -66,13 +70,14 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $entry->setCrdate(time());
         $entry->setRunId($config->getCurrentRunId());
         $entry->setHost($entry->getHost());
-        $entry->setMessage($this->replaceMessagePlaceholders((string) $message, $extraData));
-        $entry->setExtKey((string) $extension);
-        $entry->setSeverity((int) $severity);
+        $entry->setMessage($this->replaceMessagePlaceholders((string)$message, $extraData));
+        $entry->setExtKey((string)$extension);
+        $entry->setSeverity((int)$severity);
         $entry->setPid(0);
 
-        if (Typo3Utility::getTsFe() instanceof \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController) {
-            $entry->setPid(Typo3Utility::getTsFe()->id);
+        $pageInformation = ($GLOBALS['TYPO3_REQUEST'] ?? null)?->getAttribute('frontend.page.information');
+        if ($pageInformation !== null) {
+            $entry->setPid($pageInformation->getId());
         }
 
         $entry->setCruserId(Typo3Utility::getBeUserId());
@@ -91,7 +96,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $replace = [];
         foreach ($extraData as $key => $value) {
             if (!is_array($value) && !is_null($value) && (!is_object($value) || method_exists($value, '__toString'))) {
-                $replace['{'.$key.'}'] = $value;
+                $replace['{' . $key . '}'] = $value;
             }
         }
 
@@ -138,7 +143,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
             // ignore core devlog and logerr calls
             \Psr\Log\AbstractLogger::class,
             'TYPO3\\CMS\\Core\\Log\\',
-            GeneralUtility::class.'::devLog',
+            GeneralUtility::class . '::devLog',
             // ignore rnbase loggers
             'Tx_Rnbase_Utility_Logger',
             'tx_rnbase_util_Logger',
@@ -153,7 +158,7 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
                 }
             }
 
-            // break if there is no more ignore
+            // break if ther is no more ignore
             if ($ignore) {
                 $lastIgnoreKey = $key;
             }
@@ -174,13 +179,13 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         array_pop($trail);
         $path = [];
         foreach ($trail as $dat) {
-            $pathFragment = ($dat['class'] ?? '').($dat['type'] ?? '').$dat['function'];
+            $pathFragment = ($dat['class'] ?? '') . ($dat['type'] ?? '') . $dat['function'];
             // add the path of the included file
             if (in_array($dat['function'], ['require', 'include', 'require_once', 'include_once']) && !($dat['class'] ?? '')) {
-                $pathFragment .= '('.PathUtility::stripPathSitePrefix($dat['args'][0]).'),'.PathUtility::stripPathSitePrefix($dat['file']);
+                $pathFragment .= '(' . PathUtility::stripPathSitePrefix($dat['args'][0]) . '),' . PathUtility::stripPathSitePrefix($dat['file']);
             }
 
-            $path[] = array_key_exists('line', $dat) ? $pathFragment.'#'.$dat['line'] : $pathFragment;
+            $path[] = array_key_exists('line', $dat) ? $pathFragment . '#' . $dat['line'] : $pathFragment;
         }
 
         return implode(' // ', $path);
@@ -196,19 +201,19 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
         $address = $GLOBALS['TYPO3_CONF_VARS']['BE']['warning_email_addr'] ?? '';
         if ($address && $this->canMailBeSend()) {
             $mailContent = "This is an automatic email from TYPO3. Don't answer!\n\n";
-            $mailContent .= 'URL: '.GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL')."\n";
-            $mailContent .= 'Exception Message: '.$exception->getMessage()."\n";
-            $mailContent .= 'Log Record Message: '.$record->getMessage()."\n";
-            $mailContent .= 'Log Record Component: '.$record->getComponent()."\n";
-            $mailContent .= 'Log Record Level: '.$record->getLevel()."\n";
-            $mailContent .= 'Log Record Data: '.print_r($record->getData(), true)."\n\n";
-            $mailContent .= "Stacktrace:\n".$this->getExceptionTraceWithoutArguments($exception)."\n";
-            GeneralUtility::makeInstance(MailMessage::class)
+            $mailContent .= 'URL: ' . GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL') . "\n";
+            $mailContent .= 'Exception Message: ' . $exception->getMessage() . "\n";
+            $mailContent .= 'Log Record Message: ' . $record->getMessage() . "\n";
+            $mailContent .= 'Log Record Component: ' . $record->getComponent() . "\n";
+            $mailContent .= 'Log Record Level: ' . $record->getLevel() . "\n";
+            $mailContent .= 'Log Record Data: ' . print_r($record->getData(), true) . "\n\n";
+            $mailContent .= "Stacktrace:\n" . $this->getExceptionTraceWithoutArguments($exception) . "\n";
+            $mail = GeneralUtility::makeInstance(MailMessage::class)
                 ->to(new Address($address))
-                ->subject('Exception during logging (EXT:mklog) on site '.$GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'])
+                ->subject('Exception during logging (EXT:mklog) on site ' . $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'])
                 ->text($mailContent)
-                ->html(nl2br($mailContent))
-                ->send();
+                ->html(nl2br($mailContent));
+            GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\Mailer::class)->send($mail);
         }
     }
 
@@ -219,8 +224,8 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     {
         $lastSendTime = 0;
         $mailCanBeSend = false;
-        $lockDir = Environment::getVarPath().'/lock';
-        $lockFile = $lockDir.'/mklog_exception_during_logging.lock';
+        $lockDir = Environment::getVarPath() . '/lock';
+        $lockFile = $lockDir . '/mklog_exception_during_logging.lock';
         if (file_exists($lockFile)) {
             $lastSendTime = file_get_contents($lockFile);
         }
@@ -239,9 +244,9 @@ abstract class AbstractLogger implements \TYPO3\CMS\Core\Log\Writer\WriterInterf
     {
         $traceAsString = '';
         foreach ($exception->getTrace() as $key => $trace) {
-            $traceAsString .= '#'.$key;
-            $traceAsString .= ' '.($trace['file'] ?? '');
-            $traceAsString .= '('.($trace['line'] ?? '').'): ';
+            $traceAsString .= '#' . $key;
+            $traceAsString .= ' ' . ($trace['file'] ?? '');
+            $traceAsString .= '(' . ($trace['line'] ?? '') . '): ';
             $traceAsString .= $trace['class'] ?? '';
             $traceAsString .= $trace['type'] ?? '';
             $traceAsString .= $trace['function'] ?? '';

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -29,7 +31,6 @@ namespace DMK\Mklog\Utility;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * MK Log TYPO3 Utility class.
@@ -40,21 +41,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 final class Typo3Utility
 {
-    /**
-     * Get the current frontend user.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    public static function getTsFe(): ?TypoScriptFrontendController
-    {
-        $tsfe = null;
-        if ($GLOBALS['TYPO3_REQUEST'] ?? null) {
-            $tsfe = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller');
-        }
-
-        return is_object($tsfe) ? $tsfe : null;
-    }
-
     /**
      * Get the current frontend user.
      *
@@ -81,7 +67,7 @@ final class Typo3Utility
             return 0;
         }
 
-        return (int) ($feuser->user['uid'] ?? 0);
+        return (int)($feuser->user['uid'] ?? 0);
     }
 
     /**
@@ -105,6 +91,6 @@ final class Typo3Utility
             return 0;
         }
 
-        return (int) ($beuser->user['uid'] ?? 0);
+        return (int)($beuser->user['uid'] ?? 0);
     }
 }

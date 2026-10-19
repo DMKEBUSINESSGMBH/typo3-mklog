@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -41,15 +43,21 @@ use TYPO3\CMS\Core\Log\LogRecord;
 class RateLimiterUtility
 {
     /**
+     * Allow null only so this can be reset in unit test.
+     *
+     * @todo find a better way to reset in unit tests. backupStaticProperties is not working.
+     */
+    protected static ?RateLimiterUtility $instance = null;
+
+    /**
      * Following problem. It might happen that a log is written inside the install tool etc. where the DI container is
      * different at some times in contrast to normal BE or FE requests and so DI for this class does not work all
      * the times. So we support situations where DI and therefore rate limiting does not work.
      */
     public function __construct(
-        private ?RateLimiterFactory $perMessageLimiterFactory = null,
-        private ?RateLimiterFactory $allMessagesLimiterFactory = null,
-    ) {
-    }
+        private readonly ?RateLimiterFactory $perMessageLimiterFactory = null,
+        private readonly ?RateLimiterFactory $allMessagesLimiterFactory = null,
+    ) {}
 
     public function isRateLimitExceeded(LogRecord $record): bool
     {
@@ -62,7 +70,7 @@ class RateLimiterUtility
 
     protected function getPerMessageRateLimiter(LogRecord $record): ?LimiterInterface
     {
-        return $this->perMessageLimiterFactory?->create($record->getMessage().$record->getComponent().$record->getLevel()) ?? null;
+        return $this->perMessageLimiterFactory?->create($record->getMessage() . $record->getComponent() . $record->getLevel()) ?? null;
     }
 
     protected function getGlobalRateLimiter(): ?LimiterInterface

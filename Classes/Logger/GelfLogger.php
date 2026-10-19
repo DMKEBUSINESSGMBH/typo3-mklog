@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -47,8 +49,6 @@ class GelfLogger extends AbstractLogger
      * Writes the log record.
      *
      * @param LogRecord $record Log record
-     *
-     * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface $this
      */
     public function writeLog(LogRecord $record): static
     {

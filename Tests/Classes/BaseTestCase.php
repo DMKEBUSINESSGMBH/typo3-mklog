@@ -52,6 +52,7 @@ namespace DMK\Mklog\Tests;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\RateLimiterUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -111,6 +112,9 @@ abstract class BaseTestCase extends UnitTestCase
         // reset extconf cache
         $configStorage = $this->callInaccessibleMethod([Factory::getConfigUtility(), 'getStorage'], []);
         $configStorage->unsExtConf();
+
+        $instance = new \ReflectionProperty(RateLimiterUtility::class, 'instance');
+        $instance->setValue(null, null);
 
         GeneralUtility::purgeInstances();
     }
@@ -209,7 +213,6 @@ abstract class BaseTestCase extends UnitTestCase
 
         $reflectionObject = new \ReflectionObject($object);
         $reflectionMethod = $reflectionObject->getMethod($name);
-        $reflectionMethod->setAccessible(true);
 
         return $reflectionMethod->invokeArgs($object, $arguments);
     }
@@ -219,18 +222,17 @@ abstract class BaseTestCase extends UnitTestCase
      *
      * Taken From nimut/testing-framework
      *
-     * @param array $methods
-     * @param bool  $callOriginalConstructor
-     * @param bool  $callOriginalClone
-     * @param bool  $callAutoload
-     * @param bool  $cloneArguments
-     * @param bool  $callOriginalMethods
+     * @param bool $callOriginalConstructor
+     * @param bool $callOriginalClone
+     * @param bool $callAutoload
+     * @param bool $cloneArguments
+     * @param bool $callOriginalMethods
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getMock(
         string $originalClassName,
-        $methods = [],
+        array $methods = [],
         array $arguments = [],
         string $mockClassName = '',
         $callOriginalConstructor = true,

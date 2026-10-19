@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -58,14 +60,18 @@ class SchedulerWatchDog extends AbstractTask
      */
     protected $messageTransport;
 
+    public function __unserialize(array $data): void
+    {
+        foreach ($data as $property => $value) {
+            if (property_exists($this, $property)) {
+                $this->{$property} = $value;
+            }
+        }
+    }
+
     protected function getLogger(): \TYPO3\CMS\Core\Log\Logger
     {
-        $name = 'DMK.Mklog.WatchDog.SchedulerWatchDog';
-        if ($this->logger->getName() !== $name) {
-            $this->logger = Factory::makeInstance(LogManager::class)->getLogger($name);
-        }
-
-        return $this->logger;
+        return Factory::makeInstance(LogManager::class)->getLogger('DMK.Mklog.WatchDog.SchedulerWatchDog');
     }
 
     /**
@@ -76,11 +82,11 @@ class SchedulerWatchDog extends AbstractTask
     public function getOptions()
     {
         // backwards compatiblity for schedulers that were created when we still used rn_base.
-        if (null !== $this->schedulerOptions && $this->schedulerOptions::class === 'Sys25\RnBase\Domain\Model\DataModel') {
+        if ($this->schedulerOptions !== null && $this->schedulerOptions::class === 'Sys25\RnBase\Domain\Model\DataModel') {
             $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->getProperties());
         }
 
-        if (null === $this->schedulerOptions) {
+        if ($this->schedulerOptions === null) {
             $this->schedulerOptions = GenericArrayObject::getInstance();
         }
 
@@ -116,7 +122,7 @@ class SchedulerWatchDog extends AbstractTask
         // shutdown the transport
         $transport->shutdown();
 
-        $success = [] === $failures;
+        $success = $failures === [];
         $msg = sprintf(
             'WatchDog %1$s has %2$d messages send and %3$d failures.',
             $this->getTransportId(),
@@ -135,7 +141,7 @@ class SchedulerWatchDog extends AbstractTask
         );
 
         // create a flash message for the beuser
-        if (0 !== Typo3Utility::getBeUserId()) {
+        if (Typo3Utility::getBeUserId() !== 0) {
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 $msg,
@@ -187,11 +193,11 @@ class SchedulerWatchDog extends AbstractTask
 
         $limit = $options->getMessageLimit();
         // fallback of 100, if no limit is configured
-        if (null === $limit) {
+        if ($limit === null) {
             $limit = 100;
         }
 
-        $limit = (int) $limit;
+        $limit = (int)$limit;
         if ($limit > 0) {
             $demand->setMaxResults($limit);
         }
@@ -222,7 +228,7 @@ class SchedulerWatchDog extends AbstractTask
      */
     protected function getTransport()
     {
-        if (null === $this->messageTransport) {
+        if ($this->messageTransport === null) {
             $this->messageTransport = Factory::getTransport(
                 $this->getOptions()->getTransport()
             );
@@ -233,12 +239,10 @@ class SchedulerWatchDog extends AbstractTask
 
     /**
      * Creates the transport id.
-     *
-     * @return Transport\InterfaceTransport
      */
     protected function getTransportId(): string
     {
-        return $this->getTransport()->getIdentifier().':'.$this->getTaskUid();
+        return $this->getTransport()->getIdentifier() . ':' . $this->getTaskUid();
     }
 
     /**
@@ -246,6 +250,7 @@ class SchedulerWatchDog extends AbstractTask
      *
      * @return string Information to display
      */
+    #[\Override]
     public function getAdditionalInformation(): string
     {
         if ($this->getOptions()->isEmpty()) {
@@ -260,9 +265,9 @@ class SchedulerWatchDog extends AbstractTask
             }
 
             $key = GeneralUtility::underscoredToLowerCamelCase($key);
-            $options[] = '  '.ucfirst($key).': '.$value;
+            $options[] = '  ' . ucfirst($key) . ': ' . $value;
         }
 
-        return 'Options: '.PHP_EOL.implode('; '.PHP_EOL, $options);
+        return 'Options: ' . PHP_EOL . implode('; ' . PHP_EOL, $options);
     }
 }

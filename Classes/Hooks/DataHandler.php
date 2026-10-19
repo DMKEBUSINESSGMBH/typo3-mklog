@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -63,45 +65,42 @@ class DataHandler
      * @param string $command
      * @param string $table
      * @param array  $value
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler
+     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processCmdmap_preProcess($command, $table, int $pageId, $value, $dataHandler): void
     {
-        if ('pages' == $table) {
-            switch ($command) {
-                case 'delete':
-                    $this->deleteLogEntriesByPageId($pageId);
-                    break;
-                case 'copy':
-                    $this->removeLogTablesFromTablesThatCanBeCopied($dataHandler);
-                    break;
+        if ($table === 'pages' && $command === 'delete') {
+            $this->deleteLogEntriesByPageId($pageId);
+        }
+    }
+
+    /**
+     * Löscht Logeinträge, die beim Kopieren einer Seite mitgenommen wurden.
+     * In TYPO3 14 gibt es keine Möglichkeit mehr, Tabellen vor dem Kopieren aus der Kopierliste
+     * zu entfernen (DataHandler::$copyWhichTables wurde entfernt). Daher werden die Einträge
+     * auf der neu kopierten Seite im Post-Process-Hook wieder gelöscht.
+     *
+     * @param string $command
+     * @param string $table
+     * @param mixed  $value
+     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function processCmdmap_postProcess($command, $table, int $pageId, $value, $dataHandler): void
+    {
+        if ($table === 'pages' && $command === 'copy') {
+            $newPageId = $dataHandler->copyMappingArray['pages'][$pageId] ?? null;
+            if ($newPageId !== null) {
+                $this->deleteLogEntriesByPageId((int)$newPageId);
             }
         }
     }
 
-    protected function deleteLogEntriesByPageId(int $pageId)
+    protected function deleteLogEntriesByPageId(int $pageId): void
     {
         \DMK\Mklog\Factory::getDevlogEntryRepository()->deletyByPid($pageId);
-    }
-
-    /**
-     * Es ist nie gewünscht dass die devlog und tx_mklog_devlog_entry Einträge beim kopieren einer Seite mitkopiert werden,
-     * auch nicht für Admins.
-     *
-     * @param TYPO3\CMS\Core\DataHandling\DataHandler
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    protected function removeLogTablesFromTablesThatCanBeCopied($dataHandler)
-    {
-        $tablesThatCanBeCopied = array_flip(array_keys($GLOBALS['TCA']));
-
-        if (isset($tablesThatCanBeCopied[$this->getTableName()])) {
-            unset($tablesThatCanBeCopied[$this->getTableName()]);
-        }
-
-        $dataHandler->copyWhichTables = implode(',', array_flip($tablesThatCanBeCopied));
     }
 }

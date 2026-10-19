@@ -1,14 +1,6 @@
 ChangeLog
 =========
 
-13.2.6
-------
-* Fix version number
-
-13.2.5
-------
-* Fix conflict with newest TYPO3 versions
-
 13.2.4
 ------
 * Refactor rate limiting usage when rate limiting is not available

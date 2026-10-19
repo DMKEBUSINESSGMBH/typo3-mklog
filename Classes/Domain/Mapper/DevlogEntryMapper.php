@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -42,9 +44,7 @@ class DevlogEntryMapper
     /**
      * DevlogEntryMapper constructor.
      */
-    public function __construct(protected DevlogEntry $entry)
-    {
-    }
+    public function __construct(protected DevlogEntry $entry) {}
 
     public function getEntry(): DevlogEntry
     {

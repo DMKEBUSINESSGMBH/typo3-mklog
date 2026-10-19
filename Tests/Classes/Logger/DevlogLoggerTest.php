@@ -157,7 +157,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->expects(self::once())
             ->method('persist')
             ->with(
-                $this->callback(
+                self::callback(
                     function (DevlogEntry $model) use ($that): bool {
                         $this->assertSame(0, $model->getPid());
                         $that->assertGreaterThan(time() - 60, $model->getCrdate());
@@ -273,7 +273,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->expects($matcher)
             ->method('storeLog')
             ->with(
-                $this->callback(function (string $message) use ($matcher): bool {
+                self::callback(function (string $message) use ($matcher): bool {
                     self::assertSame(
                         match ($matcher->numberOfInvocations()) {
                             1 => 'msg',

@@ -145,7 +145,7 @@ class DataHandlerTest extends BaseTestCase
 
         self::assertNotSame('*', $dataHandlerParent->copyWhichTables, 'es sollte nicht per default auf * stehen');
 
-        $copyWhichTables = array_flip(explode(',', $dataHandlerParent->copyWhichTables));
+        $copyWhichTables = array_flip(explode(',', (string)$dataHandlerParent->copyWhichTables));
         self::assertTrue(is_array($copyWhichTables), 'das sollte ein array sein');
 
         self::assertGreaterThan(2, count($copyWhichTables), 'es sollte mehr als eine Tabelle enthalten sein');

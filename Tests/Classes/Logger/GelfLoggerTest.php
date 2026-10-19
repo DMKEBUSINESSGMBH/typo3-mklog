@@ -122,7 +122,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->expects($matcher)
             ->method('storeLog')
             ->with(
-                $this->callback(function (string $message) use ($matcher): bool {
+                self::callback(function (string $message) use ($matcher): bool {
                     self::assertSame(
                         match ($matcher->numberOfInvocations()) {
                             1 => 'msg',

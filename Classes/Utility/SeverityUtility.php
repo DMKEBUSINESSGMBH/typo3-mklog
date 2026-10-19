@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -44,74 +46,58 @@ final class SeverityUtility
      *
      * You'd likely not be able to reach the system. You better have an SLA in
      * place when this happens.
-     *
-     * @var int
      */
-    public const EMERGENCY = 0;
+    public const int EMERGENCY = 0;
 
     /**
      * Alert: action must be taken immediately.
      *
      * Example: Entire website down, database unavailable, etc.
-     *
-     * @var int
      */
-    public const ALERT = 1;
+    public const int ALERT = 1;
 
     /**
      * Critical: critical conditions.
      *
      * Example: unexpected exception.
-     *
-     * @var int
      */
-    public const CRITICAL = 2;
+    public const int CRITICAL = 2;
 
     /**
      * Error: error conditions.
      *
      * Example: Runtime error.
-     *
-     * @var int
      */
-    public const ERROR = 3;
+    public const int ERROR = 3;
 
     /**
      * Warning: warning conditions.
      *
      * Examples: Use of deprecated APIs, undesirable things that are not
      * necessarily wrong.
-     *
-     * @var int
      */
-    public const WARNING = 4;
+    public const int WARNING = 4;
 
     /**
      * Notice: normal but significant condition.
      *
      * Example: things you should have a look at, nothing to worry about though.
-     *
-     * @var int
      */
-    public const NOTICE = 5;
+    public const int NOTICE = 5;
 
     /**
      * Informational: informational messages.
      *
      * Examples: User logs in, SQL logs.
-     *
-     * @var int
      */
-    public const INFO = 6;
+    public const int INFO = 6;
 
     /**
      * Debug: debug-level messages.
      *
      * Example: Detailed status information.
-     *
-     * @var int
      */
-    public const DEBUG = 7;
+    public const int DEBUG = 7;
 
     /**
      * Reverse look up of log level to level name.

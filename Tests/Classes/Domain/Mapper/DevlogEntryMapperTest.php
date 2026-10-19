@@ -25,7 +25,7 @@
  * This copyright notice MUST APPEAR in all copies of the script!
  */
 
-namespace DMK\Mklog\Domain\Model;
+namespace DMK\Mklog\Tests\Domain\Mapper;
 
 /***************************************************************
  * Copyright notice
@@ -51,6 +51,8 @@ namespace DMK\Mklog\Domain\Model;
  ***************************************************************/
 
 use DMK\Mklog\Domain\Mapper\DevlogEntryMapper;
+use DMK\Mklog\Domain\Model\DevlogEntry;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Devlog entry mapper testcase.
@@ -68,11 +70,12 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function getEntryReturnsCorrectEntry(): void
     {
         $model = new DevlogEntry();
         $mapper = DevlogEntryMapper::fromEntry($model);
-        $this->assertSame($model, $mapper->getEntry());
+        self::assertSame($model, $mapper->getEntry());
     }
 
     /**
@@ -82,6 +85,7 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function fromRecordReturnsCorrectEntry(): void
     {
         $record = [
@@ -98,16 +102,16 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
             'transport_ids' => '',
         ];
         $entry = DevlogEntryMapper::fromRecord($record)->getEntry();
-        $this->assertSame(5, $entry->getUid());
-        $this->assertSame(7, $entry->getPid());
-        $this->assertSame('0123456789', $entry->getRunId());
-        $this->assertSame('mklog', $entry->getExtKey());
-        $this->assertSame('test.localhost.net', $entry->getHost());
-        $this->assertSame('Just a test.', $entry->getMessage());
-        $this->assertSame('testdata', $entry->getExtraDataRaw());
-        $this->assertSame(987654321, $entry->getCrdate());
-        $this->assertSame([], $entry->getTransportIds());
-        $this->assertSame(7, $entry->getPid());
+        self::assertSame(5, $entry->getUid());
+        self::assertSame(7, $entry->getPid());
+        self::assertSame('0123456789', $entry->getRunId());
+        self::assertSame('mklog', $entry->getExtKey());
+        self::assertSame('test.localhost.net', $entry->getHost());
+        self::assertSame('Just a test.', $entry->getMessage());
+        self::assertSame('testdata', $entry->getExtraDataRaw());
+        self::assertSame(987654321, $entry->getCrdate());
+        self::assertSame([], $entry->getTransportIds());
+        self::assertSame(7, $entry->getPid());
     }
 
     /**
@@ -117,16 +121,17 @@ class DevlogEntryMapperTest extends \DMK\Mklog\Tests\BaseTestCase
      *
      * @test
      */
+    #[Test]
     public function fromResultsReturnsCorrectEntries(): void
     {
         $record0 = ['uid' => 5, 'run_id' => '6', 'crdate' => time()];
         $record1 = ['uid' => 7, 'run_id' => '8', 'crdate' => time()];
         $results = DevlogEntryMapper::fromResults([$record0, $record1]);
 
-        $this->assertCount(2, $results);
-        $this->assertInstanceOf(DevlogEntry::class, $results[0]);
-        $this->assertSame(5, $results[0]->getUid());
-        $this->assertInstanceOf(DevlogEntry::class, $results[1]);
-        $this->assertSame(7, $results[1]->getUid());
+        self::assertCount(2, $results);
+        self::assertInstanceOf(DevlogEntry::class, $results[0]);
+        self::assertSame(5, $results[0]->getUid());
+        self::assertInstanceOf(DevlogEntry::class, $results[1]);
+        self::assertSame(7, $results[1]->getUid());
     }
 }

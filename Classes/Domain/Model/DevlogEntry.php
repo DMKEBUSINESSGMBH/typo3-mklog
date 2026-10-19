@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -104,11 +106,11 @@ class DevlogEntry implements InterfaceMessage
         $values = [];
 
         foreach (get_object_vars($this) as $propertyName => $value) {
-            if (null === $value) {
+            if ($value === null) {
                 continue;
             }
 
-            if ('_' === $propertyName[0]) {
+            if ($propertyName[0] === '_') {
                 continue;
             }
 
@@ -134,7 +136,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function getUid(): int
     {
-        return (int) $this->uid;
+        return (int)$this->uid;
     }
 
     /**
@@ -144,19 +146,17 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setUid($uid): self
     {
-        $this->uid = (int) $uid;
+        $this->uid = (int)$uid;
 
         return $this;
     }
 
     /**
      * Getter for the pid.
-     *
-     * @return int|null the pid or NULL if none set yet
      */
     public function getPid(): int
     {
-        return (int) $this->pid;
+        return (int)$this->pid;
     }
 
     /**
@@ -166,14 +166,14 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setPid($pid): self
     {
-        $this->pid = (int) $pid;
+        $this->pid = (int)$pid;
 
         return $this;
     }
 
     public function getCrdate(): int
     {
-        return (int) $this->crdate;
+        return (int)$this->crdate;
     }
 
     /**
@@ -181,7 +181,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setCrdate($crdate): static
     {
-        $this->crdate = (int) $crdate;
+        $this->crdate = (int)$crdate;
 
         return $this;
     }
@@ -200,7 +200,7 @@ class DevlogEntry implements InterfaceMessage
 
     public function getSeverity(): int
     {
-        return (int) $this->severity;
+        return (int)$this->severity;
     }
 
     /**
@@ -208,7 +208,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setSeverity($severity): static
     {
-        $this->severity = (int) $severity;
+        $this->severity = (int)$severity;
 
         return $this;
     }
@@ -239,7 +239,7 @@ class DevlogEntry implements InterfaceMessage
 
     public function getCruserId(): int
     {
-        return (int) $this->cruserId;
+        return (int)$this->cruserId;
     }
 
     /**
@@ -247,7 +247,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function setCruserId($cruserId): static
     {
-        $this->cruserId = (int) $cruserId;
+        $this->cruserId = (int)$cruserId;
 
         return $this;
     }
@@ -364,7 +364,7 @@ class DevlogEntry implements InterfaceMessage
                 continue;
             }
 
-            $data[substr($key, 2)] = $value;
+            $data[substr((string)$key, 2)] = $value;
         }
 
         return $data;
@@ -399,7 +399,7 @@ class DevlogEntry implements InterfaceMessage
      */
     public function getTimestamp(): \DateTime
     {
-        $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate().'.0216');
+        $dateTime = \DateTime::createFromFormat('U.u', $this->getCrdate() . '.0216');
         // createFromFormat bzw. UNIX Timestamps haben per default GMT als Zeitzone.
         // Daher müssen wir zusätzlich die aktuelle Zeitzone setzen.
         $dateTime->setTimezone(new \DateTimeZone(date_default_timezone_get()));

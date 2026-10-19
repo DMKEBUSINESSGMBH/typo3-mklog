@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -32,6 +34,8 @@ use TYPO3\CMS\Scheduler\AdditionalFieldProviderInterface;
 use TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
+// @codingStandardsIgnoreStart
+
 /**
  * MK Log watchdog scheduler fields.
  *
@@ -47,7 +51,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      *
      * @param array               $taskInfo        Reference to the array containing the info used in the add/edit form
      * @param object              $task            When editing, reference to the current task object. Null when adding.
-     * @param tx_scheduler_Module $schedulerModule Reference to the calling object (Scheduler's BE module)
+     * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
      *
      * @return array Array Containg all the information pertaining to the additional fields
      *               The array is multidimensional, keyed to the task class name and each field's id
@@ -56,16 +60,13 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      *               ['label']    => The label of the field (possibly localized)
      *               ['cshKey']   => The CSH key for the field
      *               ['cshLabel'] => The code of the CSH label
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function getAdditionalFields(array &$taskInfo, $task, SchedulerModuleController $schedulerModule): array
     {
-        // @codingStandardsIgnoreEnd
-
         // Initialize extra field value
         if (empty($taskInfo['mklog_watchdog_transport'])) {
-            $action = $schedulerModule->getCurrentAction();
-
             // initialuze an empty value, as it will not be used anyway
             $taskInfo['mklog_watchdog_transport'] = '';
             $taskInfo['mklog_watchdog_credentials'] = '';
@@ -75,7 +76,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
             $taskInfo['mklog_watchdog_extension_blacklist'] = '';
             $taskInfo['mklog_watchdog_mail_subject'] = '';
 
-            if ('edit' == $action) {
+            if ($task instanceof SchedulerWatchDog) {
                 // Editing a task, set to internal value if data was not submitted already
                 $taskInfo['mklog_watchdog_transport'] = $task->getOptions()->getTransport();
                 $taskInfo['mklog_watchdog_credentials'] = $task->getOptions()->getCredentials();
@@ -107,8 +108,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
     protected function getTransportField(
         array &$taskInfo,
     ): array {
-        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_transport]" id="field_mklog_watchdog_transport" '.
-            'class="form-select" '.
+        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_transport]" id="field_mklog_watchdog_transport" ' .
+            'class="form-select" ' .
         '>';
 
         foreach ([
@@ -120,7 +121,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
                 Transport\Gelf\UdpGelf::class => 'Gelf UDP',
             ],
         ] as $group => $subs) {
-            $fieldCode .= '<optgroup label="'.$group.'">';
+            $fieldCode .= '<optgroup label="' . $group . '">';
             foreach ($subs as $key => $label) {
                 $fieldCode .= sprintf(
                     '<option value="%1$s" %3$s />%2$s</option>',
@@ -151,10 +152,10 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     protected function getInputField(string $fieldName, string $label, array &$taskInfo): array
     {
-        $fieldCode = '<input type="text" name="tx_scheduler[mklog_watchdog_'.$fieldName.']" '.
-            'id="field_mklog_watchdog_'.$fieldName.'" '.
-            'value="'.$taskInfo['mklog_watchdog_'.$fieldName].'" '.
-            'class="form-control" '.
+        $fieldCode = '<input type="text" name="tx_scheduler[mklog_watchdog_' . $fieldName . ']" ' .
+            'id="field_mklog_watchdog_' . $fieldName . '" ' .
+            'value="' . $taskInfo['mklog_watchdog_' . $fieldName] . '" ' .
+            'class="form-control" ' .
             'size="50" />';
 
         return [
@@ -170,8 +171,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         array &$taskInfo,
     ): array {
         // Transport
-        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_severity]" id="field_mklog_watchdog_severity" '.
-            'class="form-select" '.
+        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_severity]" id="field_mklog_watchdog_severity" ' .
+            'class="form-select" ' .
         '>';
 
         $levels = \DMK\Mklog\Utility\SeverityUtility::getItems();
@@ -226,13 +227,11 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function validateAdditionalFields(array &$submittedData, SchedulerModuleController $schedulerModule): bool
     {
-        // @codingStandardsIgnoreEnd
         $credentials = &$submittedData['mklog_watchdog_credentials'];
         $credentials = trim($credentials);
-        if ('' === $credentials || '0' === $credentials) {
+        if ($credentials === '' || $credentials === '0') {
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 'The credentials for the transport are required!',
@@ -256,15 +255,17 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * @param array        $submittedData Array containing the data submitted by the user
      * @param AbstractTask $task          Reference to the current task object
      */
-    // @codingStandardsIgnoreStart (interface/abstract mistake)
     public function saveAdditionalFields(array $submittedData, AbstractTask $task): void
     {
-        // @codingStandardsIgnoreEnd
+        if (!$task instanceof SchedulerWatchDog) {
+            return;
+        }
+
         $task->getOptions()
             ->setTransport($submittedData['mklog_watchdog_transport'])
             ->setCredentials($submittedData['mklog_watchdog_credentials'])
-            ->setSeverity((int) $submittedData['mklog_watchdog_severity'])
-            ->setMessageLimit((int) $submittedData['mklog_watchdog_messagelimit'])
+            ->setSeverity((int)$submittedData['mklog_watchdog_severity'])
+            ->setMessageLimit((int)$submittedData['mklog_watchdog_messagelimit'])
             ->setExtensionWhitelist($submittedData['mklog_watchdog_extension_whitelist'])
             ->setExtensionBlacklist($submittedData['mklog_watchdog_extension_blacklist'])
             ->setMailSubject($submittedData['mklog_watchdog_mail_subject'])

@@ -53,6 +53,7 @@ namespace DMK\Mklog\WatchDog\Transport;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Tests\BaseTestCase;
+use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -80,12 +81,13 @@ class MailTransportTest extends BaseTestCase
     public function testSendMailWithDefaultSubject(): void
     {
         $subjectMethod = 'subject';
-        $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod, 'send']);
+        $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod]);
         $mailUtility->expects(self::once())
             ->method($subjectMethod)
             ->with('DevLog WatchDog on site test site')
             ->willReturnSelf();
         GeneralUtility::addInstance(MailMessage::class, $mailUtility);
+        GeneralUtility::addInstance(Mailer::class, $this->createMock(Mailer::class));
 
         $mailTransport = Factory::makeInstance(MailTransport::class);
         $mailTransport->initialize(
@@ -106,12 +108,13 @@ class MailTransportTest extends BaseTestCase
     public function testSendMailWithSubjectFromOptions(): void
     {
         $subjectMethod = 'subject';
-        $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod, 'send']);
+        $mailUtility = $this->getMock(MailMessage::class, [$subjectMethod]);
         $mailUtility->expects(self::once())
             ->method($subjectMethod)
             ->with('test subject on test site')
             ->willReturnSelf();
         GeneralUtility::addInstance(MailMessage::class, $mailUtility);
+        GeneralUtility::addInstance(Mailer::class, $this->createMock(Mailer::class));
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
         $mailTransport->initialize(

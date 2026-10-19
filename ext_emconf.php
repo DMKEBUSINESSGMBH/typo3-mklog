@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -33,10 +35,10 @@ $EM_CONF['mklog'] = [
     'author_company' => 'DMK E-BUSINESS',
     'author_email' => 'dev@dmk-ebusiness.de',
     'state' => 'stable',
-    'version' => '13.2.6',
+    'version' => '14.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.4.0-13.4.99',
+            'typo3' => '13.4.0-14.4.99',
             'scheduler' => '',
         ],
         'conflicts' => [],

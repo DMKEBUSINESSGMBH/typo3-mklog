@@ -53,7 +53,7 @@ class LogMessageUtilityTest extends BaseTestCase
                 'excluded_log_message_regular_expressions' => $excludedLogMessageRegularExpressions,
             ]
         );
-        $this->assertEquals(
+        self::assertEquals(
             $isExcluded,
             GeneralUtility::makeInstance(LogMessageUtility::class)->isExcludedLogMessage('test')
         );

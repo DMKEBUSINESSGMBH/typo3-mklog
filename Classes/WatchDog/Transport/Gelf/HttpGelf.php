@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright notice
  *
@@ -27,7 +29,6 @@
 
 namespace DMK\Mklog\WatchDog\Transport\Gelf;
 
-use Gelf\Transport\AbstractTransport;
 use Gelf\Transport\HttpTransport;
 
 /**
@@ -45,8 +46,6 @@ class HttpGelf extends AbstractGelf
 {
     /**
      * Creates the Transport.
-     *
-     * @return AbstractTransport
      */
     protected function getTransport(): HttpTransport
     {

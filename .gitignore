@@ -5,3 +5,4 @@
 /.php_cs.cache
 /var/
 /composer.lock
+/.phpunit.result.cache
