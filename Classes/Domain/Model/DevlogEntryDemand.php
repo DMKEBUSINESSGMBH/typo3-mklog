@@ -60,7 +60,7 @@ class DevlogEntryDemand
 
     public function hasOrderBy(): bool
     {
-        return $this->orderByField !== '' && $this->orderByField !== '0';
+        return '' !== $this->orderByField && '0' !== $this->orderByField;
     }
 
     public function getOrderByField(): string
@@ -81,7 +81,7 @@ class DevlogEntryDemand
 
     public function hasTransportId(): bool
     {
-        return isset($this->transportId) && ($this->transportId !== '' && $this->transportId !== '0');
+        return isset($this->transportId) && ('' !== $this->transportId && '0' !== $this->transportId);
     }
 
     public function getTransportId(): string
@@ -96,7 +96,7 @@ class DevlogEntryDemand
 
     public function hasSeverity(): bool
     {
-        return $this->severity !== null;
+        return null !== $this->severity;
     }
 
     public function getSeverity(): int
@@ -111,7 +111,7 @@ class DevlogEntryDemand
 
     public function hasExtensionWhitelist(): bool
     {
-        return $this->extensionWhitelist !== [];
+        return [] !== $this->extensionWhitelist;
     }
 
     public function getExtensionWhitelist(): array
@@ -126,7 +126,7 @@ class DevlogEntryDemand
 
     public function hasExtensionBlacklist(): bool
     {
-        return $this->extensionBlacklist !== [];
+        return [] !== $this->extensionBlacklist;
     }
 
     public function getExtensionBlacklist(): array
@@ -141,7 +141,7 @@ class DevlogEntryDemand
 
     public function hasMaxResults(): bool
     {
-        return $this->maxResults !== null;
+        return null !== $this->maxResults;
     }
 
     public function getMaxResults(): int
@@ -179,9 +179,6 @@ class DevlogEntryDemand
         return $this->pid;
     }
 
-    /**
-     * @return $this
-     */
     public function setPid(int $pid): static
     {
         $this->pid = $pid;

@@ -69,5 +69,7 @@ abstract class AbstractTransport implements InterfaceTransport
     /**
      * Deinitializes the Transport.
      */
-    public function shutdown() {}
+    public function shutdown()
+    {
+    }
 }

@@ -32,8 +32,10 @@ namespace DMK\Mklog\WatchDog;
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
 use DMK\Mklog\Factory;
+use DMK\Mklog\Utility\SeverityUtility;
 use DMK\Mklog\Utility\Typo3Utility;
 use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 
@@ -46,6 +48,26 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
  */
 class SchedulerWatchDog extends AbstractTask
 {
+    /**
+     * Prefix of the native task fields in tx_scheduler_task.
+     *
+     * @see Configuration/TCA/Overrides/scheduler_mklog_watchdog.php
+     */
+    public const FIELD_PREFIX = 'tx_mklog_watchdog_';
+
+    /**
+     * The option keys, which are stored in native task fields.
+     */
+    public const OPTION_KEYS = [
+        'transport',
+        'credentials',
+        'severity',
+        'message_limit',
+        'extension_whitelist',
+        'extension_blacklist',
+        'mail_subject',
+    ];
+
     /**
      * Internal options storage.
      *
@@ -63,6 +85,8 @@ class SchedulerWatchDog extends AbstractTask
     public function __unserialize(array $data): void
     {
         foreach ($data as $property => $value) {
+            // legacy serialized tasks contain mangled names for non-public properties ("\0*\0name")
+            $property = substr((string) $property, (int) strrpos("\0".$property, "\0"));
             if (property_exists($this, $property)) {
                 $this->{$property} = $value;
             }
@@ -82,15 +106,110 @@ class SchedulerWatchDog extends AbstractTask
     public function getOptions()
     {
         // backwards compatiblity for schedulers that were created when we still used rn_base.
-        if ($this->schedulerOptions !== null && $this->schedulerOptions::class === 'Sys25\RnBase\Domain\Model\DataModel') {
+        if (null !== $this->schedulerOptions && $this->schedulerOptions::class === 'Sys25\RnBase\Domain\Model\DataModel') {
             $this->schedulerOptions = GenericArrayObject::getInstance($this->schedulerOptions->getProperties());
         }
 
-        if ($this->schedulerOptions === null) {
+        if (null === $this->schedulerOptions) {
             $this->schedulerOptions = GenericArrayObject::getInstance();
         }
 
         return $this->schedulerOptions;
+    }
+
+    /**
+     * Returns the options as values for the native task fields.
+     */
+    public function getTaskParameters(): array
+    {
+        $options = $this->getOptions();
+        $severity = $options->getSeverity();
+        $limit = $options->getMessageLimit();
+
+        return [
+            self::FIELD_PREFIX.'transport' => (string) $options->getTransport(),
+            self::FIELD_PREFIX.'credentials' => (string) $options->getCredentials(),
+            self::FIELD_PREFIX.'severity' => null === $severity ? SeverityUtility::DEBUG : (int) $severity,
+            self::FIELD_PREFIX.'message_limit' => null === $limit ? 100 : (int) $limit,
+            self::FIELD_PREFIX.'extension_whitelist' => (string) $options->getExtensionWhitelist(),
+            self::FIELD_PREFIX.'extension_blacklist' => (string) $options->getExtensionBlacklist(),
+            self::FIELD_PREFIX.'mail_subject' => (string) $options->getMailSubject(),
+        ];
+    }
+
+    /**
+     * Fills the options from the native task fields.
+     *
+     * The legacy "schedulerOptions" parameter is taken into account
+     * for tasks, which are not migrated to the native fields yet.
+     */
+    public function setTaskParameters(array $parameters): void
+    {
+        $options = $this->getOptions();
+
+        $legacyOptions = $parameters['schedulerOptions'] ?? null;
+        if ($legacyOptions instanceof GenericArrayObject) {
+            $legacyOptions = $legacyOptions->toArray();
+        }
+
+        if (is_array($legacyOptions)) {
+            foreach ($legacyOptions as $key => $value) {
+                $options->setProperty($key, $value);
+            }
+        }
+
+        foreach (self::OPTION_KEYS as $key) {
+            if (!array_key_exists(self::FIELD_PREFIX.$key, $parameters)) {
+                continue;
+            }
+
+            $value = $parameters[self::FIELD_PREFIX.$key];
+            $options->setProperty(
+                $key,
+                in_array($key, ['severity', 'message_limit'], true) ? (int) $value : (string) $value
+            );
+        }
+
+        // the transport depends on the options, so it has to be recreated
+        $this->messageTransport = null;
+    }
+
+    /**
+     * Validates the submitted credentials against the selected transport.
+     *
+     * Required fields are already validated by FormEngine.
+     */
+    public function validateTaskParameters(array $parameters): bool
+    {
+        $options = $this->getOptions();
+        $transport = (string) ($parameters[self::FIELD_PREFIX.'transport'] ?? $options->getTransport());
+        $credentials = trim((string) ($parameters[self::FIELD_PREFIX.'credentials'] ?? $options->getCredentials()));
+
+        if ('' === $credentials) {
+            return $this->addValidationError('scheduler_watchdog.error.credentials_required');
+        }
+
+        $isValid = match ($transport) {
+            Transport\MailTransport::class => GeneralUtility::validEmail(
+                // allow the "Name <mail@example.org>" notation
+                1 === preg_match('/<([^>]+)>/', $credentials, $matches) ? $matches[1] : $credentials
+            ),
+            Transport\Gelf\UdpGelf::class => 1 === preg_match('/^[^:\s]+:\d+$/', $credentials),
+            Transport\Gelf\HttpGelf::class => false !== filter_var($credentials, FILTER_VALIDATE_URL),
+            default => true,
+        };
+
+        return $isValid || $this->addValidationError('scheduler_watchdog.error.credentials_invalid');
+    }
+
+    private function addValidationError(string $labelKey): bool
+    {
+        $message = $this->getLanguageService()?->sL(
+            'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:'.$labelKey
+        ) ?: $labelKey;
+        Typo3Utility::addFlashMessage($message, 'MK Log WatchDog', ContextualFeedbackSeverity::ERROR);
+
+        return false;
     }
 
     /**
@@ -122,7 +241,7 @@ class SchedulerWatchDog extends AbstractTask
         // shutdown the transport
         $transport->shutdown();
 
-        $success = $failures === [];
+        $success = [] === $failures;
         $msg = sprintf(
             'WatchDog %1$s has %2$d messages send and %3$d failures.',
             $this->getTransportId(),
@@ -141,18 +260,12 @@ class SchedulerWatchDog extends AbstractTask
         );
 
         // create a flash message for the beuser
-        if (Typo3Utility::getBeUserId() !== 0) {
-            $flashMessage = Factory::makeInstance(
-                \TYPO3\CMS\Core\Messaging\FlashMessage::class,
+        if (0 !== Typo3Utility::getBeUserId()) {
+            Typo3Utility::addFlashMessage(
                 $msg,
                 'MK Log WatchDog',
-                $success ? \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::OK
-                    : \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR,
-                false
+                $success ? ContextualFeedbackSeverity::OK : ContextualFeedbackSeverity::ERROR
             );
-            /** @var \TYPO3\CMS\Core\Messaging\FlashMessageService $flashMessageService */
-            $flashMessageService = Factory::makeInstance(\TYPO3\CMS\Core\Messaging\FlashMessageService::class);
-            $flashMessageService->getMessageQueueByIdentifier()->enqueue($flashMessage);
         }
 
         return $success;
@@ -193,11 +306,9 @@ class SchedulerWatchDog extends AbstractTask
 
         $limit = $options->getMessageLimit();
         // fallback of 100, if no limit is configured
-        if ($limit === null) {
-            $limit = 100;
-        }
+        $limit ??= 100;
 
-        $limit = (int)$limit;
+        $limit = (int) $limit;
         if ($limit > 0) {
             $demand->setMaxResults($limit);
         }
@@ -228,7 +339,7 @@ class SchedulerWatchDog extends AbstractTask
      */
     protected function getTransport()
     {
-        if ($this->messageTransport === null) {
+        if (null === $this->messageTransport) {
             $this->messageTransport = Factory::getTransport(
                 $this->getOptions()->getTransport()
             );
@@ -242,7 +353,7 @@ class SchedulerWatchDog extends AbstractTask
      */
     protected function getTransportId(): string
     {
-        return $this->getTransport()->getIdentifier() . ':' . $this->getTaskUid();
+        return $this->getTransport()->getIdentifier().':'.$this->getTaskUid();
     }
 
     /**
@@ -265,9 +376,9 @@ class SchedulerWatchDog extends AbstractTask
             }
 
             $key = GeneralUtility::underscoredToLowerCamelCase($key);
-            $options[] = '  ' . ucfirst($key) . ': ' . $value;
+            $options[] = '  '.ucfirst($key).': '.$value;
         }
 
-        return 'Options: ' . PHP_EOL . implode('; ' . PHP_EOL, $options);
+        return 'Options: '.PHP_EOL.implode('; '.PHP_EOL, $options);
     }
 }

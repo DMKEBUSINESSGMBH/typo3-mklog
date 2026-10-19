@@ -221,9 +221,7 @@ class EntryDataParserUtilityTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     protected function getEntryDataParserUtility($devLogEntryOrExtraData = null): mixed
     {
-        if ($devLogEntryOrExtraData === null) {
-            $devLogEntryOrExtraData = self::FIXTURE_EXTRA_DATA_JSON;
-        }
+        $devLogEntryOrExtraData ??= self::FIXTURE_EXTRA_DATA_JSON;
 
         if (is_string($devLogEntryOrExtraData)) {
             $devLogEntryOrExtraData = Factory::makeInstance(DevlogEntry::class)

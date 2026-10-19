@@ -61,10 +61,8 @@ class EntryDataParserUtility
      * Returns the shortened raw extra data as json string.
      *
      * @param int $maxLen
-     *
-     * @return string
      */
-    public function getShortenedRaw($maxLen = null)
+    public function getShortenedRaw($maxLen = null): string
     {
         return $this->converter->encode(
             $this->stripJson(
@@ -127,7 +125,7 @@ class EntryDataParserUtility
         }
 
         if ($striped > 0) {
-            $jsonData['...'] = 'Striped by ' . $striped . ' elements.';
+            $jsonData['...'] = 'Striped by '.$striped.' elements.';
         }
 
         return $jsonData;

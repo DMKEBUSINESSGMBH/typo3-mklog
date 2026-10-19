@@ -1,7 +1,7 @@
 # Migration v13 → v14
 
 Dieses Dokument listet alle signifikanten Änderungen des Upgrades auf TYPO3 14-Unterstützung.
-Die Extension unterstützt weiterhin TYPO3 13.4 (Abwärtskompatibilität bleibt erhalten).
+Die Extension unterstützt TYPO3 13.4 und 14. Unter TYPO3 14 werden keine Deprecations mehr ausgelöst (siehe Abschnitt 11).
 
 ---
 
@@ -454,3 +454,72 @@ die zu schwer nachvollziehbaren Fehlern führen können.
 Betroffen: 31 Dateien — alle Klassen unter `Classes/`, `Configuration/Backend/Modules.php`,
 `ext_localconf.php`, `ext_tables.php` sowie `Tests/Fixtures/LocalConfiguration.php`.
 Die Datei `CleanupLogTableTask.php` war bereits korrekt und blieb unverändert.
+
+---
+
+## 11. Entfernung aller TYPO3-14-Deprecations (TYPO3 13 bleibt unterstützt)
+
+Alle in TYPO3 14.0–14.3 eingeführten Deprecations, die mklog betreffen, sind entfernt.
+Wo TYPO3 13 keine Alternative bietet, entscheidet `VersionUtility::isTypo3Version14OrHigher()`
+(mit `@todo` zur Entfernung, sobald TYPO3 13 nicht mehr unterstützt wird).
+Die QS-Skripte laufen gegen TYPO3 14.3.9 (Fluid 5) und 13.4.36, jeweils mit PHPUnit 13.
+
+### Scheduler-Tasks als native TCA-Tasktypen (Deprecation #98453)
+
+Die Registrierung über `$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']` und
+`AdditionalFieldProviderInterface` sind deprecated.
+
+- TYPO3 14: Registrierung als native Tasktypen in
+  `Configuration/TCA/Overrides/scheduler_mklog_watchdog.php` und
+  `Configuration/TCA/Overrides/scheduler_mklog_cleanup_log_table.php`
+- TYPO3 13: unverändert über `SC_OPTIONS` in `ext_localconf.php` mit `SchedulerFieldProviderWatchDog`
+  (nur noch für TYPO3 13 registriert). Die TCA-Overrides sind unter TYPO3 13 wirkungslos.
+- Unter TYPO3 14 sind die Optionen Felder in `tx_scheduler_task`:
+  `tx_mklog_watchdog_transport`, `_credentials`, `_severity`, `_message_limit`,
+  `_extension_whitelist`, `_extension_blacklist`, `_mail_subject`
+- `SchedulerWatchDog` implementiert `getTaskParameters()`, `setTaskParameters()` (inkl. Übernahme
+  des alten `schedulerOptions`-Werts) und `validateTaskParameters()` (Zugangsdaten passend zum Transport)
+- Bugfix: `SchedulerWatchDog::__unserialize()` hat die gemangelten Property-Namen alter, serialisierter
+  Tasks (`"\0*\0schedulerOptions"`) nicht erkannt, die Optionen gingen bei der Migration verloren.
+
+**Upgrade auf TYPO3 14:** `typo3 extension:setup` (oder Database Analyzer) und den Scheduler-Upgrade-Wizard ausführen.
+
+### `GeneralUtility::getIndpEnv()` (Deprecation #109551)
+
+Ersetzt durch `NormalizedParams` des aktuellen Requests über neue Helfer in `Typo3Utility`:
+`getNormalizedParams()`, `getRequestUrl()` (vorher `TYPO3_REQUEST_URL`) und
+`getRequestHostOnly()` (vorher `TYPO3_HOST_ONLY`). Ohne Request (CLI) wird `''` geliefert.
+
+### `ext_tables.php` (Deprecation #109438)
+
+Die (leere) Datei wurde entfernt.
+
+### `ext_emconf.php` (Deprecation #108345)
+
+Version (`extra.typo3/cms.version`) und `extra.typo3/cms.Package.providesPackages`
+(`graylog2/gelf-php`) stehen jetzt in `composer.json`. `ext_emconf.php` bleibt nur für TER/Tailor erhalten.
+
+### Backend-Modul
+
+- `parent` bleibt `web`: TYPO3 14 bildet den Alias ohne Deprecation auf `content` ab;
+  nicht registrierter `iconIdentifier` entfernt
+- Bugfix: Request-Parameter (`severity`, `runId`, `currentPage`, `itemsPerPage`) werden auf `int`
+  gecastet; vorher `TypeError` unter `strict_types` beim Filtern und Blättern
+
+### Entfernte Altlasten
+
+- `Configuration/page.tsconfig` (Konfiguration des nicht mehr existierenden Moduls `DevlogModule`)
+- `Resources/Private/Templates/BackendModule_11.html`, `Resources/Private/Layouts/Default.html` (TYPO3 11)
+- `VersionUtility::isTypo3Version12OrLower()` (ungenutzt), ersetzt durch `isTypo3Version14OrHigher()`
+- `SeverityUtility`: typisierte Klassenkonstanten (erst ab PHP 8.3) wieder untypisiert, da PHP 8.2 unterstützt wird
+- `DataConverterUtility::encode()` liefert strikt `string` (`JSON_THROW_ON_ERROR`)
+
+### Werkzeuge und Tests
+
+- `rector.php`: `UP_TO_TYPO3_13` (niedrigste unterstützte Version), PHP 8.2, `.Build`/`var` ausgeschlossen, deprecated Rule entfernt
+- `.php-cs-fixer.php`: `var` ausgeschlossen; `phpcompatibility`: `testVersion 8.2-`
+- Composer: veraltete Optionen (`app-dir`, `cms-package-dir`) entfernt, Abhängigkeiten auf TYPO3-14-Stand
+- CI: PHP 8.2–8.5, Unit-Tests gegen TYPO3 `^13.4` und `^14.3`
+- Tests für PHPUnit 13 ohne Deprecations/Notices (`any()` und Mocks ohne Erwartungen durch Stubs ersetzt),
+  `TransientMemoryBackend` je nach Version mit/ohne Kontext-Argument, neue Tests für die nativen Task-Parameter,
+  die Validierung, den Kopier-Hook und `Typo3Utility`

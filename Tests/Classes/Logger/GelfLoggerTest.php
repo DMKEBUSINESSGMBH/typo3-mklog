@@ -28,6 +28,7 @@
 namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Utility\RateLimiterUtility;
+use DMK\Mklog\Utility\VersionUtility;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use TYPO3\CMS\Core\Cache\Backend\TransientMemoryBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -78,8 +79,6 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     public function testWriteLog(): void
     {
-        $this->getGelfLoggerMock();
-
         self::markTestIncomplete();
     }
 
@@ -90,20 +89,7 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
      */
     protected function getGelfLoggerMock(array $methods = [])
     {
-        $logger = $this->getMock(
-            GelfLogger::class,
-            array_merge(
-                ['getDevlogEntryRepository'],
-                $methods
-            )
-        );
-
-        $logger
-            ->expects(self::any())
-            ->method('getDevlogEntryRepository')
-            ->willReturn($this->getDevlogEntryRepository());
-
-        return $logger;
+        return $this->getMock(GelfLogger::class, $methods);
     }
 
     /**
@@ -142,7 +128,9 @@ class GelfLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                 $extraData
             );
 
-        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
+        // @todo remove the context argument when support for TYPO3 13 is dropped
+        $backend = VersionUtility::isTypo3Version14OrHigher() ? new TransientMemoryBackend() : new TransientMemoryBackend('Testing');
+        $cache = new VariableFrontend('ratelimiter', $backend);
         $cacheManager = new CacheManager();
         $cacheManager->registerCache($cache);
 

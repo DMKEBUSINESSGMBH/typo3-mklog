@@ -50,9 +50,11 @@ namespace DMK\Mklog\Logger;
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+use DMK\Mklog\Domain\Repository\DevlogEntryRepository;
 use DMK\Mklog\Factory;
 use DMK\Mklog\Hooks\DataHandler;
 use DMK\Mklog\Tests\BaseTestCase;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Tx_Mklib_Database_ConnectionTest.
@@ -67,94 +69,58 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandCopyButTableNotPages(): void
+    public function testProcessCmdmapPostProcessDeletesLogEntriesOfCopiedPage(): void
     {
-        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
-
-        $dataHandler->expects(self::never())
-            ->method('removeLogTablesFromTablesThatCanBeCopied');
-
-        $dataHandler->processCmdmap_preProcess('copy', 'pages_not', 123, [], null);
-    }
-
-    /**
-     * @group unit
-     */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyButTablePages(): void
-    {
-        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
-
-        $dataHandler->expects(self::never())
-            ->method('removeLogTablesFromTablesThatCanBeCopied');
-
-        $dataHandler->processCmdmap_preProcess('not_copy', 'pages', 123, [], null);
-    }
-
-    /**
-     * @group unit
-     */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedNotWhenCommandNotCopyAndTableNotPages(): void
-    {
-        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
-
-        $dataHandler->expects(self::never())
-            ->method('removeLogTablesFromTablesThatCanBeCopied');
-
-        $dataHandler->processCmdmap_preProcess('not_copy', 'pages_not', 123, [], null);
-    }
-
-    /**
-     * @group unit
-     */
-    public function testProcessCmdmapPreProcessCallsRemoveLogTablesFromTablesThatCanBeCopiedWhenCommandCopyAndTablePages(): void
-    {
-        $dataHandler = $this->getMock(DataHandler::class, ['removeLogTablesFromTablesThatCanBeCopied']);
-
-        $dataHandlerParent = 'test';
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
         $dataHandler->expects(self::once())
-            ->method('removeLogTablesFromTablesThatCanBeCopied')
-            ->with($dataHandlerParent);
+            ->method('deleteLogEntriesByPageId')
+            ->with(456);
 
-        $dataHandler->processCmdmap_preProcess('copy', 'pages', 123, [], $dataHandlerParent);
+        $dataHandler->processCmdmap_postProcess('copy', 'pages', 123, 1, $this->getCoreDataHandler([123 => 456]));
     }
 
     /**
      * @group unit
      */
-    public function testRemoveLogTablesFromTablesThatCanBeCopied(): void
+    public function testProcessCmdmapPostProcessDeletesNothingWhenCopiedPageIsUnknown(): void
     {
-        $mklogTable = 'tx_mklog_devlog_entry';
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
+        $dataHandler->expects(self::never())
+            ->method('deleteLogEntriesByPageId');
 
-        $dataHandler = Factory::makeInstance(DataHandler::class);
+        $dataHandler->processCmdmap_postProcess('copy', 'pages', 123, 1, $this->getCoreDataHandler([]));
+    }
 
-        $dataHandlerParent = $this->getMock(
-            \TYPO3\CMS\Core\DataHandling\DataHandler::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $GLOBALS['TCA'] = [
-            'pages' => [],
-            'tt_content' => [],
-            'sys_template' => [],
-            $mklogTable => [],
-        ];
+    /**
+     * @group unit
+     */
+    public function testProcessCmdmapPostProcessDeletesNothingWhenCommandNotCopy(): void
+    {
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
+        $dataHandler->expects(self::never())
+            ->method('deleteLogEntriesByPageId');
 
-        $this->callInaccessibleMethod($dataHandler, 'removeLogTablesFromTablesThatCanBeCopied', $dataHandlerParent);
+        $dataHandler->processCmdmap_postProcess('move', 'pages', 123, 1, $this->getCoreDataHandler([123 => 456]));
+    }
 
-        self::assertNotSame('*', $dataHandlerParent->copyWhichTables, 'es sollte nicht per default auf * stehen');
+    /**
+     * @group unit
+     */
+    public function testProcessCmdmapPostProcessDeletesNothingWhenTableNotPages(): void
+    {
+        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
+        $dataHandler->expects(self::never())
+            ->method('deleteLogEntriesByPageId');
 
-        $copyWhichTables = array_flip(explode(',', (string)$dataHandlerParent->copyWhichTables));
-        self::assertTrue(is_array($copyWhichTables), 'das sollte ein array sein');
+        $dataHandler->processCmdmap_postProcess('copy', 'tt_content', 123, 1, $this->getCoreDataHandler([123 => 456]));
+    }
 
-        self::assertGreaterThan(2, count($copyWhichTables), 'es sollte mehr als eine Tabelle enthalten sein');
+    private function getCoreDataHandler(array $pageMapping): \TYPO3\CMS\Core\DataHandling\DataHandler
+    {
+        $dataHandler = self::createStub(\TYPO3\CMS\Core\DataHandling\DataHandler::class);
+        $dataHandler->copyMappingArray = ['pages' => $pageMapping];
 
-        self::assertArrayNotHasKey(
-            $mklogTable,
-            $copyWhichTables,
-            'mklog Tabelle noch enthalten'
-        );
+        return $dataHandler;
     }
 
     /**
@@ -213,14 +179,14 @@ class DataHandlerTest extends BaseTestCase
     /**
      * @group unit
      */
-    public function testdeleteLogEntriesByPageId(): void
+    public function testDeleteLogEntriesByPageId(): void
     {
-        $dataHandler = $this->getMock(DataHandler::class, ['deleteLogEntriesByPageId']);
-
-        $dataHandler->expects(self::once())
-            ->method('deleteLogEntriesByPageId')
+        $repository = $this->getMock(DevlogEntryRepository::class, ['deletyByPid']);
+        $repository->expects(self::once())
+            ->method('deletyByPid')
             ->with(123);
+        GeneralUtility::addInstance(DevlogEntryRepository::class, $repository);
 
-        $this->callInaccessibleMethod($dataHandler, 'deleteLogEntriesByPageId', 123);
+        $this->callInaccessibleMethod(Factory::makeInstance(DataHandler::class), 'deleteLogEntriesByPageId', 123);
     }
 }

@@ -43,12 +43,10 @@ class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
      * Converts data into a string.
-     *
-     * @return string
      */
-    public function encode($data)
+    public function encode($data): string
     {
-        return json_encode($data, JSON_FORCE_OBJECT);
+        return json_encode($data, JSON_FORCE_OBJECT | JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -69,6 +67,6 @@ class DataConverterUtility implements \TYPO3\CMS\Core\SingletonInterface
 
         $data = json_decode($data);
 
-        return (array)$data;
+        return (array) $data;
     }
 }

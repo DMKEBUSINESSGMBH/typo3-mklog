@@ -53,9 +53,7 @@ final class Factory
     {
         static $storage = null;
 
-        if ($storage === null) {
-            $storage = StorageObject::getInstance();
-        }
+        $storage ??= StorageObject::getInstance();
 
         return $storage;
     }

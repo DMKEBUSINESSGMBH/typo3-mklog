@@ -33,14 +33,13 @@ return [
         'position' => ['bottom' => '*'],
         'access' => 'user',
         'path' => '/module/web/MklogList',
-        'iconIdentifier' => 'extension-mklog',
         'icon' => 'EXT:mklog/Resources/Public/Icons/Extension.png',
         'labels' => 'LLL:EXT:mklog/Resources/Private/Language/Backend.xlf',
         'extensionName' => 'mklog',
         'aliases' => ['web_MklogBackend'],
         'routes' => [
             '_default' => [
-                'target' => DMK\Mklog\Controller\BackendModuleController::class . '::handleRequest',
+                'target' => DMK\Mklog\Controller\BackendModuleController::class.'::handleRequest',
             ],
         ],
     ],

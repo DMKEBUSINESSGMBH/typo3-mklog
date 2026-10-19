@@ -29,7 +29,7 @@ declare(strict_types=1);
 
 namespace DMK\Mklog\Utility;
 
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Core\Information\Typo3Version;
 
 /**
  * MK Log Version Utility.
@@ -40,11 +40,13 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
  */
 final class VersionUtility
 {
-    public static function isTypo3Version12OrLower(): bool
+    /**
+     * TYPO3 14 supports native (TCA based) scheduler tasks, TYPO3 13 needs the SC_OPTIONS registration.
+     *
+     * @todo remove when support for TYPO3 13 is dropped
+     */
+    public static function isTypo3Version14OrHigher(): bool
     {
-        return VersionNumberUtility::convertVersionNumberToInteger(
-            VersionNumberUtility::getNumericTypo3Version()
-        ) <= 13000000
-        ;
+        return (new Typo3Version())->getMajorVersion() >= 14;
     }
 }

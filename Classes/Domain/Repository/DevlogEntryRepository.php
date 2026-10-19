@@ -130,7 +130,7 @@ class DevlogEntryRepository
 
             // delete all entries, older than the last exeution date!
             $queryBuilder = $this->createQueryBuilder();
-            $query = $queryBuilder->delete($this->getTableName())->where('run_id < ' . $lastExec);
+            $query = $queryBuilder->delete($this->getTableName())->where('run_id < '.$lastExec);
             $query->executeStatement();
         }
     }
@@ -179,25 +179,25 @@ class DevlogEntryRepository
             );
         }
 
-        if ($demand->getRunId() !== 0) {
-            $queryBuilder->andWhere($queryBuilder->expr()->eq('run_id', (int)($demand->getRunId())));
+        if (0 !== $demand->getRunId()) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('run_id', (int) $demand->getRunId()));
         }
 
-        if ($demand->getTerm() !== '' && $demand->getTerm() !== '0') {
+        if ('' !== $demand->getTerm() && '0' !== $demand->getTerm()) {
             $fields = ['message', 'extra_data', 'host', 'ext_key'];
             $termExpressions = [];
             foreach ($fields as $field) {
                 $termExpressions[] = $queryBuilder->expr()->like(
                     $field,
-                    $queryBuilder->quote('%' . $demand->getTerm() . '%')
+                    $queryBuilder->quote('%'.$demand->getTerm().'%')
                 );
             }
 
             $queryBuilder->andWhere($queryBuilder->expr()->or(...$termExpressions));
         }
 
-        if ($demand->getPid() !== 0) {
-            $queryBuilder->andWhere($queryBuilder->expr()->eq('pid', (int)($demand->getPid())));
+        if (0 !== $demand->getPid()) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('pid', (int) $demand->getPid()));
         }
 
         if ($demand->hasMaxResults()) {
@@ -216,7 +216,7 @@ class DevlogEntryRepository
     public function deletyByPid(int $pid): void
     {
         $queryBuilder = $this->createQueryBuilder();
-        $query = $queryBuilder->delete($this->getTableName())->where('pid = ' . $pid);
+        $query = $queryBuilder->delete($this->getTableName())->where('pid = '.$pid);
         $query->executeStatement();
     }
 
@@ -233,7 +233,7 @@ class DevlogEntryRepository
             )
         );
 
-        if ($model->getUid() === 0) {
+        if (0 === $model->getUid()) {
             $this->persistNew($model);
 
             return;
@@ -261,7 +261,7 @@ class DevlogEntryRepository
     {
         $connection = $this->getConnection();
         $query = $connection->createQueryBuilder()->insert($this->getTableName())->values($model->getRecord());
-        if ($query->executeStatement() !== 0) {
+        if (0 !== $query->executeStatement()) {
             $model->setUid($connection->lastInsertId());
         }
     }
@@ -272,7 +272,7 @@ class DevlogEntryRepository
     private function quoteInArray(array $list): array
     {
         return array_map(
-            fn($entry): string => "'" . $entry . "'",
+            fn ($entry): string => "'".$entry."'",
             $list
         );
     }
@@ -318,13 +318,13 @@ class DevlogEntryRepository
         array $items,
         string $field,
     ): array {
-        if ($items === []) {
+        if ([] === $items) {
             return [];
         }
 
         $items = array_merge_recursive(...$items);
 
-        if ($items === []) {
+        if ([] === $items) {
             return [];
         }
 

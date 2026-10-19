@@ -44,7 +44,9 @@ class DevlogEntryMapper
     /**
      * DevlogEntryMapper constructor.
      */
-    public function __construct(protected DevlogEntry $entry) {}
+    public function __construct(protected DevlogEntry $entry)
+    {
+    }
 
     public function getEntry(): DevlogEntry
     {

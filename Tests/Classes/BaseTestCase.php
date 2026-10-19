@@ -120,21 +120,6 @@ abstract class BaseTestCase extends UnitTestCase
     }
 
     /**
-     * Returns the database connection.
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Tx_Rnbase_Database_Connection
-     */
-    protected function getDatabaseConnection()
-    {
-        \tx_rnbase::load('Tx_Rnbase_Database_Connection');
-
-        return $this->getMock(
-            'Tx_Rnbase_Database_Connection',
-            get_class_methods('Tx_Rnbase_Database_Connection')
-        );
-    }
-
-    /**
      * Returns a devlog entry model mock.
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|DevlogEntry
@@ -157,28 +142,19 @@ abstract class BaseTestCase extends UnitTestCase
      */
     protected function getDevlogEntryRepository()
     {
-        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
-            ->disableOriginalConstructor();
-        $connection = $this->getMockBuilder(Connection::class)
-            ->disableOriginalConstructor();
-
         $repo = $this->getMock(
             \DMK\Mklog\Domain\Repository\DevlogEntryRepository::class,
             ['countAll', 'persist', 'createQueryBuilder', 'getConnection', 'createNewModel']
         );
-
         $repo
-            ->expects(self::any())
             ->method('createNewModel')
-            ->willReturn(Factory::makeInstance(DevlogEntry::class));
+            ->willReturnCallback(static fn (): mixed => Factory::makeInstance(DevlogEntry::class));
         $repo
-            ->expects(self::any())
             ->method('createQueryBuilder')
-            ->willReturn($queryBuilder->getMock());
+            ->willReturn(self::createStub(QueryBuilder::class));
         $repo
-            ->expects(self::any())
             ->method('getConnection')
-            ->willReturn($connection->getMock());
+            ->willReturn(self::createStub(Connection::class));
 
         return $repo;
     }
@@ -218,15 +194,9 @@ abstract class BaseTestCase extends UnitTestCase
     }
 
     /**
-     * Wrapper for deprecated getMock method.
+     * Wrapper for the removed getMock method.
      *
      * Taken From nimut/testing-framework
-     *
-     * @param bool $callOriginalConstructor
-     * @param bool $callOriginalClone
-     * @param bool $callAutoload
-     * @param bool $cloneArguments
-     * @param bool $callOriginalMethods
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
@@ -235,39 +205,22 @@ abstract class BaseTestCase extends UnitTestCase
         array $methods = [],
         array $arguments = [],
         string $mockClassName = '',
-        $callOriginalConstructor = true,
-        $callOriginalClone = true,
-        $callAutoload = true,
-        $cloneArguments = false,
-        $callOriginalMethods = false,
-        $proxyTarget = null,
+        bool $callOriginalConstructor = true,
+        bool $callOriginalClone = true,
     ) {
         $mockBuilder = $this->getMockBuilder($originalClassName)
             ->onlyMethods($methods)
-            ->setConstructorArgs($arguments)
-            ->setMockClassName($mockClassName);
+            ->setConstructorArgs($arguments);
+        if ('' !== $mockClassName) {
+            $mockBuilder->setMockClassName($mockClassName);
+        }
+
         if (!$callOriginalConstructor) {
             $mockBuilder->disableOriginalConstructor();
         }
 
         if (!$callOriginalClone) {
             $mockBuilder->disableOriginalClone();
-        }
-
-        if (!$callAutoload) {
-            $mockBuilder->disableAutoload();
-        }
-
-        if ($cloneArguments) {
-            $mockBuilder->enableArgumentCloning();
-        }
-
-        if ($callOriginalMethods) {
-            $mockBuilder->enableProxyingToOriginalMethods();
-        }
-
-        if ($proxyTarget) {
-            $mockBuilder->setProxyTarget($proxyTarget);
         }
 
         return $mockBuilder->getMock();

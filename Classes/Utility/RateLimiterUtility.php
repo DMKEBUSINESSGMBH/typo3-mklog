@@ -57,7 +57,8 @@ class RateLimiterUtility
     public function __construct(
         private readonly ?RateLimiterFactory $perMessageLimiterFactory = null,
         private readonly ?RateLimiterFactory $allMessagesLimiterFactory = null,
-    ) {}
+    ) {
+    }
 
     public function isRateLimitExceeded(LogRecord $record): bool
     {
@@ -70,7 +71,7 @@ class RateLimiterUtility
 
     protected function getPerMessageRateLimiter(LogRecord $record): ?LimiterInterface
     {
-        return $this->perMessageLimiterFactory?->create($record->getMessage() . $record->getComponent() . $record->getLevel()) ?? null;
+        return $this->perMessageLimiterFactory?->create($record->getMessage().$record->getComponent().$record->getLevel()) ?? null;
     }
 
     protected function getGlobalRateLimiter(): ?LimiterInterface

@@ -52,6 +52,11 @@ namespace DMK\Mklog\WatchDog;
 
 use DMK\Mklog\Domain\Model\DevlogEntryDemand;
 use DMK\Mklog\Domain\Model\GenericArrayObject;
+use DMK\Mklog\Utility\SeverityUtility;
+use DMK\Mklog\WatchDog\Transport\Gelf\HttpGelf;
+use DMK\Mklog\WatchDog\Transport\Gelf\UdpGelf;
+use DMK\Mklog\WatchDog\Transport\MailTransport;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Scheduler WatchDog test.
@@ -93,7 +98,6 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
             ->method('findMessages')
             ->willReturn([]);
         $task
-            ->expects(self::any())
             ->method('getTransport')
             ->willReturn($transport);
 
@@ -143,6 +147,135 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
     }
 
     /**
+     * @group unit
+     */
+    public function testGetTaskParametersReturnsDefaultsForNewTask(): void
+    {
+        self::assertSame(
+            [
+                'tx_mklog_watchdog_transport' => '',
+                'tx_mklog_watchdog_credentials' => '',
+                'tx_mklog_watchdog_severity' => SeverityUtility::DEBUG,
+                'tx_mklog_watchdog_message_limit' => 100,
+                'tx_mklog_watchdog_extension_whitelist' => '',
+                'tx_mklog_watchdog_extension_blacklist' => '',
+                'tx_mklog_watchdog_mail_subject' => '',
+            ],
+            $this->createTask()->getTaskParameters()
+        );
+    }
+
+    /**
+     * @group unit
+     */
+    public function testSetTaskParametersFromNativeFields(): void
+    {
+        $task = $this->createTask();
+        $task->setTaskParameters([
+            'tx_mklog_watchdog_transport' => MailTransport::class,
+            'tx_mklog_watchdog_credentials' => 'john@dohe.org',
+            // database values are strings
+            'tx_mklog_watchdog_severity' => '3',
+            'tx_mklog_watchdog_message_limit' => '25',
+            'tx_mklog_watchdog_extension_whitelist' => 'mklog',
+            'tx_mklog_watchdog_extension_blacklist' => 'core',
+            'tx_mklog_watchdog_mail_subject' => 'Errors on %s',
+        ]);
+
+        $options = $task->getOptions();
+        self::assertSame(MailTransport::class, $options->getTransport());
+        self::assertSame('john@dohe.org', $options->getCredentials());
+        self::assertSame(3, $options->getSeverity());
+        self::assertSame(25, $options->getMessageLimit());
+        self::assertSame('mklog', $options->getExtensionWhitelist());
+        self::assertSame('core', $options->getExtensionBlacklist());
+        self::assertSame('Errors on %s', $options->getMailSubject());
+    }
+
+    /**
+     * Tasks created before the native task types are stored as serialized object.
+     *
+     * @group unit
+     */
+    public function testLegacySerializedTaskIsMappedToNativeFields(): void
+    {
+        $task = $this->createTask();
+        $task->getOptions()
+            ->setTransport(UdpGelf::class)
+            ->setCredentials('127.0.0.1:12201')
+            ->setSeverity(4)
+            ->setMessageLimit(50);
+
+        $migratedTask = unserialize(serialize($task));
+
+        self::assertInstanceOf(SchedulerWatchDog::class, $migratedTask);
+        $parameters = $migratedTask->getTaskParameters();
+        self::assertSame(UdpGelf::class, $parameters['tx_mklog_watchdog_transport']);
+        self::assertSame('127.0.0.1:12201', $parameters['tx_mklog_watchdog_credentials']);
+        self::assertSame(4, $parameters['tx_mklog_watchdog_severity']);
+        self::assertSame(50, $parameters['tx_mklog_watchdog_message_limit']);
+    }
+
+    /**
+     * @group unit
+     */
+    public function testSetTaskParametersFromLegacyOptions(): void
+    {
+        $task = $this->createTask();
+        $task->setTaskParameters([
+            'schedulerOptions' => [
+                'transport' => HttpGelf::class,
+                'credentials' => 'https://graylog.local/gelf',
+                'severity' => 2,
+            ],
+        ]);
+
+        self::assertSame(HttpGelf::class, $task->getOptions()->getTransport());
+        self::assertSame('https://graylog.local/gelf', $task->getOptions()->getCredentials());
+        self::assertSame(2, $task->getOptions()->getSeverity());
+    }
+
+    /**
+     * @return array<string, array{string, string, bool}>
+     */
+    public static function validateTaskParametersDataProvider(): array
+    {
+        return [
+            'mail address' => [MailTransport::class, 'john@dohe.org', true],
+            'mail address with name' => [MailTransport::class, 'John Dohe<john@dohe.org>', true],
+            'invalid mail address' => [MailTransport::class, 'john', false],
+            'udp host and port' => [UdpGelf::class, '127.0.0.1:12201', true],
+            'udp without port' => [UdpGelf::class, '127.0.0.1', false],
+            'http url' => [HttpGelf::class, 'https://admin:admin@127.0.0.1:2345/gelf', true],
+            'http without url' => [HttpGelf::class, '127.0.0.1:2345', false],
+            'empty credentials' => [MailTransport::class, ' ', false],
+        ];
+    }
+
+    /**
+     * @group unit
+     */
+    #[DataProvider('validateTaskParametersDataProvider')]
+    public function testValidateTaskParameters(string $transport, string $credentials, bool $expected): void
+    {
+        self::assertSame(
+            $expected,
+            $this->createTask()->validateTaskParameters([
+                'tx_mklog_watchdog_transport' => $transport,
+                'tx_mklog_watchdog_credentials' => $credentials,
+            ])
+        );
+    }
+
+    /**
+     * Creates the task without constructor, as the TYPO3 13 constructor requires a complete scheduler setup.
+     */
+    private function createTask(): SchedulerWatchDog
+    {
+        return (new \ReflectionClass(SchedulerWatchDog::class))->newInstanceWithoutConstructor();
+    }
+
+    /**
      * Returns the logger mock.
      *
      * @return PHPUnit_Framework_MockObject_MockObject|SchedulerWatchDog
@@ -150,14 +283,7 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
     protected function getSchedulerMock(
         array $methods = [],
     ) {
-        $logger = $this->getMock(
-            \TYPO3\CMS\Core\Log\Logger::class,
-            [],
-            ['MK Log WatchDog'],
-            '',
-            true,
-            false
-        );
+        $logger = self::createStub(\TYPO3\CMS\Core\Log\Logger::class);
         $task = $this->getMock(
             SchedulerWatchDog::class,
             array_merge(
@@ -171,7 +297,6 @@ class SchedulerWatchDogTest extends \DMK\Mklog\Tests\BaseTestCase
         );
 
         $task
-            ->expects(self::any())
             ->method('getLogger')
             ->willReturn($logger);
 

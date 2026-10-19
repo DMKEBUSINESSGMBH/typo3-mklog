@@ -44,7 +44,7 @@ class LogMessageUtility
     {
         $config = Factory::getConfigUtility();
         foreach ($config->getExcludedLogMessageRegularExpressions() as $regex) {
-            if (@preg_match($regex, $logMessage) === 1) {
+            if (1 === @preg_match($regex, $logMessage)) {
                 return true;
             }
         }

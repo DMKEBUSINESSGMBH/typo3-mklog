@@ -133,7 +133,7 @@ class DevlogLogger extends AbstractLogger
     public function devLogHook(array $params): void
     {
         // map the old log levels to the new one
-        switch ((int)$params['severity']) {
+        switch ((int) $params['severity']) {
             case -1:
                 $params['severity'] = SeverityUtility::DEBUG;
                 break;

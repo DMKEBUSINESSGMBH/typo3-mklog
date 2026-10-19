@@ -87,7 +87,11 @@ class MailTransportTest extends BaseTestCase
             ->with('DevLog WatchDog on site test site')
             ->willReturnSelf();
         GeneralUtility::addInstance(MailMessage::class, $mailUtility);
-        GeneralUtility::addInstance(Mailer::class, $this->createMock(Mailer::class));
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects(self::once())
+            ->method('send')
+            ->with($mailUtility);
+        GeneralUtility::addInstance(Mailer::class, $mailer);
 
         $mailTransport = Factory::makeInstance(MailTransport::class);
         $mailTransport->initialize(
@@ -114,7 +118,11 @@ class MailTransportTest extends BaseTestCase
             ->with('test subject on test site')
             ->willReturnSelf();
         GeneralUtility::addInstance(MailMessage::class, $mailUtility);
-        GeneralUtility::addInstance(Mailer::class, $this->createMock(Mailer::class));
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects(self::once())
+            ->method('send')
+            ->with($mailUtility);
+        GeneralUtility::addInstance(Mailer::class, $mailer);
 
         $mailTransport = GeneralUtility::makeInstance(MailTransport::class);
         $mailTransport->initialize(

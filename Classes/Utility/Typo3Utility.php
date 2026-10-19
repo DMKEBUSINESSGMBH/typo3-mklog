@@ -29,7 +29,13 @@ declare(strict_types=1);
 
 namespace DMK\Mklog\Utility;
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 /**
@@ -67,7 +73,7 @@ final class Typo3Utility
             return 0;
         }
 
-        return (int)($feuser->user['uid'] ?? 0);
+        return (int) ($feuser->user['uid'] ?? 0);
     }
 
     /**
@@ -91,6 +97,54 @@ final class Typo3Utility
             return 0;
         }
 
-        return (int)($beuser->user['uid'] ?? 0);
+        return (int) ($beuser->user['uid'] ?? 0);
+    }
+
+    /**
+     * Adds a flash message to the default queue.
+     */
+    public static function addFlashMessage(
+        string $message,
+        string $title,
+        ContextualFeedbackSeverity $severity,
+    ): void {
+        GeneralUtility::makeInstance(FlashMessageService::class)
+            ->getMessageQueueByIdentifier()
+            ->enqueue(
+                GeneralUtility::makeInstance(FlashMessage::class, $message, $title, $severity)
+            );
+    }
+
+    /**
+     * Get the normalized params of the current request, if available.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getNormalizedParams(): ?NormalizedParams
+    {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if (!$request instanceof ServerRequestInterface) {
+            return null;
+        }
+
+        $normalizedParams = $request->getAttribute('normalizedParams');
+
+        return $normalizedParams instanceof NormalizedParams ? $normalizedParams : null;
+    }
+
+    /**
+     * Get the url of the current request (former TYPO3_REQUEST_URL).
+     */
+    public static function getRequestUrl(): string
+    {
+        return self::getNormalizedParams()?->getRequestUrl() ?? '';
+    }
+
+    /**
+     * Get the host of the current request without port (former TYPO3_HOST_ONLY).
+     */
+    public static function getRequestHostOnly(): string
+    {
+        return self::getNormalizedParams()?->getRequestHostOnly() ?? '';
     }
 }

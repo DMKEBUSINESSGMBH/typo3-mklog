@@ -73,11 +73,11 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $lockFilesFolder = Environment::getVarPath() . '/lock/';
+        $lockFilesFolder = Environment::getVarPath().'/lock/';
         GeneralUtility::mkdir_deep($lockFilesFolder);
-        $this->lockFile = $lockFilesFolder . 'mklog_exception_during_logging.lock';
+        $this->lockFile = $lockFilesFolder.'mklog_exception_during_logging.lock';
 
-        $this->abstractLogger = new class () extends AbstractLogger {
+        $this->abstractLogger = new class extends AbstractLogger {
             public function writeLog(\TYPO3\CMS\Core\Log\LogRecord $record): static
             {
                 return $this;
@@ -88,7 +88,7 @@ class AbstractLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        GeneralUtility::rmdir(Environment::getVarPath() . '/lock/', true);
+        GeneralUtility::rmdir(Environment::getVarPath().'/lock/', true);
     }
 
     /**

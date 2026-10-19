@@ -55,11 +55,12 @@ class BackendModuleController
     public function __construct(
         protected DevlogEntryRepository $devlogEntryRepository,
         protected ModuleTemplateFactory $moduleTemplateFactory,
-    ) {}
+    ) {
+    }
 
     public function handleRequest(ServerRequestInterface $request): ResponseInterface
     {
-        $pageId = (int)($request->getQueryParams()['id'] ?? $request->getParsedBody()['id'] ?? 0);
+        $pageId = (int) ($request->getQueryParams()['id'] ?? $request->getParsedBody()['id'] ?? 0);
         $this->view = $this->getView($request);
 
         $this->view->assign('formData', $request->getParsedBody());
@@ -83,7 +84,7 @@ class BackendModuleController
     {
         $items = ['' => ''];
         foreach (\DMK\Mklog\Utility\SeverityUtility::getItems() as $id => $name) {
-            $items[(string)$id] = $id . ' - ' . ucfirst(strtolower((string)$name));
+            $items[(string) $id] = $id.' - '.ucfirst(strtolower((string) $name));
         }
 
         $this->view->assign('severitySelectOptions', $items);
@@ -114,34 +115,34 @@ class BackendModuleController
 
         $severity = $parsedBody['severity'] ?? $queryParams['severity'] ?? null;
         if (MathUtility::canBeInterpretedAsInteger($severity)) {
-            $demand->setSeverity($severity);
+            $demand->setSeverity((int) $severity);
         }
 
         $extension = $parsedBody['extension'] ?? $queryParams['extension'] ?? null;
         if ($extension) {
-            $demand->setExtensionWhitelist([$extension]);
+            $demand->setExtensionWhitelist([(string) $extension]);
         }
 
         $runId = $parsedBody['runId'] ?? $queryParams['runId'] ?? null;
-        if ($runId) {
-            $demand->setRunId($runId);
+        if (MathUtility::canBeInterpretedAsInteger($runId)) {
+            $demand->setRunId((int) $runId);
         }
 
         $term = $parsedBody['term'] ?? $queryParams['term'] ?? null;
         if ($term) {
-            $demand->setTerm($term);
+            $demand->setTerm((string) $term);
         }
 
         $pageId = $parsedBody['id'] ?? $queryParams['id'] ?? 0;
         if ($pageId) {
-            $demand->setPid((int)$pageId);
+            $demand->setPid((int) $pageId);
         }
 
         $results = $this->devlogEntryRepository->findByDemand($demand);
         $this->view->assign('results', $results);
 
-        $currentPage = $parsedBody['currentPage'] ?? $queryParams['currentPage'] ?? 1;
-        $itemsPerPage = $parsedBody['itemsPerPage'] ?? $queryParams['itemsPerPage'] ?? 10;
+        $currentPage = max(1, (int) ($parsedBody['currentPage'] ?? $queryParams['currentPage'] ?? 1));
+        $itemsPerPage = max(1, (int) ($parsedBody['itemsPerPage'] ?? $queryParams['itemsPerPage'] ?? 10));
         $this->assignItemPageOptions();
         $this->assignPagination($results, $currentPage, $itemsPerPage);
 
@@ -150,7 +151,7 @@ class BackendModuleController
         ]);
     }
 
-    protected function assignPagination(array $results, int $currentPage = 1, $itemsPerPage = 10): void
+    protected function assignPagination(array $results, int $currentPage = 1, int $itemsPerPage = 10): void
     {
         $paginator = new ArrayPaginator(
             $results,

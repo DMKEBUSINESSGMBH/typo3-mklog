@@ -5,5 +5,5 @@ parameters:
     paths:
         - %currentWorkingDirectory%/Classes
         - %currentWorkingDirectory%/ext_localconf.php
-        - %currentWorkingDirectory%/ext_tables.php
+        - %currentWorkingDirectory%/Configuration
         - %currentWorkingDirectory%/ext_emconf.php

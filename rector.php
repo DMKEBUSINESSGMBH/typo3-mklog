@@ -32,7 +32,6 @@ use Rector\Config\RectorConfig;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
-use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\ValueObject\PhpVersion;
 use Ssch\TYPO3Rector\CodeQuality\General\ConvertImplicitVariablesToExplicitGlobalsRector;
 use Ssch\TYPO3Rector\CodeQuality\General\ExtEmConfRector;
@@ -42,10 +41,10 @@ use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([__DIR__]);
 
-    $rectorConfig->phpVersion(PhpVersion::PHP_81);
+    $rectorConfig->phpVersion(PhpVersion::PHP_82);
 
     $rectorConfig->sets([
-        LevelSetList::UP_TO_PHP_84,
+        LevelSetList::UP_TO_PHP_82,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         SetList::DEAD_CODE,
@@ -57,7 +56,6 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
-    $rectorConfig->rule(DisallowedEmptyRuleFixerRector::class);
     $rectorConfig->ruleWithConfiguration(
         ExtEmConfRector::class,
         [ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => []]
@@ -65,18 +63,21 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(ConvertImplicitVariablesToExplicitGlobalsRector::class);
 
     $rectorConfig->phpstanConfig(Typo3Option::PHPSTAN_FOR_RECTOR_PATH);
-    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');
+    $rectorConfig->phpstanConfig(__DIR__.'/phpstan.neon');
 
     $rectorConfig->skip([
+        __DIR__.'/.Build',
+        __DIR__.'/var',
+
         // @see https://github.com/sabbelasichon/typo3-rector/issues/2536
-        __DIR__ . '/Configuration/ExtensionBuilder/*',
+        __DIR__.'/Configuration/ExtensionBuilder/*',
 
         // no namespace imports for these files:
         NameImportingPostRector::class => [
             'ext_localconf.php',
             'ext_tables.php',
-            __DIR__ . '/Configuration/*.php',
-            __DIR__ . '/Configuration/**/*.php',
+            __DIR__.'/Configuration/*.php',
+            __DIR__.'/Configuration/**/*.php',
         ],
     ]);
 };

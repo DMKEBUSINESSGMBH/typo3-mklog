@@ -35,19 +35,22 @@ call_user_func(
     function (): void {
         $config = DMK\Mklog\Factory::getConfigUtility();
 
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][DMK\Mklog\WatchDog\SchedulerWatchDog::class] = [
-            'extension' => 'mklog',
-            'title' => 'Watchdog',
-            'description' => '',
-            'additionalFields' => DMK\Mklog\WatchDog\SchedulerFieldProviderWatchDog::class,
-        ];
-
-        // cleanup task
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][DMK\Mklog\Task\CleanupLogTableTask::class] = [
-            'extension' => 'mklog',
-            'title' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_name',
-            'description' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_description',
-        ];
+        // TYPO3 14 registers the scheduler tasks as native task types,
+        // see Configuration/TCA/Overrides/scheduler_*.php
+        // @todo remove the SC_OPTIONS registration when support for TYPO3 13 is dropped
+        if (!DMK\Mklog\Utility\VersionUtility::isTypo3Version14OrHigher()) {
+            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][DMK\Mklog\WatchDog\SchedulerWatchDog::class] = [
+                'extension' => 'mklog',
+                'title' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_watchdog_name',
+                'description' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_watchdog_description',
+                'additionalFields' => DMK\Mklog\WatchDog\SchedulerFieldProviderWatchDog::class,
+            ];
+            $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][DMK\Mklog\Task\CleanupLogTableTask::class] = [
+                'extension' => 'mklog',
+                'title' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_name',
+                'description' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_description',
+            ];
+        }
 
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']['mklog'] = DMK\Mklog\Hooks\DataHandler::class;
 

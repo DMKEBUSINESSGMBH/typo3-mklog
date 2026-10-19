@@ -151,7 +151,12 @@ Currently there are a mail and some gelf transports.
 
 ![](Images/SchedulerWatchDog.png)
 
-The credentials are Transport specific:
+In TYPO3 14 the WatchDog and the cleanup task are native scheduler task types (TCA based). All options are
+regular fields of the scheduler task record and validated by FormEngine. In TYPO3 13 the tasks are
+registered the classic way with an additional field provider. When updating to TYPO3 14 run `typo3 extension:setup` (or the database analyzer) to create the fields and
+the scheduler upgrade wizard to migrate existing tasks.
+
+The credentials are Transport specific and validated on save:
 
  * **Mail Message**  
    The mail to address: `John Dohe<john@dohe.org>`
@@ -161,6 +166,12 @@ The credentials are Transport specific:
    The complete url of the server: `https://admin:admin@127.0.0.1:2345/gelf`
  * **Message limit per run**  
    Max message count to send throu the transport for each scheduler run. Set to `0` to disable the limit.
+ * **Min severity**  
+   Only messages with this or a more important severity are sent.
+ * **Extension whitelist / blacklist**  
+   Comma separated list of extension keys (log components) to include or exclude.
+ * **Custom mail subject**  
+   Only for mail transport. `%s` is replaced by the site name.
 
 
 Additional features
@@ -168,7 +179,7 @@ Additional features
 
 Normally when a page is copied the devlog entries are copied along (depending on the permissions).
 This is annoying and can lead to confusion as those entries are recognized as new even though they aren't.
-That's why this extensions hooks into the copy process and removes the devlog table from the list of tables which can be copied.
+That's why this extensions hooks into the copy process and removes the devlog entries from the copied page right after copying.
 This happens for all admins as well.
 
 When a page is deleted by a non admin TYPO3 checks if the user has permissions to delete all tables on that page.

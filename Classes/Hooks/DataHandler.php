@@ -62,16 +62,16 @@ class DataHandler
      * aber noch nicht weil eben festgestellt wurde dass devlog Einträge drauf liegen. Daher hooken wir uns einen
      * Schritt eher ein.
      *
-     * @param string $command
-     * @param string $table
-     * @param array  $value
+     * @param string                                   $command
+     * @param string                                   $table
+     * @param array                                    $value
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processCmdmap_preProcess($command, $table, int $pageId, $value, $dataHandler): void
     {
-        if ($table === 'pages' && $command === 'delete') {
+        if ('pages' === $table && 'delete' === $command) {
             $this->deleteLogEntriesByPageId($pageId);
         }
     }
@@ -82,19 +82,18 @@ class DataHandler
      * zu entfernen (DataHandler::$copyWhichTables wurde entfernt). Daher werden die Einträge
      * auf der neu kopierten Seite im Post-Process-Hook wieder gelöscht.
      *
-     * @param string $command
-     * @param string $table
-     * @param mixed  $value
+     * @param string                                   $command
+     * @param string                                   $table
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $dataHandler
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processCmdmap_postProcess($command, $table, int $pageId, $value, $dataHandler): void
     {
-        if ($table === 'pages' && $command === 'copy') {
+        if ('pages' === $table && 'copy' === $command) {
             $newPageId = $dataHandler->copyMappingArray['pages'][$pageId] ?? null;
-            if ($newPageId !== null) {
-                $this->deleteLogEntriesByPageId((int)$newPageId);
+            if (null !== $newPageId) {
+                $this->deleteLogEntriesByPageId((int) $newPageId);
             }
         }
     }

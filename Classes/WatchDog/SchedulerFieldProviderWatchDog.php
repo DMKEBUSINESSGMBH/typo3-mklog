@@ -39,6 +39,11 @@ use TYPO3\CMS\Scheduler\Task\AbstractTask;
 /**
  * MK Log watchdog scheduler fields.
  *
+ * Only used in TYPO3 13. TYPO3 14 uses native task fields,
+ * see Configuration/TCA/Overrides/scheduler_mklog_watchdog.php
+ *
+ * @todo remove when support for TYPO3 13 is dropped
+ *
  * @author  Michael Wagner
  * @license http://www.gnu.org/licenses/lgpl.html
  *          GNU Lesser General Public License, version 3 or later
@@ -49,8 +54,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
      * This method is used to define new fields for adding or editing a task
      * In this case, it adds an email field.
      *
-     * @param array               $taskInfo        Reference to the array containing the info used in the add/edit form
-     * @param object              $task            When editing, reference to the current task object. Null when adding.
+     * @param array                     $taskInfo        Reference to the array containing the info used in the add/edit form
+     * @param object                    $task            When editing, reference to the current task object. Null when adding.
      * @param SchedulerModuleController $schedulerModule Reference to the calling object (Scheduler's BE module)
      *
      * @return array Array Containg all the information pertaining to the additional fields
@@ -108,8 +113,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
     protected function getTransportField(
         array &$taskInfo,
     ): array {
-        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_transport]" id="field_mklog_watchdog_transport" ' .
-            'class="form-select" ' .
+        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_transport]" id="field_mklog_watchdog_transport" '.
+            'class="form-select" '.
         '>';
 
         foreach ([
@@ -121,7 +126,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
                 Transport\Gelf\UdpGelf::class => 'Gelf UDP',
             ],
         ] as $group => $subs) {
-            $fieldCode .= '<optgroup label="' . $group . '">';
+            $fieldCode .= '<optgroup label="'.$group.'">';
             foreach ($subs as $key => $label) {
                 $fieldCode .= sprintf(
                     '<option value="%1$s" %3$s />%2$s</option>',
@@ -152,10 +157,10 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
 
     protected function getInputField(string $fieldName, string $label, array &$taskInfo): array
     {
-        $fieldCode = '<input type="text" name="tx_scheduler[mklog_watchdog_' . $fieldName . ']" ' .
-            'id="field_mklog_watchdog_' . $fieldName . '" ' .
-            'value="' . $taskInfo['mklog_watchdog_' . $fieldName] . '" ' .
-            'class="form-control" ' .
+        $fieldCode = '<input type="text" name="tx_scheduler[mklog_watchdog_'.$fieldName.']" '.
+            'id="field_mklog_watchdog_'.$fieldName.'" '.
+            'value="'.$taskInfo['mklog_watchdog_'.$fieldName].'" '.
+            'class="form-control" '.
             'size="50" />';
 
         return [
@@ -171,8 +176,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         array &$taskInfo,
     ): array {
         // Transport
-        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_severity]" id="field_mklog_watchdog_severity" ' .
-            'class="form-select" ' .
+        $fieldCode = '<select name="tx_scheduler[mklog_watchdog_severity]" id="field_mklog_watchdog_severity" '.
+            'class="form-select" '.
         '>';
 
         $levels = \DMK\Mklog\Utility\SeverityUtility::getItems();
@@ -231,7 +236,7 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
     {
         $credentials = &$submittedData['mklog_watchdog_credentials'];
         $credentials = trim($credentials);
-        if ($credentials === '' || $credentials === '0') {
+        if ('' === $credentials || '0' === $credentials) {
             $flashMessage = Factory::makeInstance(
                 \TYPO3\CMS\Core\Messaging\FlashMessage::class,
                 'The credentials for the transport are required!',
@@ -264,8 +269,8 @@ class SchedulerFieldProviderWatchDog implements AdditionalFieldProviderInterface
         $task->getOptions()
             ->setTransport($submittedData['mklog_watchdog_transport'])
             ->setCredentials($submittedData['mklog_watchdog_credentials'])
-            ->setSeverity((int)$submittedData['mklog_watchdog_severity'])
-            ->setMessageLimit((int)$submittedData['mklog_watchdog_messagelimit'])
+            ->setSeverity((int) $submittedData['mklog_watchdog_severity'])
+            ->setMessageLimit((int) $submittedData['mklog_watchdog_messagelimit'])
             ->setExtensionWhitelist($submittedData['mklog_watchdog_extension_whitelist'])
             ->setExtensionBlacklist($submittedData['mklog_watchdog_extension_blacklist'])
             ->setMailSubject($submittedData['mklog_watchdog_mail_subject'])

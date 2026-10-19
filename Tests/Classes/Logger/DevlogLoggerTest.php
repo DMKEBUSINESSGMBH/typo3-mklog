@@ -52,6 +52,7 @@ namespace DMK\Mklog\Logger;
 
 use DMK\Mklog\Domain\Model\DevlogEntry;
 use DMK\Mklog\Utility\RateLimiterUtility;
+use DMK\Mklog\Utility\VersionUtility;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use TYPO3\CMS\Core\Cache\Backend\TransientMemoryBackend;
@@ -84,12 +85,12 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         // activate logging
         \DMK\Mklog\Factory::getStorage()->setLoggingActive(true);
 
-        self::assertFalse(
-            $this->callInaccessibleMethod(
-                $this->getDevlogLoggerMock(),
-                'isLoggingEnabled'
-            )
-        );
+        $logger = $this->getDevlogLoggerMock();
+        $logger->expects(self::once())
+            ->method('isDatabaseConnected')
+            ->willReturn(false);
+
+        self::assertFalse($this->callInaccessibleMethod($logger, 'isLoggingEnabled'));
     }
 
     /**
@@ -147,7 +148,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger = $this->getDevlogLoggerMock(['isLoggingEnabled']);
 
         $logger
-            ->expects(self::any())
+            ->expects(self::once())
             ->method('isLoggingEnabled')
             ->willReturn(true);
 
@@ -213,7 +214,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $logger = $this->getDevlogLoggerMock(['isLoggingEnabled']);
 
         $logger
-            ->expects(self::any())
+            ->expects(self::once())
             ->method('isLoggingEnabled')
             ->willReturn(true);
 
@@ -244,10 +245,13 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             )
         );
 
+        // the repository is created on demand, so tests which never use it do not get a superfluous mock
+        $repository = null;
         $logger
-            ->expects(self::any())
             ->method('getDevlogEntryRepository')
-            ->willReturn($this->getDevlogEntryRepository());
+            ->willReturnCallback(function () use (&$repository) {
+                return $repository ??= $this->getDevlogEntryRepository();
+            });
 
         return $logger;
     }
@@ -261,12 +265,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $severity = LogLevel::DEBUG;
         $extraData = ['foo' => 1, 'bar' => ['baz']];
 
-        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled', 'storeLog']);
-
-        $logger
-            ->expects(self::any())
-            ->method('isLoggingEnabled')
-            ->willReturn(true);
+        $logger = $this->getDevlogLoggerMock(['storeLog']);
 
         $matcher = self::exactly(6);
         $logger
@@ -293,7 +292,9 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
                 $extraData
             );
 
-        $cache = new VariableFrontend('ratelimiter', new TransientMemoryBackend('testing'));
+        // @todo remove the context argument when support for TYPO3 13 is dropped
+        $backend = VersionUtility::isTypo3Version14OrHigher() ? new TransientMemoryBackend() : new TransientMemoryBackend('Testing');
+        $cache = new VariableFrontend('ratelimiter', $backend);
         $cacheManager = new CacheManager();
         $cacheManager->registerCache($cache);
 
@@ -364,12 +365,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $severity = LogLevel::DEBUG;
         $extraData = ['foo' => 1, 'bar' => ['baz']];
 
-        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled', 'storeLog']);
-
-        $logger
-            ->expects(self::any())
-            ->method('isLoggingEnabled')
-            ->willReturn(true);
+        $logger = $this->getDevlogLoggerMock(['storeLog']);
 
         $logger
             ->expects(self::once())
@@ -395,11 +391,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
         $severity = LogLevel::DEBUG;
         $extraData = ['foo' => 1, 'bar' => ['baz']];
 
-        $logger = $this->getDevlogLoggerMock(['isLoggingEnabled', 'storeLog', 'handleExceptionDuringLogging']);
-
-        $logger
-            ->method('isLoggingEnabled')
-            ->willReturn(true);
+        $logger = $this->getDevlogLoggerMock(['storeLog', 'handleExceptionDuringLogging']);
 
         $exception = new \RuntimeException('Some exception while logging');
         $logger
@@ -410,7 +402,7 @@ class DevlogLoggerTest extends \DMK\Mklog\Tests\BaseTestCase
             ->method('handleExceptionDuringLogging')
             ->with($exception);
 
-        $rateLimiterUtility = $this->createMock(RateLimiterUtility::class);
+        $rateLimiterUtility = self::createStub(RateLimiterUtility::class);
 
         $logRecord = new LogRecord($extKey, $severity, 'msg', $extraData);
         GeneralUtility::addInstance(RateLimiterUtility::class, $rateLimiterUtility);

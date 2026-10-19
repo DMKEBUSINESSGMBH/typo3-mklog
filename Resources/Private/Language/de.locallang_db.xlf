@@ -1,40 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff
-    xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-    <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2022-05-03T08:34:56Z" product-name="mklog">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+    <file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2026-10-19T00:00:00Z" product-name="mklog">
         <header/>
         <body>
             <trans-unit id="scheduler_watchdog_name" resname="scheduler_watchdog_name" approved="yes">
-                <source>tx_devlog Watchdog</source>
-                <target>tx_devlog Watchdog</target>
+                <source>MK Log WatchDog</source>
+                <target>MK Log WatchDog</target>
             </trans-unit>
             <trans-unit id="scheduler_watchdog_description" resname="scheduler_watchdog_description" approved="yes">
-                <source>Informs you by email about important errors in developer log</source>
-                <target>Informiert per Email über fatale Fehler im Developer log</target>
+                <source>Sends new developer log entries to a transport (mail or Gelf/GrayLog).</source>
+                <target>Versendet neue Developer-Log-Einträge über einen Transport (Mail oder Gelf/GrayLog).</target>
             </trans-unit>
-            <trans-unit id="scheduler_watchdog_field_mklog_email" resname="scheduler_watchdog_field_mklog_email" approved="yes">
-                <source>Email</source>
-                <target/>
+            <trans-unit id="scheduler_watchdog.transport" resname="scheduler_watchdog.transport" approved="yes">
+                <source>Transport</source>
+                <target>Transport</target>
             </trans-unit>
-            <trans-unit id="scheduler_watchdog_field_mklog_force" resname="scheduler_watchdog_field_mklog_force" approved="yes">
-                <source>Force a summary mail</source>
-                <target>Email mit Zusammenfassung immer schicken.</target>
+            <trans-unit id="scheduler_watchdog.credentials" resname="scheduler_watchdog.credentials" approved="yes">
+                <source>Credentials</source>
+                <target>Zugangsdaten</target>
             </trans-unit>
-            <trans-unit id="scheduler_watchdog_field_mklog_severity" resname="scheduler_watchdog_field_mklog_severity" approved="yes">
-                <source>Minimum error level to trigger email.</source>
-                <target>Mindest-Fehlerstufe für Mailversand.</target>
+            <trans-unit id="scheduler_watchdog.credentials.description" resname="scheduler_watchdog.credentials.description" approved="yes">
+                <source>Mail: recipient address. Gelf UDP: host:port, e.g. 127.0.0.1:12201. Gelf HTTP: URL, e.g. https://user:pass@127.0.0.1:2345/gelf</source>
+                <target>Mail: Empfängeradresse. Gelf UDP: host:port, z. B. 127.0.0.1:12201. Gelf HTTP: URL, z. B. https://user:pass@127.0.0.1:2345/gelf</target>
             </trans-unit>
-            <trans-unit id="scheduler_watchdog_field_mklog_datavar" resname="scheduler_watchdog_field_mklog_datavar" approved="yes">
-                <source>Include data_var/extra_data.</source>
-                <target>Daten (data_var/extra_data) mit exportieren.</target>
+            <trans-unit id="scheduler_watchdog.severity" resname="scheduler_watchdog.severity" approved="yes">
+                <source>Min severity</source>
+                <target>Mindest-Fehlerstufe</target>
             </trans-unit>
-            <trans-unit id="scheduler_watchdog_taskinfo" resname="scheduler_watchdog_taskinfo" approved="yes">
-                <source>Send notify emails to %s.</source>
-                <target>Sende Info-Emails an %s.</target>
+            <trans-unit id="scheduler_watchdog.message_limit" resname="scheduler_watchdog.message_limit" approved="yes">
+                <source>Message limit per run</source>
+                <target>Nachrichtenlimit pro Durchlauf</target>
             </trans-unit>
-            <trans-unit id="scheduler_watchdog_field_mklog_group_entries" resname="scheduler_watchdog_field_mklog_group_entries" approved="yes">
-                <source>Group messages (so every message is only present once)</source>
-                <target>Meldungen gruppieren (damit jede Meldung nur einmal erscheint)</target>
+            <trans-unit id="scheduler_watchdog.message_limit.description" resname="scheduler_watchdog.message_limit.description" approved="yes">
+                <source>0 means no limit.</source>
+                <target>0 bedeutet kein Limit.</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.extension_whitelist" resname="scheduler_watchdog.extension_whitelist" approved="yes">
+                <source>Extension whitelist</source>
+                <target>Extension-Whitelist</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.extension_blacklist" resname="scheduler_watchdog.extension_blacklist" approved="yes">
+                <source>Extension blacklist</source>
+                <target>Extension-Blacklist</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.extension_list.description" resname="scheduler_watchdog.extension_list.description" approved="yes">
+                <source>Comma separated list of extension keys.</source>
+                <target>Kommaseparierte Liste von Extension-Keys.</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.mail_subject" resname="scheduler_watchdog.mail_subject" approved="yes">
+                <source>Custom mail subject</source>
+                <target>Eigener Mail-Betreff</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.mail_subject.description" resname="scheduler_watchdog.mail_subject.description" approved="yes">
+                <source>%s is replaced by the site name. Default: DevLog WatchDog on site %s</source>
+                <target>%s wird durch den Seitennamen ersetzt. Standard: DevLog WatchDog on site %s</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.error.credentials_required" resname="scheduler_watchdog.error.credentials_required" approved="yes">
+                <source>The credentials for the transport are required!</source>
+                <target>Die Zugangsdaten für den Transport sind erforderlich!</target>
+            </trans-unit>
+            <trans-unit id="scheduler_watchdog.error.credentials_invalid" resname="scheduler_watchdog.error.credentials_invalid" approved="yes">
+                <source>The credentials do not match the selected transport (Mail: email address, Gelf UDP: host:port, Gelf HTTP: URL).</source>
+                <target>Die Zugangsdaten passen nicht zum gewählten Transport (Mail: E-Mail-Adresse, Gelf UDP: host:port, Gelf HTTP: URL).</target>
             </trans-unit>
             <trans-unit id="scheduler_cleanup_log_table_name" resname="scheduler_cleanup_log_table_name" approved="yes">
                 <source>Cleanup mklog entries</source>

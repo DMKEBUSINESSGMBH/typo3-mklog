@@ -64,7 +64,7 @@ class SeverityIconViewHelper extends AbstractViewHelper
         $severityId = $this->arguments['logEntry']->getSeverity();
         $severityName = SeverityUtility::getName($severityId);
         $icon = $this->getSeverityIconClass($severityId);
-        if ($icon !== '' && $icon !== '0') {
+        if ('' !== $icon && '0' !== $icon) {
             $icon = GeneralUtility::makeInstance(IconFactory::class)->getIcon($icon, IconSize::SMALL);
         }
 

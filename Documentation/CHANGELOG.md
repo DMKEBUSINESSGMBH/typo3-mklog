@@ -1,6 +1,19 @@
 ChangeLog
 =========
 
+14.0.0
+------
+* Support for TYPO3 13.4 and 14, PHP 8.2 - 8.5 (TYPO3 12 support dropped)
+* TYPO3 14: The scheduler tasks (WatchDog, Cleanup) are native TCA based task types.
+  Run `typo3 extension:setup` (or the database analyzer) and the scheduler upgrade wizard
+  to migrate existing tasks. TYPO3 13 still uses the `SC_OPTIONS` registration and
+  `SchedulerFieldProviderWatchDog`.
+* Removed all TYPO3 14 deprecations: `getIndpEnv()`, `ext_tables.php`, scheduler registration
+  via `SC_OPTIONS` (TYPO3 14 only), `ext_emconf.php` metadata (now in `composer.json`)
+* Fix options of legacy serialized WatchDog tasks getting lost during the scheduler migration
+* Fix type errors in the backend module when filtering by severity/run or paginating
+* Log entries of copied pages are removed after copying (`DataHandler::$copyWhichTables` is gone in TYPO3 14)
+
 13.2.4
 ------
 * Refactor rate limiting usage when rate limiting is not available

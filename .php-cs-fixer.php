@@ -29,6 +29,7 @@ EOF;
 $finder = \PhpCsFixer\Finder::create()
     ->exclude('Resources')
     ->exclude('Documentation')
+    ->exclude('var')
     ->in(__DIR__);
 
 $config = new \PhpCsFixer\Config();

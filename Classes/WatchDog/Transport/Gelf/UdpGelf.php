@@ -51,12 +51,12 @@ class UdpGelf extends AbstractGelf
     {
         [$host, $port] = explode(
             ':',
-            (string)$this->getOptions()->getCredentials()
+            (string) $this->getOptions()->getCredentials()
         );
 
         return new UdpTransport(
             trim($host),
-            (int)trim($port),
+            (int) trim($port),
             UdpTransport::CHUNK_SIZE_LAN
         );
     }
