@@ -1,13 +1,13 @@
 MK Log
 =========
 
-![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-12.4%20%7C%2013.2-orange?maxAge=3600&style=flat-square&logo=typo3)
+![TYPO3 compatibility](https://img.shields.io/badge/TYPO3-13.4%20%7C%2014.3-orange?maxAge=3600&style=flat-square&logo=typo3)
 [![Latest Stable Version](https://img.shields.io/packagist/v/dmk/mklog.svg?maxAge=3600&style=flat-square&logo=composer)](https://packagist.org/packages/dmk/mklog)
 [![Total Downloads](https://img.shields.io/packagist/dt/dmk/mklog.svg?maxAge=3600&style=flat-square)](https://packagist.org/packages/dmk/mklog)
-[![Build Status](https://img.shields.io/github/workflow/status/DMKEBUSINESSGMBH/typo3-mklog/PHP%20Checks.svg?maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mklog/actions?query=workflow%3A%22PHP+Checks%22)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/DMKEBUSINESSGMBH/typo3-mklog/php.yml?branch=14.3&maxAge=3600&style=flat-square&logo=github-actions)](https://github.com/DMKEBUSINESSGMBH/typo3-mklog/actions?query=workflow%3A%22PHP+Checks%22)
 [![License](https://img.shields.io/packagist/l/dmk/mklog.svg?maxAge=3600&style=flat-square&logo=gnu)](https://packagist.org/packages/dmk/mklog)
 
-
+ 
 This extension offers a developer log. 
 Ther is a scheduler task too, the watch dog, which aggregates devlog entries and sends them via a transport.
 So it is possible to send a mail with fatal errors the minute they occur but warnings only every 6 hours. 
