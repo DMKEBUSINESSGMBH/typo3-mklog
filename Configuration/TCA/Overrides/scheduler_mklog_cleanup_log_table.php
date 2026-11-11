@@ -35,13 +35,7 @@ if (!isset($GLOBALS['TCA']['tx_scheduler_task']) || !DMK\Mklog\Utility\VersionUt
 }
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addRecordType(
-    [
-        'label' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_name',
-        'description' => 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_description',
-        'value' => DMK\Mklog\Task\CleanupLogTableTask::class,
-        'icon' => 'mimetypes-x-tx_scheduler_task_group',
-        'group' => 'mklog',
-    ],
+    new TYPO3\CMS\Core\Schema\Struct\SelectItem(type: 'select', label: 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_name', value: DMK\Mklog\Task\CleanupLogTableTask::class, icon: 'mimetypes-x-tx_scheduler_task_group', group: 'mklog', description: 'LLL:EXT:mklog/Resources/Private/Language/locallang_db.xlf:scheduler_cleanup_log_table_description'),
     '
         --div--;core.form.tabs:general,
             tasktype,

@@ -130,13 +130,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
 );
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addRecordType(
-    [
-        'label' => $ll.'scheduler_watchdog_name',
-        'description' => $ll.'scheduler_watchdog_description',
-        'value' => DMK\Mklog\WatchDog\SchedulerWatchDog::class,
-        'icon' => 'mimetypes-x-tx_scheduler_task_group',
-        'group' => 'mklog',
-    ],
+    new TYPO3\CMS\Core\Schema\Struct\SelectItem(type: 'select', label: $ll.'scheduler_watchdog_name', value: DMK\Mklog\WatchDog\SchedulerWatchDog::class, icon: 'mimetypes-x-tx_scheduler_task_group', group: 'mklog', description: $ll.'scheduler_watchdog_description'),
     '
         --div--;core.form.tabs:general,
             tasktype,
