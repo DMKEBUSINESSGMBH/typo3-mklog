@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-14.0.0
+14.3.0
 ------
 * Support for TYPO3 13.4 and 14, PHP 8.2 - 8.5 (TYPO3 12 support dropped)
 * TYPO3 14: The scheduler tasks (WatchDog, Cleanup) are native TCA based task types.
